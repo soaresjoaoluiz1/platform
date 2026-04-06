@@ -18,6 +18,8 @@ import {
 interface Props {
   accountName: string
   days: number
+  since?: string
+  until?: string
 }
 
 const DEVICE_LABELS: Record<string, string> = { DESKTOP: 'Desktop', MOBILE: 'Mobile', TABLET: 'Tablet', CONNECTED_TV: 'TV', OTHER: 'Outro' }
@@ -65,7 +67,7 @@ function KPI({ label, value, icon, color, current, previous, invert, sub }: {
   )
 }
 
-export default function GoogleAdsView({ accountName, days }: Props) {
+export default function GoogleAdsView({ accountName, days, since, until }: Props) {
   const [gadsAccount, setGadsAccount] = useState<GAdsAccount | null>(null)
   const [campaigns, setCampaigns] = useState<GAdsCampaignsResponse | null>(null)
   const [daily, setDaily] = useState<GAdsDaily[]>([])
@@ -98,12 +100,12 @@ export default function GoogleAdsView({ accountName, days }: Props) {
         setGadsAccount(match)
 
         return Promise.all([
-          fetchGAdsCampaigns(match.id, days).catch(() => null),
-          fetchGAdsDaily(match.id, days).catch(() => []),
-          fetchGAdsKeywords(match.id, days).catch(() => []),
-          fetchGAdsSearchTerms(match.id, days).catch(() => []),
-          fetchGAdsDevices(match.id, days).catch(() => []),
-          fetchGAdsHourly(match.id, days).catch(() => []),
+          fetchGAdsCampaigns(match.id, days, since, until).catch(() => null),
+          fetchGAdsDaily(match.id, days, since, until).catch(() => []),
+          fetchGAdsKeywords(match.id, days, since, until).catch(() => []),
+          fetchGAdsSearchTerms(match.id, days, since, until).catch(() => []),
+          fetchGAdsDevices(match.id, days, since, until).catch(() => []),
+          fetchGAdsHourly(match.id, days, since, until).catch(() => []),
         ]).then(([camp, d, kw, st, dev, hr]) => {
           setCampaigns(camp)
           setDaily(d as GAdsDaily[])
@@ -115,7 +117,7 @@ export default function GoogleAdsView({ accountName, days }: Props) {
       })
       .catch(() => setNoAccount(true))
       .finally(() => setLoading(false))
-  }, [accountName, days])
+  }, [accountName, days, since, until])
 
   if (loading) return <div className="loading-container"><div className="spinner" /><span>Carregando Google Ads...</span></div>
   if (noAccount) return <div className="empty-state"><div className="icon">📊</div><h3>Sem dados Google Ads</h3><p>Nenhuma conta Google Ads vinculada para este cliente.</p></div>

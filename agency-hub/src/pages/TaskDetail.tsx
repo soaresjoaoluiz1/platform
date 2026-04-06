@@ -44,7 +44,7 @@ export default function TaskDetail() {
     if (!id) return
     const data = await fetchTask(+id)
     setTask(data.task); setComments(data.comments); setHistory(data.history); setAttachments(data.attachments)
-    setEditData({ title: data.task.title, description: data.task.description || '', due_date: data.task.due_date?.slice(0, 10) || '', priority: data.task.priority, department_id: data.task.department_id || '', assigned_to: data.task.assigned_to || '', category_id: data.task.category_id || '', drive_link: data.task.drive_link || '', drive_link_raw: data.task.drive_link_raw || '', approval_link: data.task.approval_link || '', approval_text: data.task.approval_text || '' })
+    setEditData({ title: data.task.title, description: data.task.description || '', due_date: data.task.due_date?.slice(0, 10) || '', priority: data.task.priority, department_id: data.task.department_id || '', assigned_to: data.task.assigned_to || '', category_id: data.task.category_id || '', drive_link: data.task.drive_link || '', drive_link_raw: data.task.drive_link_raw || '', approval_link: data.task.approval_link || '', approval_text: data.task.approval_text || '', publish_date: data.task.publish_date || '', publish_objective: data.task.publish_objective || '' })
     setTimeEntries(data.timeEntries || []); setTotalTime(data.totalTimeSeconds || 0)
     if (data.activeTimer) { setActiveTimerEntry(data.activeTimer); setTimerRunning(true) } else { setActiveTimerEntry(null); setTimerRunning(false) }
   }, [id])
@@ -96,7 +96,15 @@ export default function TaskDetail() {
   const handleApprove = async () => { if (task) { await approveTask(task.id); loadTask() } }
   const handleReject = async () => { if (task && rejectReason) { await rejectTask(task.id, rejectReason); setShowReject(false); setRejectReason(''); loadTask() } }
 
-  const handleStageMove = async (stage: string) => { if (task) { await moveTaskStage(task.id, stage); loadTask() } }
+  const handleStageMove = async (stage: string) => {
+    if (!task) return
+    if ((stage === 'aprovacao_interna' || stage === 'aguardando_cliente') && !task.approval_link) {
+      alert('Preencha o "Conteudo para Aprovacao" antes de enviar pra aprovacao.\n\nClique em Editar e preencha o link do arquivo finalizado na secao dourada.')
+      return
+    }
+    try { await moveTaskStage(task.id, stage); loadTask() }
+    catch (err: any) { alert(err.message || 'Erro ao mover tarefa') }
+  }
 
   if (loading) return <div className="loading-container"><div className="spinner" /></div>
   if (!task) return <div className="empty-state"><h3>Tarefa nao encontrada</h3></div>
@@ -165,7 +173,11 @@ export default function TaskDetail() {
                   <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Conteudo para Aprovacao</div>
                   <div className="form-group"><label>Link do arquivo finalizado *</label><input className="input" value={editData.approval_link} onChange={e => setEditData((p: any) => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive com o arquivo pronto pra aprovacao..." /></div>
                   <div className="form-group"><label>Texto / Legenda</label><textarea className="input" rows={3} value={editData.approval_text} onChange={e => setEditData((p: any) => ({ ...p, approval_text: e.target.value }))} placeholder="Legenda do post, texto da publicacao, descricao..." /></div>
-                  <div style={{ fontSize: 10, color: '#6E6887' }}>Obrigatorio preencher o link antes de enviar pra aprovacao interna ou do cliente.</div>
+                  <div className="form-row">
+                    <div className="form-group"><label>Data da Publicacao</label><input className="input" type="date" value={editData.publish_date} onChange={e => setEditData((p: any) => ({ ...p, publish_date: e.target.value }))} /></div>
+                    <div className="form-group"><label>Objetivo da Publicacao</label><input className="input" value={editData.publish_objective} onChange={e => setEditData((p: any) => ({ ...p, publish_objective: e.target.value }))} placeholder="Ex: Gerar leads, engajamento, branding..." /></div>
+                  </div>
+                  <div style={{ fontSize: 10, color: '#6E6887' }}>Obrigatorio preencher o link antes de enviar pra aprovacao. Data e objetivo sao opcionais.</div>
                 </div>
                 <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
                   <button className="btn btn-primary btn-sm" onClick={handleSaveEdit}><Save size={12} /> Salvar</button>
@@ -232,8 +244,14 @@ export default function TaskDetail() {
                     </a>
                   )}
                   {task.approval_text && (
-                    <div style={{ padding: '14px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)', fontSize: 14, lineHeight: 1.6, color: '#F2F0F7', whiteSpace: 'pre-wrap' }}>
+                    <div style={{ padding: '14px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)', fontSize: 14, lineHeight: 1.6, color: '#F2F0F7', whiteSpace: 'pre-wrap', marginBottom: 12 }}>
                       {task.approval_text}
+                    </div>
+                  )}
+                  {(task.publish_date || task.publish_objective) && (
+                    <div style={{ display: 'flex', gap: 16, fontSize: 13 }}>
+                      {task.publish_date && <div><span style={{ color: '#6E6887', fontSize: 11 }}>Data publicacao: </span><strong>{task.publish_date}</strong></div>}
+                      {task.publish_objective && <div><span style={{ color: '#6E6887', fontSize: 11 }}>Objetivo: </span><strong>{task.publish_objective}</strong></div>}
                     </div>
                   )}
                 </div>

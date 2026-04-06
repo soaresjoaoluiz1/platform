@@ -256,6 +256,8 @@ try { db.exec("ALTER TABLE tasks ADD COLUMN drive_link_raw TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN drive_folder TEXT") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN approval_link TEXT") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN approval_text TEXT") } catch {}
+try { db.exec("ALTER TABLE tasks ADD COLUMN publish_date TEXT") } catch {}
+try { db.exec("ALTER TABLE tasks ADD COLUMN publish_objective TEXT") } catch {}
 
 console.log('[DB] SQLite ready at', dbPath)
 export default db

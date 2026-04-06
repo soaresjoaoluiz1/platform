@@ -15,6 +15,8 @@ import {
 interface Props {
   accountName: string
   days: number
+  since?: string
+  until?: string
 }
 
 const SOURCE_COLORS: Record<string, string> = {
@@ -80,7 +82,7 @@ function fmtDur(s: number): string {
   return m > 0 ? `${m}m ${sec}s` : `${sec}s`
 }
 
-export default function AnalyticsView({ accountName, days }: Props) {
+export default function AnalyticsView({ accountName, days, since, until }: Props) {
   const [properties, setProperties] = useState<GA4Property[]>([])
   const [selectedProp, setSelectedProp] = useState<GA4Property | null>(null)
   const [report, setReport] = useState<GA4Report | null>(null)
@@ -102,10 +104,10 @@ export default function AnalyticsView({ accountName, days }: Props) {
   useEffect(() => {
     if (!selectedProp) return
     setLoadingReport(true)
-    fetchGA4Report(selectedProp.id, days)
+    fetchGA4Report(selectedProp.id, days, since, until)
       .then(setReport).catch(() => setReport(null))
       .finally(() => setLoadingReport(false))
-  }, [selectedProp, days])
+  }, [selectedProp, days, since, until])
 
   if (loading) return <div className="loading-container"><div className="spinner" /><span>Carregando Analytics...</span></div>
   if (properties.length === 0) return <div className="empty-state"><div className="icon">📈</div><h3>Sem dados Analytics</h3><p>Nenhuma propriedade GA4 vinculada para este cliente.</p></div>

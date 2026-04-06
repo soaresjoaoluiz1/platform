@@ -13,6 +13,8 @@ interface Props {
   accountId: string
   accountName: string
   days: number
+  since?: string
+  until?: string
 }
 
 function Tip({ active, payload, label }: any) {
@@ -56,17 +58,17 @@ function BigKPI({ label, value, icon, color, current, previous, invert, sub }: {
   )
 }
 
-export default function OverviewView({ accountId, accountName, days }: Props) {
+export default function OverviewView({ accountId, accountName, days, since, until }: Props) {
   const [data, setData] = useState<OverviewData | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     setLoading(true)
-    fetchOverview(accountId, accountName, days)
+    fetchOverview(accountId, accountName, days, since, until)
       .then(setData)
       .catch(() => setData(null))
       .finally(() => setLoading(false))
-  }, [accountId, accountName, days])
+  }, [accountId, accountName, days, since, until])
 
   if (loading) return <div className="loading-container"><div className="spinner" /><span>Carregando visao geral...</span></div>
   if (!data) return <div className="empty-state"><div className="icon">📊</div><h3>Sem dados disponiveis</h3></div>

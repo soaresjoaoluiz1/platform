@@ -150,7 +150,7 @@ router.put('/:id', requireRole('dono', 'funcionario'), (req, res) => {
   if (!task) return res.status(404).json({ error: 'Tarefa nao encontrada' })
   if (req.user.role === 'funcionario' && task.assigned_to !== req.user.id) return res.status(403).json({ error: 'Sem permissao' })
 
-  const { title, description, due_date, priority, department_id, assigned_to, drive_link, drive_link_raw, category_id, approval_link, approval_text } = req.body
+  const { title, description, due_date, priority, department_id, assigned_to, drive_link, drive_link_raw, category_id, approval_link, approval_text, publish_date, publish_objective } = req.body
   const sets = []; const params = []
   if (title !== undefined) { sets.push('title = ?'); params.push(title) }
   if (description !== undefined) { sets.push('description = ?'); params.push(description) }
@@ -163,6 +163,8 @@ router.put('/:id', requireRole('dono', 'funcionario'), (req, res) => {
   if (category_id !== undefined) { sets.push('category_id = ?'); params.push(category_id) }
   if (approval_link !== undefined) { sets.push('approval_link = ?'); params.push(approval_link) }
   if (approval_text !== undefined) { sets.push('approval_text = ?'); params.push(approval_text) }
+  if (publish_date !== undefined) { sets.push('publish_date = ?'); params.push(publish_date) }
+  if (publish_objective !== undefined) { sets.push('publish_objective = ?'); params.push(publish_objective) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
   sets.push("updated_at = datetime('now')"); params.push(req.params.id)
   const oldAssigned = task.assigned_to
