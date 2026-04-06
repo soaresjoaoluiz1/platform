@@ -74,16 +74,16 @@ export async function fetchAccounts(): Promise<MetaAccount[]> {
   return data.accounts
 }
 
-export async function fetchCompare(accountId: string, days = 30, level = 'account'): Promise<CompareResponse> {
-  return apiFetch<CompareResponse>(
-    `/api/meta/accounts/${accountId}/insights/compare?days=${days}&level=${level}`
-  )
+export async function fetchCompare(accountId: string, days = 30, level = 'account', since?: string, until?: string): Promise<CompareResponse> {
+  let url = `/api/meta/accounts/${accountId}/insights/compare?days=${days}&level=${level}`
+  if (since && until) url += `&since=${since}&until=${until}`
+  return apiFetch<CompareResponse>(url)
 }
 
-export async function fetchDailyCompare(accountId: string, days = 30): Promise<DailyCompareResponse> {
-  return apiFetch<DailyCompareResponse>(
-    `/api/meta/accounts/${accountId}/insights/daily-compare?days=${days}`
-  )
+export async function fetchDailyCompare(accountId: string, days = 30, since?: string, until?: string): Promise<DailyCompareResponse> {
+  let url = `/api/meta/accounts/${accountId}/insights/daily-compare?days=${days}`
+  if (since && until) url += `&since=${since}&until=${until}`
+  return apiFetch<DailyCompareResponse>(url)
 }
 
 // Helper to extract action value
@@ -460,32 +460,38 @@ export async function fetchGAdsAccounts(): Promise<GAdsAccount[]> {
   return data.accounts || []
 }
 
-export async function fetchGAdsCampaigns(customerId: string, days = 30): Promise<GAdsCampaignsResponse> {
-  return apiFetch<GAdsCampaignsResponse>(`/api/google-ads/${customerId}/campaigns?days=${days}`)
+function dateParams(days: number, since?: string, until?: string): string {
+  let q = `days=${days}`
+  if (since && until) q += `&since=${since}&until=${until}`
+  return q
 }
 
-export async function fetchGAdsDaily(customerId: string, days = 30): Promise<GAdsDaily[]> {
-  const data = await apiFetch<{ daily: GAdsDaily[] }>(`/api/google-ads/${customerId}/daily?days=${days}`)
+export async function fetchGAdsCampaigns(customerId: string, days = 30, since?: string, until?: string): Promise<GAdsCampaignsResponse> {
+  return apiFetch<GAdsCampaignsResponse>(`/api/google-ads/${customerId}/campaigns?${dateParams(days, since, until)}`)
+}
+
+export async function fetchGAdsDaily(customerId: string, days = 30, since?: string, until?: string): Promise<GAdsDaily[]> {
+  const data = await apiFetch<{ daily: GAdsDaily[] }>(`/api/google-ads/${customerId}/daily?${dateParams(days, since, until)}`)
   return data.daily || []
 }
 
-export async function fetchGAdsKeywords(customerId: string, days = 30): Promise<GAdsKeyword[]> {
-  const data = await apiFetch<{ keywords: GAdsKeyword[] }>(`/api/google-ads/${customerId}/keywords?days=${days}`)
+export async function fetchGAdsKeywords(customerId: string, days = 30, since?: string, until?: string): Promise<GAdsKeyword[]> {
+  const data = await apiFetch<{ keywords: GAdsKeyword[] }>(`/api/google-ads/${customerId}/keywords?${dateParams(days, since, until)}`)
   return data.keywords || []
 }
 
-export async function fetchGAdsSearchTerms(customerId: string, days = 30): Promise<GAdsSearchTerm[]> {
-  const data = await apiFetch<{ searchTerms: GAdsSearchTerm[] }>(`/api/google-ads/${customerId}/search-terms?days=${days}`)
+export async function fetchGAdsSearchTerms(customerId: string, days = 30, since?: string, until?: string): Promise<GAdsSearchTerm[]> {
+  const data = await apiFetch<{ searchTerms: GAdsSearchTerm[] }>(`/api/google-ads/${customerId}/search-terms?${dateParams(days, since, until)}`)
   return data.searchTerms || []
 }
 
-export async function fetchGAdsDevices(customerId: string, days = 30): Promise<GAdsDevice[]> {
-  const data = await apiFetch<{ devices: GAdsDevice[] }>(`/api/google-ads/${customerId}/devices?days=${days}`)
+export async function fetchGAdsDevices(customerId: string, days = 30, since?: string, until?: string): Promise<GAdsDevice[]> {
+  const data = await apiFetch<{ devices: GAdsDevice[] }>(`/api/google-ads/${customerId}/devices?${dateParams(days, since, until)}`)
   return data.devices || []
 }
 
-export async function fetchGAdsHourly(customerId: string, days = 30): Promise<GAdsHourly[]> {
-  const data = await apiFetch<{ hourly: GAdsHourly[] }>(`/api/google-ads/${customerId}/hourly?days=${days}`)
+export async function fetchGAdsHourly(customerId: string, days = 30, since?: string, until?: string): Promise<GAdsHourly[]> {
+  const data = await apiFetch<{ hourly: GAdsHourly[] }>(`/api/google-ads/${customerId}/hourly?${dateParams(days, since, until)}`)
   return data.hourly || []
 }
 
@@ -616,8 +622,8 @@ export async function fetchGA4Properties(accountName: string): Promise<{ availab
   return apiFetch(`/api/analytics/properties?name=${encodeURIComponent(accountName)}`)
 }
 
-export async function fetchGA4Report(propertyId: string, days = 7): Promise<GA4Report> {
-  return apiFetch<GA4Report>(`/api/analytics/${propertyId}/report?days=${days}`)
+export async function fetchGA4Report(propertyId: string, days = 7, since?: string, until?: string): Promise<GA4Report> {
+  return apiFetch<GA4Report>(`/api/analytics/${propertyId}/report?${dateParams(days, since, until)}`)
 }
 
 // =============================================
@@ -642,6 +648,8 @@ export interface OverviewData {
   alerts: { type: string; text: string }[]
 }
 
-export async function fetchOverview(accountId: string, accountName: string, days = 7): Promise<OverviewData> {
-  return apiFetch<OverviewData>(`/api/overview/${accountId}?name=${encodeURIComponent(accountName)}&days=${days}`)
+export async function fetchOverview(accountId: string, accountName: string, days = 7, since?: string, until?: string): Promise<OverviewData> {
+  let url = `/api/overview/${accountId}?name=${encodeURIComponent(accountName)}&days=${days}`
+  if (since && until) url += `&since=${since}&until=${until}`
+  return apiFetch<OverviewData>(url)
 }

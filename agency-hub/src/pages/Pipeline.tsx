@@ -54,6 +54,10 @@ export default function Pipeline() {
     if (!draggedTask) return
     const task = tasks.find(t => t.id === draggedTask)
     if (!task || task.stage === stageSlug) return
+    if ((stageSlug === 'aprovacao_interna' || stageSlug === 'aguardando_cliente') && !task.approval_link) {
+      alert('Preencha o "Conteudo para Aprovacao" na tarefa antes de enviar pra aprovacao.\n\nAbra a tarefa, clique em Editar e preencha o link na secao dourada.')
+      setDraggedTask(null); return
+    }
     setTasks(prev => prev.map(t => t.id === draggedTask ? { ...t, stage: stageSlug } : t))
     setDraggedTask(null)
     try { await moveTaskStage(draggedTask, stageSlug) } catch { loadData() }
@@ -66,6 +70,11 @@ export default function Pipeline() {
   }
 
   const handleMobileMove = async (taskId: number, stageSlug: string) => {
+    const task = tasks.find(t => t.id === taskId)
+    if ((stageSlug === 'aprovacao_interna' || stageSlug === 'aguardando_cliente') && task && !task.approval_link) {
+      alert('Preencha o "Conteudo para Aprovacao" na tarefa antes de enviar pra aprovacao.\n\nAbra a tarefa, clique em Editar e preencha o link na secao dourada.')
+      setMoveTaskId(null); return
+    }
     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, stage: stageSlug } : t))
     setMoveTaskId(null)
     try { await moveTaskStage(taskId, stageSlug) } catch { loadData() }

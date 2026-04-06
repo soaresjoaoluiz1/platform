@@ -108,7 +108,23 @@ function fmtDate(date) {
   return date.toISOString().split('T')[0]
 }
 
-function getDateRanges(days) {
+function getDateRanges(days, since, until) {
+  if (since && until) {
+    const start = new Date(since + 'T00:00:00')
+    const end = new Date(until + 'T00:00:00')
+    const diffDays = Math.ceil((end - start) / 86400000) + 1
+
+    const prevEnd = new Date(start)
+    prevEnd.setDate(prevEnd.getDate() - 1)
+    const prevStart = new Date(prevEnd)
+    prevStart.setDate(prevStart.getDate() - diffDays + 1)
+
+    return {
+      current: { since: fmtDate(start), until: fmtDate(end) },
+      previous: { since: fmtDate(prevStart), until: fmtDate(prevEnd) },
+    }
+  }
+
   const now = new Date()
   const end = new Date(now)
   end.setDate(end.getDate() - 1) // yesterday
@@ -153,8 +169,8 @@ app.get('/api/meta/accounts', auth, async (req, res) => {
 app.get('/api/meta/accounts/:accountId/insights/compare', auth, async (req, res) => {
   try {
     const { accountId } = req.params
-    const { days = '30', level = 'account' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', level = 'account', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     const fields = 'spend,impressions,clicks,cpc,cpm,ctr,reach,frequency,actions,cost_per_action_type,action_values'
     const levelFields = level === 'campaign' ? `campaign_id,campaign_name,${fields}` : fields
@@ -188,8 +204,8 @@ app.get('/api/meta/accounts/:accountId/insights/compare', auth, async (req, res)
 app.get('/api/meta/accounts/:accountId/insights/daily-compare', auth, async (req, res) => {
   try {
     const { accountId } = req.params
-    const { days = '30' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     const fields = 'spend,impressions,clicks,cpc,ctr,reach,actions,action_values'
 
@@ -265,9 +281,9 @@ app.get('/api/instagram/:igId/profile', auth, async (req, res) => {
 app.get('/api/instagram/:igId/insights', auth, async (req, res) => {
   try {
     const { igId } = req.params
-    const { days = '7' } = req.query
+    const { days = '7', since, until } = req.query
     const d = parseInt(days)
-    const ranges = getDateRanges(d)
+    const ranges = getDateRanges(d, since, until)
 
     const toUnix = (dateStr) => Math.floor(new Date(dateStr + 'T00:00:00').getTime() / 1000)
 
@@ -1393,8 +1409,8 @@ app.get('/api/google-ads/accounts', auth, async (req, res) => {
 app.get('/api/google-ads/:customerId/campaigns', auth, async (req, res) => {
   try {
     const { customerId } = req.params
-    const { days = '30' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     function parseCampaigns(results) {
       return results.map(r => ({
@@ -1474,8 +1490,8 @@ app.get('/api/google-ads/:customerId/campaigns', auth, async (req, res) => {
 app.get('/api/google-ads/:customerId/daily', auth, async (req, res) => {
   try {
     const { customerId } = req.params
-    const { days = '30' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     const dailyQuery = `
       SELECT segments.date, metrics.impressions, metrics.clicks, metrics.cost_micros,
@@ -1514,8 +1530,8 @@ app.get('/api/google-ads/:customerId/daily', auth, async (req, res) => {
 app.get('/api/google-ads/:customerId/keywords', auth, async (req, res) => {
   try {
     const { customerId } = req.params
-    const { days = '30' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     const results = await gaqlQuery(customerId, `
       SELECT
@@ -1552,8 +1568,8 @@ app.get('/api/google-ads/:customerId/keywords', auth, async (req, res) => {
 app.get('/api/google-ads/:customerId/search-terms', auth, async (req, res) => {
   try {
     const { customerId } = req.params
-    const { days = '30' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     const results = await gaqlQuery(customerId, `
       SELECT
@@ -1588,8 +1604,8 @@ app.get('/api/google-ads/:customerId/search-terms', auth, async (req, res) => {
 app.get('/api/google-ads/:customerId/devices', auth, async (req, res) => {
   try {
     const { customerId } = req.params
-    const { days = '30' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     const results = await gaqlQuery(customerId, `
       SELECT
@@ -1632,8 +1648,8 @@ app.get('/api/google-ads/:customerId/devices', auth, async (req, res) => {
 app.get('/api/google-ads/:customerId/hourly', auth, async (req, res) => {
   try {
     const { customerId } = req.params
-    const { days = '30' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     const results = await gaqlQuery(customerId, `
       SELECT
@@ -1729,16 +1745,29 @@ app.get('/api/analytics/properties', auth, (req, res) => {
 app.get('/api/analytics/:propertyId/report', auth, async (req, res) => {
   try {
     const { propertyId } = req.params
-    const { days = '7' } = req.query
+    const { days = '7', since, until } = req.query
     const d = parseInt(days)
     const token = await getGoogleAccessToken()
     if (!token) return res.status(500).json({ error: 'No Google token' })
 
     // Date ranges
-    const endDate = 'yesterday'
-    const startDate = `${d}daysAgo`
-    const prevEndDate = `${d + 1}daysAgo`
-    const prevStartDate = `${d * 2}daysAgo`
+    let startDate, endDate, prevStartDate, prevEndDate
+    if (since && until) {
+      startDate = since
+      endDate = until
+      const diffDays = Math.ceil((new Date(until) - new Date(since)) / 86400000) + 1
+      const prevEnd = new Date(since)
+      prevEnd.setDate(prevEnd.getDate() - 1)
+      const prevStart = new Date(prevEnd)
+      prevStart.setDate(prevStart.getDate() - diffDays + 1)
+      prevStartDate = fmtDate(prevStart)
+      prevEndDate = fmtDate(prevEnd)
+    } else {
+      endDate = 'yesterday'
+      startDate = `${d}daysAgo`
+      prevEndDate = `${d + 1}daysAgo`
+      prevStartDate = `${d * 2}daysAgo`
+    }
 
     // 1. KPIs with comparison
     const [kpiData, dailyData, sourceData, pageData, deviceData, sourceMediumData, landingData, newRetData, eventsData, dowData, cityData] = await Promise.all([
@@ -2050,8 +2079,8 @@ app.get('/api/kiwify/sales', auth, async (req, res) => {
   try {
     if (!KIWIFY_CLIENT_ID) return res.json({ available: false })
 
-    const { days = '30' } = req.query
-    const ranges = getDateRanges(parseInt(days))
+    const { days = '30', since, until } = req.query
+    const ranges = getDateRanges(parseInt(days), since, until)
 
     const [currentSales, previousSales, balanceData] = await Promise.all([
       fetchAllKiwifySales(ranges.current.since, ranges.current.until).catch(() => []),
@@ -2155,7 +2184,8 @@ app.get('/api/overview/:accountId', auth, async (req, res) => {
     const { accountId } = req.params
     const accountName = req.query.name || ''
     const days = parseInt(req.query.days || '7')
-    const ranges = getDateRanges(days)
+    const { since, until } = req.query
+    const ranges = getDateRanges(days, since, until)
 
     // Determine which data sources are available and fetch all in parallel
     const promises = {}

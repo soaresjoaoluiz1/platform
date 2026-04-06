@@ -20,13 +20,14 @@ import KiwifyView from '../components/KiwifyView'
 import GoogleAdsView from '../components/GoogleAdsView'
 import AnalyticsView from '../components/AnalyticsView'
 import OverviewView from '../components/OverviewView'
-import { Search, LogOut, BarChart3, Instagram, LineChart, LayoutDashboard } from 'lucide-react'
+import { Search, LogOut, BarChart3, Instagram, LineChart, LayoutDashboard, Calendar } from 'lucide-react'
 
 const DATE_OPTIONS = [
   { label: '7 dias', value: '7d' },
   { label: '14 dias', value: '14d' },
   { label: '30 dias', value: '30d' },
   { label: '90 dias', value: '90d' },
+  { label: 'Personalizado', value: 'custom' },
 ]
 
 type ClientTab = 'overview' | 'ads' | 'instagram' | 'googleads' | 'analytics'
@@ -37,6 +38,9 @@ export default function Dashboard() {
   const [selectedAccount, setSelectedAccount] = useState<MetaAccount | null>(null)
   const [clientTab, setClientTab] = useState<ClientTab>('overview')
   const [datePeriod, setDatePeriod] = useState('7d')
+  const [customDateFrom, setCustomDateFrom] = useState('')
+  const [customDateTo, setCustomDateTo] = useState('')
+  const [showCustomDates, setShowCustomDates] = useState(false)
   const [compareData, setCompareData] = useState<CompareResponse | null>(null)
   const [campaignCompare, setCampaignCompare] = useState<CompareResponse | null>(null)
   const [dailyCompare, setDailyCompare] = useState<DailyCompareResponse | null>(null)
@@ -54,16 +58,28 @@ export default function Dashboard() {
       .finally(() => setLoadingAccounts(false))
   }, [])
 
+  // Calculate days for custom period
+  const getEffectiveDays = (): number => {
+    if (datePeriod === 'custom' && customDateFrom && customDateTo) {
+      const diff = Math.ceil((new Date(customDateTo).getTime() - new Date(customDateFrom).getTime()) / 86400000) + 1
+      return Math.max(diff, 1)
+    }
+    return DAYS_MAP[datePeriod] || 7
+  }
+
   useEffect(() => {
     if (!selectedAccount || (clientTab !== 'ads' && clientTab !== 'overview')) return
-    if (clientTab === 'overview') return // overview fetches its own data
+    if (clientTab === 'overview') return
+    if (datePeriod === 'custom' && (!customDateFrom || !customDateTo)) return
     setLoadingData(true)
-    const days = DAYS_MAP[datePeriod]
+    const days = getEffectiveDays()
+    const since = datePeriod === 'custom' ? customDateFrom : undefined
+    const until = datePeriod === 'custom' ? customDateTo : undefined
 
     Promise.all([
-      fetchCompare(selectedAccount.id, days, 'account').catch(() => null),
-      fetchCompare(selectedAccount.id, days, 'campaign').catch(() => null),
-      fetchDailyCompare(selectedAccount.id, days).catch(() => null),
+      fetchCompare(selectedAccount.id, days, 'account', since, until).catch(() => null),
+      fetchCompare(selectedAccount.id, days, 'campaign', since, until).catch(() => null),
+      fetchDailyCompare(selectedAccount.id, days, since, until).catch(() => null),
     ])
       .then(([acct, camp, daily]) => {
         setCompareData(acct)
@@ -72,7 +88,7 @@ export default function Dashboard() {
         setLastUpdate(new Date())
       })
       .finally(() => setLoadingData(false))
-  }, [selectedAccount, datePeriod, clientTab])
+  }, [selectedAccount, datePeriod, clientTab, customDateFrom, customDateTo])
 
   // Reset tab when switching accounts
   useEffect(() => {
@@ -146,19 +162,30 @@ export default function Dashboard() {
             </div>
 
             {/* Date selector (shown for all tabs) */}
-            <div className="date-bar">
+            <div className="date-bar" style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
               <div className="date-selector">
                 {DATE_OPTIONS.map((opt) => (
-                  <button key={opt.value} className={`date-btn ${datePeriod === opt.value ? 'active' : ''}`} onClick={() => setDatePeriod(opt.value)}>
-                    {opt.label}
+                  <button key={opt.value} className={`date-btn ${datePeriod === opt.value ? 'active' : ''}`} onClick={() => {
+                    setDatePeriod(opt.value)
+                    if (opt.value === 'custom') setShowCustomDates(true)
+                    else setShowCustomDates(false)
+                  }}>
+                    {opt.value === 'custom' ? <><Calendar size={11} /> {opt.label}</> : opt.label}
                   </button>
                 ))}
               </div>
+              {showCustomDates && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <input type="date" className="input" value={customDateFrom} onChange={e => setCustomDateFrom(e.target.value)} style={{ width: 140, padding: '6px 10px', fontSize: 12 }} />
+                  <span style={{ color: '#6E6887', fontSize: 11 }}>ate</span>
+                  <input type="date" className="input" value={customDateTo} onChange={e => setCustomDateTo(e.target.value)} style={{ width: 140, padding: '6px 10px', fontSize: 12 }} />
+                </div>
+              )}
             </div>
 
             {/* Tab: Overview */}
             {clientTab === 'overview' && (
-              <OverviewView accountId={selectedAccount.id} accountName={selectedAccount.name} days={DAYS_MAP[datePeriod]} />
+              <OverviewView accountId={selectedAccount.id} accountName={selectedAccount.name} days={getEffectiveDays()} since={datePeriod === 'custom' ? customDateFrom : undefined} until={datePeriod === 'custom' ? customDateTo : undefined} />
             )}
 
             {/* Tab: Meta Ads */}
@@ -170,7 +197,7 @@ export default function Dashboard() {
                   <div className="empty-state">
                     <div className="icon">📭</div>
                     <h3>Sem dados no periodo</h3>
-                    <p>Nenhum dado encontrado para os ultimos {DAYS_MAP[datePeriod]} dias.</p>
+                    <p>Nenhum dado encontrado para os ultimos {getEffectiveDays()} dias.</p>
                   </div>
                 ) : (
                   <>
@@ -203,9 +230,9 @@ export default function Dashboard() {
                       <CampaignTable currentCampaigns={campaignCompare?.current || []} previousCampaigns={campaignCompare?.previous || []} />
                     </section>
 
-                    <CRMView accountId={selectedAccount.id} accountName={selectedAccount.name} days={DAYS_MAP[datePeriod]} adSpend={current ? parseFloat(current.spend) : undefined} />
+                    <CRMView accountId={selectedAccount.id} accountName={selectedAccount.name} days={getEffectiveDays()} adSpend={current ? parseFloat(current.spend) : undefined} />
 
-                    <KiwifyView accountName={selectedAccount.name} days={DAYS_MAP[datePeriod]} adSpend={current ? parseFloat(current.spend) : undefined} />
+                    <KiwifyView accountName={selectedAccount.name} days={getEffectiveDays()} adSpend={current ? parseFloat(current.spend) : undefined} />
                   </>
                 )}
               </>
@@ -218,12 +245,12 @@ export default function Dashboard() {
 
             {/* Tab: Google Ads */}
             {clientTab === 'googleads' && (
-              <GoogleAdsView accountName={selectedAccount.name} days={DAYS_MAP[datePeriod]} />
+              <GoogleAdsView accountName={selectedAccount.name} days={getEffectiveDays()} since={datePeriod === 'custom' ? customDateFrom : undefined} until={datePeriod === 'custom' ? customDateTo : undefined} />
             )}
 
             {/* Tab: Analytics */}
             {clientTab === 'analytics' && (
-              <AnalyticsView accountName={selectedAccount.name} days={DAYS_MAP[datePeriod]} />
+              <AnalyticsView accountName={selectedAccount.name} days={getEffectiveDays()} since={datePeriod === 'custom' ? customDateFrom : undefined} until={datePeriod === 'custom' ? customDateTo : undefined} />
             )}
 
             {/* Footer */}
