@@ -169,33 +169,59 @@ export default function OverviewView({ accountId, accountName, days }: Props) {
         </div>
       </section>
 
-      {/* Funnel */}
-      {funnelSteps.length >= 3 && (
-        <section className="dash-section">
-          <div className="section-title">Funil de Conversao</div>
-          <div className="chart-card">
-            <div className="crm-funnel">
-              {funnelSteps.map((step, i) => {
-                const maxVal = funnelSteps[0]?.value || 1
-                const width = Math.max((step.value / maxVal) * 100, 12)
-                const prevStep = funnelSteps[i - 1]
-                const rate = prevStep && prevStep.value > 0 ? ((step.value / prevStep.value) * 100).toFixed(1) + '%' : ''
-                return (
-                  <div key={step.name} className="crm-funnel-row">
-                    <div className="crm-funnel-label">{step.name}</div>
-                    <div className="crm-funnel-bar-wrap">
-                      <div className="crm-funnel-bar" style={{ width: `${width}%`, background: step.color }}>
-                        <span>{formatNumber(step.value)}</span>
-                      </div>
-                      {rate && <span className="crm-funnel-rate">{rate}</span>}
-                    </div>
-                  </div>
-                )
-              })}
+      {/* Funnel + Daily Chart side by side */}
+      <section className="dash-section">
+        <div className="section-title">Desempenho</div>
+        <div className="charts-grid">
+          {/* Daily timeline chart */}
+          {dailyData.length > 1 && (
+            <div className="chart-card">
+              <h3>Investimento & Leads por Dia</h3>
+              <ResponsiveContainer width="100%" height={260}>
+                <ComposedChart data={dailyData}>
+                  <defs>
+                    <linearGradient id="ovSpendGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#EA4335" stopOpacity={0.2} /><stop offset="100%" stopColor="#EA4335" stopOpacity={0} /></linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                  <XAxis dataKey="date" tick={{ fill: '#6E6887', fontSize: 10 }} />
+                  <YAxis yAxisId="left" tick={{ fill: '#6E6887', fontSize: 10 }} tickFormatter={(v: number) => `R$${v}`} />
+                  <YAxis yAxisId="right" orientation="right" tick={{ fill: '#6E6887', fontSize: 10 }} />
+                  <Tooltip content={<Tip />} />
+                  <Area yAxisId="left" type="monotone" dataKey="investimento" name="Investimento" stroke="#EA4335" fill="url(#ovSpendGrad2)" strokeWidth={2} />
+                  <Bar yAxisId="right" dataKey="leads" name="Leads" fill="#34A853" radius={[3, 3, 0, 0]} barSize={14} opacity={0.8} />
+                </ComposedChart>
+              </ResponsiveContainer>
             </div>
-          </div>
-        </section>
-      )}
+          )}
+
+          {/* Funnel — Same style as Meta Ads tab */}
+          {funnelSteps.length >= 3 && (() => {
+            const COLORS = ['#FF6B8A', '#FFAA83', '#9B59B6', '#5DADE2', '#34C759', '#FFB300']
+            const maxWidth = 100, minWidth = 28
+            const widthStep = funnelSteps.length > 1 ? (maxWidth - minWidth) / (funnelSteps.length - 1) : 0
+            return (
+              <div className="chart-card">
+                <h3>Funil de Conversao</h3>
+                <div className="funnel-container">
+                  {funnelSteps.map((step, i) => {
+                    const width = maxWidth - widthStep * i
+                    const convRate = i > 0 && funnelSteps[i - 1].value > 0 ? ((step.value / funnelSteps[i - 1].value) * 100).toFixed(1) + '%' : null
+                    return (
+                      <div key={step.name} className="funnel-tier" style={{ width: `${width}%` }}>
+                        <div className="funnel-tier-bar" style={{ background: COLORS[i % COLORS.length] }}>
+                          <div className="funnel-tier-label">{step.name}</div>
+                          <div className="funnel-tier-value">{formatNumber(step.value)}</div>
+                        </div>
+                        {convRate && <div className="funnel-tier-rate">{convRate}</div>}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })()}
+        </div>
+      </section>
 
       {/* Channel Comparison */}
       {channels.length > 0 && (
@@ -240,12 +266,12 @@ export default function OverviewView({ accountId, accountName, days }: Props) {
         </section>
       )}
 
-      {/* Combined Daily Chart */}
-      {dailyData.length > 2 && (
+      {/* Combined Daily Chart — full width below */}
+      {dailyData.length > 2 && hasGA4 && (
         <section className="dash-section">
-          <div className="section-title">Timeline Unificada</div>
+          <div className="section-title">Sessoes do Site</div>
           <div className="chart-card full-width">
-            <ResponsiveContainer width="100%" height={280}>
+            <ResponsiveContainer width="100%" height={220}>
               <ComposedChart data={dailyData}>
                 <defs>
                   <linearGradient id="ovSpendGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#EA4335" stopOpacity={0.2} /><stop offset="100%" stopColor="#EA4335" stopOpacity={0} /></linearGradient>

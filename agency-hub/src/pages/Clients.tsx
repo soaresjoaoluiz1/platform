@@ -7,7 +7,7 @@ export default function Clients() {
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
   const [showNew, setShowNew] = useState(false)
-  const [newClient, setNewClient] = useState({ name: '', contact_name: '', contact_email: '', contact_phone: '', drive_folder: '' })
+  const [newClient, setNewClient] = useState({ name: '', contact_name: '', contact_email: '', contact_phone: '', drive_folder: '', password: '' })
   const [editId, setEditId] = useState<number | null>(null)
   const navigate = useNavigate()
   const [editData, setEditData] = useState<any>({})
@@ -15,7 +15,7 @@ export default function Clients() {
   const load = () => { setLoading(true); fetchClients().then(setClients).finally(() => setLoading(false)) }
   useEffect(load, [])
 
-  const handleCreate = async () => { if (!newClient.name) return; await createClient(newClient); setShowNew(false); setNewClient({ name: '', contact_name: '', contact_email: '', contact_phone: '', drive_folder: '' }); load() }
+  const handleCreate = async () => { if (!newClient.name || !newClient.contact_email || !newClient.password) return; await createClient(newClient); setShowNew(false); setNewClient({ name: '', contact_name: '', contact_email: '', contact_phone: '', drive_folder: '', password: '' }); load() }
   const handleSaveEdit = async () => { if (!editId) return; await updateClient(editId, editData); setEditId(null); load() }
   const startEdit = (c: Client) => { setEditId(c.id); setEditData({ name: c.name, contact_name: c.contact_name || '', contact_email: c.contact_email || '', contact_phone: (c as any).contact_phone || '' }) }
 
@@ -57,10 +57,14 @@ export default function Clients() {
         <div className="modal-overlay" onClick={() => setShowNew(false)}><div className="modal" onClick={e => e.stopPropagation()}>
           <h2>Novo Cliente</h2>
           <div className="form-group"><label>Nome *</label><input className="input" value={newClient.name} onChange={e => setNewClient(p => ({ ...p, name: e.target.value }))} /></div>
-          <div className="form-row"><div className="form-group"><label>Nome Contato</label><input className="input" value={newClient.contact_name} onChange={e => setNewClient(p => ({ ...p, contact_name: e.target.value }))} /></div><div className="form-group"><label>Email</label><input className="input" value={newClient.contact_email} onChange={e => setNewClient(p => ({ ...p, contact_email: e.target.value }))} /></div></div>
+          <div className="form-row"><div className="form-group"><label>Nome do Contato</label><input className="input" value={newClient.contact_name} onChange={e => setNewClient(p => ({ ...p, contact_name: e.target.value }))} placeholder="Nome da pessoa" /></div><div className="form-group"><label>Email de Acesso *</label><input className="input" type="email" value={newClient.contact_email} onChange={e => setNewClient(p => ({ ...p, contact_email: e.target.value }))} placeholder="email@cliente.com" /></div></div>
           <div className="form-row">
             <div className="form-group"><label>Telefone</label><input className="input" value={newClient.contact_phone} onChange={e => setNewClient(p => ({ ...p, contact_phone: e.target.value }))} /></div>
-            <div className="form-group"><label>Pasta do Drive</label><input className="input" value={newClient.drive_folder} onChange={e => setNewClient(p => ({ ...p, drive_folder: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
+            <div className="form-group"><label>Senha de Acesso *</label><input className="input" type="password" value={newClient.password} onChange={e => setNewClient(p => ({ ...p, password: e.target.value }))} placeholder="Senha para o cliente acessar o sistema" /></div>
+          </div>
+          <div className="form-group"><label>Pasta do Drive</label><input className="input" value={newClient.drive_folder} onChange={e => setNewClient(p => ({ ...p, drive_folder: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
+          <div style={{ padding: '10px 12px', background: 'rgba(245,166,35,0.06)', borderRadius: 8, fontSize: 12, color: '#F5A623', marginTop: 4 }}>
+            Um usuario sera criado automaticamente com o email e senha acima. O cliente usara essas credenciais pra acessar o sistema, aprovar tarefas e acompanhar o andamento.
           </div>
           <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNew(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreate}>Criar</button></div>
         </div></div>

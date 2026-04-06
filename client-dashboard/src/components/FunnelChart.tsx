@@ -29,16 +29,10 @@ export default function FunnelChart({ insight }: Props) {
     { label: 'Cliques no link', value: linkClicks },
   ]
 
-  // Bottom of funnel:
-  // Has purchases → show Vendas only
-  // Has leads + messaging → show total combined
-  // Has only one → show that one
-  if (purchases > 0) {
-    steps.push({ label: 'Vendas', value: purchases })
-  } else if (leads > 0 || messaging > 0) {
+  if (purchases > 0) steps.push({ label: 'Vendas', value: purchases })
+  else if (leads > 0 || messaging > 0) {
     const total = leads + messaging
-    const label = leads > 0 && messaging > 0 ? 'Leads + Conversas' : leads > 0 ? 'Leads' : 'Conversas'
-    steps.push({ label, value: total })
+    steps.push({ label: leads > 0 && messaging > 0 ? 'Leads + Conversas' : leads > 0 ? 'Leads' : 'Conversas', value: total })
   }
 
   const filtered = steps.filter((s) => s.value > 0)

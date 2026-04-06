@@ -9,12 +9,12 @@ const router = Router()
 // Stage transition rules per role
 const TRANSITIONS = {
   dono: null, // can do anything
-  funcionario: { backlog: ['em_producao'], em_producao: ['revisao_interna'] },
+  funcionario: null, // funcionarios can move to any stage
   cliente: { aguardando_cliente: ['aprovado_cliente', 'revisao_interna'] },
 }
 
 function canTransition(role, fromStage, toStage) {
-  if (role === 'dono') return true
+  if (TRANSITIONS[role] === null) return true // null = can do anything
   const allowed = TRANSITIONS[role]?.[fromStage]
   return allowed ? allowed.includes(toStage) : false
 }
@@ -150,7 +150,7 @@ router.put('/:id', requireRole('dono', 'funcionario'), (req, res) => {
   if (!task) return res.status(404).json({ error: 'Tarefa nao encontrada' })
   if (req.user.role === 'funcionario' && task.assigned_to !== req.user.id) return res.status(403).json({ error: 'Sem permissao' })
 
-  const { title, description, due_date, priority, department_id, assigned_to, drive_link, category_id } = req.body
+  const { title, description, due_date, priority, department_id, assigned_to, drive_link, drive_link_raw, category_id, approval_link, approval_text } = req.body
   const sets = []; const params = []
   if (title !== undefined) { sets.push('title = ?'); params.push(title) }
   if (description !== undefined) { sets.push('description = ?'); params.push(description) }
@@ -159,7 +159,10 @@ router.put('/:id', requireRole('dono', 'funcionario'), (req, res) => {
   if (department_id !== undefined) { sets.push('department_id = ?'); params.push(department_id) }
   if (assigned_to !== undefined) { sets.push('assigned_to = ?'); params.push(assigned_to) }
   if (drive_link !== undefined) { sets.push('drive_link = ?'); params.push(drive_link) }
+  if (drive_link_raw !== undefined) { sets.push('drive_link_raw = ?'); params.push(drive_link_raw) }
   if (category_id !== undefined) { sets.push('category_id = ?'); params.push(category_id) }
+  if (approval_link !== undefined) { sets.push('approval_link = ?'); params.push(approval_link) }
+  if (approval_text !== undefined) { sets.push('approval_text = ?'); params.push(approval_text) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
   sets.push("updated_at = datetime('now')"); params.push(req.params.id)
   const oldAssigned = task.assigned_to
@@ -187,6 +190,11 @@ router.put('/:id/stage', (req, res) => {
 
   if (!canTransition(req.user.role, task.stage, stage)) {
     return res.status(403).json({ error: `Transicao ${task.stage} → ${stage} nao permitida para ${req.user.role}` })
+  }
+
+  // Require approval_link for approval stages
+  if ((stage === 'aprovacao_interna' || stage === 'aguardando_cliente') && !task.approval_link) {
+    return res.status(400).json({ error: 'Preencha o conteudo de aprovacao (link + texto) antes de enviar pra aprovacao' })
   }
 
   db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now') WHERE id = ?").run(stage, task.id)
