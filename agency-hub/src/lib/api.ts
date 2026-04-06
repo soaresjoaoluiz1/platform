@@ -22,6 +22,7 @@ export interface Task {
   id: number; client_id: number; category_id: number | null; department_id: number | null
   stage: string; title: string; description: string | null; due_date: string | null
   priority: string; assigned_to: number | null; drive_link: string | null; drive_link_raw: string | null
+  approval_link: string | null; approval_text: string | null
   created_by: number; is_active: number; created_at: string; updated_at: string
   client_name?: string; department_name?: string; department_color?: string
   category_name?: string; category_color?: string; assigned_name?: string

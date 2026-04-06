@@ -44,14 +44,15 @@ export default function TaskDetail() {
     if (!id) return
     const data = await fetchTask(+id)
     setTask(data.task); setComments(data.comments); setHistory(data.history); setAttachments(data.attachments)
-    setEditData({ title: data.task.title, description: data.task.description || '', due_date: data.task.due_date?.slice(0, 10) || '', priority: data.task.priority, department_id: data.task.department_id || '', assigned_to: data.task.assigned_to || '', category_id: data.task.category_id || '', drive_link: data.task.drive_link || '', drive_link_raw: data.task.drive_link_raw || '' })
+    setEditData({ title: data.task.title, description: data.task.description || '', due_date: data.task.due_date?.slice(0, 10) || '', priority: data.task.priority, department_id: data.task.department_id || '', assigned_to: data.task.assigned_to || '', category_id: data.task.category_id || '', drive_link: data.task.drive_link || '', drive_link_raw: data.task.drive_link_raw || '', approval_link: data.task.approval_link || '', approval_text: data.task.approval_text || '' })
     setTimeEntries(data.timeEntries || []); setTotalTime(data.totalTimeSeconds || 0)
     if (data.activeTimer) { setActiveTimerEntry(data.activeTimer); setTimerRunning(true) } else { setActiveTimerEntry(null); setTimerRunning(false) }
   }, [id])
 
   useEffect(() => {
     setLoading(true)
-    Promise.all([loadTask(), isDono ? fetchClients().then(setClients) : Promise.resolve(), isDono ? fetchDepartments().then(setDepartments) : Promise.resolve(), isDono ? fetchUsers().then(setUsers) : Promise.resolve(), fetchCategories().then(setCategories)])
+    const loadMeta = isDono || isFunc
+    Promise.all([loadTask(), loadMeta ? fetchClients().then(setClients) : Promise.resolve(), loadMeta ? fetchDepartments().then(setDepartments) : Promise.resolve(), loadMeta ? fetchUsers().then(setUsers) : Promise.resolve(), fetchCategories().then(setCategories)])
       .finally(() => setLoading(false))
   }, [loadTask, isDono])
   useSSE('task:stage_changed', useCallback((data: any) => { if (data.id === parseInt(id || '0')) loadTask() }, [id, loadTask]))
@@ -148,7 +149,7 @@ export default function TaskDetail() {
                 <div className="form-group"><label>Descricao</label><textarea className="input" rows={3} value={editData.description} onChange={e => setEditData((p: any) => ({ ...p, description: e.target.value }))} /></div>
                 <div className="form-row">
                   <div className="form-group"><label>Departamento</label><select className="select" value={editData.department_id} onChange={e => setEditData((p: any) => ({ ...p, department_id: e.target.value }))}><option value="">Nenhum</option>{departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}</select></div>
-                  <div className="form-group"><label>Responsavel</label><select className="select" value={editData.assigned_to} onChange={e => setEditData((p: any) => ({ ...p, assigned_to: e.target.value }))}><option value="">Ninguem</option>{users.filter(u => u.role === 'funcionario').map(u => <option key={u.id} value={u.id}>{u.name}</option>)}</select></div>
+                  <div className="form-group"><label>Responsavel</label><select className="select" value={editData.assigned_to} onChange={e => setEditData((p: any) => ({ ...p, assigned_to: e.target.value }))}><option value="">Ninguem</option>{users.filter((u: any) => u.role === 'funcionario' && u.is_active).map((u: any) => <option key={u.id} value={u.id}>{u.name}{u.departments?.length ? ` (${u.departments.map((d: any) => d.name).join(', ')})` : ''}</option>)}</select></div>
                 </div>
                 <div className="form-row">
                   <div className="form-group"><label>Prazo</label><input className="input" type="date" value={editData.due_date} onChange={e => setEditData((p: any) => ({ ...p, due_date: e.target.value }))} /></div>
@@ -159,7 +160,14 @@ export default function TaskDetail() {
                   <div className="form-group"><label>Link Drive (Arquivo Bruto)</label><input className="input" value={editData.drive_link_raw} onChange={e => setEditData((p: any) => ({ ...p, drive_link_raw: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
                   <div className="form-group"><label>Link Drive (Arquivo Pronto)</label><input className="input" value={editData.drive_link} onChange={e => setEditData((p: any) => ({ ...p, drive_link: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
                 </div>
-                <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                {/* Approval content section */}
+                <div style={{ marginTop: 12, padding: '14px 16px', background: 'rgba(245,166,35,0.04)', border: '1px solid rgba(245,166,35,0.12)', borderRadius: 10 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Conteudo para Aprovacao</div>
+                  <div className="form-group"><label>Link do arquivo finalizado *</label><input className="input" value={editData.approval_link} onChange={e => setEditData((p: any) => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive com o arquivo pronto pra aprovacao..." /></div>
+                  <div className="form-group"><label>Texto / Legenda</label><textarea className="input" rows={3} value={editData.approval_text} onChange={e => setEditData((p: any) => ({ ...p, approval_text: e.target.value }))} placeholder="Legenda do post, texto da publicacao, descricao..." /></div>
+                  <div style={{ fontSize: 10, color: '#6E6887' }}>Obrigatorio preencher o link antes de enviar pra aprovacao interna ou do cliente.</div>
+                </div>
+                <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
                   <button className="btn btn-primary btn-sm" onClick={handleSaveEdit}><Save size={12} /> Salvar</button>
                   <button className="btn btn-secondary btn-sm" onClick={() => setEditing(false)}><X size={12} /> Cancelar</button>
                 </div>
@@ -209,8 +217,55 @@ export default function TaskDetail() {
           </div>
         </div>
 
-        {/* Right: Comments/History/Attachments */}
+        {/* Right column — different for client vs team */}
         <div>
+          {/* CLIENT VIEW: Approval content only */}
+          {isCliente ? (
+            <div>
+              {/* Approval content */}
+              {(task.approval_link || task.approval_text) ? (
+                <div className="card" style={{ marginBottom: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>Conteudo para Aprovacao</div>
+                  {task.approval_link && (
+                    <a href={task.approval_link} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm" style={{ marginBottom: 12, display: 'inline-flex' }}>
+                      <ExternalLink size={14} /> Ver Arquivo
+                    </a>
+                  )}
+                  {task.approval_text && (
+                    <div style={{ padding: '14px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)', fontSize: 14, lineHeight: 1.6, color: '#F2F0F7', whiteSpace: 'pre-wrap' }}>
+                      {task.approval_text}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="card" style={{ textAlign: 'center', padding: 40, color: '#6E6887' }}>
+                  Conteudo ainda nao disponivel. A equipe esta trabalhando nesta tarefa.
+                </div>
+              )}
+
+              {/* Client comments (non-internal only) */}
+              <div className="card">
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#6E6887', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>Comentarios</div>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                  <input className="input" placeholder="Deixe um comentario..." value={commentText} onChange={e => setCommentText(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleComment()} />
+                  <button className="btn btn-primary btn-icon" onClick={handleComment}><Send size={16} /></button>
+                </div>
+                {comments.length === 0 ? (
+                  <div style={{ textAlign: 'center', color: '#6E6887', padding: 20, fontSize: 13 }}>Nenhum comentario</div>
+                ) : [...comments].reverse().map(c => (
+                  <div key={c.id} style={{ padding: '10px 12px', marginBottom: 6, borderRadius: 8, background: 'rgba(52,199,89,0.04)', border: '1px solid rgba(52,199,89,0.12)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>{c.user_name}</span>
+                    </div>
+                    <div style={{ fontSize: 13 }}>{c.content}</div>
+                    <div style={{ fontSize: 10, color: '#6E6887', marginTop: 4 }}>{new Date(c.created_at).toLocaleString('pt-BR')}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+          /* TEAM VIEW: Full tabs */
+          <>
           <div style={{ display: 'flex', gap: 4, marginBottom: 8, flexWrap: 'wrap' }}>
             <button className={`btn btn-sm ${activeTab === 'comments' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setActiveTab('comments')}><MessageCircle size={12} /> Comentarios ({comments.length})</button>
             <button className={`btn btn-sm ${activeTab === 'history' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setActiveTab('history')}><GitBranch size={12} /> Historico</button>
@@ -294,6 +349,8 @@ export default function TaskDetail() {
               ))}
               {attachments.length === 0 && <div style={{ textAlign: 'center', color: '#6B6580', padding: 30 }}>Nenhum anexo</div>}
             </div>
+          )}
+          </>
           )}
         </div>
       </div>

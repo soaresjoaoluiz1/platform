@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import bcrypt from 'bcryptjs'
 import db from '../db.js'
 import { requireRole } from '../middleware/auth.js'
 
@@ -14,12 +15,25 @@ router.get('/', requireRole('dono', 'funcionario'), (req, res) => {
 })
 
 router.post('/', requireRole('dono'), (req, res) => {
-  const { name, contact_name, contact_email, contact_phone, logo_url, drive_folder } = req.body
+  const { name, contact_name, contact_email, contact_phone, logo_url, drive_folder, password } = req.body
   if (!name) return res.status(400).json({ error: 'Nome obrigatorio' })
+  if (!contact_email) return res.status(400).json({ error: 'Email obrigatorio' })
+  if (!password) return res.status(400).json({ error: 'Senha obrigatoria' })
+
+  // Check if email already in use
+  if (db.prepare('SELECT id FROM users WHERE email = ?').get(contact_email)) return res.status(400).json({ error: 'Email ja cadastrado' })
+
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   if (db.prepare('SELECT id FROM clients WHERE slug = ?').get(slug)) return res.status(400).json({ error: 'Cliente ja existe' })
-  const result = db.prepare('INSERT INTO clients (name, slug, contact_name, contact_email, contact_phone, logo_url, drive_folder) VALUES (?, ?, ?, ?, ?, ?, ?)').run(name, slug, contact_name, contact_email, contact_phone, logo_url, drive_folder || null)
-  res.json({ client: db.prepare('SELECT * FROM clients WHERE id = ?').get(result.lastInsertRowid) })
+
+  // Create client
+  const result = db.prepare('INSERT INTO clients (name, slug, contact_name, contact_email, contact_phone, logo_url, drive_folder) VALUES (?, ?, ?, ?, ?, ?, ?)').run(name, slug, contact_name || name, contact_email, contact_phone, logo_url, drive_folder || null)
+  const clientId = result.lastInsertRowid
+
+  // Auto-create user with role 'cliente'
+  db.prepare("INSERT INTO users (client_id, name, email, password, role) VALUES (?, ?, ?, ?, 'cliente')").run(clientId, contact_name || name, contact_email, bcrypt.hashSync(password, 10))
+
+  res.json({ client: db.prepare('SELECT * FROM clients WHERE id = ?').get(clientId) })
 })
 
 router.get('/:id', requireRole('dono'), (req, res) => {

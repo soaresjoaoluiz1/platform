@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { fetchClient, updateClient, fetchClientCredentials, createClientCredential, updateClientCredential, deleteClientCredential, type Client, type ClientCredential } from '../lib/api'
-import { ArrowLeft, Building2, ExternalLink, Plus, Edit3, Save, X, Trash2, Eye, EyeOff, Key } from 'lucide-react'
+import { fetchClient, updateClient, fetchClientCredentials, createClientCredential, updateClientCredential, deleteClientCredential, apiFetch, type Client, type ClientCredential, type User as UserT } from '../lib/api'
+import { ArrowLeft, Building2, ExternalLink, Plus, Edit3, Save, X, Trash2, Eye, EyeOff, Key, Users, Lock } from 'lucide-react'
 
 const PLATFORMS = ['Facebook', 'Instagram', 'Google Ads', 'Google Analytics', 'Google Meu Negocio', 'Meta Business', 'TikTok', 'LinkedIn', 'YouTube', 'Twitter/X', 'Pinterest', 'Kiwify', 'Hotmart', 'RD Station', 'Outro']
 
@@ -13,7 +13,10 @@ export default function ClientDetail() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
   const [editData, setEditData] = useState<any>({})
-  const [activeTab, setActiveTab] = useState<'info' | 'credentials'>('info')
+  const [activeTab, setActiveTab] = useState<'info' | 'credentials' | 'users'>('info')
+  const [clientUsers, setClientUsers] = useState<any[]>([])
+  const [resetPassId, setResetPassId] = useState<number | null>(null)
+  const [newPassword, setNewPassword] = useState('')
   const [showNewCred, setShowNewCred] = useState(false)
   const [newCred, setNewCred] = useState({ platform: '', login: '', password: '', observation: '' })
   const [showPasswords, setShowPasswords] = useState<Set<number>>(new Set())
@@ -25,7 +28,7 @@ export default function ClientDetail() {
     setLoading(true)
     try {
       const data = await fetchClient(+id)
-      setClient(data.client); setCredentials((data as any).credentials || [])
+      setClient(data.client); setCredentials((data as any).credentials || []); setClientUsers((data as any).users || [])
       setEditData({ name: data.client.name, contact_name: data.client.contact_name || '', contact_email: data.client.contact_email || '', contact_phone: (data.client as any).contact_phone || '', drive_folder: (data.client as any).drive_folder || '' })
     } catch {} finally { setLoading(false) }
   }
@@ -65,6 +68,7 @@ export default function ClientDetail() {
         <div style={{ display: 'flex', gap: 4 }}>
           <button className={`btn btn-sm ${activeTab === 'info' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setActiveTab('info')}>Dados</button>
           <button className={`btn btn-sm ${activeTab === 'credentials' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setActiveTab('credentials')}><Key size={12} /> Acessos ({credentials.length})</button>
+          <button className={`btn btn-sm ${activeTab === 'users' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setActiveTab('users')}><Users size={12} /> Usuarios ({clientUsers.length})</button>
         </div>
       </div>
 
@@ -173,6 +177,87 @@ export default function ClientDetail() {
                   <button className="btn btn-secondary" onClick={() => setShowNewCred(false)}>Cancelar</button>
                   <button className="btn btn-primary" onClick={handleCreateCred}>Criar Acesso</button>
                 </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Users tab */}
+      {activeTab === 'users' && (
+        <div>
+          {clientUsers.length === 0 ? (
+            <div className="empty-state" style={{ minHeight: 200 }}>
+              <h3>Nenhum usuario vinculado</h3>
+              <p>Este cliente ainda nao tem acesso ao sistema.</p>
+              <button className="btn btn-primary btn-sm" style={{ marginTop: 12 }} onClick={() => { setResetPassId(-1); setNewPassword('') }}><Plus size={14} /> Criar Acesso</button>
+            </div>
+          ) : (
+            <div className="table-card">
+              <table>
+                <thead><tr><th>Nome</th><th>Email</th><th>Role</th><th>Status</th><th className="right">Acoes</th></tr></thead>
+                <tbody>
+                  {clientUsers.map((u: any) => (
+                    <tr key={u.id}>
+                      <td className="name">{u.name}</td>
+                      <td>{u.email}</td>
+                      <td><span className="stage-badge" style={{ background: 'rgba(255,179,0,0.1)', color: '#F5A623' }}>{u.role}</span></td>
+                      <td><span style={{ color: u.is_active ? '#22C55E' : '#EF4444' }}>{u.is_active ? 'Ativo' : 'Inativo'}</span></td>
+                      <td className="right">
+                        <button className="btn btn-secondary btn-sm" onClick={() => { setResetPassId(u.id); setNewPassword('') }}>
+                          <Lock size={12} /> Resetar Senha
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Reset password / Create access modal */}
+          {resetPassId && (
+            <div className="modal-overlay" onClick={() => setResetPassId(null)}>
+              <div className="modal" onClick={e => e.stopPropagation()}>
+                {resetPassId === -1 ? (
+                  <>
+                    <h2>Criar Acesso para o Cliente</h2>
+                    <p style={{ fontSize: 13, color: '#A8A3B8', marginBottom: 16 }}>
+                      Um usuario sera criado com o email <strong>{client?.contact_email}</strong> para acessar o sistema.
+                    </p>
+                    <div className="form-group">
+                      <label>Senha de Acesso</label>
+                      <input className="input" type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Defina uma senha..." />
+                    </div>
+                    <div className="modal-actions">
+                      <button className="btn btn-secondary" onClick={() => setResetPassId(null)}>Cancelar</button>
+                      <button className="btn btn-primary" disabled={!newPassword.trim() || !client?.contact_email} onClick={async () => {
+                        await apiFetch('/api/users', { method: 'POST', body: JSON.stringify({ name: client?.contact_name || client?.name, email: client?.contact_email, password: newPassword, role: 'cliente', client_id: client?.id }) })
+                        setResetPassId(null); setNewPassword('')
+                        load()
+                      }}>Criar Acesso</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h2>Resetar Senha</h2>
+                    <p style={{ fontSize: 13, color: '#A8A3B8', marginBottom: 16 }}>
+                      Defina uma nova senha para <strong>{clientUsers.find((u: any) => u.id === resetPassId)?.name}</strong>
+                    </p>
+                    <div className="form-group">
+                      <label>Nova Senha</label>
+                      <input className="input" type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Digite a nova senha..." />
+                    </div>
+                    <div className="modal-actions">
+                      <button className="btn btn-secondary" onClick={() => setResetPassId(null)}>Cancelar</button>
+                      <button className="btn btn-primary" disabled={!newPassword.trim()} onClick={async () => {
+                        await apiFetch(`/api/users/${resetPassId}`, { method: 'PUT', body: JSON.stringify({ password: newPassword }) })
+                        setResetPassId(null); setNewPassword('')
+                        alert('Senha alterada com sucesso!')
+                      }}>Salvar Nova Senha</button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}
