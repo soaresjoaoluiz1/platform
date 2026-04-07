@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { fetchClient, updateClient, fetchClientCredentials, createClientCredential, updateClientCredential, deleteClientCredential, fetchClientOnboard, fetchServices, fetchClientServices, updateClientServices, apiFetch, type Client, type ClientCredential, type User as UserT, type Service } from '../lib/api'
+import { fetchClient, updateClient, fetchClientCredentials, createClientCredential, updateClientCredential, deleteClientCredential, fetchClientOnboard, fetchServices, fetchClientServices, updateClientServices, apiFetch, type Client, type ClientCredential, type User as UserT, type Service, type ClientService } from '../lib/api'
 import { ArrowLeft, Building2, ExternalLink, Plus, Edit3, Save, X, Trash2, Eye, EyeOff, Key, Users, Lock, ClipboardCopy, FileText, CheckCircle, Briefcase } from 'lucide-react'
 
 const PLATFORMS = ['Facebook', 'Instagram', 'Google Ads', 'Google Analytics', 'Google Meu Negocio', 'Meta Business', 'TikTok', 'LinkedIn', 'YouTube', 'Twitter/X', 'Pinterest', 'Kiwify', 'Hotmart', 'RD Station', 'Outro']
@@ -24,7 +24,7 @@ export default function ClientDetail() {
   const [editCredData, setEditCredData] = useState<any>({})
   const [onboardEntries, setOnboardEntries] = useState<any[]>([])
   const [allServices, setAllServices] = useState<Service[]>([])
-  const [clientServiceIds, setClientServiceIds] = useState<number[]>([])
+  const [clientSvcs, setClientSvcs] = useState<{ id: number; config: Record<string, string> }[]>([])
   const [servicesLoaded, setServicesLoaded] = useState(false)
   const [onboardLoading, setOnboardLoading] = useState(false)
   const [linkCopied, setLinkCopied] = useState(false)
@@ -73,11 +73,17 @@ export default function ClientDetail() {
   const loadServices = async () => {
     if (!id || servicesLoaded) return
     const [all, mine] = await Promise.all([fetchServices(), fetchClientServices(+id)])
-    setAllServices(all); setClientServiceIds(mine.map(s => s.id)); setServicesLoaded(true)
+    setAllServices(all); setClientSvcs(mine.map(s => ({ id: s.id, config: s.config || {} }))); setServicesLoaded(true)
   }
   const toggleService = async (sid: number) => {
-    const next = clientServiceIds.includes(sid) ? clientServiceIds.filter(x => x !== sid) : [...clientServiceIds, sid]
-    setClientServiceIds(next)
+    const exists = clientSvcs.find(s => s.id === sid)
+    const next = exists ? clientSvcs.filter(s => s.id !== sid) : [...clientSvcs, { id: sid, config: {} }]
+    setClientSvcs(next)
+    await updateClientServices(+id!, next)
+  }
+  const updateSvcConfig = async (sid: number, key: string, val: string) => {
+    const next = clientSvcs.map(s => s.id === sid ? { ...s, config: { ...s.config, [key]: val } } : s)
+    setClientSvcs(next)
     await updateClientServices(+id!, next)
   }
 
@@ -302,14 +308,45 @@ export default function ClientDetail() {
           {allServices.length === 0 ? (
             <p style={{ color: '#9B96B0', fontSize: 13 }}>Nenhum servico cadastrado ainda. Crie servicos na area de configuracoes.</p>
           ) : (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {allServices.map(s => {
-                const isOn = clientServiceIds.includes(s.id)
+                const svc = clientSvcs.find(cs => cs.id === s.id)
+                const isOn = !!svc
+                const nameLower = s.name.toLowerCase()
                 return (
-                  <button key={s.id} onClick={() => toggleService(s.id)}
-                    style={{ padding: '8px 16px', borderRadius: 8, border: `1px solid ${isOn ? s.color : 'rgba(255,255,255,0.08)'}`, background: isOn ? `${s.color}20` : 'rgba(255,255,255,0.03)', color: isOn ? s.color : '#9B96B0', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', fontWeight: isOn ? 600 : 400, transition: 'all 0.2s' }}>
-                    {isOn ? '\u2713 ' : ''}{s.name}
-                  </button>
+                  <div key={s.id} style={{ borderRadius: 10, border: `1px solid ${isOn ? s.color : 'rgba(255,255,255,0.08)'}`, background: isOn ? `${s.color}10` : 'rgba(255,255,255,0.02)', overflow: 'hidden' }}>
+                    <button onClick={() => toggleService(s.id)}
+                      style={{ width: '100%', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', border: 'none', color: isOn ? s.color : '#9B96B0', fontSize: 14, cursor: 'pointer', fontFamily: 'inherit', fontWeight: isOn ? 600 : 400, textAlign: 'left' }}>
+                      <span style={{ width: 20, height: 20, borderRadius: 5, border: `2px solid ${isOn ? s.color : 'rgba(255,255,255,0.12)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, background: isOn ? s.color : 'transparent', color: isOn ? '#06040C' : 'transparent', flexShrink: 0 }}>{isOn ? '\u2713' : ''}</span>
+                      {s.name}
+                    </button>
+                    {isOn && nameLower.includes('linha editorial') && (
+                      <div style={{ padding: '0 16px 12px', display: 'flex', gap: 10 }}>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ fontSize: 11, color: '#6E6887', display: 'block', marginBottom: 4 }}>Posts/mes</label>
+                          <input className="input" style={{ padding: '6px 10px', fontSize: 13 }} value={svc?.config.posts || ''} onChange={e => updateSvcConfig(s.id, 'posts', e.target.value)} placeholder="Ex: 15" />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ fontSize: 11, color: '#6E6887', display: 'block', marginBottom: 4 }}>Videos/mes</label>
+                          <input className="input" style={{ padding: '6px 10px', fontSize: 13 }} value={svc?.config.videos || ''} onChange={e => updateSvcConfig(s.id, 'videos', e.target.value)} placeholder="Ex: 4" />
+                        </div>
+                      </div>
+                    )}
+                    {isOn && nameLower.includes('trafego') && (
+                      <div style={{ padding: '0 16px 12px', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                        {['Relatorio Mensal', 'Relatorio Semanal'].map(opt => {
+                          const key = opt.toLowerCase().replace(/\s+/g, '_')
+                          const checked = svc?.config[key] === 'sim'
+                          return (
+                            <button key={opt} onClick={() => updateSvcConfig(s.id, key, checked ? '' : 'sim')}
+                              style={{ padding: '6px 14px', borderRadius: 6, border: `1px solid ${checked ? '#34C759' : 'rgba(255,255,255,0.08)'}`, background: checked ? 'rgba(52,199,89,0.1)' : 'transparent', color: checked ? '#34C759' : '#9B96B0', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
+                              {checked ? '\u2713 ' : ''}{opt}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
                 )
               })}
             </div>
