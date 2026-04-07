@@ -106,18 +106,18 @@ app.put('/api/services/:id', authenticate, (req, res) => {
   res.json({ service: db.prepare('SELECT * FROM services WHERE id = ?').get(req.params.id) })
 })
 
-// Client services
+// Client services (with config)
 app.get('/api/clients/:id/services', authenticate, (req, res) => {
-  const services = db.prepare('SELECT s.* FROM services s JOIN client_services cs ON cs.service_id = s.id WHERE cs.client_id = ? AND s.is_active = 1 ORDER BY s.name').all(req.params.id)
-  res.json({ services })
+  const rows = db.prepare('SELECT s.*, cs.config FROM services s JOIN client_services cs ON cs.service_id = s.id WHERE cs.client_id = ? AND s.is_active = 1 ORDER BY s.name').all(req.params.id)
+  res.json({ services: rows.map(r => ({ ...r, config: JSON.parse(r.config || '{}') })) })
 })
 app.put('/api/clients/:id/services', authenticate, (req, res) => {
   if (req.user.role !== 'dono') return res.status(403).json({ error: 'Forbidden' })
-  const { service_ids } = req.body
+  const { services } = req.body
   db.prepare('DELETE FROM client_services WHERE client_id = ?').run(req.params.id)
-  if (service_ids?.length) {
-    const stmt = db.prepare('INSERT INTO client_services (client_id, service_id) VALUES (?, ?)')
-    service_ids.forEach(sid => stmt.run(req.params.id, sid))
+  if (services?.length) {
+    const stmt = db.prepare('INSERT INTO client_services (client_id, service_id, config) VALUES (?, ?, ?)')
+    services.forEach(s => stmt.run(req.params.id, s.id, JSON.stringify(s.config || {})))
   }
   res.json({ ok: true })
 })

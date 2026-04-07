@@ -205,10 +205,11 @@ db.exec(`
     created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours'))
   );
 
-  -- Client-service many-to-many
+  -- Client-service many-to-many with config
   CREATE TABLE IF NOT EXISTS client_services (
     client_id   INTEGER NOT NULL,
     service_id  INTEGER NOT NULL,
+    config      TEXT DEFAULT '{}',
     PRIMARY KEY (client_id, service_id),
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE,
     FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE
@@ -290,6 +291,7 @@ try { db.exec("ALTER TABLE tasks ADD COLUMN approval_text TEXT") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN publish_date TEXT") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN publish_objective TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN onboard_token TEXT") } catch {}
+try { db.exec("ALTER TABLE client_services ADD COLUMN config TEXT DEFAULT '{}'") } catch {}
 
 // Client onboard responses table
 db.exec(`

@@ -117,5 +117,6 @@ export interface Service { id: number; name: string; color: string; is_active: n
 export const fetchServices = () => apiFetch<{ services: Service[] }>('/api/services').then(d => d.services)
 export const createService = (name: string, color: string) => apiFetch<{ service: Service }>('/api/services', { method: 'POST', body: JSON.stringify({ name, color }) }).then(d => d.service)
 export const updateService = (id: number, data: Partial<Service>) => apiFetch(`/api/services/${id}`, { method: 'PUT', body: JSON.stringify(data) })
-export const fetchClientServices = (clientId: number) => apiFetch<{ services: Service[] }>(`/api/clients/${clientId}/services`).then(d => d.services)
-export const updateClientServices = (clientId: number, serviceIds: number[]) => apiFetch(`/api/clients/${clientId}/services`, { method: 'PUT', body: JSON.stringify({ service_ids: serviceIds }) })
+export interface ClientService extends Service { config: Record<string, string> }
+export const fetchClientServices = (clientId: number) => apiFetch<{ services: ClientService[] }>(`/api/clients/${clientId}/services`).then(d => d.services)
+export const updateClientServices = (clientId: number, services: { id: number; config: Record<string, string> }[]) => apiFetch(`/api/clients/${clientId}/services`, { method: 'PUT', body: JSON.stringify({ services }) })
