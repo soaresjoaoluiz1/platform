@@ -58,7 +58,7 @@ router.put('/:id', requireRole('dono'), (req, res) => {
   if (drive_folder !== undefined) { sets.push('drive_folder = ?'); params.push(drive_folder) }
   if (is_active !== undefined) { sets.push('is_active = ?'); params.push(is_active ? 1 : 0) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
-  sets.push("updated_at = datetime('now')"); params.push(req.params.id)
+  sets.push("updated_at = datetime('now', '-3 hours')"); params.push(req.params.id)
   db.prepare(`UPDATE clients SET ${sets.join(', ')} WHERE id = ?`).run(...params)
   res.json({ client: db.prepare('SELECT * FROM clients WHERE id = ?').get(req.params.id) })
 })
@@ -84,7 +84,7 @@ router.put('/:id/credentials/:credId', requireRole('dono'), (req, res) => {
   if (password !== undefined) { sets.push('password = ?'); params.push(password) }
   if (observation !== undefined) { sets.push('observation = ?'); params.push(observation) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
-  sets.push("updated_at = datetime('now')"); params.push(req.params.credId)
+  sets.push("updated_at = datetime('now', '-3 hours')"); params.push(req.params.credId)
   db.prepare(`UPDATE client_credentials SET ${sets.join(', ')} WHERE id = ?`).run(...params)
   res.json({ credential: db.prepare('SELECT * FROM client_credentials WHERE id = ?').get(req.params.credId) })
 })

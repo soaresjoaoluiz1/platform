@@ -57,7 +57,7 @@ router.post('/:id/approve', (req, res) => {
     return res.status(403).json({ error: 'Nao pode aprovar neste estado' })
   }
 
-  db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now') WHERE id = ?").run(newStage, task.id)
+  db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now', '-3 hours') WHERE id = ?").run(newStage, task.id)
   db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id, comment) VALUES (?, ?, ?, ?, ?)').run(task.id, task.stage, newStage, req.user.id, comment || 'Aprovado')
   if (comment) db.prepare('INSERT INTO task_comments (task_id, user_id, content, is_internal) VALUES (?, ?, ?, 0)').run(task.id, req.user.id, comment)
 
@@ -86,7 +86,7 @@ router.post('/:id/reject', (req, res) => {
     return res.status(403).json({ error: 'Nao pode rejeitar neste estado' })
   }
 
-  db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now') WHERE id = ?").run(newStage, task.id)
+  db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now', '-3 hours') WHERE id = ?").run(newStage, task.id)
   db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id, comment) VALUES (?, ?, ?, ?, ?)').run(task.id, task.stage, newStage, req.user.id, `Rejeitado: ${comment}`)
   db.prepare('INSERT INTO task_comments (task_id, user_id, content, is_internal) VALUES (?, ?, ?, 0)').run(task.id, req.user.id, `Rejeitado: ${comment}`)
 

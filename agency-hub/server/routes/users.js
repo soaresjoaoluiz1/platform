@@ -39,7 +39,7 @@ router.put('/:id', requireRole('dono'), (req, res) => {
   if (password) { sets.push('password = ?'); params.push(bcrypt.hashSync(password, 10)) }
   if (client_id !== undefined) { sets.push('client_id = ?'); params.push(client_id) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
-  sets.push("updated_at = datetime('now')"); params.push(req.params.id)
+  sets.push("updated_at = datetime('now', '-3 hours')"); params.push(req.params.id)
   db.prepare(`UPDATE users SET ${sets.join(', ')} WHERE id = ?`).run(...params)
   res.json({ user: db.prepare('SELECT id, name, email, role, client_id, is_active FROM users WHERE id = ?').get(req.params.id) })
 })
