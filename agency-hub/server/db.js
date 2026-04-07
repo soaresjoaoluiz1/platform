@@ -21,8 +21,8 @@ db.exec(`
     contact_email TEXT,
     contact_phone TEXT,
     is_active     INTEGER NOT NULL DEFAULT 1,
-    created_at    TEXT NOT NULL DEFAULT (datetime('now')),
-    updated_at    TEXT NOT NULL DEFAULT (datetime('now'))
+    created_at    TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
+    updated_at    TEXT NOT NULL DEFAULT (datetime('now', '-3 hours'))
   );
 
   -- Users (dono, funcionario, cliente)
@@ -35,8 +35,8 @@ db.exec(`
     role        TEXT NOT NULL CHECK (role IN ('dono', 'funcionario', 'cliente')),
     avatar_url  TEXT,
     is_active   INTEGER NOT NULL DEFAULT 1,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
-    updated_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE SET NULL
   );
 
@@ -46,7 +46,7 @@ db.exec(`
     name        TEXT NOT NULL UNIQUE,
     color       TEXT NOT NULL DEFAULT '#FFB300',
     is_active   INTEGER NOT NULL DEFAULT 1,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours'))
   );
 
   -- User-department many-to-many
@@ -64,7 +64,7 @@ db.exec(`
     name        TEXT NOT NULL UNIQUE,
     color       TEXT NOT NULL DEFAULT '#5DADE2',
     is_active   INTEGER NOT NULL DEFAULT 1,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours'))
   );
 
   -- Pipeline stages
@@ -75,7 +75,7 @@ db.exec(`
     position    INTEGER NOT NULL DEFAULT 0,
     color       TEXT NOT NULL DEFAULT '#FFB300',
     is_terminal INTEGER NOT NULL DEFAULT 0,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours'))
   );
 
   -- Tasks
@@ -93,8 +93,8 @@ db.exec(`
     drive_link      TEXT,
     created_by      INTEGER NOT NULL,
     is_active       INTEGER NOT NULL DEFAULT 1,
-    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
-    updated_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at      TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
+    updated_at      TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES task_categories(id) ON DELETE SET NULL,
     FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL,
@@ -115,7 +115,7 @@ db.exec(`
     user_id     INTEGER NOT NULL,
     content     TEXT NOT NULL,
     is_internal INTEGER NOT NULL DEFAULT 0,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
   );
@@ -129,7 +129,7 @@ db.exec(`
     to_stage    TEXT NOT NULL,
     user_id     INTEGER,
     comment     TEXT,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
   );
@@ -143,7 +143,7 @@ db.exec(`
     filename    TEXT NOT NULL,
     type        TEXT DEFAULT 'file',
     uploaded_by INTEGER,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE SET NULL
   );
@@ -158,7 +158,7 @@ db.exec(`
     ended_at    TEXT,
     duration_seconds INTEGER DEFAULT 0,
     description TEXT,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
   );
@@ -172,8 +172,8 @@ db.exec(`
     login       TEXT NOT NULL,
     password    TEXT NOT NULL,
     observation TEXT,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
-    updated_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
   );
   CREATE INDEX IF NOT EXISTS idx_credentials_client ON client_credentials(client_id);
@@ -188,7 +188,7 @@ db.exec(`
     task_id     INTEGER,
     triggered_by INTEGER,
     is_read     INTEGER NOT NULL DEFAULT 0,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     FOREIGN KEY (triggered_by) REFERENCES users(id) ON DELETE SET NULL
@@ -266,8 +266,8 @@ db.exec(`
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     client_id   INTEGER NOT NULL,
     data        TEXT NOT NULL,
-    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
-    updated_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
   );
 `)
@@ -277,7 +277,7 @@ try {
   const hasUnique = db.prepare("SELECT sql FROM sqlite_master WHERE name = 'client_onboard'").get()
   if (hasUnique && hasUnique.sql.includes('UNIQUE')) {
     db.exec(`
-      CREATE TABLE IF NOT EXISTS client_onboard_new (id INTEGER PRIMARY KEY AUTOINCREMENT, client_id INTEGER NOT NULL, data TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE);
+      CREATE TABLE IF NOT EXISTS client_onboard_new (id INTEGER PRIMARY KEY AUTOINCREMENT, client_id INTEGER NOT NULL, data TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')), updated_at TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')), FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE);
       INSERT INTO client_onboard_new SELECT * FROM client_onboard;
       DROP TABLE client_onboard;
       ALTER TABLE client_onboard_new RENAME TO client_onboard;

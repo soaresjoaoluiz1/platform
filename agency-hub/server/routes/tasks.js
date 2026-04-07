@@ -166,7 +166,7 @@ router.put('/:id', requireRole('dono', 'funcionario'), (req, res) => {
   if (publish_date !== undefined) { sets.push('publish_date = ?'); params.push(publish_date) }
   if (publish_objective !== undefined) { sets.push('publish_objective = ?'); params.push(publish_objective) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
-  sets.push("updated_at = datetime('now')"); params.push(req.params.id)
+  sets.push("updated_at = datetime('now', '-3 hours')"); params.push(req.params.id)
   const oldAssigned = task.assigned_to
   db.prepare(`UPDATE tasks SET ${sets.join(', ')} WHERE id = ?`).run(...params)
   const updated = db.prepare('SELECT * FROM tasks WHERE id = ?').get(req.params.id)
@@ -199,7 +199,7 @@ router.put('/:id/stage', (req, res) => {
     return res.status(400).json({ error: 'Preencha o conteudo de aprovacao (link + texto) antes de enviar pra aprovacao' })
   }
 
-  db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now') WHERE id = ?").run(stage, task.id)
+  db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now', '-3 hours') WHERE id = ?").run(stage, task.id)
   db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id, comment) VALUES (?, ?, ?, ?, ?)').run(task.id, task.stage, stage, req.user.id, comment || null)
 
   const updated = db.prepare('SELECT * FROM tasks WHERE id = ?').get(task.id)
@@ -278,7 +278,7 @@ router.post('/:id/time/stop', (req, res) => {
 router.post('/bulk/stage', requireRole('dono'), (req, res) => {
   const { task_ids, stage } = req.body
   if (!task_ids?.length || !stage) return res.status(400).json({ error: 'task_ids and stage required' })
-  const stmtUpdate = db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now') WHERE id = ?")
+  const stmtUpdate = db.prepare("UPDATE tasks SET stage = ?, updated_at = datetime('now', '-3 hours') WHERE id = ?")
   const stmtHistory = db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id) VALUES (?, (SELECT stage FROM tasks WHERE id = ?), ?, ?)')
   const transaction = db.transaction(() => { for (const id of task_ids) { stmtHistory.run(id, id, stage, req.user.id); stmtUpdate.run(stage, id) } })
   transaction()
@@ -288,7 +288,7 @@ router.post('/bulk/stage', requireRole('dono'), (req, res) => {
 router.post('/bulk/assign', requireRole('dono'), (req, res) => {
   const { task_ids, assigned_to } = req.body
   if (!task_ids?.length) return res.status(400).json({ error: 'task_ids required' })
-  const stmt = db.prepare("UPDATE tasks SET assigned_to = ?, updated_at = datetime('now') WHERE id = ?")
+  const stmt = db.prepare("UPDATE tasks SET assigned_to = ?, updated_at = datetime('now', '-3 hours') WHERE id = ?")
   const transaction = db.transaction(() => { for (const id of task_ids) stmt.run(assigned_to || null, id) })
   transaction()
   res.json({ ok: true, count: task_ids.length })
