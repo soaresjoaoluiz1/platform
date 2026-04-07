@@ -58,7 +58,9 @@ const STEPS = [
   ]},
 ]
 
-const ACCESS_ITEMS = ['Instagram', 'Facebook', 'Google Analytics', 'Gmail da empresa', 'Google Ads', 'WhatsApp Business', 'Dominio do site', 'Fotos dos produtos', 'Tabela de precos', 'Lista de clientes', 'Logo em alta qualidade', 'Catalogo de produtos']
+const ACCESS_WITH_LOGIN = ['Instagram', 'Facebook', 'Google Analytics', 'Gmail da empresa', 'Google Ads', 'WhatsApp Business', 'Dominio do site']
+const ACCESS_NO_LOGIN = ['Fotos dos produtos', 'Tabela de precos', 'Lista de clientes', 'Logo em alta qualidade', 'Catalogo de produtos']
+const ACCESS_ITEMS = [...ACCESS_WITH_LOGIN, ...ACCESS_NO_LOGIN]
 
 export default function Onboard() {
   const { token } = useParams<{ token: string }>()
@@ -170,16 +172,25 @@ export default function Onboard() {
                 </div>
               )}
               {f.type === 'access_check' && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {ACCESS_ITEMS.map(a => {
                     const key = `acesso_${a}`
                     const isOn = data[key] === 'Sim'
+                    const needsLogin = ACCESS_WITH_LOGIN.includes(a)
                     return (
-                      <button key={a} onClick={() => set(key, isOn ? '' : 'Sim')}
-                        style={{ ...styles.accessItem, ...(isOn ? { borderColor: '#34C759', background: 'rgba(52,199,89,0.1)', color: '#34C759' } : {}) }}>
-                        <span style={{ ...styles.accessIcon, ...(isOn ? { background: '#34C759', borderColor: '#34C759', color: '#06040C' } : {}) }}>{isOn ? '\u2713' : ''}</span>
-                        <span style={{ fontSize: 13 }}>{a}</span>
-                      </button>
+                      <div key={a}>
+                        <button onClick={() => { set(key, isOn ? '' : 'Sim'); if (isOn) { set(`${key}_login`, ''); set(`${key}_senha`, '') } }}
+                          style={{ ...styles.accessItem, width: '100%', ...(isOn ? { borderColor: '#34C759', background: 'rgba(52,199,89,0.1)', color: '#34C759' } : {}) }}>
+                          <span style={{ ...styles.accessIcon, ...(isOn ? { background: '#34C759', borderColor: '#34C759', color: '#06040C' } : {}) }}>{isOn ? '\u2713' : ''}</span>
+                          <span style={{ fontSize: 13 }}>{a}</span>
+                        </button>
+                        {isOn && needsLogin && (
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginTop: 6, marginLeft: 28 }}>
+                            <input style={{ ...styles.input, fontSize: 13, padding: '8px 10px' }} placeholder="Login / e-mail" value={data[`${key}_login`] || ''} onChange={e => set(`${key}_login`, e.target.value)} />
+                            <input style={{ ...styles.input, fontSize: 13, padding: '8px 10px' }} placeholder="Senha" value={data[`${key}_senha`] || ''} onChange={e => set(`${key}_senha`, e.target.value)} />
+                          </div>
+                        )}
+                      </div>
                     )
                   })}
                 </div>
