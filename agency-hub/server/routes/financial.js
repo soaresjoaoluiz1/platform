@@ -121,11 +121,115 @@ router.get('/dashboard', (req, res) => {
   const months = []
   for (let m = 1; m <= 12; m++) {
     const monthStr = `${year}-${String(m).padStart(2, '0')}`
-    const row = db.prepare('SELECT COALESCE(SUM(amount), 0) as total FROM payments WHERE reference_month = ?').get(monthStr)
-    months.push({ month: monthStr, total: row.total })
+    const revenue = db.prepare('SELECT COALESCE(SUM(amount), 0) as total FROM payments WHERE reference_month = ?').get(monthStr)
+    const expenses = db.prepare('SELECT COALESCE(SUM(amount), 0) as total FROM expenses WHERE reference_month = ?').get(monthStr)
+    months.push({ month: monthStr, revenue: revenue.total, expenses: expenses.total, profit: revenue.total - expenses.total })
   }
 
   res.json({ months })
+})
+
+// ==================== EXPENSES ====================
+
+// GET expense categories
+router.get('/expense-categories', (req, res) => {
+  res.json({ categories: db.prepare('SELECT * FROM expense_categories WHERE is_active = 1 ORDER BY name').all() })
+})
+
+// POST expense category
+router.post('/expense-categories', (req, res) => {
+  const { name, type, color } = req.body
+  if (!name) return res.status(400).json({ error: 'Nome obrigatorio' })
+  const result = db.prepare('INSERT INTO expense_categories (name, type, color) VALUES (?, ?, ?)').run(name, type || 'variable', color || '#FF6B6B')
+  res.json({ category: db.prepare('SELECT * FROM expense_categories WHERE id = ?').get(result.lastInsertRowid) })
+})
+
+// GET expenses for a month
+router.get('/expenses', (req, res) => {
+  const month = req.query.month
+  if (!month) return res.status(400).json({ error: 'month required' })
+  const expenses = db.prepare(`
+    SELECT e.*, ec.name as category_name, ec.color as category_color, ec.type as category_type
+    FROM expenses e JOIN expense_categories ec ON e.category_id = ec.id
+    WHERE e.reference_month = ? ORDER BY ec.name, e.description
+  `).all(month)
+
+  const totalFixed = expenses.filter(e => e.category_type === 'fixed').reduce((s, e) => s + e.amount, 0)
+  const totalVariable = expenses.filter(e => e.category_type === 'variable').reduce((s, e) => s + e.amount, 0)
+  const total = totalFixed + totalVariable
+
+  // Group by category
+  const byCategory = {}
+  expenses.forEach(e => {
+    if (!byCategory[e.category_name]) byCategory[e.category_name] = { name: e.category_name, color: e.category_color, type: e.category_type, total: 0, items: [] }
+    byCategory[e.category_name].total += e.amount
+    byCategory[e.category_name].items.push(e)
+  })
+
+  res.json({ expenses, byCategory: Object.values(byCategory), totalFixed, totalVariable, total })
+})
+
+// POST expense
+router.post('/expenses', (req, res) => {
+  const { category_id, description, amount, reference_month, paid_at, is_recurring } = req.body
+  if (!category_id || !amount || !reference_month) return res.status(400).json({ error: 'category_id, amount, reference_month obrigatorios' })
+  const result = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, paid_at, is_recurring) VALUES (?, ?, ?, ?, ?, ?)').run(category_id, description || null, amount, reference_month, paid_at || null, is_recurring ? 1 : 0)
+  res.json({ expense: db.prepare('SELECT * FROM expenses WHERE id = ?').get(result.lastInsertRowid) })
+})
+
+// PUT expense
+router.put('/expenses/:id', (req, res) => {
+  const { category_id, description, amount, paid_at } = req.body
+  const sets = []; const params = []
+  if (category_id !== undefined) { sets.push('category_id = ?'); params.push(category_id) }
+  if (description !== undefined) { sets.push('description = ?'); params.push(description) }
+  if (amount !== undefined) { sets.push('amount = ?'); params.push(amount) }
+  if (paid_at !== undefined) { sets.push('paid_at = ?'); params.push(paid_at) }
+  if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
+  params.push(req.params.id)
+  db.prepare(`UPDATE expenses SET ${sets.join(', ')} WHERE id = ?`).run(...params)
+  res.json({ expense: db.prepare('SELECT * FROM expenses WHERE id = ?').get(req.params.id) })
+})
+
+// DELETE expense
+router.delete('/expenses/:id', (req, res) => {
+  db.prepare('DELETE FROM expenses WHERE id = ?').run(req.params.id)
+  res.json({ ok: true })
+})
+
+// Copy recurring expenses to next month
+router.post('/expenses/copy-recurring', (req, res) => {
+  const { from_month, to_month } = req.body
+  if (!from_month || !to_month) return res.status(400).json({ error: 'from_month e to_month obrigatorios' })
+  const recurring = db.prepare('SELECT * FROM expenses WHERE reference_month = ? AND is_recurring = 1').all(from_month)
+  const stmt = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, is_recurring) VALUES (?, ?, ?, ?, 1)')
+  let count = 0
+  recurring.forEach(e => {
+    const exists = db.prepare('SELECT id FROM expenses WHERE category_id = ? AND description = ? AND reference_month = ?').get(e.category_id, e.description, to_month)
+    if (!exists) { stmt.run(e.category_id, e.description, e.amount, to_month); count++ }
+  })
+  res.json({ copied: count })
+})
+
+// DRE for a month
+router.get('/dre', (req, res) => {
+  const month = req.query.month
+  if (!month) return res.status(400).json({ error: 'month required' })
+
+  const revenue = db.prepare('SELECT COALESCE(SUM(amount), 0) as total FROM payments WHERE reference_month = ?').get(month).total
+  const expenseRows = db.prepare(`
+    SELECT ec.name, ec.type, ec.color, COALESCE(SUM(e.amount), 0) as total
+    FROM expense_categories ec LEFT JOIN expenses e ON e.category_id = ec.id AND e.reference_month = ?
+    WHERE ec.is_active = 1 GROUP BY ec.id ORDER BY ec.name
+  `).all(month)
+
+  const totalFixed = expenseRows.filter(r => r.type === 'fixed').reduce((s, r) => s + r.total, 0)
+  const totalVariable = expenseRows.filter(r => r.type === 'variable').reduce((s, r) => s + r.total, 0)
+  const totalExpenses = totalFixed + totalVariable
+  const profit = revenue - totalExpenses
+  const margin = revenue > 0 ? (profit / revenue) * 100 : 0
+
+  res.json({ month, revenue, totalFixed, totalVariable, totalExpenses, profit, margin: Math.round(margin * 10) / 10, categories: expenseRows.filter(r => r.total > 0) })
 })
 
 export default router

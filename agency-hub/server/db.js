@@ -321,6 +321,53 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_payments_month ON payments(reference_month);
 `)
 
+// Expense categories
+db.exec(`
+  CREATE TABLE IF NOT EXISTS expense_categories (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT NOT NULL UNIQUE,
+    type        TEXT NOT NULL DEFAULT 'fixed' CHECK (type IN ('fixed', 'variable')),
+    color       TEXT NOT NULL DEFAULT '#FF6B6B',
+    is_active   INTEGER NOT NULL DEFAULT 1
+  );
+`)
+
+// Expenses
+db.exec(`
+  CREATE TABLE IF NOT EXISTS expenses (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    category_id     INTEGER NOT NULL,
+    description     TEXT,
+    amount          REAL NOT NULL,
+    reference_month TEXT NOT NULL,
+    paid_at         TEXT,
+    is_recurring    INTEGER NOT NULL DEFAULT 0,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now', '-3 hours')),
+    FOREIGN KEY (category_id) REFERENCES expense_categories(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_expenses_month ON expenses(reference_month);
+  CREATE INDEX IF NOT EXISTS idx_expenses_cat ON expenses(category_id);
+`)
+
+// Seed expense categories
+const expCatExists = db.prepare('SELECT id FROM expense_categories LIMIT 1').get()
+if (!expCatExists) {
+  const cats = [
+    { name: 'Salarios', type: 'fixed', color: '#FF6B6B' },
+    { name: 'Ferramentas/Software', type: 'fixed', color: '#5DADE2' },
+    { name: 'Impostos', type: 'variable', color: '#FFAA83' },
+    { name: 'Aluguel/Escritorio', type: 'fixed', color: '#9B59B6' },
+    { name: 'Internet/Telefone', type: 'fixed', color: '#34C759' },
+    { name: 'Contabilidade', type: 'fixed', color: '#FFB300' },
+    { name: 'Marketing/Anuncios', type: 'variable', color: '#E91E63' },
+    { name: 'Emprestimos/Parcelas', type: 'fixed', color: '#FF6B8A' },
+    { name: 'Outros', type: 'variable', color: '#6B6580' },
+  ]
+  const stmt = db.prepare('INSERT INTO expense_categories (name, type, color) VALUES (?, ?, ?)')
+  cats.forEach(c => stmt.run(c.name, c.type, c.color))
+  console.log('[DB] Expense categories seeded')
+}
+
 // Task assignees (multi-assignee support)
 db.exec(`
   CREATE TABLE IF NOT EXISTS task_assignees (
