@@ -130,3 +130,18 @@ export interface MonthlyRevenue { month: string; total: number }
 export const fetchFinancialOverview = (month: string) => apiFetch<FinancialOverview>(`/api/financial/overview?month=${month}`)
 export const recordPayment = (data: { client_id: number; amount: number; reference_month: string; paid_at: string }) => apiFetch('/api/financial/payments', { method: 'POST', body: JSON.stringify(data) })
 export const fetchFinancialDashboard = (year: number) => apiFetch<{ months: MonthlyRevenue[] }>(`/api/financial/dashboard?year=${year}`)
+
+// Expenses
+export interface ExpenseCategory { id: number; name: string; type: 'fixed' | 'variable'; color: string }
+export interface Expense { id: number; category_id: number; category_name: string; category_color: string; category_type: string; description: string; amount: number; reference_month: string; paid_at: string; is_recurring: number }
+export interface ExpensesByCategory { name: string; color: string; type: string; total: number; items: Expense[] }
+export interface DRE { month: string; revenue: number; totalFixed: number; totalVariable: number; totalExpenses: number; profit: number; margin: number; categories: { name: string; type: string; color: string; total: number }[] }
+
+export const fetchExpenseCategories = () => apiFetch<{ categories: ExpenseCategory[] }>('/api/financial/expense-categories').then(d => d.categories)
+export const createExpenseCategory = (name: string, type: string, color: string) => apiFetch('/api/financial/expense-categories', { method: 'POST', body: JSON.stringify({ name, type, color }) })
+export const fetchExpenses = (month: string) => apiFetch<{ expenses: Expense[]; byCategory: ExpensesByCategory[]; totalFixed: number; totalVariable: number; total: number }>(`/api/financial/expenses?month=${month}`)
+export const createExpense = (data: { category_id: number; description: string; amount: number; reference_month: string; paid_at?: string; is_recurring?: boolean }) => apiFetch('/api/financial/expenses', { method: 'POST', body: JSON.stringify(data) })
+export const updateExpense = (id: number, data: any) => apiFetch(`/api/financial/expenses/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+export const deleteExpense = (id: number) => apiFetch(`/api/financial/expenses/${id}`, { method: 'DELETE' })
+export const copyRecurringExpenses = (from: string, to: string) => apiFetch('/api/financial/expenses/copy-recurring', { method: 'POST', body: JSON.stringify({ from_month: from, to_month: to }) })
+export const fetchDRE = (month: string) => apiFetch<DRE>(`/api/financial/dre?month=${month}`)
