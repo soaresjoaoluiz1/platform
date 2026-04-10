@@ -353,8 +353,24 @@ router.get('/:id', (req, res) => {
   const attachments = db.prepare('SELECT ta.*, u.name as uploaded_by_name FROM task_attachments ta LEFT JOIN users u ON ta.uploaded_by = u.id WHERE ta.task_id = ? ORDER BY ta.created_at DESC').all(task.id)
 
   const timeEntries = db.prepare('SELECT te.*, u.name as user_name FROM time_entries te LEFT JOIN users u ON te.user_id = u.id WHERE te.task_id = ? ORDER BY te.created_at DESC').all(task.id)
-  const totalTimeSeconds = timeEntries.reduce((sum, e) => sum + (e.duration_seconds || 0), 0)
+  let totalTimeSeconds = timeEntries.reduce((sum, e) => sum + (e.duration_seconds || 0), 0)
   const activeTimer = db.prepare('SELECT * FROM time_entries WHERE task_id = ? AND ended_at IS NULL').get(task.id)
+
+  // For mother tasks, aggregate time from all subtasks
+  if (task.task_type && task.task_type !== 'normal' && task.subtasks?.length) {
+    const subtaskIds = task.subtasks.map(s => s.id)
+    const subtaskTotal = db.prepare(`
+      SELECT COALESCE(SUM(duration_seconds), 0) as total
+      FROM time_entries WHERE task_id IN (${subtaskIds.map(() => '?').join(',')})
+    `).get(...subtaskIds).total
+    totalTimeSeconds += subtaskTotal
+    // Annotate each subtask with its own total time for display
+    const subTotalStmt = db.prepare('SELECT COALESCE(SUM(duration_seconds), 0) as total FROM time_entries WHERE task_id = ?')
+    for (const sub of task.subtasks) {
+      sub.total_time_seconds = subTotalStmt.get(sub.id).total
+    }
+  }
+
   res.json({ task, comments, history, attachments, timeEntries, totalTimeSeconds, activeTimer })
 })
 
