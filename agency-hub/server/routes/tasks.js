@@ -33,12 +33,20 @@ function canTransition(role, fromStage, toStage) {
 
 // List tasks with filters
 router.get('/', (req, res) => {
-  const { client_id, department_id, stage, assigned_to, category_id, priority, search, date_from, date_to, page = '1', limit = '30', include_subtasks } = req.query
+  const { client_id, department_id, stage, assigned_to, category_id, priority, search, date_from, date_to, page = '1', limit = '30' } = req.query
   const where = ['t.is_active = 1']
   const params = []
 
-  // By default hide subtasks in list
-  if (include_subtasks !== '1') where.push('t.parent_task_id IS NULL')
+  // Show standalone tasks, mother tasks, AND only the first non-concluded subtask per mother
+  where.push(`(
+    t.parent_task_id IS NULL
+    OR t.subtask_position = (
+      SELECT MIN(t2.subtask_position) FROM tasks t2
+      WHERE t2.parent_task_id = t.parent_task_id
+        AND t2.is_active = 1
+        AND t2.stage NOT IN ('concluido', 'rejeitado')
+    )
+  )`)
 
   // Role-based scoping
   if (req.user.role === 'cliente') {
@@ -87,12 +95,20 @@ router.get('/', (req, res) => {
 
 // Pipeline view (grouped by stage)
 router.get('/pipeline', (req, res) => {
-  const { client_id, department_id, assigned_to, include_subtasks } = req.query
+  const { client_id, department_id, assigned_to } = req.query
   const where = ['t.is_active = 1']
   const params = []
 
-  // By default, only show parent tasks and standalone tasks (hide subtasks)
-  if (include_subtasks !== '1') where.push('t.parent_task_id IS NULL')
+  // Show standalone tasks, mother tasks, AND only the first non-concluded subtask per mother
+  where.push(`(
+    t.parent_task_id IS NULL
+    OR t.subtask_position = (
+      SELECT MIN(t2.subtask_position) FROM tasks t2
+      WHERE t2.parent_task_id = t.parent_task_id
+        AND t2.is_active = 1
+        AND t2.stage NOT IN ('concluido', 'rejeitado')
+    )
+  )`)
 
   if (req.user.role === 'cliente') { where.push('t.client_id = ?'); params.push(req.user.client_id) }
   else if (req.user.role === 'funcionario') { where.push('(t.id IN (SELECT task_id FROM task_assignees WHERE user_id = ?) OR t.department_id IN (SELECT department_id FROM user_departments WHERE user_id = ?))'); params.push(req.user.id, req.user.id) }
