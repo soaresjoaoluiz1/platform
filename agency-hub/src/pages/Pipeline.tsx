@@ -188,13 +188,23 @@ export default function Pipeline() {
                 <span className="kanban-column-count">{stageTasks.length}</span>
               </div>
               <div className="kanban-cards">
-                {stageTasks.map(task => (
+                {stageTasks.map(task => {
+                  const isSubtask = !!(task as any).parent_task_id
+                  // For subtasks, strip " - Linha Editorial..." from title for compact display
+                  const displayTitle = isSubtask ? task.title.split(' - ')[0] : task.title
+                  return (
                   <div key={task.id} className={`kanban-card ${draggedTask === task.id ? 'dragging' : ''}`}
+                  data-subtask={isSubtask ? '1' : undefined}
                     draggable onDragStart={() => setDraggedTask(task.id)} onDragEnd={() => setDraggedTask(null)}
                     onClick={() => navigate(`/tasks/${task.id}`)}
-                    style={{ borderLeft: `3px solid ${stage.color}` }}>
+                    style={{ borderLeft: `3px solid ${stage.color}`, ...(isSubtask ? { background: 'rgba(255,179,0,0.03)' } : {}) }}>
+                    {isSubtask && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, color: '#FFB300', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                        <Layers size={9} /> Subtarefa
+                      </div>
+                    )}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <div className="kanban-card-name">{task.title}</div>
+                      <div className="kanban-card-name">{displayTitle}</div>
                       {task.priority === 'urgent' && <span style={{ fontSize: 9, background: '#FF6B6B20', color: '#FF6B6B', padding: '1px 6px', borderRadius: 4, fontWeight: 700, flexShrink: 0 }}>URGENTE</span>}
                       {task.priority === 'high' && <span style={{ fontSize: 9, background: '#FFAA8320', color: '#FFAA83', padding: '1px 6px', borderRadius: 4, fontWeight: 700, flexShrink: 0 }}>ALTA</span>}
                     </div>
@@ -218,7 +228,8 @@ export default function Pipeline() {
                     )}
                     {task.drive_link && <div style={{ marginTop: 4 }}><ExternalLink size={10} style={{ color: '#5DADE2' }} /></div>}
                   </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           )
