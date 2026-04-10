@@ -347,23 +347,26 @@ export default function TaskDetail() {
                     )}
                   </div>
                 )}
-                {/* Timer */}
-                {(isFunc || isDono) && (
-                  <div style={{ marginTop: 16, padding: '12px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div>
-                        <div style={{ fontSize: 11, color: '#6B6580', textTransform: 'uppercase', fontWeight: 700, letterSpacing: 0.5 }}>Tempo Total</div>
-                        <div style={{ fontSize: 22, fontWeight: 800, fontFamily: 'var(--font-heading)', color: totalTime > 0 ? '#FFB300' : '#6B6580' }}>{formatTime(totalTime + (timerRunning ? timerElapsed : 0))}</div>
+                {/* Timer — mae editorial mostra agregado sem botoes; tarefas normais e subtarefas tem o botao */}
+                {(isFunc || isDono) && (() => {
+                  const isMother = (task as any).task_type && (task as any).task_type !== 'normal'
+                  return (
+                    <div style={{ marginTop: 16, padding: '12px 14px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <div style={{ fontSize: 11, color: '#6B6580', textTransform: 'uppercase', fontWeight: 700, letterSpacing: 0.5 }}>{isMother ? 'Tempo Total (Soma das Subtarefas)' : 'Tempo Total'}</div>
+                          <div style={{ fontSize: 22, fontWeight: 800, fontFamily: 'var(--font-heading)', color: totalTime > 0 ? '#FFB300' : '#6B6580' }}>{formatTime(totalTime + (timerRunning && !isMother ? timerElapsed : 0))}</div>
+                        </div>
+                        {!isMother && (timerRunning ? (
+                          <button className="btn btn-danger btn-sm" onClick={handleStopTimer}>⏹ Parar</button>
+                        ) : (
+                          <button className="btn btn-primary btn-sm" onClick={handleStartTimer}>▶ Iniciar Timer</button>
+                        ))}
                       </div>
-                      {timerRunning ? (
-                        <button className="btn btn-danger btn-sm" onClick={handleStopTimer}>⏹ Parar</button>
-                      ) : (
-                        <button className="btn btn-primary btn-sm" onClick={handleStartTimer}>▶ Iniciar Timer</button>
-                      )}
+                      {timerRunning && !isMother && <div style={{ fontSize: 11, color: '#34C759', marginTop: 4 }}>⏱ Cronometro ativo: {formatTime(timerElapsed)}</div>}
                     </div>
-                    {timerRunning && <div style={{ fontSize: 11, color: '#34C759', marginTop: 4 }}>⏱ Cronometro ativo: {formatTime(timerElapsed)}</div>}
-                  </div>
-                )}
+                  )
+                })()}
               </>
             )}
           </div>
@@ -407,6 +410,7 @@ export default function TaskDetail() {
                           </span>
                         )}
                         {sub.comment_count > 0 && <span><MessageCircle size={10} /> {sub.comment_count}</span>}
+                        {sub.total_time_seconds > 0 && <span style={{ color: '#FFB300' }}><Clock size={10} /> {formatTime(sub.total_time_seconds)}</span>}
                       </div>
                     </div>
                   )
