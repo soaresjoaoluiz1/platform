@@ -194,24 +194,21 @@ router.post('/editorial', requireRole('dono', 'gerente'), (req, res) => {
     const parentId = parentResult.lastInsertRowid
     histStmt.run(parentId, 'backlog', req.user.id)
 
-    // Initial subtasks (production tasks created on-demand via /confirm-recording)
-    // Positions: 1,2 (briefing), 3-6 reserved (gravacao,subir,editar,imagens), 7-9 (aprovacoes+publicacao)
+    // Initial subtasks (apenas 2 — o resto e criado dinamicamente via triggers)
+    // Positions: 1 briefing, 2 reuniao, 3-9 reservadas pras tarefas dinamicas
     const subs = [
       {
         title: 'Briefing (Ideias + Copies)',
         dept: socialId, pos: 1, kind: 'briefing',
-        description: 'Criar um documento no Docs com Briefing completo do conteudo + Ideias/Referencias + Copy/roteiro de todos os conteudos e anexar para aprovacao.\n\nAo concluir, e obrigatorio informar a Data e Hora da Reuniao de Apresentacao.',
+        description: 'Criar um documento no Docs com Briefing completo do conteudo + Ideias/Referencias + Copy/roteiro de todos os conteudos e anexar para aprovacao.\n\nAo concluir, e obrigatorio informar a Data e Hora da Reuniao de Apresentacao.\n\nQuando concluir, criara automaticamente a tarefa de Criar Imagens (Design) em paralelo.',
         assigned: ivandroId,
       },
       {
         title: 'Reuniao Aprovacao Cliente (Briefing)',
         dept: socialId, pos: 2, kind: 'aprov_briefing',
-        description: 'Apresentar Briefing, ideias e copys/roteiros para o cliente em reuniao e pedir aprovacao do mesmo.\n\nAo concluir, e obrigatorio informar a Data e Hora da Gravacao para criar as tarefas de producao automaticamente.',
+        description: 'Apresentar Briefing, ideias e copys/roteiros para o cliente em reuniao e pedir aprovacao do mesmo.\n\nAo concluir, e obrigatorio informar a Data e Hora da Gravacao para criar a tarefa de Gravacao automaticamente.',
         assigned: null,
       },
-      { title: 'Aprovacao Interna Final', dept: null, pos: 7, kind: 'aprov_interna_final', description: null, assigned: null },
-      { title: 'Aprovacao Cliente (Final)', dept: null, pos: 8, kind: 'aprov_cliente_final', description: null, assigned: null },
-      { title: 'Publicacao', dept: socialId, pos: 9, kind: 'publicacao', description: null, assigned: null },
     ]
     subs.forEach(s => {
       const r = createTask.run(
@@ -492,100 +489,120 @@ function triggerEditorialWorkflow(completedTask, userId) {
     VALUES (?, ?, ?, ?, ?, 'normal', ?, ?, 'backlog', 'normal', ?, ?, ?, ?, ?)
   `)
   const histStmt = db.prepare('INSERT INTO task_history (task_id, to_stage, user_id) VALUES (?, ?, ?)')
+  const insertAssignee = db.prepare('INSERT OR IGNORE INTO task_assignees (task_id, user_id) VALUES (?, ?)')
 
-  // Briefing -> propagate meeting_datetime to Reuniao subtask's due_date
-  if (completedTask.subtask_kind === 'briefing' && completedTask.meeting_datetime) {
-    const meetingDate = completedTask.meeting_datetime.slice(0, 10)
-    db.prepare("UPDATE tasks SET due_date = ?, meeting_datetime = ?, updated_at = datetime('now', '-3 hours') WHERE parent_task_id = ? AND subtask_kind = 'aprov_briefing'")
-      .run(meetingDate, completedTask.meeting_datetime, parent.id)
+  // Helpers — buscar departamentos e usuarios fixos
+  const findDept = (pattern) => db.prepare(`SELECT id FROM departments WHERE name LIKE ? AND is_active = 1`).get(pattern)?.id || null
+  const findUser = (pattern) => db.prepare(`SELECT id FROM users WHERE name LIKE ? AND is_active = 1`).get(pattern)?.id || null
+  const socialId = findDept('%Social%')
+  const captacaoId = findDept('%Capt%') || findDept('%Video%') || findDept('%Producao%')
+  const designId = findDept('%Design%')
+  const edicaoId = findDept('%Ed%Vid%') || findDept('%Edit%')
+  const ivandroId = findUser('%Ivandro%')
+  const dalilaId = findUser('%Dalila%')
+  const grazielleId = findUser('%Grazielle%') || findUser('%Grazi%')
+
+  const createSubtask = (opts) => {
+    const exists = db.prepare("SELECT id FROM tasks WHERE parent_task_id = ? AND subtask_kind = ?").get(parent.id, opts.kind)
+    if (exists) return null
+    const r = insertTask.run(
+      parent.client_id, parent.category_id, opts.dept || null,
+      `${opts.title} - ${parent.title}`, opts.description || null,
+      opts.due_date || null, userId, parent.id, opts.pos, opts.kind, opts.assigned || null, opts.recording_datetime || null
+    )
+    histStmt.run(r.lastInsertRowid, 'backlog', userId)
+    if (opts.assigned) {
+      insertAssignee.run(r.lastInsertRowid, opts.assigned)
+      notify(opts.assigned, 'task_assigned', opts.notifyTitle || 'Nova tarefa atribuida', `"${opts.title} - ${parent.title}"`, r.lastInsertRowid, userId)
+    }
+    broadcastSSE(parent.client_id, 'task:created', { parent_id: parent.id })
+    return r.lastInsertRowid
   }
 
-  // Reuniao Aprovacao Cliente Briefing concluida -> cria Gravacao + Criar Imagens automaticamente
+  // === BRIEFING concluido ===
+  if (completedTask.subtask_kind === 'briefing') {
+    // Propaga meeting_datetime para a Reuniao
+    if (completedTask.meeting_datetime) {
+      const meetingDate = completedTask.meeting_datetime.slice(0, 10)
+      db.prepare("UPDATE tasks SET due_date = ?, meeting_datetime = ?, updated_at = datetime('now', '-3 hours') WHERE parent_task_id = ? AND subtask_kind = 'aprov_briefing'")
+        .run(meetingDate, completedTask.meeting_datetime, parent.id)
+    }
+    // Cria Criar Imagens (Dalila) em paralelo
+    createSubtask({
+      title: 'Criar Imagens', kind: 'criar_imagens', pos: 3, dept: designId,
+      description: `Criar ${parent.num_posts || 0} imagens para os posts da linha editorial.\n\nQuando concluir, criara automaticamente a tarefa Programar Publicacao das Imagens.`,
+      assigned: dalilaId,
+      notifyTitle: 'Nova tarefa de criar imagens',
+    })
+  }
+
+  // === CRIAR IMAGENS concluido -> Programar Publicacao Imagens ===
+  if (completedTask.subtask_kind === 'criar_imagens') {
+    createSubtask({
+      title: 'Programar Publ Imagens', kind: 'prog_publ_imagens', pos: 4, dept: socialId,
+      description: 'Programar a publicacao das imagens nas redes sociais conforme briefing aprovado.',
+      assigned: grazielleId,
+      notifyTitle: 'Programar publicacao de imagens',
+    })
+  }
+
+  // === REUNIAO concluida -> cria Gravacao ===
   if (completedTask.subtask_kind === 'aprov_briefing' && completedTask.recording_datetime) {
-    const exists = db.prepare("SELECT id FROM tasks WHERE parent_task_id = ? AND subtask_kind = 'gravacao'").get(parent.id)
-    if (!exists) {
-      // Save recording_datetime on parent for reference
-      db.prepare("UPDATE tasks SET recording_datetime = ?, updated_at = datetime('now', '-3 hours') WHERE id = ?")
-        .run(completedTask.recording_datetime, parent.id)
-
-      const captacaoDept = db.prepare("SELECT id FROM departments WHERE (name LIKE '%Capt%' OR name LIKE '%Video%' OR name LIKE '%Producao%') AND is_active = 1").get()
-      const designDept = db.prepare("SELECT id FROM departments WHERE name LIKE '%Design%' AND is_active = 1").get()
-      const ivandro = db.prepare("SELECT id FROM users WHERE name LIKE '%Ivandro%' AND is_active = 1").get()
-      const recordingDate = completedTask.recording_datetime.slice(0, 10)
-
-      // Gravacao - Ivandro, prazo no dia da gravacao
-      const gravR = insertTask.run(parent.client_id, parent.category_id, captacaoDept?.id || null,
-        `Gravacao - ${parent.title}`,
-        `Gravar todo o conteudo do mes em ${recordingDate}.\n\nApos concluir, criar a tarefa Subir Arquivos automaticamente.`,
-        recordingDate, userId, parent.id, 3, 'gravacao', ivandro?.id || null, completedTask.recording_datetime)
-      histStmt.run(gravR.lastInsertRowid, 'backlog', userId)
-      if (ivandro?.id) {
-        db.prepare('INSERT OR IGNORE INTO task_assignees (task_id, user_id) VALUES (?, ?)').run(gravR.lastInsertRowid, ivandro.id)
-        notify(ivandro.id, 'task_assigned', 'Nova tarefa de gravacao', `"${parent.title}" - Gravacao em ${recordingDate}`, gravR.lastInsertRowid, userId)
-      }
-
-      // Criar Imagens - Design, em paralelo
-      const imgR = insertTask.run(parent.client_id, parent.category_id, designDept?.id || null,
-        `Criar Imagens - ${parent.title}`,
-        `Criar ${parent.num_posts || 0} imagens para os posts da linha editorial.`,
-        parent.due_date || null, userId, parent.id, 6, 'criar_imagens', null, null)
-      histStmt.run(imgR.lastInsertRowid, 'backlog', userId)
-
-      broadcastSSE(parent.client_id, 'task:created', { parent_id: parent.id })
-    }
+    db.prepare("UPDATE tasks SET recording_datetime = ?, updated_at = datetime('now', '-3 hours') WHERE id = ?")
+      .run(completedTask.recording_datetime, parent.id)
+    const recordingDate = completedTask.recording_datetime.slice(0, 10)
+    createSubtask({
+      title: 'Gravacao', kind: 'gravacao', pos: 5, dept: captacaoId,
+      description: `Gravar todo o conteudo do mes em ${recordingDate}.\n\nQuando concluir, criara automaticamente a tarefa Subir Arquivos.`,
+      due_date: recordingDate,
+      recording_datetime: completedTask.recording_datetime,
+      assigned: ivandroId,
+      notifyTitle: 'Nova tarefa de gravacao',
+    })
   }
 
-  // Gravacao -> Subir Arquivos
+  // === GRAVACAO concluida -> Subir Arquivos (Ivandro) ===
   if (completedTask.subtask_kind === 'gravacao') {
-    const exists = db.prepare("SELECT id FROM tasks WHERE parent_task_id = ? AND subtask_kind = 'subir_arquivos'").get(parent.id)
-    if (!exists) {
-      const captacaoDept = db.prepare("SELECT id FROM departments WHERE (name LIKE '%Capt%' OR name LIKE '%Video%' OR name LIKE '%Producao%') AND is_active = 1").get()
-      // Same person who did the recording does the upload
-      const captureUser = completedTask.assigned_to
-      const r = insertTask.run(parent.client_id, parent.category_id, captacaoDept?.id || null,
-        `Subir Arquivos - ${parent.title}`, 'Subir arquivos brutos pro Drive pra edicao',
-        null, userId, parent.id, 4, 'subir_arquivos', captureUser || null, null)
-      histStmt.run(r.lastInsertRowid, 'backlog', userId)
-      if (captureUser) {
-        db.prepare('INSERT OR IGNORE INTO task_assignees (task_id, user_id) VALUES (?, ?)').run(r.lastInsertRowid, captureUser)
-        notify(captureUser, 'task_assigned', 'Subir arquivos da gravacao', `"Subir Arquivos - ${parent.title}"`, r.lastInsertRowid, userId)
-      }
-      broadcastSSE(parent.client_id, 'task:created', { parent_id: parent.id })
-    }
+    createSubtask({
+      title: 'Subir Arquivos', kind: 'subir_arquivos', pos: 6, dept: captacaoId,
+      description: 'Subir arquivos brutos da gravacao pro Drive para edicao.\n\nQuando concluir, criara automaticamente a tarefa Editar Videos.',
+      assigned: ivandroId,
+      notifyTitle: 'Subir arquivos da gravacao',
+    })
   }
 
-  // Subir Arquivos -> Editar Video
+  // === SUBIR ARQUIVOS concluido -> Editar Videos (Ivandro) ===
   if (completedTask.subtask_kind === 'subir_arquivos') {
-    const exists = db.prepare("SELECT id FROM tasks WHERE parent_task_id = ? AND subtask_kind = 'editar_video'").get(parent.id)
-    if (!exists) {
-      const edicaoDept = db.prepare("SELECT id FROM departments WHERE (name LIKE '%Ed%Vid%' OR name LIKE '%Edit%') AND is_active = 1").get()
-      // Get edit_user_id from parent.briefing_content (stored at confirm-recording)
-      let editUser = null
-      try { editUser = JSON.parse(parent.briefing_content || '{}').edit_user_id } catch {}
-      const r = insertTask.run(parent.client_id, parent.category_id, edicaoDept?.id || null,
-        `Editar Video - ${parent.title}`, `Editar ${parent.num_videos || 0} videos`,
-        parent.due_date || null, userId, parent.id, 5, 'editar_video', editUser || null, null)
-      histStmt.run(r.lastInsertRowid, 'backlog', userId)
-      if (editUser) {
-        db.prepare('INSERT OR IGNORE INTO task_assignees (task_id, user_id) VALUES (?, ?)').run(r.lastInsertRowid, editUser)
-        notify(editUser, 'task_assigned', 'Editar videos', `"Editar Video - ${parent.title}"`, r.lastInsertRowid, userId)
-      }
-      broadcastSSE(parent.client_id, 'task:created', { parent_id: parent.id })
-    }
+    createSubtask({
+      title: 'Editar Videos', kind: 'editar_video', pos: 7, dept: edicaoId,
+      description: `Editar ${parent.num_videos || 0} videos da linha editorial.\n\nQuando concluir, criara automaticamente a tarefa Programar Publicacao dos Videos.`,
+      assigned: ivandroId,
+      notifyTitle: 'Editar videos',
+    })
   }
 
-  // When all production tasks done -> mother goes to aprovacao_interna
-  const productionKinds = ['briefing', 'aprov_briefing', 'gravacao', 'subir_arquivos', 'editar_video', 'criar_imagens']
-  const productionDone = db.prepare(`
+  // === EDITAR VIDEOS concluido -> Programar Publ Videos (Grazielle) ===
+  if (completedTask.subtask_kind === 'editar_video') {
+    createSubtask({
+      title: 'Programar Publ Videos', kind: 'prog_publ_videos', pos: 8, dept: socialId,
+      description: 'Programar a publicacao dos videos nas redes sociais conforme briefing aprovado.',
+      assigned: grazielleId,
+      notifyTitle: 'Programar publicacao de videos',
+    })
+  }
+
+  // === Quando TODAS as subtarefas conhecidas estiverem concluidas, mae vai pra concluido ===
+  const allKinds = ['briefing', 'aprov_briefing', 'criar_imagens', 'prog_publ_imagens', 'gravacao', 'subir_arquivos', 'editar_video', 'prog_publ_videos']
+  const status = db.prepare(`
     SELECT COUNT(*) as total,
       SUM(CASE WHEN stage = 'concluido' THEN 1 ELSE 0 END) as done
-    FROM tasks WHERE parent_task_id = ? AND is_active = 1 AND subtask_kind IN (${productionKinds.map(() => '?').join(',')})
-  `).get(parent.id, ...productionKinds)
+    FROM tasks WHERE parent_task_id = ? AND is_active = 1 AND subtask_kind IN (${allKinds.map(() => '?').join(',')})
+  `).get(parent.id, ...allKinds)
 
-  if (productionDone.total > 0 && productionDone.total === productionDone.done && parent.stage !== 'aprovacao_interna') {
-    db.prepare("UPDATE tasks SET stage = 'aprovacao_interna', updated_at = datetime('now', '-3 hours') WHERE id = ?").run(parent.id)
-    db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id, comment) VALUES (?, ?, ?, ?, ?)').run(parent.id, parent.stage, 'aprovacao_interna', userId, 'Auto: producao completa')
-    notifyMany(getDonoUsers().map(d => d.id), 'task_submitted_review', 'Linha editorial pronta pra aprovacao', `"${parent.title}"`, parent.id, userId)
+  if (status.total > 0 && status.total === status.done && parent.stage !== 'concluido') {
+    db.prepare("UPDATE tasks SET stage = 'concluido', updated_at = datetime('now', '-3 hours') WHERE id = ?").run(parent.id)
+    db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id, comment) VALUES (?, ?, ?, ?, ?)').run(parent.id, parent.stage, 'concluido', userId, 'Auto: todas as etapas concluidas')
+    notifyMany(getDonoUsers().map(d => d.id), 'task_completed', 'Linha editorial concluida', `"${parent.title}"`, parent.id, userId)
     const updatedParent = db.prepare('SELECT * FROM tasks WHERE id = ?').get(parent.id)
     broadcastSSE(parent.client_id, 'task:stage_changed', updatedParent)
   }
