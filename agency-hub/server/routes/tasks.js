@@ -683,7 +683,9 @@ router.post('/:id/comments', (req, res) => {
 router.post('/:id/attachments', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   const { url, filename, type } = req.body
   if (!url || !filename) return res.status(400).json({ error: 'url e filename obrigatorios' })
+  const task = db.prepare('SELECT stage FROM tasks WHERE id = ?').get(req.params.id)
   const result = db.prepare('INSERT INTO task_attachments (task_id, url, filename, type, uploaded_by) VALUES (?, ?, ?, ?, ?)').run(req.params.id, url, filename, type || 'file', req.user.id)
+  db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id, comment) VALUES (?, ?, ?, ?, ?)').run(req.params.id, task?.stage, task?.stage, req.user.id, `Anexo adicionado: ${filename}`)
   res.json({ attachment: db.prepare('SELECT * FROM task_attachments WHERE id = ?').get(result.lastInsertRowid) })
 })
 
@@ -691,7 +693,9 @@ router.post('/:id/attachments', requireRole('dono', 'gerente', 'funcionario'), (
 router.delete('/:id/attachments/:attId', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   const att = db.prepare('SELECT * FROM task_attachments WHERE id = ? AND task_id = ?').get(req.params.attId, req.params.id)
   if (!att) return res.status(404).json({ error: 'Anexo nao encontrado' })
+  const task = db.prepare('SELECT stage FROM tasks WHERE id = ?').get(req.params.id)
   db.prepare('DELETE FROM task_attachments WHERE id = ?').run(req.params.attId)
+  db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id, comment) VALUES (?, ?, ?, ?, ?)').run(req.params.id, task?.stage, task?.stage, req.user.id, `Anexo removido: ${att.filename}`)
   res.json({ ok: true })
 })
 
