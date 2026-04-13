@@ -205,11 +205,11 @@ router.post('/expenses/copy-recurring', (req, res) => {
   const { from_month, to_month } = req.body
   if (!from_month || !to_month) return res.status(400).json({ error: 'from_month e to_month obrigatorios' })
   const recurring = db.prepare('SELECT * FROM expenses WHERE reference_month = ? AND is_recurring = 1').all(from_month)
-  const stmt = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, is_recurring) VALUES (?, ?, ?, ?, 1)')
+  const stmt = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, is_recurring, paid_at) VALUES (?, ?, ?, ?, 1, ?)')
   let count = 0
   recurring.forEach(e => {
     const exists = db.prepare('SELECT id FROM expenses WHERE category_id = ? AND description = ? AND reference_month = ?').get(e.category_id, e.description, to_month)
-    if (!exists) { stmt.run(e.category_id, e.description, e.amount, to_month); count++ }
+    if (!exists) { stmt.run(e.category_id, e.description, e.amount, to_month, e.paid_at || null); count++ }
   })
   res.json({ copied: count })
 })
@@ -231,11 +231,11 @@ router.post('/installments', (req, res) => {
   const catId = category_id || db.prepare("SELECT id FROM expense_categories WHERE name LIKE '%Emprestimo%' OR name LIKE '%Parcela%' LIMIT 1").get()?.id
   if (catId) {
     const [y, m] = start_month.split('-').map(Number)
-    const stmt = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, is_recurring) VALUES (?, ?, ?, ?, 0)')
+    const stmt = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, is_recurring, paid_at) VALUES (?, ?, ?, ?, 0, ?)')
     for (let i = 0; i < installment_count; i++) {
       const date = new Date(y, m - 1 + i, 1)
       const monthStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
-      stmt.run(catId, `${name} (${i + 1}/${installment_count})`, installment_amount, monthStr)
+      stmt.run(catId, `${name} (${i + 1}/${installment_count})`, installment_amount, monthStr, null)
     }
   }
 
