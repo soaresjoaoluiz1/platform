@@ -313,7 +313,7 @@ export default function Financial() {
         </div>
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-          <button className="btn btn-primary btn-sm" onClick={() => setShowNewExp(true)}><Plus size={14} /> Nova Despesa</button>
+          <button className="btn btn-primary btn-sm" onClick={() => { const t = new Date(); setNewExp(p => ({ ...p, paid_at: `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}` })); setShowNewExp(true) }}><Plus size={14} /> Nova Despesa</button>
           <button className="btn btn-secondary btn-sm" onClick={handleCopyRecurring}><Copy size={14} /> Copiar Recorrentes do Mes Anterior</button>
         </div>
 
@@ -338,6 +338,7 @@ export default function Financial() {
                       {e.is_recurring === 1 && <span style={{ fontSize: 9, padding: '1px 6px', borderRadius: 4, background: 'rgba(93,173,226,0.12)', color: '#5DADE2' }}>RECORRENTE</span>}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <span style={{ color: '#6B6580', fontSize: 11 }}>{e.paid_at || '-'}</span>
                       <span style={{ fontWeight: 600 }}>{formatBRL(e.amount)}</span>
                       <button onClick={() => handleDeleteExpense(e.id)} style={{ background: 'transparent', border: 'none', color: '#6B6580', cursor: 'pointer', padding: 4 }}><Trash2 size={12} /></button>
                     </div>
