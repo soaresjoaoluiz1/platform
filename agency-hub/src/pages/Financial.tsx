@@ -46,7 +46,7 @@ export default function Financial() {
   const [expByCategory, setExpByCategory] = useState<ExpensesByCategory[]>([])
   const [expTotal, setExpTotal] = useState({ fixed: 0, variable: 0, total: 0 })
   const [showNewExp, setShowNewExp] = useState(false)
-  const [newExp, setNewExp] = useState({ category_id: '', description: '', amount: '', is_recurring: false })
+  const [newExp, setNewExp] = useState({ category_id: '', description: '', amount: '', is_recurring: false, paid_at: '' })
 
   // DRE state
   const [dre, setDre] = useState<DRE | null>(null)
@@ -125,8 +125,8 @@ export default function Financial() {
 
   const handleAddExpense = async () => {
     if (!newExp.category_id || !newExp.amount) return
-    await createExpense({ category_id: +newExp.category_id, description: newExp.description, amount: parseFloat(newExp.amount), reference_month: month, is_recurring: newExp.is_recurring })
-    setShowNewExp(false); setNewExp({ category_id: '', description: '', amount: '', is_recurring: false }); load()
+    await createExpense({ category_id: +newExp.category_id, description: newExp.description, amount: parseFloat(newExp.amount), reference_month: month, is_recurring: newExp.is_recurring, paid_at: newExp.paid_at || undefined })
+    setShowNewExp(false); setNewExp({ category_id: '', description: '', amount: '', is_recurring: false, paid_at: '' }); load()
   }
 
   const handleDeleteExpense = async (id: number) => {
@@ -563,8 +563,11 @@ export default function Financial() {
                 {expCategories.map(c => <option key={c.id} value={c.id}>{c.name} ({c.type === 'fixed' ? 'Fixa' : 'Variavel'})</option>)}
               </select>
             </div>
-            <div className="form-group"><label>Descricao</label><input className="input" value={newExp.description} onChange={e => setNewExp(p => ({ ...p, description: e.target.value }))} placeholder="Ex: Salario Grazielle, Adobe CC..." /></div>
-            <div className="form-group"><label>Valor (R$)</label><input className="input" type="number" step="0.01" value={newExp.amount} onChange={e => setNewExp(p => ({ ...p, amount: e.target.value }))} /></div>
+            <div className="form-group"><label>Descricao</label><input className="input" value={newExp.description} onChange={e => setNewExp(p => ({ ...p, description: e.target.value }))} placeholder="Ex: Salario Graziele, Adobe CC..." /></div>
+            <div className="form-row">
+              <div className="form-group"><label>Valor (R$)</label><input className="input" type="number" step="0.01" value={newExp.amount} onChange={e => setNewExp(p => ({ ...p, amount: e.target.value }))} /></div>
+              <div className="form-group"><label>Data do Pagamento</label><input className="input" type="date" value={newExp.paid_at} onChange={e => setNewExp(p => ({ ...p, paid_at: e.target.value }))} /></div>
+            </div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#A8A3B8', cursor: 'pointer', marginBottom: 16 }}>
               <input type="checkbox" checked={newExp.is_recurring} onChange={e => setNewExp(p => ({ ...p, is_recurring: e.target.checked }))} />
               Despesa recorrente (copiar automaticamente pro proximo mes)
