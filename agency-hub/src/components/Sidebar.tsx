@@ -38,7 +38,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <button className="hamburger-btn" onClick={() => setMobileOpen(true)}><Menu size={20} /></button>
+      {!mobileOpen && <button className="hamburger-btn" onClick={() => setMobileOpen(true)}><Menu size={20} /></button>}
       {mobileOpen && <div className="sidebar-overlay" onClick={close} />}
       <aside className={`sidebar ${mobileOpen ? 'open' : ''} ${collapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-header">
@@ -71,7 +71,7 @@ export default function Sidebar() {
           </NavLink>
           {(isDono || isCliente) && (
             <NavLink to="/approvals" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}>
-              <CheckCircle size={16} /> Aprovacoes
+              <CheckCircle size={16} /> {isCliente ? 'Aprovações' : 'Aprovacoes'}
               {approvalCount > 0 && <span className="nav-badge">{approvalCount}</span>}
             </NavLink>
           )}

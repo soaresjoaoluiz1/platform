@@ -109,9 +109,15 @@ export default function Approvals() {
                     <ExternalLink size={12} /> Abrir no Drive
                   </a>
                 )}
-                <button className="btn btn-secondary btn-sm" onClick={() => navigate(`/tasks/${t.id}`)}>
-                  <Eye size={12} /> Ver Detalhes
-                </button>
+                {isCliente ? (
+                  <button onClick={() => navigate(`/tasks/${t.id}`)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 20px', background: 'linear-gradient(135deg, #FFB300, #FFAA83)', color: '#1a1625', border: 'none', borderRadius: 8, fontSize: 15, fontWeight: 800, cursor: 'pointer', flex: 1, boxShadow: '0 4px 12px rgba(255,179,0,0.3)', textTransform: 'uppercase', letterSpacing: '0.04em', fontFamily: 'inherit' }}>
+                    <Eye size={18} /> Ver Detalhes da Tarefa
+                  </button>
+                ) : (
+                  <button className="btn btn-secondary btn-sm" onClick={() => navigate(`/tasks/${t.id}`)}>
+                    <Eye size={12} /> Ver Detalhes
+                  </button>
+                )}
               </div>
             </div>
           ))}
