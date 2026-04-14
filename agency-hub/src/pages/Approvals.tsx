@@ -110,8 +110,8 @@ export default function Approvals() {
                   </a>
                 )}
                 {isCliente ? (
-                  <button onClick={() => navigate(`/tasks/${t.id}`)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 20px', background: 'linear-gradient(135deg, #FFB300, #FFAA83)', color: '#1a1625', border: 'none', borderRadius: 8, fontSize: 15, fontWeight: 800, cursor: 'pointer', flex: 1, boxShadow: '0 4px 12px rgba(255,179,0,0.3)', textTransform: 'uppercase', letterSpacing: '0.04em', fontFamily: 'inherit' }}>
-                    <Eye size={18} /> Ver Detalhes da Tarefa
+                  <button onClick={() => navigate(`/tasks/${t.id}`)} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px 18px', background: 'linear-gradient(135deg, #FFB300, #FFAA83)', color: '#1a1625', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px rgba(255,179,0,0.2)', textTransform: 'uppercase', letterSpacing: '0.03em', fontFamily: 'inherit' }}>
+                    <Eye size={14} /> Ver Detalhes da Tarefa
                   </button>
                 ) : (
                   <button className="btn btn-secondary btn-sm" onClick={() => navigate(`/tasks/${t.id}`)}>
