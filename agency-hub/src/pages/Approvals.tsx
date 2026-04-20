@@ -116,7 +116,7 @@ export default function Approvals() {
                   </div>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
-                  <button className="btn btn-primary btn-sm" onClick={() => handleApprove(t.id)} disabled={saving}><CheckCircle size={14} /> Aprovar</button>
+                  <button className="btn btn-primary btn-sm" onClick={() => { if (confirm('Confirma a aprovacao desta tarefa?')) handleApprove(t.id) }} disabled={saving}><CheckCircle size={14} /> Aprovar</button>
                   {isCliente && activeTab !== 'requests' && <button className="btn btn-sm" style={{ background: '#FFB300', color: '#1a1625', border: 'none' }} onClick={() => setChangesId(t.id)}><RotateCcw size={14} /> Solicitar Alteracao</button>}
                   <button className="btn btn-danger btn-sm" onClick={() => setRejectId(t.id)}><XCircle size={14} /> Rejeitar</button>
                 </div>

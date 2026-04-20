@@ -228,12 +228,13 @@ export default function Pipeline() {
                     const isSubtask = !!(task as any).parent_task_id
                     const isMother = !isSubtask && !!(task as any).task_type && (task as any).task_type !== 'normal'
                     const displayTitle = isSubtask ? task.title.split(' - ')[0] : task.title
+                    const overdue = isOverdue(task.due_date) && task.stage !== 'concluido' && task.stage !== 'rejeitado'
                     return (
                       <div key={task.id} className={`kanban-card ${draggedTask === task.id ? 'dragging' : ''}`}
                         data-subtask={isSubtask ? '1' : undefined}
                         draggable onDragStart={() => setDraggedTask(task.id)} onDragEnd={() => setDraggedTask(null)}
                         onClick={() => navigate(`/tasks/${task.id}`)}
-                        style={{ borderLeft: `3px solid ${stage.color}`, ...(isSubtask ? { background: 'rgba(255,179,0,0.03)' } : isMother ? { background: 'rgba(255,179,0,0.05)' } : {}) }}>
+                        style={{ borderLeft: `3px solid ${overdue ? '#FF6B6B' : stage.color}`, ...(overdue ? { background: 'rgba(255,107,107,0.08)', border: '1px solid rgba(255,107,107,0.2)' } : isSubtask ? { background: 'rgba(255,179,0,0.03)' } : isMother ? { background: 'rgba(255,179,0,0.05)' } : {}) }}>
                         {isMother && (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9, color: '#FFB300', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
                             <Layers size={9} /> Tarefa Mae

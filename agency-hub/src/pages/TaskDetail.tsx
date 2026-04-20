@@ -677,14 +677,15 @@ export default function TaskDetail() {
       {/* Timer hourly check popup */}
       {showTimerCheck && (
         <div className="modal-overlay">
-          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 380, textAlign: 'center' }}>
+          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 400, textAlign: 'center' }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>&#9202;</div>
-            <h2 style={{ marginBottom: 8 }}>Ainda esta produzindo?</h2>
-            <p style={{ color: '#9B96B0', fontSize: 14, marginBottom: 8 }}>Timer ativo ha <strong style={{ color: '#FFB300' }}>{formatTime(timerElapsed)}</strong></p>
-            <p style={{ color: '#6B6580', fontSize: 12, marginBottom: 20 }}>"{task?.title}"</p>
+            <h2 style={{ marginBottom: 8 }}>Tarefa em producao ha mais de 2 horas</h2>
+            <p style={{ color: '#9B96B0', fontSize: 14, marginBottom: 8 }}>O timer desta tarefa esta ativo ha <strong style={{ color: '#FFB300' }}>{formatTime(timerElapsed)}</strong></p>
+            <p style={{ color: '#6B6580', fontSize: 12, marginBottom: 6 }}>"{task?.title}"</p>
+            <p style={{ color: '#A8A3B8', fontSize: 12, marginBottom: 20 }}>Confirma que ainda esta trabalhando nela ou deseja parar o timer e mover pro backlog?</p>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
               <button className="btn btn-primary" onClick={() => setShowTimerCheck(false)} style={{ minWidth: 120 }}>Sim, continuar</button>
-              <button className="btn btn-danger" onClick={handleTimerCheckNo} style={{ minWidth: 120 }}>Nao, parar</button>
+              <button className="btn btn-danger" onClick={handleTimerCheckNo} style={{ minWidth: 120 }}>Parar timer</button>
             </div>
           </div>
         </div>
