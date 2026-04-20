@@ -7,6 +7,7 @@ import {
   type Task, type Client, type Department, type User as UserT, type TaskCategory, type PipelineStage,
 } from '../lib/api'
 import { Plus, Clock, Building2, User, ExternalLink, Download, AlertTriangle, CheckSquare, Square, Users, ArrowRight, ArrowUpDown, Filter } from 'lucide-react'
+import { useToast } from '../components/Toast'
 
 function timeAgo(d: string) { const m = Math.floor((Date.now() - new Date(d).getTime()) / 60000); if (m < 60) return `${m}m`; const h = Math.floor(m / 60); if (h < 24) return `${h}h`; return `${Math.floor(h / 24)}d` }
 function todayStr() { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}` }
@@ -27,9 +28,11 @@ const PRIORITY_COLORS: Record<string, { bg: string; text: string }> = {
 export default function Tasks() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const { toast } = useToast()
   const isDono = user?.role === 'dono'
   const isFunc = user?.role === 'funcionario'
   const isCliente = user?.role === 'cliente'
+  const [saving, setSaving] = useState(false)
   const [tasks, setTasks] = useState<Task[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
@@ -98,8 +101,13 @@ export default function Tasks() {
 
   const handleCreate = async () => {
     if (!newTask.title || !newTask.client_id) return
-    await createTask({ ...newTask, client_id: +newTask.client_id, category_id: newTask.category_id ? +newTask.category_id : undefined, department_id: newTask.department_id ? +newTask.department_id : undefined, assigned_to: newTask.assigned_to.map(Number) } as any)
-    setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: '', priority: 'normal', drive_link: '' }); loadTasks()
+    setSaving(true)
+    try {
+      await createTask({ ...newTask, client_id: +newTask.client_id, category_id: newTask.category_id ? +newTask.category_id : undefined, department_id: newTask.department_id ? +newTask.department_id : undefined, assigned_to: newTask.assigned_to.map(Number) } as any)
+      setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: '', priority: 'normal', drive_link: '' }); loadTasks()
+      toast('Tarefa criada com sucesso!')
+    } catch (err: any) { toast(err.message || 'Erro ao criar tarefa', 'error') }
+    finally { setSaving(false) }
   }
 
   const toggleSort = (field: string) => {
@@ -277,7 +285,7 @@ export default function Tasks() {
             <div className="form-group"><label>Prioridade</label><select className="select" value={newTask.priority} onChange={e => setNewTask(p => ({ ...p, priority: e.target.value }))}><option value="low">Baixa</option><option value="normal">Normal</option><option value="high">Alta</option><option value="urgent">Urgente</option></select></div>
           </div>
           <div className="form-group"><label>Link Drive (Arquivo Bruto)</label><input className="input" value={newTask.drive_link} onChange={e => setNewTask(p => ({ ...p, drive_link: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
-          <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNew(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreate}>Criar Tarefa</button></div>
+          <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNew(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreate} disabled={saving}>{saving ? 'Criando...' : 'Criar Tarefa'}</button></div>
         </div></div>
       )}
 
@@ -291,7 +299,7 @@ export default function Tasks() {
           <div className="form-group"><label>Link dos arquivos (opcional)</label><input className="input" value={newRequest.drive_link_raw} onChange={e => setNewRequest(p => ({ ...p, drive_link_raw: e.target.value }))} placeholder="https://drive.google.com/... ou outro" /></div>
           <div className="modal-actions">
             <button className="btn btn-secondary" onClick={() => setShowRequest(false)}>Cancelar</button>
-            <button className="btn btn-primary" disabled={!newRequest.title} onClick={async () => { await createTaskRequest({ title: newRequest.title, description: newRequest.description, drive_link_raw: newRequest.drive_link_raw || undefined }); setShowRequest(false); setNewRequest({ title: '', description: '', drive_link_raw: '' }); loadTasks() }}>Enviar Solicitacao</button>
+            <button className="btn btn-primary" disabled={saving || !newRequest.title} onClick={async () => { setSaving(true); try { await createTaskRequest({ title: newRequest.title, description: newRequest.description, drive_link_raw: newRequest.drive_link_raw || undefined }); setShowRequest(false); setNewRequest({ title: '', description: '', drive_link_raw: '' }); loadTasks(); toast('Solicitacao enviada!') } catch (err: any) { toast(err.message || 'Erro ao enviar', 'error') } finally { setSaving(false) } }}>{saving ? 'Enviando...' : 'Enviar Solicitacao'}</button>
           </div>
         </div></div>
       )}

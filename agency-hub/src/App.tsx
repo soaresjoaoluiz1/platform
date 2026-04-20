@@ -20,6 +20,7 @@ import Financial from './pages/Financial'
 import Gravacoes from './pages/Gravacoes'
 import Onboard from './pages/Onboard'
 import TimerCheck from './components/TimerCheck'
+import { ToastProvider } from './components/Toast'
 
 function AppRoutes() {
   const { user, loading } = useAuth()
@@ -70,7 +71,7 @@ export default function App() {
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/onboard/:token" element={<Onboard />} />
-        <Route path="/*" element={<AuthProvider><AppRoutes /></AuthProvider>} />
+        <Route path="/*" element={<AuthProvider><ToastProvider><AppRoutes /></ToastProvider></AuthProvider>} />
       </Routes>
     </BrowserRouter>
   )
