@@ -259,10 +259,13 @@ export default function Tasks() {
                   </tr>
                 )
               })}
-              {tasks.length === 0 && <tr><td colSpan={isDono ? 8 : isCliente ? 4 : 7} style={{ textAlign: 'center', padding: 40, color: '#6B6580' }}>Nenhuma tarefa encontrada</td></tr>}
+              {tasks.length === 0 && <tr><td colSpan={isDono ? 8 : isCliente ? 4 : 7} style={{ textAlign: 'center', padding: 40, color: '#6B6580' }}>{(search || filterClient || filterStages.size > 0 || filterAssigned) ? 'Nenhuma tarefa com esses filtros. Tente limpar os filtros.' : 'Nenhuma tarefa encontrada.'}</td></tr>}
             </tbody>
           </table>
-          {total > 30 && <div style={{ padding: 12, display: 'flex', justifyContent: 'center', gap: 8 }}><button className="btn btn-secondary btn-sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>Anterior</button><span style={{ fontSize: 12, color: '#A8A3B8', padding: '6px 12px' }}>Pag {page}/{Math.ceil(total / 30)}</span><button className="btn btn-secondary btn-sm" disabled={page >= Math.ceil(total / 30)} onClick={() => setPage(p => p + 1)}>Proxima</button></div>}
+          <div style={{ padding: 12, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 11, color: '#6B6580' }}>Mostrando {Math.min(tasks.length, 30)} de {total} tarefas</span>
+            {total > 30 && <><button className="btn btn-secondary btn-sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>Anterior</button><span style={{ fontSize: 12, color: '#A8A3B8', padding: '4px 8px' }}>Pag {page}/{Math.ceil(total / 30)}</span><button className="btn btn-secondary btn-sm" disabled={page >= Math.ceil(total / 30)} onClick={() => setPage(p => p + 1)}>Proxima</button></>}
+          </div>
         </div>
       )}
 
