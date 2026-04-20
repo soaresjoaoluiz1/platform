@@ -1,18 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAccount } from '../context/AccountContext'
 import { useSSE } from '../context/SSEContext'
-import { apiFetch } from '../lib/api'
+import { apiFetch, fetchTaskCounts } from '../lib/api'
 import {
   LayoutDashboard, Kanban, Users, MessageCircle, UserCog, GitBranch,
   Plug, Settings, Building2, LogOut, UsersRound, Menu, X,
+  ListOrdered, MessageSquarePlus, ClipboardList, Rocket, ListTodo, ExternalLink,
 } from 'lucide-react'
 
 export default function Sidebar() {
   const { user, logout } = useAuth()
   const { accountId } = useAccount()
   const [newLeadsCount, setNewLeadsCount] = useState(0)
+  const [taskCount, setTaskCount] = useState(0)
+
+  const loadTaskCount = useCallback(() => {
+    if (!accountId) return
+    fetchTaskCounts(accountId).then(c => setTaskCount(c.overdue + c.today)).catch(() => {})
+  }, [accountId])
+  useEffect(() => { loadTaskCount() }, [loadTaskCount])
+  useSSE('task:updated', loadTaskCount)
+  useSSE('task:due', loadTaskCount)
   const [mobileOpen, setMobileOpen] = useState(false)
   if (!user) return null
 
@@ -46,7 +56,7 @@ export default function Sidebar() {
         <div className="sidebar-header">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <img src="/logo-dros.png" alt="Dros" className="sidebar-logo" />
+              <img src="https://drosagencia.com.br/wp-content/uploads/2025/12/DROS-LOGO-1-1024x1024.png" alt="Dros" className="sidebar-logo" />
               <div className="sidebar-subtitle">CRM</div>
             </div>
             <button className="sidebar-close-btn" onClick={closeMobile}><X size={18} /></button>
@@ -75,6 +85,13 @@ export default function Sidebar() {
               <LayoutDashboard size={16} /> Dashboard
             </NavLink>
           )}
+          <NavLink to="/chat" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}>
+            <MessageCircle size={16} /> Chat
+          </NavLink>
+          <NavLink to="/tasks" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}>
+            <ListTodo size={16} /> Tarefas
+            {taskCount > 0 && <span className="nav-badge" style={{ background: '#FF6B6B' }}>{taskCount > 99 ? '99+' : taskCount}</span>}
+          </NavLink>
           <NavLink to="/pipeline" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}>
             <Kanban size={16} /> Pipeline
             {newLeadsCount > 0 && <span className="nav-badge">{newLeadsCount > 99 ? '99+' : newLeadsCount}</span>}
@@ -91,6 +108,13 @@ export default function Sidebar() {
               <NavLink to="/funnels" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><GitBranch size={16} /> Funis</NavLink>
               <NavLink to="/integrations" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><Plug size={16} /> Integracoes</NavLink>
               <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><Settings size={16} /> Configuracoes</NavLink>
+              <div className="nav-section">Automacao</div>
+              <NavLink to="/cadences" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><ListOrdered size={16} /> Cadencias</NavLink>
+              <NavLink to="/ready-messages" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><MessageSquarePlus size={16} /> Msgs Prontas</NavLink>
+              <NavLink to="/qualifications" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><ClipboardList size={16} /> Qualificacao</NavLink>
+              <NavLink to="/launches" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><Rocket size={16} /> Lancamentos</NavLink>
+              <div className="nav-section">Sistemas</div>
+              <a href="/hub/" target="_blank" rel="noopener noreferrer" className="nav-item" style={{ textDecoration: 'none' }} onClick={closeMobile}><ExternalLink size={16} /> HUB</a>
             </>
           )}
         </nav>
