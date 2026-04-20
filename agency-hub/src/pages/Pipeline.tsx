@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useSSE } from '../context/SSEContext'
 import { fetchPipelineTasks, fetchClients, fetchDepartments, fetchUsers, fetchCategories, createTask, createEditorialTask, moveTaskStage, type Task, type PipelineStage, type Client, type Department, type User as UserT, type TaskCategory } from '../lib/api'
 import { Clock, Building2, User, ExternalLink, ChevronDown, ChevronRight, ArrowRight, Search, AlertTriangle, Plus, Layers } from 'lucide-react'
+import { useToast } from '../components/Toast'
 
 function timeAgo(d: string) { const m = Math.floor((Date.now() - new Date(d).getTime()) / 60000); if (m < 60) return `${m}m`; const h = Math.floor(m / 60); if (h < 24) return `${h}h`; return `${Math.floor(h / 24)}d` }
 function todayStr() { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}` }
@@ -14,8 +15,10 @@ const PRIORITY_COLORS: Record<string, string> = { low: '#6B6580', normal: '#5DAD
 
 export default function Pipeline() {
   const { user } = useAuth()
+  const { toast } = useToast()
   const navigate = useNavigate()
   const isMobile = useIsMobile()
+  const [saving, setSaving] = useState(false)
   const [stages, setStages] = useState<PipelineStage[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -71,24 +74,34 @@ export default function Pipeline() {
 
   const handleCreateTask = async () => {
     if (!newTask.title || !newTask.client_id) return
-    const recording_datetime = newTask.recording_date ? `${newTask.recording_date}T${newTask.recording_time || '09:00'}` : undefined
-    await createTask({ ...newTask, client_id: +newTask.client_id, category_id: newTask.category_id ? +newTask.category_id : undefined, department_id: newTask.department_id ? +newTask.department_id : undefined, assigned_to: newTask.assigned_to.map(Number), recording_datetime } as any)
-    setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [], due_date: '', priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' }); loadData()
+    setSaving(true)
+    try {
+      const recording_datetime = newTask.recording_date ? `${newTask.recording_date}T${newTask.recording_time || '09:00'}` : undefined
+      await createTask({ ...newTask, client_id: +newTask.client_id, category_id: newTask.category_id ? +newTask.category_id : undefined, department_id: newTask.department_id ? +newTask.department_id : undefined, assigned_to: newTask.assigned_to.map(Number), recording_datetime } as any)
+      setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [], due_date: '', priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' }); loadData()
+      toast('Tarefa criada com sucesso!')
+    } catch (err: any) { toast(err.message || 'Erro ao criar tarefa', 'error') }
+    finally { setSaving(false) }
   }
 
   const handleCreateEditorial = async () => {
     if (!newEditorial.client_id || !newEditorial.month_label) return
-    await createEditorialTask({
-      client_id: +newEditorial.client_id,
-      month_label: newEditorial.month_label,
-      num_posts: newEditorial.num_posts ? +newEditorial.num_posts : undefined,
-      num_videos: newEditorial.num_videos ? +newEditorial.num_videos : undefined,
-      due_date: newEditorial.due_date || undefined,
-      category_id: newEditorial.category_id ? +newEditorial.category_id : undefined,
-    })
-    setShowNewEditorial(false)
-    setNewEditorial({ client_id: '', month_label: '', num_posts: '8', num_videos: '4', due_date: '', category_id: '' })
-    loadData()
+    setSaving(true)
+    try {
+      await createEditorialTask({
+        client_id: +newEditorial.client_id,
+        month_label: newEditorial.month_label,
+        num_posts: newEditorial.num_posts ? +newEditorial.num_posts : undefined,
+        num_videos: newEditorial.num_videos ? +newEditorial.num_videos : undefined,
+        due_date: newEditorial.due_date || undefined,
+        category_id: newEditorial.category_id ? +newEditorial.category_id : undefined,
+      })
+      setShowNewEditorial(false)
+      setNewEditorial({ client_id: '', month_label: '', num_posts: '8', num_videos: '4', due_date: '', category_id: '' })
+      loadData()
+      toast('Linha Editorial criada com sucesso!')
+    } catch (err: any) { toast(err.message || 'Erro ao criar linha editorial', 'error') }
+    finally { setSaving(false) }
   }
 
   const handleMobileMove = async (taskId: number, stageSlug: string) => {
@@ -339,7 +352,7 @@ export default function Pipeline() {
               </div>
             )
           })()}
-          <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNew(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreateTask}>Criar Tarefa</button></div>
+          <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNew(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreateTask} disabled={saving}>{saving ? 'Criando...' : 'Criar Tarefa'}</button></div>
         </div></div>
       )}
 
@@ -380,7 +393,7 @@ export default function Pipeline() {
             </ul>
             <div style={{ marginTop: 8, fontStyle: 'italic' }}>Quando todas concluirem, a tarefa-mae auto-conclui.</div>
           </div>
-          <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNewEditorial(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreateEditorial} disabled={!newEditorial.client_id || !newEditorial.month_label}>Criar Linha Editorial</button></div>
+          <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNewEditorial(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreateEditorial} disabled={saving || !newEditorial.client_id || !newEditorial.month_label}>{saving ? 'Criando...' : 'Criar Linha Editorial'}</button></div>
         </div></div>
       )}
     </div>

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { fetchDashboardStats, fetchDashboardTrends, fetchTeamWorkload, createTaskRequest, formatNumber } from '../lib/api'
 import { ResponsiveContainer, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ComposedChart, Line } from 'recharts'
 import { ListTodo, Clock, CheckCircle, AlertTriangle, Send, Calendar, Users, TrendingUp, Plus } from 'lucide-react'
+import { useToast } from '../components/Toast'
 
 const COLORS = ['#6B6580', '#5DADE2', '#9B59B6', '#FFAA83', '#FFB300', '#34C759', '#FF6B8A', '#34C759', '#FF6B6B']
 const STATUS_COLORS: Record<string, string> = { available: '#34C759', busy: '#FBBC04', overloaded: '#FF6B6B' }
@@ -26,6 +27,8 @@ export default function Dashboard() {
   const [days, setDays] = useState(30)
   const isDono = user?.role === 'dono'
   const isCliente = user?.role === 'cliente'
+  const { toast } = useToast()
+  const [saving, setSaving] = useState(false)
   const [showRequest, setShowRequest] = useState(false)
   const [newRequest, setNewRequest] = useState({ title: '', description: '', drive_link_raw: '' })
 
@@ -206,8 +209,8 @@ export default function Dashboard() {
           <div className="form-group"><label>Link dos arquivos (opcional)</label><input className="input" value={newRequest.drive_link_raw} onChange={e => setNewRequest(p => ({ ...p, drive_link_raw: e.target.value }))} placeholder="https://drive.google.com/... ou outro link" /></div>
           <div className="modal-actions">
             <button className="btn btn-secondary" onClick={() => setShowRequest(false)}>Cancelar</button>
-            <button className="btn btn-primary" disabled={!newRequest.title} onClick={async () => { await createTaskRequest({ title: newRequest.title, description: newRequest.description, drive_link_raw: newRequest.drive_link_raw || undefined }); setShowRequest(false); setNewRequest({ title: '', description: '', drive_link_raw: '' }); alert('Solicitacao enviada! A equipe sera notificada.') }}>
-              Enviar Solicitacao
+            <button className="btn btn-primary" disabled={saving || !newRequest.title} onClick={async () => { setSaving(true); try { await createTaskRequest({ title: newRequest.title, description: newRequest.description, drive_link_raw: newRequest.drive_link_raw || undefined }); setShowRequest(false); setNewRequest({ title: '', description: '', drive_link_raw: '' }); toast('Solicitacao enviada!') } catch (err: any) { toast(err.message || 'Erro ao enviar', 'error') } finally { setSaving(false) } }}>
+              {saving ? 'Enviando...' : 'Enviar Solicitacao'}
             </button>
           </div>
         </div></div>

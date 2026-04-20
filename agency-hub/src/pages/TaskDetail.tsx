@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useSSE } from '../context/SSEContext'
 import { fetchTask, fetchClients, fetchDepartments, fetchUsers, fetchCategories, fetchStages, updateTask, moveTaskStage, addTaskComment, addTaskAttachment, deleteTaskAttachment, approveTask, rejectTask, startTimer, stopTimer, confirmRecording, type Task, type TaskComment, type TaskHistory, type TaskAttachment, type TimeEntry, type Client, type Department, type User as UserT, type TaskCategory, type PipelineStage } from '../lib/api'
 import { ArrowLeft, Building2, Clock, User, ExternalLink, CheckCircle, XCircle, Send, MessageCircle, GitBranch, Paperclip, Eye, Edit3, Save, X, Plus, AlertTriangle, Layers, ChevronRight, Video, Trash2 } from 'lucide-react'
+import { useToast } from '../components/Toast'
 
 export default function TaskDetail() {
   const { id } = useParams()
@@ -39,6 +40,7 @@ export default function TaskDetail() {
   const [showRecording, setShowRecording] = useState(false)
   const [recordingData, setRecordingData] = useState({ recording_datetime: '', capture_user_id: '', edit_user_id: '', design_user_id: '' })
 
+  const { toast } = useToast()
   const isDono = user?.role === 'dono'
   const isFunc = user?.role === 'funcionario'
   const isCliente = user?.role === 'cliente'
@@ -100,8 +102,11 @@ export default function TaskDetail() {
 
   const handleSaveEdit = async () => {
     if (!task) return
-    await updateTask(task.id, { ...editData, department_id: editData.department_id ? +editData.department_id : null, assigned_to: (editData.assigned_to || []).map(Number), category_id: editData.category_id ? +editData.category_id : null })
-    setEditing(false); loadTask()
+    try {
+      await updateTask(task.id, { ...editData, department_id: editData.department_id ? +editData.department_id : null, assigned_to: (editData.assigned_to || []).map(Number), category_id: editData.category_id ? +editData.category_id : null })
+      setEditing(false); loadTask()
+      toast('Tarefa atualizada!')
+    } catch (err: any) { toast(err.message || 'Erro ao salvar', 'error') }
   }
 
   const handleAddAttachment = async () => {
@@ -116,8 +121,8 @@ export default function TaskDetail() {
     setComments(prev => [...prev, comment]); setCommentText('')
   }
 
-  const handleApprove = async () => { if (task) { await approveTask(task.id); loadTask() } }
-  const handleReject = async () => { if (task && rejectReason) { await rejectTask(task.id, rejectReason); setShowReject(false); setRejectReason(''); loadTask() } }
+  const handleApprove = async () => { if (task) { try { await approveTask(task.id); loadTask(); toast('Tarefa aprovada!') } catch (err: any) { toast(err.message || 'Erro ao aprovar', 'error') } } }
+  const handleReject = async () => { if (task && rejectReason) { try { await rejectTask(task.id, rejectReason); setShowReject(false); setRejectReason(''); loadTask(); toast('Tarefa rejeitada') } catch (err: any) { toast(err.message || 'Erro ao rejeitar', 'error') } } }
 
   const handleConfirmRecording = async () => {
     if (!task || !recordingData.recording_datetime) return
@@ -135,15 +140,16 @@ export default function TaskDetail() {
   const handleStageMove = async (stage: string) => {
     if (!task) return
     if ((stage === 'aprovacao_interna' || stage === 'aguardando_cliente') && !task.approval_link) {
-      alert('Preencha o "Conteudo para Aprovacao" antes de enviar pra aprovacao.\n\nClique em Editar e preencha o link do arquivo finalizado na secao dourada.')
+      toast('Preencha o "Conteudo para Aprovacao" antes de enviar pra aprovacao.', 'error')
       return
     }
     try {
       if (stage === 'em_producao') lastCheckRef.current = 0
       await moveTaskStage(task.id, stage)
       loadTask()
+      toast('Etapa atualizada!')
     }
-    catch (err: any) { alert(err.message || 'Erro ao mover tarefa') }
+    catch (err: any) { toast(err.message || 'Erro ao mover tarefa', 'error') }
   }
 
   if (loading) return <div className="loading-container"><div className="spinner" /></div>
