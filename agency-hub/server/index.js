@@ -187,8 +187,8 @@ app.get('/{*path}', (req, res) => {
 app.listen(PORT, () => {
   console.log(`[Dros Hub API] Running on http://localhost:${PORT}`)
 
-  // Server-side timer check — every 5 minutes, check for active timers and send SSE
-  const TIMER_CHECK_SECONDS = 3600 // 1 hour
+  // Server-side timer check — every 2 hours
+  const TIMER_CHECK_SECONDS = 7200 // 2 hours
   setInterval(() => {
     const activeTimers = db.prepare('SELECT te.*, t.title as task_title FROM time_entries te JOIN tasks t ON te.task_id = t.id WHERE te.ended_at IS NULL').all()
     for (const timer of activeTimers) {
