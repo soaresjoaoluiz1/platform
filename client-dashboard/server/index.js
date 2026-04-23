@@ -13,6 +13,12 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+// Strip /core prefix so /core/api/... maps to /api/...
+app.use((req, _res, next) => {
+  if (req.url.startsWith('/core/api/')) req.url = req.url.slice(5)
+  next()
+})
+
 const JWT_SECRET = process.env.JWT_SECRET || 'dros-dashboard-secret-2026'
 const META_TOKEN = process.env.META_ACCESS_TOKEN
 const KIWIFY_CLIENT_ID = process.env.KIWIFY_CLIENT_ID
