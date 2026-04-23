@@ -3,6 +3,7 @@ import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
+import fs from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, resolve } from 'path'
 
@@ -2589,7 +2590,6 @@ app.get('/api/overview/:accountId', auth, async (req, res) => {
 })
 
 // ─── Production: serve built frontend ────────────────────────────
-import fs from 'fs'
 const distPath = resolve(__dirname, '../dist')
 if (fs.existsSync(distPath)) {
   app.use('/core', (req, res, next) => {
