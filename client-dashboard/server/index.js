@@ -7,6 +7,13 @@ import fs from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, resolve } from 'path'
 
+// Polyfill fetch for Node 16
+if (!globalThis.fetch) {
+  const mod = await import('node-fetch')
+  globalThis.fetch = mod.default
+  globalThis.URLSearchParams = globalThis.URLSearchParams || URL.URLSearchParams
+}
+
 const __dirname = dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: resolve(__dirname, '../../.env') })
 
