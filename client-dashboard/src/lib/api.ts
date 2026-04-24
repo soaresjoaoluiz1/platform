@@ -1,7 +1,8 @@
 const getToken = () => localStorage.getItem('dros_token')
+const API_BASE = import.meta.env.DEV ? '' : '/core'
 
 async function apiFetch<T = any>(path: string): Promise<T> {
-  const res = await fetch(path, {
+  const res = await fetch(`${API_BASE}${path}`, {
     headers: { Authorization: `Bearer ${getToken()}` },
   })
   if (res.status === 401) {
