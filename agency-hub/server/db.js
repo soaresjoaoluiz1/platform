@@ -307,6 +307,15 @@ try { db.exec("ALTER TABLE client_services ADD COLUMN config TEXT DEFAULT '{}'")
 try { db.exec("ALTER TABLE services ADD COLUMN fields TEXT DEFAULT '[]'") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN monthly_fee REAL DEFAULT 0") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN payment_day INTEGER DEFAULT 10") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN cnpj TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN razao_social TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN segmento TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN website TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN instagram TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN cidade TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN estado TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN observacoes TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN contrato_inicio TEXT") } catch {}
 // Editorial/Anuncios task-mae support (hardcoded workflows)
 try { db.exec("ALTER TABLE tasks ADD COLUMN task_type TEXT DEFAULT 'normal'") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN num_posts INTEGER") } catch {}

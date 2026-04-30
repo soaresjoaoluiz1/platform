@@ -13,7 +13,7 @@ export function formatNumber(n: number) { return n.toLocaleString('pt-BR') }
 export function formatBRL(n: number) { return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }
 
 // Types
-export interface Client { id: number; name: string; slug: string; logo_url: string | null; contact_name: string | null; contact_email: string | null; contact_phone?: string | null; drive_folder?: string | null; is_active: number; approval_token?: string | null; onboard_token?: string | null; task_count?: number; user_count?: number }
+export interface Client { id: number; name: string; slug: string; logo_url: string | null; contact_name: string | null; contact_email: string | null; contact_phone?: string | null; drive_folder?: string | null; is_active: number; approval_token?: string | null; onboard_token?: string | null; task_count?: number; user_count?: number; cnpj?: string | null; razao_social?: string | null; segmento?: string | null; website?: string | null; instagram?: string | null; cidade?: string | null; estado?: string | null; observacoes?: string | null; monthly_fee?: number | null; payment_day?: number | null; contrato_inicio?: string | null }
 export interface ClientCredential { id: number; client_id: number; platform: string; login: string; password: string; observation: string | null; created_at: string }
 export interface TimeEntry { id: number; task_id: number; user_id: number; started_at: string; ended_at: string | null; duration_seconds: number; description: string | null; user_name: string }
 export interface Department { id: number; name: string; color: string; is_active: number; employee_count?: number; task_count?: number }

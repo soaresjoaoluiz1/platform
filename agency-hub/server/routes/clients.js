@@ -17,7 +17,9 @@ router.get('/', requireRole('dono', 'funcionario'), (req, res) => {
 })
 
 router.post('/', requireRole('dono', 'gerente'), (req, res) => {
-  const { name, contact_name, contact_email, contact_phone, logo_url, drive_folder, password } = req.body
+  const { name, contact_name, contact_email, contact_phone, logo_url, drive_folder, password,
+          cnpj, razao_social, segmento, website, instagram, cidade, estado, observacoes,
+          monthly_fee, payment_day, contrato_inicio } = req.body
   if (!name) return res.status(400).json({ error: 'Nome obrigatorio' })
   if (!contact_email) return res.status(400).json({ error: 'Email obrigatorio' })
   if (!password) return res.status(400).json({ error: 'Senha obrigatoria' })
@@ -30,7 +32,16 @@ router.post('/', requireRole('dono', 'gerente'), (req, res) => {
 
   // Create client with onboard token
   const onboard_token = randomBytes(16).toString('hex')
-  const result = db.prepare('INSERT INTO clients (name, slug, contact_name, contact_email, contact_phone, logo_url, drive_folder, onboard_token) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').run(name, slug, contact_name || name, contact_email, contact_phone, logo_url, drive_folder || null, onboard_token)
+  const result = db.prepare(`
+    INSERT INTO clients (name, slug, contact_name, contact_email, contact_phone, logo_url, drive_folder, onboard_token,
+                         cnpj, razao_social, segmento, website, instagram, cidade, estado, observacoes,
+                         monthly_fee, payment_day, contrato_inicio)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    name, slug, contact_name || name, contact_email, contact_phone, logo_url, drive_folder || null, onboard_token,
+    cnpj || null, razao_social || null, segmento || null, website || null, instagram || null, cidade || null, estado || null, observacoes || null,
+    monthly_fee || 0, payment_day || 10, contrato_inicio || null
+  )
   const clientId = result.lastInsertRowid
 
   // Auto-create user with role 'cliente'
@@ -49,7 +60,8 @@ router.get('/:id', requireRole('dono', 'gerente'), (req, res) => {
 })
 
 router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
-  const { name, contact_name, contact_email, contact_phone, logo_url, drive_folder, is_active, monthly_fee, payment_day } = req.body
+  const { name, contact_name, contact_email, contact_phone, logo_url, drive_folder, is_active, monthly_fee, payment_day,
+          cnpj, razao_social, segmento, website, instagram, cidade, estado, observacoes, contrato_inicio } = req.body
   const sets = []; const params = []
   if (name !== undefined) { sets.push('name = ?'); params.push(name) }
   if (contact_name !== undefined) { sets.push('contact_name = ?'); params.push(contact_name) }
@@ -60,6 +72,15 @@ router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
   if (is_active !== undefined) { sets.push('is_active = ?'); params.push(is_active ? 1 : 0) }
   if (monthly_fee !== undefined) { sets.push('monthly_fee = ?'); params.push(monthly_fee) }
   if (payment_day !== undefined) { sets.push('payment_day = ?'); params.push(payment_day) }
+  if (cnpj !== undefined) { sets.push('cnpj = ?'); params.push(cnpj || null) }
+  if (razao_social !== undefined) { sets.push('razao_social = ?'); params.push(razao_social || null) }
+  if (segmento !== undefined) { sets.push('segmento = ?'); params.push(segmento || null) }
+  if (website !== undefined) { sets.push('website = ?'); params.push(website || null) }
+  if (instagram !== undefined) { sets.push('instagram = ?'); params.push(instagram || null) }
+  if (cidade !== undefined) { sets.push('cidade = ?'); params.push(cidade || null) }
+  if (estado !== undefined) { sets.push('estado = ?'); params.push(estado || null) }
+  if (observacoes !== undefined) { sets.push('observacoes = ?'); params.push(observacoes || null) }
+  if (contrato_inicio !== undefined) { sets.push('contrato_inicio = ?'); params.push(contrato_inicio || null) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
   sets.push("updated_at = datetime('now', '-3 hours')"); params.push(req.params.id)
   db.prepare(`UPDATE clients SET ${sets.join(', ')} WHERE id = ?`).run(...params)
