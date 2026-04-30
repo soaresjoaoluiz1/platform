@@ -12,7 +12,8 @@ router.get('/overview', (req, res) => {
   const month = req.query.month
   if (!month || !/^\d{4}-\d{2}$/.test(month)) return res.status(400).json({ error: 'month param required (YYYY-MM)' })
 
-  const clients = db.prepare('SELECT id, name, monthly_fee, payment_day FROM clients WHERE is_active = 1 ORDER BY name').all()
+  // Lista todos: ativos sempre, inativos so se tiverem pagamento ou divida em aberto neste mes
+  const clients = db.prepare('SELECT id, name, monthly_fee, payment_day, is_active FROM clients ORDER BY name').all()
 
   // Get all payments for this month
   const payments = db.prepare('SELECT * FROM payments WHERE reference_month = ?').all(month)
@@ -36,27 +37,25 @@ router.get('/overview', (req, res) => {
 
   const result = clients.map(c => {
     const fee = c.monthly_fee || 0
-    totalExpected += fee
-
     const payment = paymentMap[c.id]
     if (payment) {
+      totalExpected += fee
       totalReceived += payment.amount
       return {
         id: c.id, name: c.name, monthly_fee: fee, payment_day: c.payment_day || 10,
         status: 'paid', paid_at: payment.paid_at, amount_paid: payment.amount,
-        days_late: 0, penalty: 0, total_due: fee
+        days_late: 0, penalty: 0, total_due: fee, is_active: c.is_active
       }
     }
 
     // No payment - check if late
     const payDay = c.payment_day || 10
-    // Payment is late if: requested month is in the past, OR it's current month and payment_day has passed
     const isCurrentMonth = reqYear === currentYear && reqMonth === currentMonth
     const isPastMonth = reqYear < currentYear || (reqYear === currentYear && reqMonth < currentMonth)
     const isLate = isPastMonth || (isCurrentMonth && currentDay > payDay)
 
     if (isLate && fee > 0) {
-      // Calculate days late — 2% fixed penalty + 1% per 30 days after
+      totalExpected += fee
       const dueDate = new Date(reqYear, reqMonth - 1, payDay)
       const diffMs = spNow.getTime() - dueDate.getTime()
       const daysLate = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)))
@@ -68,18 +67,20 @@ router.get('/overview', (req, res) => {
       return {
         id: c.id, name: c.name, monthly_fee: fee, payment_day: payDay,
         status: 'late', paid_at: null, amount_paid: 0,
-        days_late: daysLate, penalty, total_due: totalDue
+        days_late: daysLate, penalty, total_due: totalDue, is_active: c.is_active
       }
     }
 
-    // Pending (not yet due)
+    // Pending (not yet due) — clientes inativos nao geram divida futura
+    if (!c.is_active) return null
+    totalExpected += fee
     totalPending += fee
     return {
       id: c.id, name: c.name, monthly_fee: fee, payment_day: payDay,
       status: 'pending', paid_at: null, amount_paid: 0,
-      days_late: 0, penalty: 0, total_due: fee
+      days_late: 0, penalty: 0, total_due: fee, is_active: c.is_active
     }
-  })
+  }).filter(Boolean)
 
   res.json({
     clients: result,
