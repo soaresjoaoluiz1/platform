@@ -1,17 +1,26 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchClients, createClient, updateClient, formatNumber, type Client } from '../lib/api'
-import { Building2, Plus, Edit3, Save, X, Eye, Archive, ArchiveRestore } from 'lucide-react'
+import { Building2, Plus, Edit3, Eye, Archive, ArchiveRestore } from 'lucide-react'
+
+const BLANK_FORM = {
+  name: '', contact_name: '', contact_email: '', contact_phone: '',
+  drive_folder: '', password: '',
+  cnpj: '', razao_social: '', segmento: '', website: '', instagram: '',
+  cidade: '', estado: '', observacoes: '',
+  monthly_fee: '', payment_day: '10', contrato_inicio: '',
+}
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
-  const [showNew, setShowNew] = useState(false)
-  const [newClient, setNewClient] = useState({ name: '', contact_name: '', contact_email: '', contact_phone: '', drive_folder: '', password: '', cnpj: '', razao_social: '', segmento: '', website: '', instagram: '', cidade: '', estado: '', observacoes: '', monthly_fee: '', payment_day: '10', contrato_inicio: '' })
-  const [editId, setEditId] = useState<number | null>(null)
-  const navigate = useNavigate()
-  const [editData, setEditData] = useState<any>({})
   const [view, setView] = useState<'active' | 'inactive'>('active')
+  const navigate = useNavigate()
+
+  // Modal: 'new' = criar, number = editar id, null = fechado
+  const [modalMode, setModalMode] = useState<'new' | number | null>(null)
+  const [form, setForm] = useState(BLANK_FORM)
+  const isEditing = typeof modalMode === 'number'
 
   const load = () => { setLoading(true); fetchClients({ inactive: view === 'inactive' }).then(setClients).finally(() => setLoading(false)) }
   useEffect(load, [view])
@@ -23,22 +32,54 @@ export default function Clients() {
     load()
   }
 
-  const handleCreate = async () => {
-    if (!newClient.name || !newClient.contact_email || !newClient.password) return
-    const payload: any = { ...newClient }
-    payload.monthly_fee = newClient.monthly_fee ? parseFloat(newClient.monthly_fee) : 0
-    payload.payment_day = newClient.payment_day ? parseInt(newClient.payment_day) : 10
-    await createClient(payload)
-    setShowNew(false)
-    setNewClient({ name: '', contact_name: '', contact_email: '', contact_phone: '', drive_folder: '', password: '', cnpj: '', razao_social: '', segmento: '', website: '', instagram: '', cidade: '', estado: '', observacoes: '', monthly_fee: '', payment_day: '10', contrato_inicio: '' })
-    load()
+  const openNew = () => { setForm(BLANK_FORM); setModalMode('new') }
+
+  const openEdit = (c: Client) => {
+    setForm({
+      name: c.name || '',
+      contact_name: c.contact_name || '',
+      contact_email: c.contact_email || '',
+      contact_phone: (c as any).contact_phone || '',
+      drive_folder: (c as any).drive_folder || '',
+      password: '',
+      cnpj: (c as any).cnpj || '',
+      razao_social: (c as any).razao_social || '',
+      segmento: (c as any).segmento || '',
+      website: (c as any).website || '',
+      instagram: (c as any).instagram || '',
+      cidade: (c as any).cidade || '',
+      estado: (c as any).estado || '',
+      observacoes: (c as any).observacoes || '',
+      monthly_fee: (c as any).monthly_fee != null ? String((c as any).monthly_fee) : '',
+      payment_day: (c as any).payment_day != null ? String((c as any).payment_day) : '10',
+      contrato_inicio: (c as any).contrato_inicio || '',
+    })
+    setModalMode(c.id)
   }
-  const handleSaveEdit = async () => { if (!editId) return; await updateClient(editId, editData); setEditId(null); load() }
-  const startEdit = (c: Client) => { setEditId(c.id); setEditData({ name: c.name, contact_name: c.contact_name || '', contact_email: c.contact_email || '', contact_phone: (c as any).contact_phone || '' }) }
+
+  const closeModal = () => { setModalMode(null); setForm(BLANK_FORM) }
+
+  const handleSave = async () => {
+    if (!form.name) return alert('Nome Fantasia obrigatorio')
+    if (!form.contact_email) return alert('Email obrigatorio')
+    if (!isEditing && !form.password) return alert('Senha obrigatoria pra novo cliente')
+
+    const payload: any = { ...form }
+    payload.monthly_fee = form.monthly_fee ? parseFloat(form.monthly_fee) : 0
+    payload.payment_day = form.payment_day ? parseInt(form.payment_day) : 10
+    // No PUT, nao envia senha vazia (mantem a atual)
+    if (isEditing && !payload.password) delete payload.password
+
+    try {
+      if (isEditing) await updateClient(modalMode as number, payload)
+      else await createClient(payload)
+      closeModal(); load()
+    } catch (e: any) { alert('Erro: ' + (e?.message || 'desconhecido')) }
+  }
 
   return (
     <div>
-      <div className="page-header"><h1><Building2 size={22} style={{ marginRight: 8 }} /> Clientes</h1><button className="btn btn-primary btn-sm" onClick={() => setShowNew(true)}><Plus size={14} /> Novo Cliente</button></div>
+      <div className="page-header"><h1><Building2 size={22} style={{ marginRight: 8 }} /> Clientes</h1><button className="btn btn-primary btn-sm" onClick={openNew}><Plus size={14} /> Novo Cliente</button></div>
       <div style={{ display: 'flex', gap: 4, marginBottom: 12, borderBottom: '1px solid var(--border-subtle)' }}>
         <button
           onClick={() => setView('active')}
@@ -53,26 +94,14 @@ export default function Clients() {
         <div className="table-card"><table>
           <thead><tr><th>Nome</th><th>Contato</th><th>Email</th><th className="right">Tarefas</th><th>Status</th><th className="right">Acoes</th></tr></thead>
           <tbody>
-            {clients.map(c => editId === c.id ? (
-              <tr key={c.id}>
-                <td><input className="input" value={editData.name} onChange={e => setEditData((p: any) => ({ ...p, name: e.target.value }))} style={{ padding: '4px 8px' }} /></td>
-                <td><input className="input" value={editData.contact_name} onChange={e => setEditData((p: any) => ({ ...p, contact_name: e.target.value }))} style={{ padding: '4px 8px' }} /></td>
-                <td><input className="input" value={editData.contact_email} onChange={e => setEditData((p: any) => ({ ...p, contact_email: e.target.value }))} style={{ padding: '4px 8px' }} /></td>
-                <td className="right">{formatNumber(c.task_count || 0)}</td>
-                <td><span style={{ color: '#34C759' }}>Ativo</span></td>
-                <td className="right" style={{ display: 'flex', gap: 4, justifyContent: 'flex-end' }}>
-                  <button className="btn btn-primary btn-sm btn-icon" onClick={handleSaveEdit}><Save size={12} /></button>
-                  <button className="btn btn-secondary btn-sm btn-icon" onClick={() => setEditId(null)}><X size={12} /></button>
-                </td>
-              </tr>
-            ) : (
+            {clients.map(c => (
               <tr key={c.id}>
                 <td className="name">{c.name}</td><td>{c.contact_name || '-'}</td><td>{c.contact_email || '-'}</td>
                 <td className="right" style={{ fontWeight: 600 }}>{formatNumber(c.task_count || 0)}</td>
                 <td><span style={{ color: c.is_active ? '#34C759' : '#FF6B6B' }}>{c.is_active ? 'Ativo' : 'Inativo'}</span></td>
                 <td className="right" style={{ display: 'flex', gap: 4, justifyContent: 'flex-end' }}>
                   <button className="btn btn-secondary btn-sm btn-icon" onClick={() => navigate(`/clients/${c.id}`)} title="Ver detalhes"><Eye size={12} /></button>
-                  <button className="btn btn-secondary btn-sm btn-icon" onClick={() => startEdit(c)} title="Editar"><Edit3 size={12} /></button>
+                  <button className="btn btn-secondary btn-sm btn-icon" onClick={() => openEdit(c)} title="Editar"><Edit3 size={12} /></button>
                   <button
                     className="btn btn-secondary btn-sm btn-icon"
                     onClick={() => handleToggleActive(c)}
@@ -86,55 +115,57 @@ export default function Clients() {
           </tbody>
         </table></div>
       )}
-      {showNew && (
-        <div className="modal-overlay" onClick={() => setShowNew(false)}><div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 700, maxHeight: '90vh', overflowY: 'auto' }}>
-          <h2>Novo Cliente</h2>
+      {modalMode !== null && (
+        <div className="modal-overlay" onClick={closeModal}><div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 700, maxHeight: '90vh', overflowY: 'auto' }}>
+          <h2>{isEditing ? 'Editar Cliente' : 'Novo Cliente'}</h2>
 
           <div style={{ fontSize: 11, color: '#9B96B0', textTransform: 'uppercase', fontWeight: 600, margin: '12px 0 6px' }}>Identificacao</div>
           <div className="form-row">
-            <div className="form-group"><label>Nome Fantasia *</label><input className="input" value={newClient.name} onChange={e => setNewClient(p => ({ ...p, name: e.target.value }))} placeholder="Nome do cliente" /></div>
-            <div className="form-group"><label>Razao Social</label><input className="input" value={newClient.razao_social} onChange={e => setNewClient(p => ({ ...p, razao_social: e.target.value }))} placeholder="Razao social registrada" /></div>
+            <div className="form-group"><label>Nome Fantasia *</label><input className="input" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} placeholder="Nome do cliente" /></div>
+            <div className="form-group"><label>Razao Social</label><input className="input" value={form.razao_social} onChange={e => setForm(p => ({ ...p, razao_social: e.target.value }))} placeholder="Razao social registrada" /></div>
           </div>
           <div className="form-row">
-            <div className="form-group"><label>CNPJ</label><input className="input" value={newClient.cnpj} onChange={e => setNewClient(p => ({ ...p, cnpj: e.target.value }))} placeholder="00.000.000/0000-00" /></div>
-            <div className="form-group"><label>Segmento</label><input className="input" value={newClient.segmento} onChange={e => setNewClient(p => ({ ...p, segmento: e.target.value }))} placeholder="Ex: Estetica, Industria, Varejo" /></div>
+            <div className="form-group"><label>CNPJ</label><input className="input" value={form.cnpj} onChange={e => setForm(p => ({ ...p, cnpj: e.target.value }))} placeholder="00.000.000/0000-00" /></div>
+            <div className="form-group"><label>Segmento</label><input className="input" value={form.segmento} onChange={e => setForm(p => ({ ...p, segmento: e.target.value }))} placeholder="Ex: Estetica, Industria, Varejo" /></div>
           </div>
 
           <div style={{ fontSize: 11, color: '#9B96B0', textTransform: 'uppercase', fontWeight: 600, margin: '16px 0 6px' }}>Contato</div>
           <div className="form-row">
-            <div className="form-group"><label>Nome do Contato</label><input className="input" value={newClient.contact_name} onChange={e => setNewClient(p => ({ ...p, contact_name: e.target.value }))} placeholder="Pessoa responsavel" /></div>
-            <div className="form-group"><label>Telefone</label><input className="input" value={newClient.contact_phone} onChange={e => setNewClient(p => ({ ...p, contact_phone: e.target.value }))} placeholder="(00) 00000-0000" /></div>
+            <div className="form-group"><label>Nome do Contato</label><input className="input" value={form.contact_name} onChange={e => setForm(p => ({ ...p, contact_name: e.target.value }))} placeholder="Pessoa responsavel" /></div>
+            <div className="form-group"><label>Telefone</label><input className="input" value={form.contact_phone} onChange={e => setForm(p => ({ ...p, contact_phone: e.target.value }))} placeholder="(00) 00000-0000" /></div>
           </div>
           <div className="form-row">
-            <div className="form-group"><label>Email de Acesso *</label><input className="input" type="email" value={newClient.contact_email} onChange={e => setNewClient(p => ({ ...p, contact_email: e.target.value }))} placeholder="email@cliente.com" /></div>
-            <div className="form-group"><label>Senha de Acesso *</label><input className="input" type="password" value={newClient.password} onChange={e => setNewClient(p => ({ ...p, password: e.target.value }))} placeholder="Senha do cliente" /></div>
+            <div className="form-group"><label>Email de Acesso *</label><input className="input" type="email" value={form.contact_email} onChange={e => setForm(p => ({ ...p, contact_email: e.target.value }))} placeholder="email@cliente.com" /></div>
+            <div className="form-group"><label>{isEditing ? 'Nova Senha (opcional)' : 'Senha de Acesso *'}</label><input className="input" type="password" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder={isEditing ? 'Deixe vazio para manter' : 'Senha do cliente'} /></div>
           </div>
           <div className="form-row">
-            <div className="form-group"><label>Cidade</label><input className="input" value={newClient.cidade} onChange={e => setNewClient(p => ({ ...p, cidade: e.target.value }))} placeholder="Cidade" /></div>
-            <div className="form-group"><label>Estado</label><input className="input" value={newClient.estado} onChange={e => setNewClient(p => ({ ...p, estado: e.target.value }))} placeholder="UF" maxLength={2} /></div>
+            <div className="form-group"><label>Cidade</label><input className="input" value={form.cidade} onChange={e => setForm(p => ({ ...p, cidade: e.target.value }))} placeholder="Cidade" /></div>
+            <div className="form-group"><label>Estado</label><input className="input" value={form.estado} onChange={e => setForm(p => ({ ...p, estado: e.target.value }))} placeholder="UF" maxLength={2} /></div>
           </div>
 
           <div style={{ fontSize: 11, color: '#9B96B0', textTransform: 'uppercase', fontWeight: 600, margin: '16px 0 6px' }}>Redes / Site</div>
           <div className="form-row">
-            <div className="form-group"><label>Site</label><input className="input" value={newClient.website} onChange={e => setNewClient(p => ({ ...p, website: e.target.value }))} placeholder="https://..." /></div>
-            <div className="form-group"><label>Instagram</label><input className="input" value={newClient.instagram} onChange={e => setNewClient(p => ({ ...p, instagram: e.target.value }))} placeholder="@perfil" /></div>
+            <div className="form-group"><label>Site</label><input className="input" value={form.website} onChange={e => setForm(p => ({ ...p, website: e.target.value }))} placeholder="https://..." /></div>
+            <div className="form-group"><label>Instagram</label><input className="input" value={form.instagram} onChange={e => setForm(p => ({ ...p, instagram: e.target.value }))} placeholder="@perfil" /></div>
           </div>
 
           <div style={{ fontSize: 11, color: '#9B96B0', textTransform: 'uppercase', fontWeight: 600, margin: '16px 0 6px' }}>Contrato / Financeiro</div>
           <div className="form-row">
-            <div className="form-group"><label>Mensalidade (R$)</label><input className="input" type="number" step="0.01" value={newClient.monthly_fee} onChange={e => setNewClient(p => ({ ...p, monthly_fee: e.target.value }))} placeholder="0.00" /></div>
-            <div className="form-group"><label>Dia do Pagamento</label><input className="input" type="number" min="1" max="31" value={newClient.payment_day} onChange={e => setNewClient(p => ({ ...p, payment_day: e.target.value }))} placeholder="10" /></div>
-            <div className="form-group"><label>Inicio do Contrato</label><input className="input" type="date" value={newClient.contrato_inicio} onChange={e => setNewClient(p => ({ ...p, contrato_inicio: e.target.value }))} /></div>
+            <div className="form-group"><label>Mensalidade (R$)</label><input className="input" type="number" step="0.01" value={form.monthly_fee} onChange={e => setForm(p => ({ ...p, monthly_fee: e.target.value }))} placeholder="0.00" /></div>
+            <div className="form-group"><label>Dia do Pagamento</label><input className="input" type="number" min="1" max="31" value={form.payment_day} onChange={e => setForm(p => ({ ...p, payment_day: e.target.value }))} placeholder="10" /></div>
+            <div className="form-group"><label>Inicio do Contrato</label><input className="input" type="date" value={form.contrato_inicio} onChange={e => setForm(p => ({ ...p, contrato_inicio: e.target.value }))} /></div>
           </div>
 
           <div style={{ fontSize: 11, color: '#9B96B0', textTransform: 'uppercase', fontWeight: 600, margin: '16px 0 6px' }}>Outros</div>
-          <div className="form-group"><label>Pasta do Drive</label><input className="input" value={newClient.drive_folder} onChange={e => setNewClient(p => ({ ...p, drive_folder: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
-          <div className="form-group"><label>Observacoes</label><textarea className="input" value={newClient.observacoes} onChange={e => setNewClient(p => ({ ...p, observacoes: e.target.value }))} rows={3} style={{ resize: 'vertical' }} placeholder="Anotacoes internas sobre o cliente" /></div>
+          <div className="form-group"><label>Pasta do Drive</label><input className="input" value={form.drive_folder} onChange={e => setForm(p => ({ ...p, drive_folder: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
+          <div className="form-group"><label>Observacoes</label><textarea className="input" value={form.observacoes} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={3} style={{ resize: 'vertical' }} placeholder="Anotacoes internas sobre o cliente" /></div>
 
-          <div style={{ padding: '10px 12px', background: 'rgba(245,166,35,0.06)', borderRadius: 8, fontSize: 12, color: '#F5A623', marginTop: 4 }}>
-            Um usuario sera criado automaticamente com o email e senha acima. O cliente usara essas credenciais pra acessar o sistema, aprovar tarefas e acompanhar o andamento.
-          </div>
-          <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNew(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreate}>Criar</button></div>
+          {!isEditing && (
+            <div style={{ padding: '10px 12px', background: 'rgba(245,166,35,0.06)', borderRadius: 8, fontSize: 12, color: '#F5A623', marginTop: 4 }}>
+              Um usuario sera criado automaticamente com o email e senha acima. O cliente usara essas credenciais pra acessar o sistema, aprovar tarefas e acompanhar o andamento.
+            </div>
+          )}
+          <div className="modal-actions"><button className="btn btn-secondary" onClick={closeModal}>Cancelar</button><button className="btn btn-primary" onClick={handleSave}>{isEditing ? 'Salvar' : 'Criar'}</button></div>
         </div></div>
       )}
     </div>
