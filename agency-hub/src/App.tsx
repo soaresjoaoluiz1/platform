@@ -29,9 +29,10 @@ function AppRoutes() {
   if (!user) return <Routes><Route path="*" element={<Login />} /></Routes>
 
   const isDono = user.role === 'dono'
+  const isGerente = user.role === 'gerente'
   const isFunc = user.role === 'funcionario'
   const isCliente = user.role === 'cliente'
-  const home = isDono ? '/dashboard' : isFunc ? '/pipeline' : '/approvals'
+  const home = (isDono || isGerente) ? '/dashboard' : isFunc ? '/pipeline' : '/approvals'
 
   return (
     <SSEProvider>
@@ -46,16 +47,18 @@ function AppRoutes() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/tasks/:id" element={<TaskDetail />} />
-            {(isDono || isFunc) && <Route path="/pipeline" element={<Pipeline />} />}
-            {(isDono || isFunc) && <Route path="/gravacoes" element={<Gravacoes />} />}
-            {(isDono || isCliente) && <Route path="/approvals" element={<Approvals />} />}
-            {isDono && <>
+            {(isDono || isGerente || isFunc) && <Route path="/pipeline" element={<Pipeline />} />}
+            {(isDono || isGerente || isFunc) && <Route path="/gravacoes" element={<Gravacoes />} />}
+            {(isDono || isGerente || isCliente) && <Route path="/approvals" element={<Approvals />} />}
+            {(isDono || isGerente) && <>
               <Route path="/clients" element={<Clients />} />
               <Route path="/clients/:id" element={<ClientDetail />} />
               <Route path="/team" element={<Team />} />
               <Route path="/departments" element={<Departments />} />
               <Route path="/categories" element={<Categories />} />
               <Route path="/services" element={<Services />} />
+            </>}
+            {isDono && <>
               <Route path="/financial" element={<Financial />} />
               <Route path="/settings" element={<SettingsPage />} />
             </>}
