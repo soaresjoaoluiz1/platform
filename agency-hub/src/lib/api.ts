@@ -46,7 +46,7 @@ export interface TaskHistory { id: number; task_id: number; from_stage: string |
 export interface TaskAttachment { id: number; task_id: number; url: string; filename: string; type: string; uploaded_by_name?: string; created_at: string }
 
 // API Functions
-export const fetchClients = () => apiFetch<{ clients: Client[] }>('/api/clients').then(d => d.clients)
+export const fetchClients = (opts?: { inactive?: boolean }) => apiFetch<{ clients: Client[] }>(`/api/clients${opts?.inactive ? '?inactive=1' : ''}`).then(d => d.clients)
 export const createClient = (data: Partial<Client>) => apiFetch<{ client: Client }>('/api/clients', { method: 'POST', body: JSON.stringify(data) }).then(d => d.client)
 export const fetchClient = (id: number) => apiFetch<{ client: Client; users: User[]; tasksByStage: any[] }>(`/api/clients/${id}`)
 export const generateApprovalToken = (clientId: number) => apiFetch<{ approval_token: string }>(`/api/clients/${clientId}/approval-token`, { method: 'POST' })
