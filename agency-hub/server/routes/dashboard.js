@@ -8,7 +8,7 @@ router.get('/stats', (req, res) => {
   const since = new Date(); since.setDate(since.getDate() - parseInt(days))
   const sinceStr = since.toISOString().slice(0, 19).replace('T', ' ')
 
-  if (req.user.role === 'dono') {
+  if (req.user.role === 'dono' || req.user.role === 'gerente') {
     const totalTasks = db.prepare('SELECT COUNT(*) as c FROM tasks WHERE is_active = 1').get().c
     const byStage = db.prepare(`
       SELECT ps.name, ps.slug, ps.color, ps.position, COUNT(t.id) as count
@@ -75,7 +75,7 @@ router.get('/workload', (req, res) => {
       (SELECT COUNT(*) FROM tasks WHERE id IN (SELECT task_id FROM task_assignees WHERE user_id = u.id) AND is_active = 1 AND stage NOT IN ('concluido', 'rejeitado')) as open_tasks,
       (SELECT COUNT(*) FROM tasks WHERE id IN (SELECT task_id FROM task_assignees WHERE user_id = u.id) AND is_active = 1 AND due_date IS NOT NULL AND due_date != '' AND due_date < date('now', '-3 hours') AND stage NOT IN ('concluido', 'rejeitado')) as overdue_tasks,
       (SELECT COUNT(*) FROM tasks WHERE id IN (SELECT task_id FROM task_assignees WHERE user_id = u.id) AND is_active = 1 AND stage = 'concluido') as completed_tasks
-    FROM users u WHERE u.role IN ('funcionario', 'dono') AND u.is_active = 1
+    FROM users u WHERE u.role IN ('funcionario', 'dono', 'gerente') AND u.is_active = 1
     ORDER BY open_tasks DESC
   `).all()
   // Attach departments

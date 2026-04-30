@@ -5,7 +5,7 @@ import { requireRole } from '../middleware/auth.js'
 
 const router = Router()
 
-router.get('/', requireRole('dono', 'funcionario'), (req, res) => {
+router.get('/', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   const { role, client_id, department_id } = req.query
   let sql = `SELECT u.id, u.client_id, u.name, u.email, u.role, u.is_active, u.created_at,
     c.name as client_name FROM users u LEFT JOIN clients c ON u.client_id = c.id WHERE 1=1`

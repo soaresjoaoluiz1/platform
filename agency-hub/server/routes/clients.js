@@ -6,7 +6,7 @@ import { requireRole } from '../middleware/auth.js'
 
 const router = Router()
 
-router.get('/', requireRole('dono', 'funcionario'), (req, res) => {
+router.get('/', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   const isActive = req.query.inactive === '1' ? 0 : 1
   const clients = db.prepare(`
     SELECT c.*, (SELECT COUNT(*) FROM tasks WHERE client_id = c.id AND is_active = 1) as task_count,
