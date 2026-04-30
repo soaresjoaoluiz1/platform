@@ -25,7 +25,7 @@ export default function Dashboard() {
   const [workload, setWorkload] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [days, setDays] = useState(30)
-  const isDono = user?.role === 'dono'
+  const isDono = user?.role === 'dono' || user?.role === 'gerente'
   const isCliente = user?.role === 'cliente'
   const { toast } = useToast()
   const [saving, setSaving] = useState(false)
