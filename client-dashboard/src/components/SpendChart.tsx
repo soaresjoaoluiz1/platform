@@ -15,7 +15,7 @@ import { getAction, type DailyInsight } from '../lib/api'
 interface Props {
   currentData: DailyInsight[]
   previousData: DailyInsight[]
-  dataKey: 'spend' | 'messaging'
+  dataKey: 'spend' | 'messaging' | 'leads'
   label: string
 }
 
@@ -49,10 +49,11 @@ export default function SpendChart({ currentData, previousData, dataKey, label }
   const getValue = (d: DailyInsight) => {
     if (dataKey === 'spend') return parseFloat(d.spend)
     if (dataKey === 'messaging') return getAction(d.actions, 'onsite_conversion.messaging_conversation_started_7d')
+    if (dataKey === 'leads') return getAction(d.actions, 'lead') || getAction(d.actions, 'onsite_conversion.lead_grouped')
     return 0
   }
 
-  if (dataKey === 'messaging') {
+  if (dataKey === 'messaging' || dataKey === 'leads') {
     // Bar chart comparing current vs previous
     const chartData = currentData.map((d, i) => {
       const prevItem = previousData[i]

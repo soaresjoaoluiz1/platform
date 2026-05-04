@@ -216,8 +216,17 @@ export default function Dashboard() {
                       <div className="section-title">Desempenho no Periodo</div>
                       <div className="charts-grid">
                         <div className="chart-card">
-                          <h3>Conversas Iniciadas</h3>
-                          <SpendChart currentData={dailyCompare?.current || []} previousData={dailyCompare?.previous || []} dataKey="messaging" label="Conversas" />
+                          {selectedAccount.name.toLowerCase().includes('sameco') ? (
+                            <>
+                              <h3>Leads</h3>
+                              <SpendChart currentData={dailyCompare?.current || []} previousData={dailyCompare?.previous || []} dataKey="leads" label="Leads" />
+                            </>
+                          ) : (
+                            <>
+                              <h3>Conversas Iniciadas</h3>
+                              <SpendChart currentData={dailyCompare?.current || []} previousData={dailyCompare?.previous || []} dataKey="messaging" label="Conversas" />
+                            </>
+                          )}
                         </div>
                         <div className="chart-card">
                           <h3>Funil de Conversao</h3>
