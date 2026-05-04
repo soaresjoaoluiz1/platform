@@ -454,7 +454,14 @@ function parseSamecoLeads(rows) {
     const tipo = row[14] // residência/empresa
     const nome = row[16]
     const telefone = row[17]
-    const qualificacao = (row[19] || '').trim().toUpperCase() // coluna T: SIM/NÃO/EM ATENDIMENTO/VENDEU
+    // coluna T: ORÇAMENTO (qualificado) / NÃO EXISTE (desq) / NÃO QUER ORÇAR/ORÇAMENTO (desq) / VENDEU (vendido) / vazio (sem qualif)
+    const qualRaw = (row[19] || '').trim()
+    const qualNorm = qualRaw.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase()
+    let qualificacao = ''
+    if (qualNorm.includes('VENDEU')) qualificacao = 'VENDEU'
+    else if (qualNorm.startsWith('NAO')) qualificacao = 'NÃO' // NAO EXISTE, NAO QUER ORCAR, NAO QUER ORCAMENTO
+    else if (qualNorm.includes('ORCAMENTO')) qualificacao = 'SIM' // ORCAMENTO (sem NAO)
+    else qualificacao = qualRaw // vazio ou outros
 
     if (!createdTime || !nome || nome === 'full_name' || id === 'ENTRADA DE LEADS - FORMULARIO') continue
 
@@ -1161,7 +1168,8 @@ app.get('/api/crm/:accountId', auth, async (req, res) => {
       qualNao = leads.filter(l => l.qualificacao === 'NÃO' || l.qualificacao === 'NAO').length
       qualEmAtendimento = leads.filter(l => l.qualificacao === 'EM ATENDIMENTO').length
       qualVendido = leads.filter(l => l.qualificacao === 'VENDEU').length
-      qualMeio = qualEmAtendimento
+      // Sem qualificacao = leads ainda nao avaliados (vazio ou outros estados)
+      qualMeio = leads.filter(l => !['SIM', 'NÃO', 'VENDEU'].includes(l.qualificacao)).length
     } else {
       qualSim = leads.filter(l => l.qualificacao === 'SIM').length
       qualNao = leads.filter(l => l.qualificacao === 'NÃO').length
@@ -2413,6 +2421,22 @@ app.get('/api/overview/:accountId', auth, async (req, res) => {
             let q = 'MEIO TERMO'
             if (!corInDesq && estInQual) q = 'SIM'
             else if (corInDesq && estInDesq) q = 'NÃO'
+            crmLeads.push({ qualificacao: q })
+          }
+        } else if (config.type === 'sameco') {
+          // Sameco: coluna T (row[19]) — ORÇAMENTO=SIM, NÃO EXISTE/NÃO QUER=NÃO, VENDEU=VENDEU, vazio=MEIO
+          for (const row of rows) {
+            if (row.length < 18) continue
+            const id = row[0], createdTime = row[1], nome = row[16]
+            if (!createdTime || !nome || nome === 'full_name' || id === 'ENTRADA DE LEADS - FORMULARIO') continue
+            const dt = new Date(createdTime)
+            if (isNaN(dt.getTime()) || dt < crmStart || dt > crmEnd) continue
+            const qualRaw = (row[19] || '').trim()
+            const qualNorm = qualRaw.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase()
+            let q = 'MEIO TERMO'
+            if (qualNorm.includes('VENDEU')) q = 'VENDEU'
+            else if (qualNorm.startsWith('NAO')) q = 'NÃO'
+            else if (qualNorm.includes('ORCAMENTO')) q = 'SIM'
             crmLeads.push({ qualificacao: q })
           }
         }
