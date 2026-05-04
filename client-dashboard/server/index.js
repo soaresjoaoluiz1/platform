@@ -1013,12 +1013,12 @@ app.get('/api/crm/:accountId', auth, async (req, res) => {
       // Invista format
       allLeads = []
       const SKIP_NAMES = ['Nome', 'DEZEMBRO', 'JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO']
-      // Origens validas (match EXATO, case-insensitive). Resto e ignorado completamente.
-      const VALID_ORIGENS = ['site - invistaimoveissm.com.br', 'facebook', 'instagram', 'whatsapp', 'google ads', 'chat', 'ig']
-      // Corretor desqualifica (match PARCIAL, ignora acentos). Vazio tambem desqualifica.
-      const CORRETOR_DESQUAL = ['sem resposta', 'agenciamento', 'sem retorno', 'so informacao', 'capao da canoa']
-      // Coluna L "ge" desqualifica (match PARCIAL, ignora acentos)
-      const ESTADO_DESQUAL = ['sem resposta', 'sem evolucao', 'negativa']
+      // Filtro 1: Origens validas (match EXATO, case-insensitive)
+      const VALID_ORIGENS = ['site - invistaimoveissm.com.br', 'facebook', 'instagram', 'whatsapp']
+      // Filtro 2: Corretor desqualifica (match PARCIAL, ignora acentos). Vazio tambem desqualifica.
+      const CORRETOR_DESQUAL = ['capao - claudia', 'capao da canoa', 'sem resposta', 'sem retorno', 'so informacao']
+      // Filtro 3: Coluna L "ge" — whitelist de qualificados (match PARCIAL, ignora acentos)
+      const ESTADO_QUAL = ['em atendimento', 'em qualificacao', 'encaminhado ao setor', 'positiva', 'realmete transf']
       const stripAccents = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
       for (const row of rows) {
         if (row.length < 8) continue
@@ -1034,12 +1034,12 @@ app.get('/api/crm/:accountId', auth, async (req, res) => {
         const estado = (row[11] || '').trim()
         const corretorNorm = stripAccents(corretor)
         const estadoNorm = stripAccents(estado)
-        // Filtro 2 (corretor) e Filtro 3 (estado/coluna L)
-        let qualificacao = 'SIM'
-        if (!corretor || CORRETOR_DESQUAL.some(t => corretorNorm.includes(t))) {
-          qualificacao = 'NÃO'
-        } else if (ESTADO_DESQUAL.some(t => estadoNorm.includes(t))) {
-          qualificacao = 'NÃO'
+        // Filtro 2 (corretor desqualifica) e Filtro 3 (estado deve estar na whitelist)
+        let qualificacao = 'NÃO'
+        if (corretor && !CORRETOR_DESQUAL.some(t => corretorNorm.includes(t))) {
+          if (ESTADO_QUAL.some(t => estadoNorm.includes(t))) {
+            qualificacao = 'SIM'
+          }
         }
         allLeads.push({
           date: dateStr,
@@ -2392,9 +2392,9 @@ app.get('/api/overview/:accountId', auth, async (req, res) => {
         let crmLeads = []
         if (config.type === 'invista' || (!config.type || config.type === 'invista')) {
           const SKIP = ['Nome','DEZEMBRO','JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO']
-          const VALID_ORIGENS = ['site - invistaimoveissm.com.br', 'facebook', 'instagram', 'whatsapp', 'google ads', 'chat', 'ig']
-          const CORRETOR_DESQUAL = ['sem resposta', 'agenciamento', 'sem retorno', 'so informacao', 'capao da canoa']
-          const ESTADO_DESQUAL = ['sem resposta', 'sem evolucao', 'negativa']
+          const VALID_ORIGENS = ['site - invistaimoveissm.com.br', 'facebook', 'instagram', 'whatsapp']
+          const CORRETOR_DESQUAL = ['capao - claudia', 'capao da canoa', 'sem resposta', 'sem retorno', 'so informacao']
+          const ESTADO_QUAL = ['em atendimento', 'em qualificacao', 'encaminhado ao setor', 'positiva', 'realmete transf']
           const stripAcc = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
           for (const row of rows) {
             if (row.length < 8) continue
@@ -2409,10 +2409,11 @@ app.get('/api/overview/:accountId', auth, async (req, res) => {
             const est = (row[11] || '').trim()
             const corNorm = stripAcc(cor)
             const estNorm = stripAcc(est)
-            // Filtro 2 (corretor) e 3 (estado)
-            let q = 'SIM'
-            if (!cor || CORRETOR_DESQUAL.some(t => corNorm.includes(t))) q = 'NÃO'
-            else if (ESTADO_DESQUAL.some(t => estNorm.includes(t))) q = 'NÃO'
+            // Filtro 2 (corretor desqualifica) e Filtro 3 (estado deve estar na whitelist)
+            let q = 'NÃO'
+            if (cor && !CORRETOR_DESQUAL.some(t => corNorm.includes(t))) {
+              if (ESTADO_QUAL.some(t => estNorm.includes(t))) q = 'SIM'
+            }
             crmLeads.push({ qualificacao: q })
           }
         }
