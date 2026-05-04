@@ -21,6 +21,7 @@ function setAssignees(taskId, userIds) {
 // Stage transition rules per role
 const TRANSITIONS = {
   dono: null, // can do anything
+  gerente: null, // mesmo poder do dono em mover etapas
   funcionario: null, // funcionarios can move to any stage
   cliente: { aguardando_cliente: ['aprovado_cliente', 'revisao_interna'] },
 }
