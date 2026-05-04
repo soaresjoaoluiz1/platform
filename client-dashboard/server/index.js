@@ -2386,7 +2386,9 @@ app.get('/api/overview/:accountId', auth, async (req, res) => {
         // Fetch CRM qualification data inline
         const sheetName = config.type === 'kellermann' ? 'ENTRADA DE LEADS' : 'LEADS'
         const rows = await fetchSheetCSV(config.id, sheetName)
-        const cutoffCrm = new Date(); cutoffCrm.setDate(cutoffCrm.getDate() - days); cutoffCrm.setHours(0,0,0,0)
+        // Range exato (since/until ja calculados corretamente em ranges.current)
+        const crmStart = new Date(ranges.current.since + 'T00:00:00')
+        const crmEnd = new Date(ranges.current.until + 'T23:59:59')
         let crmLeads = []
         if (config.type === 'invista' || (!config.type || config.type === 'invista')) {
           const SKIP = ['Nome','DEZEMBRO','JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO']
@@ -2399,7 +2401,7 @@ app.get('/api/overview/:accountId', auth, async (req, res) => {
             const ds = row[0], nm = row[3]
             if (!ds || !nm || SKIP.includes(nm) || ds === 'Data') continue
             const dt = parseBRDate(ds)
-            if (!dt || dt < cutoffCrm) continue
+            if (!dt || dt < crmStart || dt > crmEnd) continue
             // Filtro 1: origem exata
             const orig = (row[6] || '').trim()
             if (!VALID_ORIGENS.includes(orig.toLowerCase())) continue
