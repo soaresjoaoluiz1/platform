@@ -2,20 +2,62 @@ import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Check } from 'lucide-react'
 
 export const BANCOS = [
+  // Tradicionais
+  'Banco do Brasil',
   'Bradesco',
+  'Caixa Econômica',
   'Itaú',
+  'Santander',
+  'Banrisul',
+  'Banese',
+  'Banestes',
+  'Banco do Nordeste',
+  'Banco da Amazônia',
+  // Digitais / Fintechs
   'Nubank',
   'Inter',
-  'Caixa Econômica',
-  'Banco do Brasil',
-  'Santander',
+  'C6 Bank',
+  'Neon',
+  'Will Bank',
+  'Next',
+  'Iti',
+  'BS2',
+  'Cora',
+  'Stone',
+  'Conta Simples',
+  // Cooperativas
   'Sicoob',
   'Sicredi',
+  'Unicred',
+  'Cresol',
+  // Investimentos
   'BTG Pactual',
-  'C6 Bank',
+  'XP Investimentos',
+  'Rico',
+  'Genial Investimentos',
+  'Modal',
+  // Médios
+  'Safra',
+  'Banco Pan',
+  'Banco Original',
+  'Banco BMG',
+  'Banco Mercantil',
+  'Daycoval',
+  'ABC Brasil',
+  'BV (Votorantim)',
+  'Banco Bari',
+  'Sofisa',
+  'Tribanco',
+  // Pagamentos / Carteiras
   'PicPay',
   'Pagseguro',
+  'PagBank',
   'Mercado Pago',
+  'Ame Digital',
+  '99Pay',
+  'Recargapay',
+  'PJBank',
+  // Outros
   'Dinheiro / Caixa',
 ]
 
