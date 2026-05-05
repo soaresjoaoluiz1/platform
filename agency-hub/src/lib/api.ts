@@ -147,7 +147,7 @@ export const updateClientServices = (clientId: number, services: { id: number; c
 
 // Financial
 export interface FinancialClient { id: number; name: string; monthly_fee: number; payment_day: number; status: 'paid' | 'pending' | 'late'; paid_at?: string; amount_paid?: number; days_late: number; penalty: number; total_due: number; bank?: string | null }
-export interface FinancialOverview { clients: FinancialClient[]; summary: { expected: number; received: number; pending: number; late: number; lateCount: number } }
+export interface FinancialOverview { clients: FinancialClient[]; summary: { expected: number; received: number; received_recurring?: number; received_extra?: number; pending: number; late: number; lateCount: number } }
 export interface MonthlyRevenue { month: string; total: number }
 export const fetchFinancialOverview = (month: string) => apiFetch<FinancialOverview>(`/api/financial/overview?month=${month}`)
 export const recordPayment = (data: { client_id: number; amount: number; reference_month: string; paid_at: string; bank?: string }) => apiFetch('/api/financial/payments', { method: 'POST', body: JSON.stringify(data) })

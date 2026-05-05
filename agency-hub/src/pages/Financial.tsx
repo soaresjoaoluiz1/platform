@@ -247,6 +247,12 @@ export default function Financial() {
             <div className="card" style={{ textAlign: 'center', borderColor: 'rgba(52,199,89,0.2)' }}>
               <div style={{ fontSize: 11, color: '#34C759', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Recebido</div>
               <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'var(--font-heading)', color: '#34C759' }}>{formatBRL(s.received)}</div>
+              {(s.received_extra ?? 0) > 0 && (
+                <div style={{ fontSize: 10, color: '#6B6580', marginTop: 6, lineHeight: 1.4 }}>
+                  Mensalidades: {formatBRL(s.received_recurring ?? 0)}<br />
+                  Extras: <span style={{ color: '#34C759' }}>{formatBRL(s.received_extra ?? 0)}</span>
+                </div>
+              )}
             </div>
             <div className="card" style={{ textAlign: 'center', borderColor: 'rgba(251,188,4,0.2)' }}>
               <div style={{ fontSize: 11, color: '#FBBC04', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Pendente</div>

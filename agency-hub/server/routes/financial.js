@@ -95,11 +95,16 @@ router.get('/overview', (req, res) => {
     }
   }).filter(Boolean)
 
+  // Receitas extras do mes (servicos avulsos, vendas pontuais, etc)
+  const extraSum = db.prepare('SELECT COALESCE(SUM(amount), 0) as total FROM extra_revenue WHERE reference_month = ?').get(month).total || 0
+
   res.json({
     clients: result,
     summary: {
-      expected: totalExpected,
-      received: totalReceived,
+      expected: totalExpected + extraSum,
+      received: totalReceived + extraSum,
+      received_recurring: totalReceived,
+      received_extra: extraSum,
       pending: totalPending,
       late: totalLate,
       lateCount
