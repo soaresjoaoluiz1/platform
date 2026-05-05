@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import {
   fetchFinancialOverview, fetchFinancialDashboard, recordPayment, fetchExpenses, fetchExpenseCategories,
-  createExpense, deleteExpense, copyRecurringExpenses, fetchDRE, formatBRL,
+  createExpense, updateExpense, deleteExpense, copyRecurringExpenses, fetchDRE, formatBRL,
   fetchInstallments, createInstallment, deleteInstallment,
   fetchExtraRevenue, createExtraRevenue, deleteExtraRevenue, fetchClients,
   type FinancialOverview, type FinancialClient, type MonthlyRevenue, type ExpenseCategory, type ExpensesByCategory, type DRE,
   type Installment, type ExtraRevenue, type Client
 } from '../lib/api'
-import { DollarSign, AlertTriangle, CheckCircle, Clock, Plus, Trash2, TrendingUp, TrendingDown, Copy, CreditCard, Receipt } from 'lucide-react'
+import { DollarSign, AlertTriangle, CheckCircle, Clock, Plus, Trash2, TrendingUp, TrendingDown, Copy, CreditCard, Receipt, Edit3 } from 'lucide-react'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell } from 'recharts'
 
 const MONTH_NAMES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
@@ -46,6 +46,7 @@ export default function Financial() {
   const [expByCategory, setExpByCategory] = useState<ExpensesByCategory[]>([])
   const [expTotal, setExpTotal] = useState({ fixed: 0, variable: 0, total: 0 })
   const [showNewExp, setShowNewExp] = useState(false)
+  const [editingExpId, setEditingExpId] = useState<number | null>(null)
   const [newExp, setNewExp] = useState({ category_id: '', description: '', amount: '', is_recurring: false, paid_at: '' })
 
   // DRE state
@@ -125,10 +126,25 @@ export default function Financial() {
 
   const handleAddExpense = async () => {
     if (!newExp.category_id || !newExp.amount) return
-    // reference_month vem da data de pagamento; sem data, usa o mes selecionado
     const refMonth = newExp.paid_at ? newExp.paid_at.slice(0, 7) : month
-    await createExpense({ category_id: +newExp.category_id, description: newExp.description, amount: parseFloat(newExp.amount), reference_month: refMonth, is_recurring: newExp.is_recurring, paid_at: newExp.paid_at || undefined })
-    setShowNewExp(false); setNewExp({ category_id: '', description: '', amount: '', is_recurring: false, paid_at: '' }); load()
+    if (editingExpId) {
+      await updateExpense(editingExpId, { category_id: +newExp.category_id, description: newExp.description, amount: parseFloat(newExp.amount), paid_at: newExp.paid_at || null, reference_month: refMonth })
+    } else {
+      await createExpense({ category_id: +newExp.category_id, description: newExp.description, amount: parseFloat(newExp.amount), reference_month: refMonth, is_recurring: newExp.is_recurring, paid_at: newExp.paid_at || undefined })
+    }
+    setShowNewExp(false); setEditingExpId(null); setNewExp({ category_id: '', description: '', amount: '', is_recurring: false, paid_at: '' }); load()
+  }
+
+  const openEditExpense = (e: any) => {
+    setEditingExpId(e.id)
+    setNewExp({
+      category_id: String(e.category_id),
+      description: e.description || '',
+      amount: String(e.amount),
+      is_recurring: e.is_recurring === 1,
+      paid_at: e.paid_at || '',
+    })
+    setShowNewExp(true)
   }
 
   const handleDeleteExpense = async (id: number) => {
@@ -316,7 +332,7 @@ export default function Financial() {
         </div>
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-          <button className="btn btn-primary btn-sm" onClick={() => { const t = new Date(); setNewExp(p => ({ ...p, paid_at: `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}` })); setShowNewExp(true) }}><Plus size={14} /> Nova Despesa</button>
+          <button className="btn btn-primary btn-sm" onClick={() => { const t = new Date(); setEditingExpId(null); setNewExp({ category_id: '', description: '', amount: '', is_recurring: false, paid_at: `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}` }); setShowNewExp(true) }}><Plus size={14} /> Nova Despesa</button>
           <button className="btn btn-secondary btn-sm" onClick={handleCopyRecurring}><Copy size={14} /> Copiar Recorrentes do Mes Anterior</button>
         </div>
 
@@ -340,10 +356,11 @@ export default function Financial() {
                       <span style={{ color: '#A8A3B8' }}>{e.description || '-'}</span>
                       {e.is_recurring === 1 && <span style={{ fontSize: 9, padding: '1px 6px', borderRadius: 4, background: 'rgba(93,173,226,0.12)', color: '#5DADE2' }}>RECORRENTE</span>}
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ color: '#6B6580', fontSize: 11 }}>{e.paid_at || '-'}</span>
                       <span style={{ fontWeight: 600 }}>{formatBRL(e.amount)}</span>
-                      <button onClick={() => handleDeleteExpense(e.id)} style={{ background: 'transparent', border: 'none', color: '#6B6580', cursor: 'pointer', padding: 4 }}><Trash2 size={12} /></button>
+                      <button onClick={() => openEditExpense(e)} title="Editar" style={{ background: 'transparent', border: 'none', color: '#6B6580', cursor: 'pointer', padding: 4 }}><Edit3 size={12} /></button>
+                      <button onClick={() => handleDeleteExpense(e.id)} title="Apagar" style={{ background: 'transparent', border: 'none', color: '#6B6580', cursor: 'pointer', padding: 4 }}><Trash2 size={12} /></button>
                     </div>
                   </div>
                 ))}
@@ -556,11 +573,11 @@ export default function Financial() {
         </div>
       )}
 
-      {/* New Expense Modal */}
+      {/* New / Edit Expense Modal */}
       {showNewExp && (
-        <div className="modal-overlay" onClick={() => setShowNewExp(false)}>
+        <div className="modal-overlay" onClick={() => { setShowNewExp(false); setEditingExpId(null) }}>
           <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 450 }}>
-            <h2>Nova Despesa — {formatMonth(month)}</h2>
+            <h2>{editingExpId ? 'Editar Despesa' : `Nova Despesa — ${formatMonth(month)}`}</h2>
             <div className="form-group"><label>Categoria</label>
               <select className="select" value={newExp.category_id} onChange={e => setNewExp(p => ({ ...p, category_id: e.target.value }))}>
                 <option value="">Selecione</option>
@@ -572,11 +589,16 @@ export default function Financial() {
               <div className="form-group"><label>Valor (R$)</label><input className="input" type="number" step="0.01" value={newExp.amount} onChange={e => setNewExp(p => ({ ...p, amount: e.target.value }))} /></div>
               <div className="form-group"><label>Data do Pagamento</label><input className="input" type="date" value={newExp.paid_at} onChange={e => setNewExp(p => ({ ...p, paid_at: e.target.value }))} /></div>
             </div>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#A8A3B8', cursor: 'pointer', marginBottom: 16 }}>
-              <input type="checkbox" checked={newExp.is_recurring} onChange={e => setNewExp(p => ({ ...p, is_recurring: e.target.checked }))} />
-              Despesa recorrente (copiar automaticamente pro proximo mes)
-            </label>
-            <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNewExp(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleAddExpense}>Adicionar</button></div>
+            {!editingExpId && (
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#A8A3B8', cursor: 'pointer', marginBottom: 16 }}>
+                <input type="checkbox" checked={newExp.is_recurring} onChange={e => setNewExp(p => ({ ...p, is_recurring: e.target.checked }))} />
+                Despesa recorrente (copiar automaticamente pro proximo mes)
+              </label>
+            )}
+            <div className="modal-actions">
+              <button className="btn btn-secondary" onClick={() => { setShowNewExp(false); setEditingExpId(null) }}>Cancelar</button>
+              <button className="btn btn-primary" onClick={handleAddExpense}>{editingExpId ? 'Salvar' : 'Adicionar'}</button>
+            </div>
           </div>
         </div>
       )}
