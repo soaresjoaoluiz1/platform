@@ -146,11 +146,11 @@ export const fetchClientServices = (clientId: number) => apiFetch<{ services: Cl
 export const updateClientServices = (clientId: number, services: { id: number; config: Record<string, string> }[]) => apiFetch(`/api/clients/${clientId}/services`, { method: 'PUT', body: JSON.stringify({ services }) })
 
 // Financial
-export interface FinancialClient { id: number; name: string; monthly_fee: number; payment_day: number; status: 'paid' | 'pending' | 'late'; paid_at?: string; amount_paid?: number; days_late: number; penalty: number; total_due: number }
+export interface FinancialClient { id: number; name: string; monthly_fee: number; payment_day: number; status: 'paid' | 'pending' | 'late'; paid_at?: string; amount_paid?: number; days_late: number; penalty: number; total_due: number; bank?: string | null }
 export interface FinancialOverview { clients: FinancialClient[]; summary: { expected: number; received: number; pending: number; late: number; lateCount: number } }
 export interface MonthlyRevenue { month: string; total: number }
 export const fetchFinancialOverview = (month: string) => apiFetch<FinancialOverview>(`/api/financial/overview?month=${month}`)
-export const recordPayment = (data: { client_id: number; amount: number; reference_month: string; paid_at: string }) => apiFetch('/api/financial/payments', { method: 'POST', body: JSON.stringify(data) })
+export const recordPayment = (data: { client_id: number; amount: number; reference_month: string; paid_at: string; bank?: string }) => apiFetch('/api/financial/payments', { method: 'POST', body: JSON.stringify(data) })
 export const fetchFinancialDashboard = (year: number) => apiFetch<{ months: MonthlyRevenue[] }>(`/api/financial/dashboard?year=${year}`)
 
 // Expenses
@@ -162,7 +162,7 @@ export interface DRE { month: string; revenue: number; totalFixed: number; total
 export const fetchExpenseCategories = () => apiFetch<{ categories: ExpenseCategory[] }>('/api/financial/expense-categories').then(d => d.categories)
 export const createExpenseCategory = (name: string, type: string, color: string) => apiFetch('/api/financial/expense-categories', { method: 'POST', body: JSON.stringify({ name, type, color }) })
 export const fetchExpenses = (month: string) => apiFetch<{ expenses: Expense[]; byCategory: ExpensesByCategory[]; totalFixed: number; totalVariable: number; total: number }>(`/api/financial/expenses?month=${month}`)
-export const createExpense = (data: { category_id: number; description: string; amount: number; reference_month: string; paid_at?: string; is_recurring?: boolean }) => apiFetch('/api/financial/expenses', { method: 'POST', body: JSON.stringify(data) })
+export const createExpense = (data: { category_id: number; description: string; amount: number; reference_month: string; paid_at?: string; is_recurring?: boolean; bank?: string }) => apiFetch('/api/financial/expenses', { method: 'POST', body: JSON.stringify(data) })
 export const updateExpense = (id: number, data: any) => apiFetch(`/api/financial/expenses/${id}`, { method: 'PUT', body: JSON.stringify(data) })
 export const deleteExpense = (id: number) => apiFetch(`/api/financial/expenses/${id}`, { method: 'DELETE' })
 export const copyRecurringExpenses = (from: string, to: string) => apiFetch('/api/financial/expenses/copy-recurring', { method: 'POST', body: JSON.stringify({ from_month: from, to_month: to }) })
@@ -175,7 +175,7 @@ export const createInstallment = (data: { name: string; total_amount: number; in
 export const deleteInstallment = (id: number) => apiFetch(`/api/financial/installments/${id}`, { method: 'DELETE' })
 
 // Extra Revenue
-export interface ExtraRevenue { id: number; client_id: number | null; client_name?: string; description: string; amount: number; reference_month: string; paid_at: string }
+export interface ExtraRevenue { id: number; client_id: number | null; client_name?: string; description: string; amount: number; reference_month: string; paid_at: string; bank?: string | null }
 export const fetchExtraRevenue = (month: string) => apiFetch<{ items: ExtraRevenue[]; total: number }>(`/api/financial/extra-revenue?month=${month}`)
-export const createExtraRevenue = (data: { client_id?: number; description: string; amount: number; reference_month: string; paid_at?: string }) => apiFetch('/api/financial/extra-revenue', { method: 'POST', body: JSON.stringify(data) })
+export const createExtraRevenue = (data: { client_id?: number; description: string; amount: number; reference_month: string; paid_at?: string; bank?: string }) => apiFetch('/api/financial/extra-revenue', { method: 'POST', body: JSON.stringify(data) })
 export const deleteExtraRevenue = (id: number) => apiFetch(`/api/financial/extra-revenue/${id}`, { method: 'DELETE' })

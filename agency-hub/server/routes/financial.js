@@ -49,7 +49,8 @@ router.get('/overview', (req, res) => {
       return {
         id: c.id, name: c.name, monthly_fee: fee, payment_day: c.payment_day || 10,
         status: 'paid', paid_at: payment.paid_at, amount_paid: payment.amount,
-        days_late: 0, penalty: 0, total_due: fee, is_active: c.is_active
+        days_late: 0, penalty: 0, total_due: fee, is_active: c.is_active,
+        bank: payment.bank || null
       }
     }
 
@@ -108,7 +109,7 @@ router.get('/overview', (req, res) => {
 
 // POST /api/financial/payments
 router.post('/payments', (req, res) => {
-  const { client_id, amount, reference_month, paid_at } = req.body
+  const { client_id, amount, reference_month, paid_at, bank } = req.body
   if (!client_id || amount === undefined || !reference_month || !paid_at) {
     return res.status(400).json({ error: 'client_id, amount, reference_month e paid_at obrigatorios' })
   }
@@ -116,15 +117,13 @@ router.post('/payments', (req, res) => {
     return res.status(400).json({ error: 'reference_month deve ser YYYY-MM' })
   }
 
-  // Check for duplicate
   const existing = db.prepare('SELECT id FROM payments WHERE client_id = ? AND reference_month = ?').get(client_id, reference_month)
   if (existing) {
-    // Update existing payment
-    db.prepare("UPDATE payments SET amount = ?, paid_at = ?, created_at = datetime('now', '-3 hours') WHERE id = ?").run(amount, paid_at, existing.id)
+    db.prepare("UPDATE payments SET amount = ?, paid_at = ?, bank = ?, created_at = datetime('now', '-3 hours') WHERE id = ?").run(amount, paid_at, bank || null, existing.id)
     return res.json({ payment: db.prepare('SELECT * FROM payments WHERE id = ?').get(existing.id) })
   }
 
-  const result = db.prepare('INSERT INTO payments (client_id, amount, reference_month, paid_at) VALUES (?, ?, ?, ?)').run(client_id, amount, reference_month, paid_at)
+  const result = db.prepare('INSERT INTO payments (client_id, amount, reference_month, paid_at, bank) VALUES (?, ?, ?, ?, ?)').run(client_id, amount, reference_month, paid_at, bank || null)
   res.json({ payment: db.prepare('SELECT * FROM payments WHERE id = ?').get(result.lastInsertRowid) })
 })
 
@@ -187,20 +186,22 @@ router.get('/expenses', (req, res) => {
 
 // POST expense
 router.post('/expenses', (req, res) => {
-  const { category_id, description, amount, reference_month, paid_at, is_recurring } = req.body
+  const { category_id, description, amount, reference_month, paid_at, is_recurring, bank } = req.body
   if (!category_id || !amount || !reference_month) return res.status(400).json({ error: 'category_id, amount, reference_month obrigatorios' })
-  const result = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, paid_at, is_recurring) VALUES (?, ?, ?, ?, ?, ?)').run(category_id, description || null, amount, reference_month, paid_at || null, is_recurring ? 1 : 0)
+  const result = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, paid_at, is_recurring, bank) VALUES (?, ?, ?, ?, ?, ?, ?)').run(category_id, description || null, amount, reference_month, paid_at || null, is_recurring ? 1 : 0, bank || null)
   res.json({ expense: db.prepare('SELECT * FROM expenses WHERE id = ?').get(result.lastInsertRowid) })
 })
 
 // PUT expense
 router.put('/expenses/:id', (req, res) => {
-  const { category_id, description, amount, paid_at } = req.body
+  const { category_id, description, amount, paid_at, bank, reference_month } = req.body
   const sets = []; const params = []
   if (category_id !== undefined) { sets.push('category_id = ?'); params.push(category_id) }
   if (description !== undefined) { sets.push('description = ?'); params.push(description) }
   if (amount !== undefined) { sets.push('amount = ?'); params.push(amount) }
   if (paid_at !== undefined) { sets.push('paid_at = ?'); params.push(paid_at) }
+  if (bank !== undefined) { sets.push('bank = ?'); params.push(bank || null) }
+  if (reference_month !== undefined) { sets.push('reference_month = ?'); params.push(reference_month) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
   params.push(req.params.id)
   db.prepare(`UPDATE expenses SET ${sets.join(', ')} WHERE id = ?`).run(...params)
@@ -277,9 +278,9 @@ router.get('/extra-revenue', (req, res) => {
 })
 
 router.post('/extra-revenue', (req, res) => {
-  const { client_id, description, amount, reference_month, paid_at } = req.body
+  const { client_id, description, amount, reference_month, paid_at, bank } = req.body
   if (!description || !amount || !reference_month) return res.status(400).json({ error: 'description, amount, reference_month obrigatorios' })
-  const result = db.prepare('INSERT INTO extra_revenue (client_id, description, amount, reference_month, paid_at) VALUES (?, ?, ?, ?, ?)').run(client_id || null, description, amount, reference_month, paid_at || null)
+  const result = db.prepare('INSERT INTO extra_revenue (client_id, description, amount, reference_month, paid_at, bank) VALUES (?, ?, ?, ?, ?, ?)').run(client_id || null, description, amount, reference_month, paid_at || null, bank || null)
   res.json({ item: db.prepare('SELECT * FROM extra_revenue WHERE id = ?').get(result.lastInsertRowid) })
 })
 
