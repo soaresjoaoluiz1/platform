@@ -57,7 +57,7 @@ export default function Financial() {
   // Parcelas state
   const [installments, setInstallments] = useState<Installment[]>([])
   const [showNewInst, setShowNewInst] = useState(false)
-  const [newInst, setNewInst] = useState({ name: '', total_amount: '', installment_count: '', start_month: '', category_id: '' })
+  const [newInst, setNewInst] = useState({ name: '', total_amount: '', installment_count: '', start_month: '', category_id: '', bank: '' })
 
   // Extras state
   const [extras, setExtras] = useState<ExtraRevenue[]>([])
@@ -157,8 +157,8 @@ export default function Financial() {
 
   const handleAddInstallment = async () => {
     if (!newInst.name || !newInst.total_amount || !newInst.installment_count || !newInst.start_month) return
-    await createInstallment({ name: newInst.name, total_amount: parseFloat(newInst.total_amount), installment_count: parseInt(newInst.installment_count), start_month: newInst.start_month, category_id: newInst.category_id ? +newInst.category_id : undefined })
-    setShowNewInst(false); setNewInst({ name: '', total_amount: '', installment_count: '', start_month: '', category_id: '' }); load()
+    await createInstallment({ name: newInst.name, total_amount: parseFloat(newInst.total_amount), installment_count: parseInt(newInst.installment_count), start_month: newInst.start_month, category_id: newInst.category_id ? +newInst.category_id : undefined, bank: newInst.bank || undefined })
+    setShowNewInst(false); setNewInst({ name: '', total_amount: '', installment_count: '', start_month: '', category_id: '', bank: '' }); load()
   }
 
   const handleDeleteInstallment = async (id: number) => {
@@ -554,6 +554,7 @@ export default function Financial() {
                 </select>
               </div>
             </div>
+            <div className="form-group"><label>Banco (opcional)</label><BankSelect value={newInst.bank} onChange={v => setNewInst(p => ({ ...p, bank: v }))} /></div>
             <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNewInst(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleAddInstallment}>Criar Parcelamento</button></div>
           </div>
         </div>

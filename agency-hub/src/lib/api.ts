@@ -169,9 +169,9 @@ export const copyRecurringExpenses = (from: string, to: string) => apiFetch('/ap
 export const fetchDRE = (month: string) => apiFetch<DRE>(`/api/financial/dre?month=${month}`)
 
 // Installments
-export interface Installment { id: number; name: string; total_amount: number; installment_count: number; installment_amount: number; start_month: string; category_name?: string; category_color?: string }
+export interface Installment { id: number; name: string; total_amount: number; installment_count: number; installment_amount: number; start_month: string; category_name?: string; category_color?: string; bank?: string | null }
 export const fetchInstallments = () => apiFetch<{ installments: Installment[] }>('/api/financial/installments').then(d => d.installments)
-export const createInstallment = (data: { name: string; total_amount: number; installment_count: number; start_month: string; category_id?: number }) => apiFetch('/api/financial/installments', { method: 'POST', body: JSON.stringify(data) })
+export const createInstallment = (data: { name: string; total_amount: number; installment_count: number; start_month: string; category_id?: number; bank?: string }) => apiFetch('/api/financial/installments', { method: 'POST', body: JSON.stringify(data) })
 export const deleteInstallment = (id: number) => apiFetch(`/api/financial/installments/${id}`, { method: 'DELETE' })
 
 // Extra Revenue

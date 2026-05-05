@@ -320,6 +320,7 @@ try { db.exec("ALTER TABLE clients ADD COLUMN inactivated_at TEXT") } catch {}
 try { db.exec("ALTER TABLE payments ADD COLUMN bank TEXT") } catch {}
 try { db.exec("ALTER TABLE expenses ADD COLUMN bank TEXT") } catch {}
 try { db.exec("ALTER TABLE extra_revenue ADD COLUMN bank TEXT") } catch {}
+try { db.exec("ALTER TABLE installments ADD COLUMN bank TEXT") } catch {}
 // Editorial/Anuncios task-mae support (hardcoded workflows)
 try { db.exec("ALTER TABLE tasks ADD COLUMN task_type TEXT DEFAULT 'normal'") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN num_posts INTEGER") } catch {}

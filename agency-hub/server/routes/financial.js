@@ -236,20 +236,20 @@ router.get('/installments', (req, res) => {
 })
 
 router.post('/installments', (req, res) => {
-  const { name, total_amount, installment_count, start_month, category_id } = req.body
+  const { name, total_amount, installment_count, start_month, category_id, bank } = req.body
   if (!name || !total_amount || !installment_count || !start_month) return res.status(400).json({ error: 'Campos obrigatorios' })
   const installment_amount = Math.round((total_amount / installment_count) * 100) / 100
-  const result = db.prepare('INSERT INTO installments (name, total_amount, installment_count, installment_amount, start_month, category_id) VALUES (?, ?, ?, ?, ?, ?)').run(name, total_amount, installment_count, installment_amount, start_month, category_id || null)
+  const result = db.prepare('INSERT INTO installments (name, total_amount, installment_count, installment_amount, start_month, category_id, bank) VALUES (?, ?, ?, ?, ?, ?, ?)').run(name, total_amount, installment_count, installment_amount, start_month, category_id || null, bank || null)
 
-  // Auto-create expenses for each month
+  // Auto-create expenses for each month (propaga banco)
   const catId = category_id || db.prepare("SELECT id FROM expense_categories WHERE name LIKE '%Emprestimo%' OR name LIKE '%Parcela%' LIMIT 1").get()?.id
   if (catId) {
     const [y, m] = start_month.split('-').map(Number)
-    const stmt = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, is_recurring, paid_at) VALUES (?, ?, ?, ?, 0, ?)')
+    const stmt = db.prepare('INSERT INTO expenses (category_id, description, amount, reference_month, is_recurring, paid_at, bank) VALUES (?, ?, ?, ?, 0, ?, ?)')
     for (let i = 0; i < installment_count; i++) {
       const date = new Date(y, m - 1 + i, 1)
       const monthStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
-      stmt.run(catId, `${name} (${i + 1}/${installment_count})`, installment_amount, monthStr, null)
+      stmt.run(catId, `${name} (${i + 1}/${installment_count})`, installment_amount, monthStr, null, bank || null)
     }
   }
 
