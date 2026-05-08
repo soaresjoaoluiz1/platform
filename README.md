@@ -1,6 +1,6 @@
-# Plataforma Dros
+# Plataforma de Operação e Performance
 
-Plataforma interna composta por dois sistemas independentes que compartilham infraestrutura e padrões de arquitetura: o **Hub** para gestão operacional da agência e o **Painel de Performance** para análise consolidada de campanhas dos clientes.
+Sistema para controle e gestão de agências de marketing, com análise consolidada de performance, KPIs cross-channel e cruzamento de dados de CRM e mídia paga. Composto por dois módulos independentes que compartilham infraestrutura e padrões de arquitetura: o **Hub** para operação e workflow editorial, e o **Painel de Performance** para inteligência de dados e otimização de campanhas.
 
 ---
 
@@ -69,7 +69,7 @@ Sistema de gestão completo para operação de agência de marketing, com workfl
 
 ## Painel de Performance
 
-Dashboard consolidado de performance para clientes da agência. Centraliza dados de aquisição paga (Meta Ads, Google Ads), conversão (Kiwify) e qualificação de leads em uma única interface visual.
+Dashboard consolidado de performance para análise multi-cliente. Centraliza dados de aquisição paga (Meta Ads, Google Ads) e conversão (Kiwify) em uma única interface visual, com KPIs cross-channel, funil completo de aquisição → conversão e cruzamento de dados de mídia paga com pipeline de CRM para identificar quais campanhas geram leads de maior qualidade.
 
 ### Funcionalidades
 
