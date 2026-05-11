@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-11T15:00:42.404Z",
+  "generatedAt": "2026-05-11T15:52:28.515Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -1799,8 +1799,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Chat.tsx": {
-      "mtime": 1778242354114.1511,
-      "size": 64906,
+      "mtime": 1778512833353.344,
+      "size": 64904,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -1890,8 +1890,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\webhooks.js": {
-      "mtime": 1778256468085.9155,
-      "size": 24611,
+      "mtime": 1778512808023.066,
+      "size": 24929,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2564,8 +2564,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\performance.js": {
-      "mtime": 1778511488138.8335,
-      "size": 101768,
+      "mtime": 1778514746762.4465,
+      "size": 101982,
       "symbols": {
         "purpose": "=====================================================================",
         "exports": [],
@@ -2609,8 +2609,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\clients.js": {
-      "mtime": 1778511430596.0798,
-      "size": 13509,
+      "mtime": 1778514731776.229,
+      "size": 9724,
       "symbols": {
         "purpose": null,
         "exports": [],

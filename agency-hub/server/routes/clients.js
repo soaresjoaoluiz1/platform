@@ -2,38 +2,7 @@ import { Router } from 'express'
 import bcrypt from 'bcryptjs'
 import { randomBytes } from 'crypto'
 import db from '../db.js'
-import jwt from 'jsonwebtoken'
-import http from 'http'
-import https from 'https'
-import { URL } from 'url'
 import { requireRole } from '../middleware/auth.js'
-
-const CORE_EMBED_SECRET = process.env.CORE_EMBED_SECRET || 'dros-core-embed-2026-shared-key'
-const CORE_API_URL = process.env.CORE_API_URL || 'http://localhost:3004'
-
-// Mini wrapper de http.request com JSON — evita dependencia nova
-function httpJsonGet(url) {
-  return new Promise((resolve, reject) => {
-    try {
-      const u = new URL(url)
-      const lib = u.protocol === 'https:' ? https : http
-      const req = lib.get(u, (res) => {
-        let body = ''
-        res.on('data', (chunk) => { body += chunk })
-        res.on('end', () => {
-          try {
-            const parsed = body ? JSON.parse(body) : {}
-            resolve({ status: res.statusCode || 0, data: parsed })
-          } catch (e) {
-            resolve({ status: res.statusCode || 0, data: { error: 'Invalid JSON from upstream' } })
-          }
-        })
-      })
-      req.on('error', reject)
-      req.setTimeout(8000, () => { req.destroy(new Error('Request timeout')) })
-    } catch (e) { reject(e) }
-  })
-}
 
 const router = Router()
 
@@ -79,20 +48,6 @@ router.post('/', requireRole('dono', 'gerente'), (req, res) => {
   db.prepare("INSERT INTO users (client_id, name, email, password, role) VALUES (?, ?, ?, ?, 'cliente')").run(clientId, contact_name || name, contact_email, bcrypt.hashSync(password, 10))
 
   res.json({ client: db.prepare('SELECT * FROM clients WHERE id = ?').get(clientId) })
-})
-
-// Lista contas Meta do /core (pra autocomplete no form de cliente)
-// IMPORTANTE: declarado ANTES de /:id pra Express nao casar como id="core-accounts"
-router.get('/core-accounts', requireRole('dono', 'gerente'), async (req, res) => {
-  try {
-    const token = jwt.sign({ embed: true, account: '__list__' }, CORE_EMBED_SECRET, { expiresIn: '5m' })
-    const { status, data } = await httpJsonGet(`${CORE_API_URL}/api/meta/accounts?embed_token=${token}`)
-    if (status !== 200) return res.status(502).json({ error: `Falha ao consultar /core (${status}): ${data?.error || ''}` })
-    const accounts = (data.accounts || []).map(a => ({ id: a.id, name: a.name }))
-    res.json({ accounts })
-  } catch (e) {
-    res.status(500).json({ error: e.message || 'Falha ao buscar contas do /core' })
-  }
 })
 
 router.get('/:id', requireRole('dono', 'gerente'), (req, res) => {
@@ -190,38 +145,6 @@ router.delete('/:id/credentials/:credId', requireRole('dono', 'gerente'), (req, 
 router.get('/:id/onboard', requireRole('dono', 'gerente'), (req, res) => {
   const entries = db.prepare('SELECT * FROM client_onboard WHERE client_id = ? ORDER BY created_at DESC').all(req.params.id)
   res.json({ entries: entries.map(e => ({ ...e, data: JSON.parse(e.data) })) })
-})
-
-// Cliente final pega URL embed do proprio painel (usa client_id do user logado)
-router.get('/me/core-embed-url', requireRole('cliente'), (req, res) => {
-  if (!req.user.client_id) return res.status(400).json({ error: 'Usuario sem client_id' })
-  const client = db.prepare('SELECT id, name, core_client_name FROM clients WHERE id = ?').get(req.user.client_id)
-  if (!client) return res.status(404).json({ error: 'Cliente nao encontrado' })
-  if (!client.core_client_name) return res.status(400).json({ error: 'Painel de Performance ainda nao foi configurado pra este cliente. Fale com a agencia.' })
-
-  const embedToken = jwt.sign(
-    { embed: true, account: client.core_client_name, hub_user_id: req.user.id, client_id: client.id },
-    CORE_EMBED_SECRET,
-    { expiresIn: '1h' }
-  )
-  const url = `/core/?account=${encodeURIComponent(client.core_client_name)}&embed=1&embed_token=${embedToken}`
-  res.json({ url, expires_in: 3600 })
-})
-
-// Gera URL embed do /core com token assinado (auto-login)
-router.get('/:id/core-embed-url', requireRole('dono', 'gerente'), (req, res) => {
-  const client = db.prepare('SELECT id, name, core_client_name FROM clients WHERE id = ?').get(req.params.id)
-  if (!client) return res.status(404).json({ error: 'Cliente nao encontrado' })
-  if (!client.core_client_name) return res.status(400).json({ error: 'Cliente sem vinculo no /core. Preencha o campo "Nome no Painel de Performance".' })
-
-  // Token JWT (1h), assinado com chave compartilhada entre Hub e Core
-  const embedToken = jwt.sign(
-    { embed: true, account: client.core_client_name, hub_user_id: req.user.id },
-    CORE_EMBED_SECRET,
-    { expiresIn: '1h' }
-  )
-  const url = `/core/?account=${encodeURIComponent(client.core_client_name)}&embed=1&embed_token=${embedToken}`
-  res.json({ url, expires_in: 3600 })
 })
 
 export default router

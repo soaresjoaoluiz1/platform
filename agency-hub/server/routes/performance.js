@@ -983,13 +983,17 @@ router.get('/crm/:accountId/forms', async (req, res) => {
 // GOOGLE ADS ROUTES
 // =====================================================================
 // Lazy getter — process.env so disponivel apos dotenv.config() rodar
+//
+// Importante: redirectUri usa HUB_GADS_REDIRECT_URI (proprio do Hub), NAO o
+// GADS_REDIRECT_URI compartilhado (que aponta pro /core). Assim os dois
+// sistemas podem fazer OAuth independente sem conflito.
 const getGADS = () => ({
   devToken: process.env.GOOGLE_ADS_DEVELOPER_TOKEN,
   clientId: process.env.GOOGLE_ADS_CLIENT_ID,
   clientSecret: process.env.GOOGLE_ADS_CLIENT_SECRET,
   refreshToken: process.env.GOOGLE_ADS_REFRESH_TOKEN,
   loginCustomerId: (process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID || '').replace(/-/g, ''),
-  redirectUri: process.env.GADS_REDIRECT_URI || `http://localhost:3003/api/performance/google-ads/callback`,
+  redirectUri: process.env.HUB_GADS_REDIRECT_URI || `http://localhost:3003/api/performance/google-ads/callback`,
 })
 
 let gadsTokenCache = { token: null, expiresAt: 0 }
