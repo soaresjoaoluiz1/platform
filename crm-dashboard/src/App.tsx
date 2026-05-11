@@ -8,15 +8,24 @@ import Dashboard from './pages/Dashboard'
 import Pipeline from './pages/Pipeline'
 import Leads from './pages/Leads'
 import LeadDetail from './pages/LeadDetail'
+import Chat from './pages/Chat'
+import Tasks from './pages/Tasks'
 import Messages from './pages/Messages'
+import BroadcastDetail from './pages/BroadcastDetail'
 import Team from './pages/Team'
 import Funnels from './pages/Funnels'
 import Integrations from './pages/Integrations'
 import SettingsPage from './pages/Settings'
+import Cadences from './pages/Cadences'
+import ReadyMessages from './pages/ReadyMessages'
+import Qualifications from './pages/Qualifications'
+import Launches from './pages/Launches'
+import Tags from './pages/Tags'
 import AdminClients from './pages/admin/Clients'
 import AdminClientDetail from './pages/admin/ClientDetail'
 import AdminGlobalDashboard from './pages/admin/GlobalDashboard'
 import AdminUsers from './pages/admin/Users'
+import Propostas from './pages/Propostas'
 
 function AppRoutes() {
   const { user, loading } = useAuth()
@@ -26,6 +35,7 @@ function AppRoutes() {
 
   const isAdmin = user.role === 'super_admin'
   const isGerente = user.role === 'gerente'
+  const canManageProposals = isAdmin || (user as any).can_manage_proposals === 1
   const homeRoute = isAdmin ? '/admin/dashboard' : isGerente ? '/dashboard' : '/pipeline'
 
   return (
@@ -45,19 +55,28 @@ function AppRoutes() {
             <Route path="/admin/clients/:id" element={<AdminClientDetail />} />
             <Route path="/admin/users" element={<AdminUsers />} />
           </>}
+          {canManageProposals && <Route path="/admin/propostas" element={<Propostas />} />}
 
           {/* Gerente + Admin routes */}
           {(isGerente || isAdmin) && <>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/messages" element={<Messages />} />
+            <Route path="/messages/:id" element={<BroadcastDetail />} />
             <Route path="/team" element={<Team />} />
             <Route path="/funnels" element={<Funnels />} />
             <Route path="/integrations" element={<Integrations />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/cadences" element={<Cadences />} />
+            <Route path="/ready-messages" element={<ReadyMessages />} />
+            <Route path="/qualifications" element={<Qualifications />} />
+            <Route path="/launches" element={<Launches />} />
+            <Route path="/tags" element={<Tags />} />
           </>}
 
           {/* All authenticated users */}
           <Route path="/pipeline" element={<Pipeline />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/tasks" element={<Tasks />} />
           <Route path="/leads" element={<Leads />} />
           <Route path="/leads/:id" element={<LeadDetail />} />
 
@@ -72,7 +91,7 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <AppRoutes />
       </AuthProvider>

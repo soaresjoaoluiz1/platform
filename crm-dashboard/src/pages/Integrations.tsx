@@ -1,93 +1,525 @@
-import { useState, useEffect } from 'react'
-import { useAuth } from '../context/AuthContext'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAccount } from '../context/AccountContext'
-import { fetchWhatsAppInstances, createWhatsAppInstance, testWhatsAppConnection, type WhatsAppInstance } from '../lib/api'
-import { Plug, Plus, Wifi, WifiOff, RefreshCw } from 'lucide-react'
+import {
+  fetchWhatsAppInstances, createWhatsAppInstance, connectWhatsAppInstance,
+  checkWhatsAppStatus, refreshWhatsAppQR, disconnectWhatsApp, deleteWhatsAppInstance,
+  fetchEvolutionConfig, saveEvolutionConfig, setupWhatsAppWebhook, restartWhatsAppInstance, syncWhatsAppNow, setInstanceAttendant, fetchUsers, apiFetch,
+  type WhatsAppInstance, type User as UserType,
+} from '../lib/api'
+import { Plug, Plus, Wifi, WifiOff, Loader, Trash2, QrCode, Power, PowerOff, RefreshCw, Smartphone, Save, Check, Settings, FileSpreadsheet, Copy, Webhook, RotateCw, Download, User } from 'lucide-react'
 
 export default function Integrations() {
-  const { user } = useAuth()
   const { accountId } = useAccount()
   const [instances, setInstances] = useState<WhatsAppInstance[]>([])
   const [loading, setLoading] = useState(true)
   const [showNew, setShowNew] = useState(false)
-  const [newInst, setNewInst] = useState({ instance_name: '', api_url: '', api_key: '' })
-  const [testing, setTesting] = useState<number | null>(null)
+  const [newName, setNewName] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [activeQR, setActiveQR] = useState<number | null>(null)
+  const pollRef = useRef<Record<number, ReturnType<typeof setInterval>>>({})
 
-  const load = () => { if (accountId) { setLoading(true); fetchWhatsAppInstances(accountId).then(setInstances).finally(() => setLoading(false)) } }
-  useEffect(load, [accountId])
+  // Evolution config
+  const [evoUrl, setEvoUrl] = useState('')
+  const [evoKey, setEvoKey] = useState('')
+  const [evoSaved, setEvoSaved] = useState(false)
+  const [evoConfigured, setEvoConfigured] = useState(false)
+  const [savingConfig, setSavingConfig] = useState(false)
+  const [accountSlug, setAccountSlug] = useState('')
+  const [sheetsCopied, setSheetsCopied] = useState(false)
+  const [sheetsTabName, setSheetsTabName] = useState('')
+  const [scriptCopied, setScriptCopied] = useState(false)
+  const [users, setUsers] = useState<UserType[]>([])
+
+  useEffect(() => {
+    if (!accountId) return
+    fetchUsers(accountId).then(setUsers).catch(() => {})
+  }, [accountId])
+
+  const handleAttendantChange = async (inst: WhatsAppInstance, attendantId: number | null) => {
+    if (!accountId) return
+    try {
+      const { instance } = await setInstanceAttendant(inst.id, accountId, attendantId)
+      setInstances(prev => prev.map(i => i.id === instance.id ? instance : i))
+    } catch (e: any) {
+      alert('Erro: ' + e.message)
+    }
+  }
+
+  const load = useCallback(() => {
+    if (!accountId) return
+    setLoading(true)
+    Promise.all([
+      fetchWhatsAppInstances(accountId),
+      fetchEvolutionConfig(accountId),
+    ]).then(([insts, config]) => {
+      setInstances(insts)
+      setEvoUrl(config.api_url || '')
+      setEvoKey(config.api_key || '')
+      setEvoConfigured(!!(config.api_url && config.api_key))
+    }).finally(() => setLoading(false))
+    // Load account slug for webhook URLs
+    apiFetch(`/api/accounts/${accountId}`).then((d: any) => setAccountSlug(d.account?.slug || '')).catch(() => {})
+  }, [accountId])
+
+  useEffect(() => { load() }, [load])
+
+  // Auto-poll status for connecting instances
+  useEffect(() => {
+    Object.values(pollRef.current).forEach(clearInterval)
+    pollRef.current = {}
+
+    instances.forEach(inst => {
+      if (inst.status === 'connecting' && accountId) {
+        pollRef.current[inst.id] = setInterval(async () => {
+          try {
+            const { instance: updated } = await checkWhatsAppStatus(inst.id, accountId)
+            setInstances(prev => prev.map(i => i.id === updated.id ? updated : i))
+            if (updated.status === 'connected') {
+              clearInterval(pollRef.current[updated.id])
+              delete pollRef.current[updated.id]
+              setActiveQR(null)
+            }
+          } catch {}
+        }, 5000)
+      }
+    })
+
+    return () => { Object.values(pollRef.current).forEach(clearInterval); pollRef.current = {} }
+  }, [instances.map(i => `${i.id}:${i.status}`).join(','), accountId])
+
+  const handleSaveConfig = async () => {
+    if (!accountId || !evoUrl || !evoKey) return
+    setSavingConfig(true)
+    try {
+      await saveEvolutionConfig(accountId, { api_url: evoUrl, api_key: evoKey })
+      setEvoConfigured(true)
+      setEvoSaved(true)
+      setTimeout(() => setEvoSaved(false), 2000)
+    } catch (e: any) { alert('Erro: ' + e.message) }
+    setSavingConfig(false)
+  }
 
   const handleCreate = async () => {
-    if (!accountId || !newInst.instance_name || !newInst.api_url || !newInst.api_key) return
-    await createWhatsAppInstance(accountId, newInst)
-    setShowNew(false); setNewInst({ instance_name: '', api_url: '', api_key: '' }); load()
+    if (!accountId || !newName.trim()) return
+    setCreating(true)
+    try {
+      const inst = await createWhatsAppInstance(accountId, { instance_name: newName.trim() })
+      setShowNew(false)
+      setNewName('')
+      if (inst.qr_code) setActiveQR(inst.id)
+      load()
+    } catch (e: any) { alert('Erro: ' + e.message) }
+    setCreating(false)
   }
 
-  const handleTest = async (inst: WhatsAppInstance) => {
+  const handleConnect = async (inst: WhatsAppInstance) => {
     if (!accountId) return
-    setTesting(inst.id)
     try {
-      const result = await testWhatsAppConnection(inst.id, accountId)
-      alert(result.success ? 'Conectado com sucesso!' : `Falha na conexao: ${result.status}`)
+      const updated = await connectWhatsAppInstance(inst.id, accountId)
+      setInstances(prev => prev.map(i => i.id === updated.id ? updated : i))
+      if (updated.qr_code) setActiveQR(updated.id)
     } catch (e: any) { alert('Erro: ' + e.message) }
-    setTesting(null); load()
   }
+
+  const handleRefreshQR = async (inst: WhatsAppInstance) => {
+    if (!accountId) return
+    try {
+      const updated = await refreshWhatsAppQR(inst.id, accountId)
+      setInstances(prev => prev.map(i => i.id === updated.id ? updated : i))
+    } catch (e: any) { alert('Erro: ' + e.message) }
+  }
+
+  const handleDisconnect = async (inst: WhatsAppInstance) => {
+    if (!accountId) return
+    await disconnectWhatsApp(inst.id, accountId)
+    setActiveQR(null)
+    load()
+  }
+
+  const handleDelete = async (inst: WhatsAppInstance) => {
+    if (!accountId || !confirm(`Deletar "${inst.instance_name}"?`)) return
+    await deleteWhatsAppInstance(inst.id, accountId)
+    setActiveQR(null)
+    load()
+  }
+
+  const [reconfiguring, setReconfiguring] = useState<number | null>(null)
+  const handleReconfigureWebhook = async (inst: WhatsAppInstance) => {
+    if (!accountId) return
+    setReconfiguring(inst.id)
+    try {
+      await setupWhatsAppWebhook(inst.id, accountId)
+      alert('Webhook reconfigurado com sucesso. Os leads voltarao a entrar em tempo real.')
+    } catch (e: any) {
+      alert('Erro ao reconfigurar webhook: ' + e.message)
+    }
+    setReconfiguring(null)
+  }
+
+  const [restarting, setRestarting] = useState<number | null>(null)
+  const handleRestart = async (inst: WhatsAppInstance) => {
+    if (!accountId) return
+    if (!confirm(`Reiniciar a sessao do WhatsApp "${inst.instance_name}"? Use isso quando a instancia parecer conectada mas nao receber mensagens.`)) return
+    setRestarting(inst.id)
+    try {
+      await restartWhatsAppInstance(inst.id, accountId)
+      alert('Sessao reiniciada. Aguarde 10s e teste enviando uma mensagem.')
+      load()
+    } catch (e: any) {
+      alert('Erro ao reiniciar: ' + e.message)
+    }
+    setRestarting(null)
+  }
+
+  const [syncing, setSyncing] = useState(false)
+  const handleSyncNow = async () => {
+    if (!accountId) return
+    setSyncing(true)
+    try {
+      await syncWhatsAppNow(accountId)
+      alert('Sincronizacao executada. Verifique a aba Chat — leads novos devem aparecer.')
+    } catch (e: any) {
+      alert('Erro ao sincronizar: ' + e.message)
+    }
+    setSyncing(false)
+  }
+
+  const getStatusIcon = (status: string) => {
+    if (status === 'connected') return <Wifi size={14} />
+    if (status === 'connecting') return <Loader size={14} className="spinning" />
+    return <WifiOff size={14} />
+  }
+  const getStatusColor = (status: string) => status === 'connected' ? '#34C759' : status === 'connecting' ? '#FBBC04' : '#FF6B6B'
+  const getStatusLabel = (status: string) => status === 'connected' ? 'Conectado' : status === 'connecting' ? 'Aguardando QR...' : 'Desconectado'
+
+  const qrInstance = instances.find(i => i.id === activeQR)
+
+  if (loading) return <div className="loading-container"><div className="spinner" /></div>
 
   return (
     <div>
       <div className="page-header">
         <h1><Plug size={20} style={{ marginRight: 8 }} />Integracoes</h1>
-        <button className="btn btn-primary btn-sm" onClick={() => setShowNew(true)}><Plus size={14} /> Nova Instancia WhatsApp</button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {evoConfigured && instances.some(i => i.status === 'connected') && (
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={handleSyncNow}
+              disabled={syncing}
+              title="Forca uma busca imediata por mensagens perdidas em todas as instancias conectadas."
+            >
+              {syncing ? <Loader size={14} className="spinning" /> : <Download size={14} />} Sincronizar agora
+            </button>
+          )}
+          {evoConfigured && (
+            <button className="btn btn-primary btn-sm" onClick={() => setShowNew(true)}><Plus size={14} /> Conectar WhatsApp</button>
+          )}
+        </div>
       </div>
 
+      {/* Evolution API Config */}
       <section className="dash-section">
-        <div className="section-title">WhatsApp (Evolution API)</div>
-        {loading ? <div className="loading-container"><div className="spinner" /></div> : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {instances.map(inst => (
-              <div key={inst.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>{inst.instance_name}</div>
-                  <div style={{ fontSize: 12, color: '#9B96B0' }}>{inst.api_url}</div>
-                  {inst.phone_number && <div style={{ fontSize: 12, color: '#9B96B0' }}>Tel: {inst.phone_number}</div>}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: inst.status === 'connected' ? '#34C759' : '#FF6B6B' }}>
-                    {inst.status === 'connected' ? <Wifi size={14} /> : <WifiOff size={14} />}
-                    {inst.status === 'connected' ? 'Conectado' : 'Desconectado'}
-                  </span>
-                  <button className="btn btn-secondary btn-sm" onClick={() => handleTest(inst)} disabled={testing === inst.id}>
-                    <RefreshCw size={12} className={testing === inst.id ? 'spinning' : ''} /> Testar
-                  </button>
-                </div>
-              </div>
-            ))}
-            {instances.length === 0 && <div className="empty-state" style={{ minHeight: 150 }}><h3>Nenhuma instancia WhatsApp</h3><p>Configure a integracao com a Evolution API para receber leads via WhatsApp.</p></div>}
-          </div>
-        )}
-      </section>
-
-      <section className="dash-section">
-        <div className="section-title">Webhook URLs</div>
+        <div className="section-title"><Settings size={14} /> Configuracao Evolution API</div>
         <div className="card">
-          <p style={{ fontSize: 12, color: '#9B96B0', marginBottom: 12 }}>Use estes URLs pra configurar os webhooks:</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 12 }}>
-            <div><strong>Evolution API:</strong> <code style={{ background: '#0A0118', padding: '2px 8px', borderRadius: 4 }}>http://seu-servidor:3002/api/webhooks/evolution/{'{slug}'}</code></div>
-            <div><strong>Meta Lead Forms:</strong> <code style={{ background: '#0A0118', padding: '2px 8px', borderRadius: 4 }}>http://seu-servidor:3002/api/webhooks/meta-leads/{'{slug}'}</code></div>
-            <div><strong>Website:</strong> <code style={{ background: '#0A0118', padding: '2px 8px', borderRadius: 4 }}>http://seu-servidor:3002/api/webhooks/site/{'{slug}'}</code></div>
+          <p style={{ fontSize: 12, color: '#9B96B0', marginBottom: 12 }}>Configure uma vez a URL e API Key do seu servidor Evolution API. Todos os numeros WhatsApp desta conta usarao estas credenciais.</p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>URL da API</label>
+              <input className="input" value={evoUrl} onChange={e => setEvoUrl(e.target.value)} placeholder="https://evo.exemplo.com.br" />
+            </div>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>API Key</label>
+              <input className="input" type="password" value={evoKey} onChange={e => setEvoKey(e.target.value)} placeholder="sua-api-key" />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+              <button className="btn btn-primary btn-sm" onClick={handleSaveConfig} disabled={savingConfig || !evoUrl || !evoKey} style={{ height: 38 }}>
+                {evoSaved ? <><Check size={14} /> Salvo</> : <><Save size={14} /> Salvar</>}
+              </button>
+            </div>
           </div>
+          {evoConfigured && <div style={{ fontSize: 11, color: '#34C759', marginTop: 8, display: 'flex', alignItems: 'center', gap: 4 }}><Check size={12} /> Evolution API configurada</div>}
         </div>
       </section>
 
+      {/* QR Code Panel */}
+      {qrInstance && qrInstance.qr_code && qrInstance.status === 'connecting' && (
+        <div className="card" style={{ marginBottom: 20, textAlign: 'center', padding: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 16 }}>
+            <QrCode size={20} style={{ color: '#FFB300' }} />
+            <h2 style={{ fontSize: 18, margin: 0 }}>Escaneie o QR Code — {qrInstance.instance_name}</h2>
+          </div>
+          <div style={{ background: '#fff', display: 'inline-block', padding: 16, borderRadius: 12, marginBottom: 16 }}>
+            <img
+              src={qrInstance.qr_code.startsWith('data:') ? qrInstance.qr_code : `data:image/png;base64,${qrInstance.qr_code}`}
+              alt="QR Code WhatsApp"
+              style={{ width: 280, height: 280, display: 'block' }}
+            />
+          </div>
+          <div style={{ fontSize: 13, color: '#9B96B0', maxWidth: 400, margin: '0 auto', lineHeight: 1.6 }}>
+            <p><strong>1.</strong> Abra o WhatsApp no celular</p>
+            <p><strong>2.</strong> Toque em <strong>Configuracoes → Aparelhos Conectados → Conectar Aparelho</strong></p>
+            <p><strong>3.</strong> Aponte a camera para este QR Code</p>
+          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 16 }}>
+            <button className="btn btn-secondary btn-sm" onClick={() => handleRefreshQR(qrInstance)}><RefreshCw size={12} /> Atualizar QR</button>
+            <button className="btn btn-secondary btn-sm" onClick={() => setActiveQR(null)}>Fechar</button>
+          </div>
+        </div>
+      )}
+
+      {/* Instances List */}
+      {evoConfigured && (
+        <section className="dash-section">
+          <div className="section-title"><Smartphone size={14} /> Numeros WhatsApp</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {instances.map(inst => (
+              <div key={inst.id} className="card" style={{ padding: '16px 20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: `${getStatusColor(inst.status)}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Smartphone size={18} style={{ color: getStatusColor(inst.status) }} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 15 }}>{inst.instance_name}</div>
+                      {inst.phone_number && <div style={{ fontSize: 12, color: '#C8C4D4' }}>{inst.phone_number}</div>}
+                      <div style={{ fontSize: 11, color: '#9B96B0', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <User size={11} /> Leads novos vao para:
+                        <select
+                          className="select"
+                          value={inst.default_attendant_id ?? ''}
+                          onChange={e => handleAttendantChange(inst, e.target.value ? parseInt(e.target.value) : null)}
+                          style={{ height: 26, fontSize: 11, padding: '2px 8px', minWidth: 180 }}
+                          title="Quando uma mensagem chega nesse numero, o lead criado e atribuido a este atendente. Em branco = usa a roleta do funil."
+                        >
+                          <option value="">Roleta do funil</option>
+                          {users.filter(u => u.is_active && (u.role === 'atendente' || u.role === 'gerente')).map(u => (
+                            <option key={u.id} value={u.id}>{u.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: getStatusColor(inst.status) }}>
+                      {getStatusIcon(inst.status)} {getStatusLabel(inst.status)}
+                    </span>
+                    {inst.status === 'disconnected' && (
+                      <button className="btn btn-primary btn-sm" onClick={() => handleConnect(inst)}><Power size={12} /> Conectar</button>
+                    )}
+                    {inst.status === 'connecting' && (
+                      <button className="btn btn-secondary btn-sm" onClick={() => setActiveQR(activeQR === inst.id ? null : inst.id)}>
+                        <QrCode size={12} /> {activeQR === inst.id ? 'Ocultar QR' : 'Ver QR'}
+                      </button>
+                    )}
+                    {inst.status === 'connected' && (
+                      <>
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => handleReconfigureWebhook(inst)}
+                          disabled={reconfiguring === inst.id}
+                          title="Reenvia o webhook pra Evolution. Use se os leads pararem de entrar em tempo real."
+                        >
+                          {reconfiguring === inst.id ? <Loader size={12} className="spinning" /> : <Webhook size={12} />} Webhook
+                        </button>
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => handleRestart(inst)}
+                          disabled={restarting === inst.id}
+                          title="Reinicia a sessao Baileys da Evolution. Use quando a instancia mostra Conectada mas nao recebe nem envia mensagens."
+                        >
+                          {restarting === inst.id ? <Loader size={12} className="spinning" /> : <RotateCw size={12} />} Reiniciar sessao
+                        </button>
+                        <button className="btn btn-secondary btn-sm" onClick={() => handleDisconnect(inst)}><PowerOff size={12} /> Desconectar</button>
+                      </>
+                    )}
+                    <button className="btn btn-danger btn-sm btn-icon" onClick={() => handleDelete(inst)} title="Excluir"><Trash2 size={12} /></button>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {instances.length === 0 && (
+              <div className="empty-state" style={{ minHeight: 120 }}>
+                <h3>Nenhum numero conectado</h3>
+                <p>Clique em "Conectar WhatsApp" para adicionar um numero.</p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {!evoConfigured && (
+        <div className="card" style={{ textAlign: 'center', padding: 30 }}>
+          <Smartphone size={32} style={{ color: '#6B6580', marginBottom: 8 }} />
+          <h3>Configure a Evolution API acima</h3>
+          <p style={{ color: '#9B96B0', fontSize: 13 }}>Salve a URL e API Key do servidor Evolution para comecar a conectar numeros de WhatsApp.</p>
+        </div>
+      )}
+
+      {/* Google Sheets Integration */}
+      {accountSlug && (
+        <section className="dash-section" style={{ marginTop: 24 }}>
+          <div className="section-title"><FileSpreadsheet size={14} /> Integracao Google Sheets</div>
+          <div className="card">
+            <p style={{ fontSize: 12, color: '#9B96B0', marginBottom: 12 }}>
+              Conecte uma planilha do Google Sheets ao CRM. Leads adicionados na planilha sao criados automaticamente no sistema.
+            </p>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>URL do Webhook (cole no Apps Script)</label>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <input className="input" readOnly value={`https://drosagencia.com.br/crm/api/webhooks/sheets/${accountSlug}`} style={{ fontSize: 11 }} />
+                <button className="btn btn-secondary btn-sm" onClick={() => { navigator.clipboard.writeText(`https://drosagencia.com.br/crm/api/webhooks/sheets/${accountSlug}`); setSheetsCopied(true); setTimeout(() => setSheetsCopied(false), 2000) }}>
+                  {sheetsCopied ? <><Check size={12} /> Copiado</> : <><Copy size={12} /> Copiar</>}
+                </button>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>
+                Nome da aba especifica <span style={{ color: '#6B6580' }}>(opcional)</span>
+              </label>
+              <input
+                className="input"
+                value={sheetsTabName}
+                onChange={e => setSheetsTabName(e.target.value)}
+                placeholder="Ex: Leads Formulario (deixe em branco se a planilha tem so 1 aba)"
+                style={{ fontSize: 12 }}
+              />
+              <div style={{ fontSize: 10, color: '#6B6580', marginTop: 4 }}>
+                Use isso quando a planilha tem <strong>varias abas</strong> e voce quer que so uma seja monitorada.
+                Se deixar em branco, o script usa a aba ativa no momento da edicao (comportamento padrao).
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', borderRadius: 8, padding: 14 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 8 }}>Como configurar:</div>
+              <ol style={{ fontSize: 11, color: '#9B96B0', lineHeight: 1.8, paddingLeft: 16, margin: 0 }}>
+                <li>Abra sua planilha no Google Sheets</li>
+                <li>Funciona com qualquer planilha — formato livre ou exportado do Facebook Ads</li>
+                <li>Colunas reconhecidas automaticamente: <strong style={{ color: '#FFB300' }}>first_name, phone_number, email, cidade, empresa, instagram</strong></li>
+                <li>Perguntas personalizadas do formulario Meta sao salvas nas <strong>observacoes</strong> do lead</li>
+                <li>Dados de campanha (campaign_name, ad_name) sao salvos como fonte</li>
+                {sheetsTabName.trim() && <li>Script vai monitorar <strong style={{ color: '#FFB300' }}>so a aba "{sheetsTabName.trim()}"</strong> — confira que o nome ta exato (acentos, maiusculas)</li>}
+                <li>Menu: <strong>Extensoes → Apps Script</strong> → cole o script abaixo</li>
+                <li>Configure o trigger: <strong>relogio → adicionar gatilho → onChange → Da planilha</strong></li>
+                <li>Pronto! Cada nova linha cria um lead no CRM automaticamente</li>
+              </ol>
+            </div>
+
+            <details style={{ marginTop: 12 }}>
+              <summary style={{ fontSize: 12, color: '#FFB300', cursor: 'pointer', fontWeight: 600 }}>Ver script do Apps Script (clique pra expandir)</summary>
+              {(() => {
+                const trimmedTab = sheetsTabName.trim()
+                const sheetSelector = trimmedTab
+                  ? `SpreadsheetApp.getActive().getSheetByName(SHEET_NAME)`
+                  : `SpreadsheetApp.getActiveSheet()`
+                const script = `// Cole este script no Apps Script da sua planilha
+// Funciona com planilhas do Facebook Ads e qualquer formato
+const WEBHOOK_URL = 'https://drosagencia.com.br/crm/api/webhooks/sheets/${accountSlug}';
+const SHEET_NAME = ${trimmedTab ? `'${trimmedTab.replace(/'/g, "\\'")}'` : `''`}; // deixe vazio pra usar a aba ativa
+const HEADER_ROW = 1;
+var SENT_COL = null; // coluna "enviado" (criada automaticamente)
+
+// Normaliza nome de coluna: "First Name" → "first_name", "Cidade?" → "cidade"
+function normalizeKey(s) {
+  return String(s || '').trim().toLowerCase()
+    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '') // remove acentos
+    .replace(/\\s+/g, '_')
+    .replace(/[^a-z0-9_]/g, '');
+}
+
+function onChange(e) {
+  var sheet = SHEET_NAME
+    ? SpreadsheetApp.getActive().getSheetByName(SHEET_NAME)
+    : SpreadsheetApp.getActiveSheet();
+  if (!sheet) {
+    Logger.log('Aba "' + SHEET_NAME + '" nao encontrada — verifique o nome no script');
+    return;
+  }
+  var lastRow = sheet.getLastRow();
+  if (lastRow <= HEADER_ROW) return;
+
+  var headers = sheet.getRange(HEADER_ROW, 1, 1, sheet.getLastColumn()).getValues()[0];
+
+  // Encontrar ou criar coluna "crm_enviado"
+  var sentIdx = headers.indexOf('crm_enviado');
+  if (sentIdx === -1) {
+    sentIdx = headers.length;
+    sheet.getRange(HEADER_ROW, sentIdx + 1).setValue('crm_enviado');
+    headers.push('crm_enviado');
+  }
+  SENT_COL = sentIdx + 1;
+
+  // Processar todas as linhas nao enviadas
+  for (var row = HEADER_ROW + 1; row <= lastRow; row++) {
+    var sent = sheet.getRange(row, SENT_COL).getValue();
+    if (sent) continue; // ja enviado
+
+    var data = sheet.getRange(row, 1, 1, headers.length).getValues()[0];
+    var payload = {};
+
+    // Envia TODOS os campos com chave normalizada (mantem original se nao normaliza)
+    headers.forEach(function(h, i) {
+      if (h && data[i] !== '' && data[i] != null) {
+        var key = normalizeKey(h);
+        if (key && key !== 'crm_enviado') payload[key] = String(data[i]).trim();
+      }
+    });
+
+    // Precisa ter pelo menos nome ou telefone
+    var hasName = payload.first_name || payload.nome || payload.name || payload.full_name;
+    var hasPhone = payload.phone_number || payload.telefone || payload.phone || payload.whatsapp || payload.celular;
+    if (!hasName && !hasPhone) continue;
+
+    try {
+      var response = UrlFetchApp.fetch(WEBHOOK_URL, {
+        method: 'post',
+        contentType: 'application/json',
+        payload: JSON.stringify(payload),
+        muteHttpExceptions: true,
+      });
+      var result = JSON.parse(response.getContentText());
+      if (result.ok) {
+        sheet.getRange(row, SENT_COL).setValue('SIM');
+      } else {
+        sheet.getRange(row, SENT_COL).setValue('ERRO: ' + (result.error || ''));
+      }
+    } catch (err) {
+      sheet.getRange(row, SENT_COL).setValue('ERRO: ' + err.message);
+    }
+  }
+}`
+                return (
+                  <>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      style={{ marginTop: 8, marginBottom: 6 }}
+                      onClick={() => { navigator.clipboard.writeText(script); setScriptCopied(true); setTimeout(() => setScriptCopied(false), 2000) }}
+                    >
+                      {scriptCopied ? <><Check size={12} /> Script copiado</> : <><Copy size={12} /> Copiar script</>}
+                    </button>
+                    <pre style={{ padding: 12, background: '#0A0118', borderRadius: 8, fontSize: 10, color: '#C8C4D4', overflow: 'auto', maxHeight: 400, whiteSpace: 'pre-wrap' }}>{script}</pre>
+                  </>
+                )
+              })()}
+            </details>
+          </div>
+        </section>
+      )}
+
+      {/* New Instance Modal — only asks for name */}
       {showNew && (
         <div className="modal-overlay" onClick={() => setShowNew(false)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
-            <h2>Nova Instancia WhatsApp</h2>
-            <div className="form-group"><label>Nome da Instancia</label><input className="input" value={newInst.instance_name} onChange={e => setNewInst(p => ({ ...p, instance_name: e.target.value }))} placeholder="ex: minha-instancia" /></div>
-            <div className="form-group"><label>URL da API Evolution</label><input className="input" value={newInst.api_url} onChange={e => setNewInst(p => ({ ...p, api_url: e.target.value }))} placeholder="https://evo.exemplo.com.br" /></div>
-            <div className="form-group"><label>API Key</label><input className="input" value={newInst.api_key} onChange={e => setNewInst(p => ({ ...p, api_key: e.target.value }))} placeholder="sua-api-key" /></div>
+            <h2>Conectar WhatsApp</h2>
+            <p style={{ fontSize: 12, color: '#9B96B0', marginBottom: 16 }}>De um nome para identificar este numero (ex: Comercial, Suporte, Vendas).</p>
+            <div className="form-group">
+              <label>Nome do numero</label>
+              <input className="input" value={newName} onChange={e => setNewName(e.target.value)} placeholder="Ex: Comercial" autoFocus onKeyDown={e => e.key === 'Enter' && handleCreate()} />
+            </div>
             <div className="modal-actions">
               <button className="btn btn-secondary" onClick={() => setShowNew(false)}>Cancelar</button>
-              <button className="btn btn-primary" onClick={handleCreate}>Criar</button>
+              <button className="btn btn-primary" onClick={handleCreate} disabled={creating || !newName.trim()}>{creating ? 'Criando...' : 'Gerar QR Code'}</button>
             </div>
           </div>
         </div>

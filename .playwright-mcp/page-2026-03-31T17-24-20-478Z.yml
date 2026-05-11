@@ -1,0 +1,60 @@
+- generic [ref=e803]:
+  - complementary [ref=e804]:
+    - generic [ref=e805]:
+      - img "Dros" [ref=e806]
+      - generic [ref=e807]: CRM
+    - navigation [ref=e808]:
+      - generic [ref=e809]: Admin
+      - link "Dashboard Global" [ref=e810] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - img [ref=e811]
+        - text: Dashboard Global
+      - link "Clientes" [ref=e816] [cursor=pointer]:
+        - /url: /admin/clients
+        - img [ref=e817]
+        - text: Clientes
+      - link "Usuarios" [ref=e821] [cursor=pointer]:
+        - /url: /admin/users
+        - img [ref=e822]
+        - text: Usuarios
+      - generic [ref=e826]: Gestao
+      - link "Dashboard" [ref=e827] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e828]
+        - text: Dashboard
+      - link "Pipeline" [ref=e833] [cursor=pointer]:
+        - /url: /pipeline
+        - img [ref=e834]
+        - text: Pipeline
+      - link "Leads" [ref=e835] [cursor=pointer]:
+        - /url: /leads
+        - img [ref=e836]
+        - text: Leads
+      - generic [ref=e841]: Configuracoes
+      - link "Disparos" [ref=e842] [cursor=pointer]:
+        - /url: /messages
+        - img [ref=e843]
+        - text: Disparos
+      - link "Equipe" [ref=e845] [cursor=pointer]:
+        - /url: /team
+        - img [ref=e846]
+        - text: Equipe
+      - link "Funis" [ref=e858] [cursor=pointer]:
+        - /url: /funnels
+        - img [ref=e859]
+        - text: Funis
+      - link "Integracoes" [ref=e863] [cursor=pointer]:
+        - /url: /integrations
+        - img [ref=e864]
+        - text: Integracoes
+      - link "Configuracoes" [ref=e866] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e867]
+        - text: Configuracoes
+    - generic [ref=e870]:
+      - generic [ref=e871]:
+        - generic [ref=e872]: Dros Admin
+        - generic [ref=e873]: Admin
+      - button "Sair" [ref=e874] [cursor=pointer]:
+        - img [ref=e875]
+  - main [ref=e878]

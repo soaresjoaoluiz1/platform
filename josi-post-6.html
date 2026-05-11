@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;600&display=swap' rel='stylesheet'>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 800px; height: 1000px; overflow: hidden; background: #0C1810; }
+
+.post {
+  position: relative;
+  width: 800px;
+  height: 1000px;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 72% 18%, rgba(212,134,76,0.20) 0%, transparent 58%),
+    radial-gradient(ellipse 55% 65% at 8% 88%, rgba(45,90,61,0.50) 0%, transparent 55%),
+    linear-gradient(155deg, #0F1D12 0%, #0C1810 45%, #111A0E 100%);
+}
+
+.accent-line {
+  position: absolute;
+  left: 0; top: 0;
+  width: 5px; height: 100%;
+  background: linear-gradient(to bottom, transparent 0%, #D4864C 20%, #D4864C 80%, transparent 100%);
+  z-index: 5;
+}
+
+.photo {
+  position: absolute;
+  right: -20px; top: -10px;
+  height: 108%; width: auto;
+  object-fit: cover;
+  z-index: 2;
+}
+
+.grad-left {
+  position: absolute;
+  inset: 0; z-index: 3;
+  background: linear-gradient(
+    96deg,
+    #0F1D12 0%, #0F1D12 20%,
+    rgba(12,24,16,0.97) 32%,
+    rgba(12,24,16,0.88) 44%,
+    rgba(12,24,16,0.50) 58%,
+    rgba(12,24,16,0.12) 70%,
+    transparent 80%
+  );
+}
+
+.grad-bottom {
+  position: absolute;
+  inset: 0; z-index: 3;
+  background: linear-gradient(
+    to top,
+    rgba(11,22,14,0.98) 0%,
+    rgba(11,22,14,0.82) 10%,
+    rgba(11,22,14,0.28) 22%,
+    transparent 34%
+  );
+}
+
+.content {
+  position: absolute;
+  inset: 0; z-index: 4;
+  display: flex;
+  flex-direction: column;
+  padding: 52px 52px 48px 60px;
+}
+
+/* TAG topo */
+.tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(212,134,76,0.80);
+  margin-bottom: 24px;
+}
+
+/* HEADLINE */
+h1 {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-weight: 900;
+  font-size: 112px;
+  line-height: 0.84;
+  letter-spacing: -4px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  max-width: 450px;
+  margin-bottom: 26px;
+}
+
+h1 .ac { color: #D4864C; display: block; }
+
+.sub {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 22px; font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.45;
+  max-width: 340px;
+  margin-bottom: 18px;
+}
+
+/* DESTAQUE — lista de bullets */
+.bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 340px;
+}
+
+.bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 17px; font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.35;
+}
+
+.bullet::before {
+  content: '';
+  display: block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #D4864C;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.promise {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 26px; font-weight: 700;
+  color: #D4864C;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
+  max-width: 340px;
+  padding-left: 14px;
+  border-left: 3px solid #D4864C;
+  margin-top: 18px;
+}
+
+.spacer { flex: 1; }
+
+/* STATS */
+.waist { margin-bottom: 30px; max-width: 440px; }
+
+.stats-row {
+  display: flex; gap: 0;
+  margin-bottom: 28px;
+  border: 1.5px solid rgba(212,134,76,0.40);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.stat {
+  flex: 1;
+  background: rgba(212,134,76,0.10);
+  padding: 16px 8px;
+  text-align: center;
+}
+
+.stat + .stat { border-left: 1.5px solid rgba(212,134,76,0.40); }
+
+.stat-num {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 42px; font-weight: 900;
+  color: #D4864C;
+  display: block; line-height: 1;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.date-row { display: flex; align-items: center; gap: 16px; }
+
+.date-pill {
+  background: #D4864C; color: #fff;
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 28px; font-weight: 900;
+  letter-spacing: 2px;
+  padding: 8px 26px; border-radius: 6px;
+}
+
+.date-detail {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 16px; font-weight: 600;
+  color: #FFFFFF;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* AUTOR */
+.author-area {
+  border-top: 1.5px solid rgba(212,134,76,0.35);
+  padding-top: 18px;
+  display: flex; align-items: center; gap: 18px;
+}
+
+.logo-box {
+  width: 54px; height: 54px;
+  border: 1.5px solid rgba(212,134,76,0.50);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; overflow: hidden;
+}
+
+.logo-box img {
+  width: 100%; height: 100%;
+  object-fit: contain; padding: 6px;
+  filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg);
+}
+
+.author-name {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 24px; font-weight: 700;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: #FFFFFF; margin-bottom: 3px;
+}
+
+.author-title {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 14px; font-weight: 600;
+  color: #D4864C; letter-spacing: 1px; text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+<div class='post'>
+
+  <div class='bg'></div>
+  <div class='accent-line'></div>
+
+  <img class='photo' src='josi-foto-slide1.png' alt='Josiane'
+       onerror="this.src='https://drive.google.com/thumbnail?id=1uQBIKzBPARLxPSetZnPZiLYXLsJml9W8&sz=w1200'" />
+  <div class='grad-left'></div>
+  <div class='grad-bottom'></div>
+
+  <div class='content'>
+
+    <div class='tag'>✦ Aulão Gratuito · 29 de Abril</div>
+
+    <h1>AINDA SAI<span class='ac'>COM DÚVIDA?</span></h1>
+
+    <p class='sub'>Terapeuta, isso não é falta de experiência.<br>É falta de um método de decisão.</p>
+
+    <div class='bullets'>
+      <div class='bullet'>Você escolhe o protocolo no feeling</div>
+      <div class='bullet'>Sai da sessão sem saber se decidiu certo</div>
+      <div class='bullet'>Não consegue justificar suas escolhas clínicas</div>
+    </div>
+
+    <p class='promise'>Isso tem solução.<br>E cabe em 2 horas.</p>
+
+    <div class='spacer'></div>
+
+    <div class='waist'>
+      <div class='stats-row'>
+        <div class='stat'>
+          <span class='stat-num'>+10</span>
+          <span class='stat-label'>anos de clínica</span>
+        </div>
+        <div class='stat'>
+          <span class='stat-num'>+500</span>
+          <span class='stat-label'>casos acomp.</span>
+        </div>
+        <div class='stat'>
+          <span class='stat-num'>+200</span>
+          <span class='stat-label'>profissionais</span>
+        </div>
+      </div>
+      <div class='date-row'>
+        <div class='date-pill'>29 DE ABRIL</div>
+        <span class='date-detail'>Online · Ao vivo</span>
+      </div>
+    </div>
+
+    <div class='author-area'>
+      <div class='logo-box'>
+        <img src='josiane-logo.png' alt='Logo' onerror="this.style.display='none'">
+      </div>
+      <div class='author-text'>
+        <div class='author-name'>Josiane Vargas</div>
+        <div class='author-title'>Psicopedagoga</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+#edit-toolbar {
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+  background: #1a1a1a; border: 1px solid #444; border-radius: 10px;
+  padding: 8px 14px; display: flex; align-items: center; gap: 10px;
+  z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  font-family: sans-serif; font-size: 13px; color: #fff; user-select: none;
+}
+#edit-toolbar button {
+  background: #333; border: 1px solid #555; color: #fff;
+  border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 16px; line-height: 1;
+}
+#edit-toolbar button:hover { background: #555; }
+#edit-toolbar label { color: #aaa; font-size: 12px; }
+#color-picker { width: 32px; height: 32px; border: none; border-radius: 6px; cursor: pointer; padding: 0; }
+#font-size-display { min-width: 36px; text-align: center; font-size: 13px; color: #ccc; }
+</style>
+
+<div id="edit-toolbar">
+  <label>Tamanho:</label>
+  <button id="btn-minus">−</button>
+  <span id="font-size-display">—</span>
+  <button id="btn-plus">+</button>
+  <label style="margin-left:8px">Cor:</label>
+  <input type="color" id="color-picker" value="#ffffff">
+</div>
+
+<script>
+let activeEl = null;
+document.querySelectorAll('h1, p, span, div, button').forEach(el => {
+  if (el.children.length === 0 || el.tagName === 'BUTTON') {
+    el.contentEditable = 'true';
+    el.style.outline = 'none';
+    el.style.cursor = 'text';
+    el.addEventListener('focus', () => {
+      activeEl = el;
+      const fs = parseFloat(window.getComputedStyle(el).fontSize);
+      document.getElementById('font-size-display').textContent = Math.round(fs) + 'px';
+      document.getElementById('color-picker').value = rgbToHex(window.getComputedStyle(el).color);
+    });
+  }
+});
+document.getElementById('btn-plus').addEventListener('mousedown', e => {
+  e.preventDefault();
+  if (!activeEl) return;
+  const fs = parseFloat(window.getComputedStyle(activeEl).fontSize);
+  activeEl.style.fontSize = (fs + 2) + 'px';
+  document.getElementById('font-size-display').textContent = Math.round(fs + 2) + 'px';
+});
+document.getElementById('btn-minus').addEventListener('mousedown', e => {
+  e.preventDefault();
+  if (!activeEl) return;
+  const fs = parseFloat(window.getComputedStyle(activeEl).fontSize);
+  activeEl.style.fontSize = Math.max(8, fs - 2) + 'px';
+  document.getElementById('font-size-display').textContent = Math.round(Math.max(8, fs - 2)) + 'px';
+});
+document.getElementById('color-picker').addEventListener('input', e => {
+  if (!activeEl) return;
+  activeEl.style.color = e.target.value;
+});
+function rgbToHex(rgb) {
+  const match = rgb.match(/\d+/g);
+  if (!match) return '#ffffff';
+  return '#' + match.slice(0,3).map(n => parseInt(n).toString(16).padStart(2,'0')).join('');
+}
+</script>
+</body>
+</html>

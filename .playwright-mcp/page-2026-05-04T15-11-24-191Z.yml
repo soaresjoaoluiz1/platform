@@ -1,0 +1,357 @@
+- generic [ref=e1]:
+  - generic [ref=e16]:
+    - complementary [ref=e17]:
+      - generic [ref=e18]:
+        - img "Dros" [ref=e19]
+        - generic [ref=e20]: Painel de Performance
+      - generic [ref=e21]:
+        - img
+        - textbox "Buscar conta..." [ref=e22]: ask
+      - generic [ref=e59] [cursor=pointer]:
+        - generic [ref=e60]: CA
+        - generic [ref=e61]:
+          - generic [ref=e62]: CA -ASK Equipamentos
+          - generic [ref=e63]: "Total: R$ 50.492,26"
+      - generic [ref=e134]:
+        - generic [ref=e135]: Dros Admin
+        - button "Sair" [ref=e136] [cursor=pointer]:
+          - img [ref=e137]
+    - main [ref=e140]:
+      - generic [ref=e141]:
+        - heading "CA -ASK Equipamentos" [level=2] [ref=e184]
+        - generic [ref=e143]:
+          - button "Geral" [ref=e144] [cursor=pointer]:
+            - img [ref=e145]
+            - generic [ref=e150]: Geral
+          - button "Meta Ads" [active] [ref=e151] [cursor=pointer]:
+            - img [ref=e152]
+            - generic [ref=e154]: Meta Ads
+          - button "Instagram" [ref=e155] [cursor=pointer]:
+            - img [ref=e156]
+            - generic [ref=e159]: Instagram
+          - button "Google Ads" [ref=e160] [cursor=pointer]:
+            - img [ref=e161]
+            - generic [ref=e163]: Google Ads
+          - button "Analytics" [ref=e164] [cursor=pointer]:
+            - img [ref=e165]
+            - generic [ref=e168]: Analytics
+      - generic [ref=e169]:
+        - generic [ref=e170]:
+          - button "7 dias" [ref=e171] [cursor=pointer]
+          - button "14 dias" [ref=e172] [cursor=pointer]
+          - button "30 dias" [ref=e173] [cursor=pointer]
+          - button "90 dias" [ref=e174] [cursor=pointer]
+          - button "Personalizado" [ref=e175] [cursor=pointer]:
+            - img [ref=e176]
+            - text: Personalizado
+        - generic [ref=e2779]:
+          - textbox [ref=e2780]: 2026-04-01
+          - generic [ref=e2781]: ate
+          - textbox [ref=e2782]: 2026-04-30
+      - generic [ref=e3817]:
+        - generic [ref=e3818]:
+          - generic [ref=e3819]:
+            - generic [ref=e3820]: Investimento
+            - img [ref=e3822]
+          - generic [ref=e3824]: R$ 2.738,35
+          - generic [ref=e3825]:
+            - generic [ref=e3826]:
+              - img [ref=e3827]
+              - text: +100.0%
+            - text: CPM R$ 9,23
+        - generic [ref=e3830]:
+          - generic [ref=e3831]:
+            - generic [ref=e3832]: Impressoes
+            - img [ref=e3834]
+          - generic [ref=e3837]: "296.710"
+          - generic [ref=e3838]:
+            - generic [ref=e3839]:
+              - img [ref=e3840]
+              - text: +43.7%
+            - text: Alcance 142.932
+        - generic [ref=e3843]:
+          - generic [ref=e3844]:
+            - generic [ref=e3845]: Frequencia
+            - img [ref=e3847]
+          - generic [ref=e3853]: "2.1"
+          - generic [ref=e3854]:
+            - generic [ref=e3855]:
+              - img [ref=e3856]
+              - text: +1.6%
+            - text: "Anterior: 2.0"
+        - generic [ref=e3859]:
+          - generic [ref=e3860]:
+            - generic [ref=e3861]: CTR
+            - img [ref=e3863]
+          - generic [ref=e3867]: 3,53%
+          - generic [ref=e3868]:
+            - generic [ref=e3869]:
+              - img [ref=e3870]
+              - text: +35.7%
+            - text: CPC R$ 0,26
+        - generic [ref=e3873]:
+          - generic [ref=e3874]:
+            - generic [ref=e3875]: Cliques no Link
+            - img [ref=e3877]
+          - generic [ref=e3883]: "6.940"
+          - generic [ref=e3884]:
+            - generic [ref=e3885]:
+              - img [ref=e3886]
+              - text: +66.8%
+            - text: "LPV Rate: 13% (874 views)"
+          - generic [ref=e3889]: Site lento ou problema no link
+        - generic [ref=e3890]:
+          - generic [ref=e3891]:
+            - generic [ref=e3892]: Conversas
+            - img [ref=e3894]
+          - generic [ref=e3896]: "191"
+          - generic [ref=e3897]:
+            - generic [ref=e3898]:
+              - img [ref=e3899]
+              - text: +13.0%
+            - text: Custo R$ 14,34
+        - generic [ref=e3902]:
+          - generic [ref=e3903]:
+            - generic [ref=e3904]: Leads
+            - img [ref=e3906]
+          - generic [ref=e3909]: "31"
+          - generic [ref=e3910]:
+            - generic [ref=e3911]:
+              - img [ref=e3912]
+              - text: +100.0%
+            - text: Custo R$ 88,33
+        - generic [ref=e3915]:
+          - generic [ref=e3916]:
+            - generic [ref=e3917]: Hook Rate
+            - img [ref=e3919]
+          - generic [ref=e3922]: 24.0%
+          - generic [ref=e3923]: 71.321 video views
+      - generic [ref=e3924]:
+        - generic [ref=e3925]: Desempenho no Periodo
+        - generic [ref=e3926]:
+          - generic [ref=e3927]:
+            - heading "Conversas Iniciadas" [level=3] [ref=e3928]
+            - generic [ref=e3930]:
+              - img [ref=e3931]:
+                - generic [ref=e3936]:
+                  - generic [ref=e3938]: 04-03
+                  - generic [ref=e3940]: 04-06
+                  - generic [ref=e3942]: 04-09
+                  - generic [ref=e3944]: 04-12
+                  - generic [ref=e3946]: 04-15
+                  - generic [ref=e3948]: 04-18
+                  - generic [ref=e3950]: 04-21
+                  - generic [ref=e3952]: 04-24
+                  - generic [ref=e3954]: 04-27
+                  - generic [ref=e3956]: 04-30
+                - generic [ref=e3958]:
+                  - generic [ref=e3960]: "0"
+                  - generic [ref=e3962]: "4"
+                  - generic [ref=e3964]: "8"
+                  - generic [ref=e3966]: "12"
+                  - generic [ref=e3968]: "16"
+              - list [ref=e4084]:
+                - listitem [ref=e4085]:
+                  - img [ref=e4086]
+                  - text: Atual
+                - listitem [ref=e4088]:
+                  - img [ref=e4089]
+                  - text: Anterior
+          - generic [ref=e4091]:
+            - heading "Funil de Conversao" [level=3] [ref=e4092]
+            - generic [ref=e4093]:
+              - generic [ref=e4095]:
+                - generic [ref=e4096]: Impressoes
+                - generic [ref=e4097]: "296.710"
+              - generic [ref=e4098]:
+                - generic [ref=e4099]:
+                  - generic [ref=e4100]: Alcance
+                  - generic [ref=e4101]: "142.932"
+                - generic [ref=e4102]: 48.2%
+              - generic [ref=e4103]:
+                - generic [ref=e4104]:
+                  - generic [ref=e4105]: Cliques (todos)
+                  - generic [ref=e4106]: "10.461"
+                - generic [ref=e4107]: 7.3%
+              - generic [ref=e4108]:
+                - generic [ref=e4109]:
+                  - generic [ref=e4110]: Cliques no link
+                  - generic [ref=e4111]: "6.940"
+                - generic [ref=e4112]: 66.3%
+              - generic [ref=e4113]:
+                - generic [ref=e4114]:
+                  - generic [ref=e4115]: Leads + Conversas
+                  - generic [ref=e4116]: "222"
+                - generic [ref=e4117]: 3.2%
+        - generic [ref=e4119]:
+          - heading "Valor Investido" [level=3] [ref=e4120]
+          - generic [ref=e4122]:
+            - img [ref=e4123]:
+              - generic [ref=e4128]:
+                - generic [ref=e4130]: 04-01
+                - generic [ref=e4132]: 04-03
+                - generic [ref=e4134]: 04-05
+                - generic [ref=e4136]: 04-07
+                - generic [ref=e4138]: 04-09
+                - generic [ref=e4140]: 04-10
+                - generic [ref=e4142]: 04-11
+                - generic [ref=e4144]: 04-12
+                - generic [ref=e4146]: 04-13
+                - generic [ref=e4148]: 04-14
+                - generic [ref=e4150]: 04-15
+                - generic [ref=e4152]: 04-16
+                - generic [ref=e4154]: 04-17
+                - generic [ref=e4156]: 04-18
+                - generic [ref=e4158]: 04-19
+                - generic [ref=e4160]: 04-20
+                - generic [ref=e4162]: 04-21
+                - generic [ref=e4164]: 04-23
+                - generic [ref=e4166]: 04-25
+                - generic [ref=e4168]: 04-26
+                - generic [ref=e4170]: 04-27
+                - generic [ref=e4172]: 04-28
+                - generic [ref=e4174]: 04-30
+              - generic [ref=e4176]:
+                - generic [ref=e4178]: "0"
+                - generic [ref=e4180]: "35"
+                - generic [ref=e4182]: "70"
+                - generic [ref=e4184]: "105"
+                - generic [ref=e4186]: "140"
+            - list [ref=e4200]:
+              - listitem [ref=e4201]:
+                - img [ref=e4202]
+                - text: Periodo Anterior
+              - listitem [ref=e4204]:
+                - img [ref=e4205]
+                - text: Valor Investido
+      - generic [ref=e4207]:
+        - generic [ref=e4208]: Campanhas
+        - generic [ref=e4209]:
+          - generic [ref=e4210]:
+            - heading "Campanhas" [level=3] [ref=e4211]
+            - generic [ref=e4212]: 11 campanhas
+          - table [ref=e4214]:
+            - rowgroup [ref=e4215]:
+              - row "Campanha Investimento Impressoes Cliques Link CTR Resultados Custo/Resultado" [ref=e4216]:
+                - columnheader "Campanha" [ref=e4217]
+                - columnheader "Investimento" [ref=e4218]
+                - columnheader "Impressoes" [ref=e4219]
+                - columnheader "Cliques Link" [ref=e4220]
+                - columnheader "CTR" [ref=e4221]
+                - columnheader "Resultados" [ref=e4222]
+                - columnheader "Custo/Resultado" [ref=e4223]
+            - rowgroup [ref=e4224]:
+              - row "Topo de Funil" [ref=e4225]:
+                - cell "Topo de Funil" [ref=e4226]
+              - row "[05/12]_[TOPO]_[TRAFEGO-SITE]_[12D]_[CBO]_[CONCHA] R$ 200,31 32.796 3.022 16,04% - -" [ref=e4227]:
+                - cell "[05/12]_[TOPO]_[TRAFEGO-SITE]_[12D]_[CBO]_[CONCHA]" [ref=e4228]
+                - cell "R$ 200,31" [ref=e4229]
+                - cell "32.796" [ref=e4230]
+                - cell "3.022" [ref=e4231]
+                - cell "16,04%" [ref=e4232]
+                - cell "-" [ref=e4233]
+                - cell "-" [ref=e4234]
+              - row "[12/02]_[TOPO]_[TRAFEGO]_[VISITAS-PERFIL]_[12D]_[CBO]_[CONCHA] R$ 174,42 -1.5% 51.980 2.618 4,99% - -" [ref=e4235]:
+                - cell "[12/02]_[TOPO]_[TRAFEGO]_[VISITAS-PERFIL]_[12D]_[CBO]_[CONCHA]" [ref=e4236]
+                - cell "R$ 174,42 -1.5%" [ref=e4237]:
+                  - text: R$ 174,42
+                  - generic [ref=e4238]: "-1.5%"
+                - cell "51.980" [ref=e4239]
+                - cell "2.618" [ref=e4240]
+                - cell "4,99%" [ref=e4241]
+                - cell "-" [ref=e4242]
+                - cell "-" [ref=e4243]
+              - row "Meio de Funil" [ref=e4244]:
+                - cell "Meio de Funil" [ref=e4245]
+              - row "[31/03]_[MEIO-RMKT]_[TRAFEGO-SITE]_[10D]_[CBO] R$ 175,43 46.371 440 1,45% 1 conversa R$ 175,43" [ref=e4246]:
+                - cell "[31/03]_[MEIO-RMKT]_[TRAFEGO-SITE]_[10D]_[CBO]" [ref=e4247]
+                - cell "R$ 175,43" [ref=e4248]
+                - cell "46.371" [ref=e4249]
+                - cell "440" [ref=e4250]
+                - cell "1,45%" [ref=e4251]
+                - cell "1 conversa" [ref=e4252]
+                - cell "R$ 175,43" [ref=e4253]
+              - row "[05/12]_[MEIO-RMKT]_[TRAFEGO-SITE]_[10D]_[CBO] R$ 21,39 -92.4% 7.550 8 0,12% - -" [ref=e4254]:
+                - cell "[05/12]_[MEIO-RMKT]_[TRAFEGO-SITE]_[10D]_[CBO]" [ref=e4255]
+                - cell "R$ 21,39 -92.4%" [ref=e4256]:
+                  - text: R$ 21,39
+                  - generic [ref=e4257]: "-92.4%"
+                - cell "7.550" [ref=e4258]
+                - cell "8" [ref=e4259]
+                - cell "0,12%" [ref=e4260]
+                - cell "-" [ref=e4261]
+                - cell "-" [ref=e4262]
+              - row "[31/03]_[MEIO-RMKT]_[TRAFEGO-SITE]_[10D]_[CBO] R$ 14,68 -42.8% 1.586 9 1,89% 3 conversas +0.0% R$ 4,89" [ref=e4263]:
+                - cell "[31/03]_[MEIO-RMKT]_[TRAFEGO-SITE]_[10D]_[CBO]" [ref=e4264]
+                - cell "R$ 14,68 -42.8%" [ref=e4265]:
+                  - text: R$ 14,68
+                  - generic [ref=e4266]: "-42.8%"
+                - cell "1.586" [ref=e4267]
+                - cell "9" [ref=e4268]
+                - cell "1,89%" [ref=e4269]
+                - cell "3 conversas +0.0%" [ref=e4270]:
+                  - text: 3 conversas
+                  - generic [ref=e4271]: +0.0%
+                - cell "R$ 4,89" [ref=e4272]
+              - row "Fundo de Funil" [ref=e4273]:
+                - cell "Fundo de Funil" [ref=e4274]
+              - row "[05/12]_[FUNDO]_[WHATS]_[CONCHA-HIDRAULICA]_[30D] R$ 780,12 -9.5% 54.906 268 1,06% 78 conversas -50.6% R$ 10,00" [ref=e4275]:
+                - cell "[05/12]_[FUNDO]_[WHATS]_[CONCHA-HIDRAULICA]_[30D]" [ref=e4276]
+                - cell "R$ 780,12 -9.5%" [ref=e4277]:
+                  - text: R$ 780,12
+                  - generic [ref=e4278]: "-9.5%"
+                - cell "54.906" [ref=e4279]
+                - cell "268" [ref=e4280]
+                - cell "1,06%" [ref=e4281]
+                - cell "78 conversas -50.6%" [ref=e4282]:
+                  - text: 78 conversas
+                  - generic [ref=e4283]: "-50.6%"
+                - cell "R$ 10,00" [ref=e4284]
+              - row "[31/03]_[FUNDO]_[WHATS]_[CONCHA-HIDRAULICA]_[30D] R$ 752,48 +3122.6% 58.776 260 1,19% 88 conversas +2833.3% R$ 8,55" [ref=e4285]:
+                - cell "[31/03]_[FUNDO]_[WHATS]_[CONCHA-HIDRAULICA]_[30D]" [ref=e4286]
+                - cell "R$ 752,48 +3122.6%" [ref=e4287]:
+                  - text: R$ 752,48
+                  - generic [ref=e4288]: +3122.6%
+                - cell "58.776" [ref=e4289]
+                - cell "260" [ref=e4290]
+                - cell "1,19%" [ref=e4291]
+                - cell "88 conversas +2833.3%" [ref=e4292]:
+                  - text: 88 conversas
+                  - generic [ref=e4293]: +2833.3%
+                - cell "R$ 8,55" [ref=e4294]
+              - row "[16/04]_[FUNDO]_[WHATS]_[CONCHA-HIDRAULICA]_[30D] R$ 255,82 18.921 107 1,26% 20 conversas R$ 12,79" [ref=e4295]:
+                - cell "[16/04]_[FUNDO]_[WHATS]_[CONCHA-HIDRAULICA]_[30D]" [ref=e4296]
+                - cell "R$ 255,82" [ref=e4297]
+                - cell "18.921" [ref=e4298]
+                - cell "107" [ref=e4299]
+                - cell "1,26%" [ref=e4300]
+                - cell "20 conversas" [ref=e4301]
+                - cell "R$ 12,79" [ref=e4302]
+              - row "[10/04] [FUNDO] [LEADS] [FORMS] [40D] R$ 185,39 13.430 110 1,55% 16 leads R$ 11,59" [ref=e4303]:
+                - cell "[10/04] [FUNDO] [LEADS] [FORMS] [40D]" [ref=e4304]
+                - cell "R$ 185,39" [ref=e4305]
+                - cell "13.430" [ref=e4306]
+                - cell "110" [ref=e4307]
+                - cell "1,55%" [ref=e4308]
+                - cell "16 leads" [ref=e4309]
+                - cell "R$ 11,59" [ref=e4310]
+              - row "[13/04] [FUNDO] [LEADS] [FORMS] [40D] R$ 153,36 9.220 95 1,76% 14 leads R$ 10,95" [ref=e4311]:
+                - cell "[13/04] [FUNDO] [LEADS] [FORMS] [40D]" [ref=e4312]
+                - cell "R$ 153,36" [ref=e4313]
+                - cell "9.220" [ref=e4314]
+                - cell "95" [ref=e4315]
+                - cell "1,76%" [ref=e4316]
+                - cell "14 leads" [ref=e4317]
+                - cell "R$ 10,95" [ref=e4318]
+              - row "[09/04] [FUNDO] [LEADS] [FORMS] [80D] R$ 24,95 1.174 3 0,60% 1 lead R$ 24,95" [ref=e4319]:
+                - cell "[09/04] [FUNDO] [LEADS] [FORMS] [80D]" [ref=e4320]
+                - cell "R$ 24,95" [ref=e4321]
+                - cell "1.174" [ref=e4322]
+                - cell "3" [ref=e4323]
+                - cell "0,60%" [ref=e4324]
+                - cell "1 lead" [ref=e4325]
+                - cell "R$ 24,95" [ref=e4326]
+      - generic [ref=e181]:
+        - img "Dros" [ref=e182]
+        - generic [ref=e183]: "Ultima atualizacao: 04/05/2026, 12:11:23"
+  - generic [ref=e547]: "35"

@@ -1,0 +1,273 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e16]:
+    - complementary [ref=e17]:
+      - generic [ref=e18]:
+        - img "Dros" [ref=e19]
+        - generic [ref=e20]: Painel de Performance
+      - generic [ref=e21]:
+        - img
+        - textbox "Buscar conta..." [ref=e22]: ask
+      - generic [ref=e59] [cursor=pointer]:
+        - generic [ref=e60]: CA
+        - generic [ref=e61]:
+          - generic [ref=e62]: CA -ASK Equipamentos
+          - generic [ref=e63]: "Total: R$ 50.492,26"
+      - generic [ref=e134]:
+        - generic [ref=e135]: Dros Admin
+        - button "Sair" [ref=e136] [cursor=pointer]:
+          - img [ref=e137]
+    - main [ref=e140]:
+      - generic [ref=e141]:
+        - heading "CA -ASK Equipamentos" [level=2] [ref=e184]
+        - generic [ref=e143]:
+          - button "Geral" [ref=e144] [cursor=pointer]:
+            - img [ref=e145]
+            - generic [ref=e150]: Geral
+          - button "Meta Ads" [ref=e151] [cursor=pointer]:
+            - img [ref=e152]
+            - generic [ref=e154]: Meta Ads
+          - button "Instagram" [ref=e155] [cursor=pointer]:
+            - img [ref=e156]
+            - generic [ref=e159]: Instagram
+          - button "Google Ads" [ref=e160] [cursor=pointer]:
+            - img [ref=e161]
+            - generic [ref=e163]: Google Ads
+          - button "Analytics" [ref=e164] [cursor=pointer]:
+            - img [ref=e165]
+            - generic [ref=e168]: Analytics
+      - generic [ref=e170]:
+        - button "7 dias" [ref=e171] [cursor=pointer]
+        - button "14 dias" [ref=e172] [cursor=pointer]
+        - button "30 dias" [ref=e173] [cursor=pointer]
+        - button "90 dias" [ref=e174] [cursor=pointer]
+        - button "Personalizado" [ref=e175] [cursor=pointer]:
+          - img [ref=e176]
+          - text: Personalizado
+      - generic [ref=e178]:
+        - generic [ref=e186]:
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - generic [ref=e189]: Investimento Total
+              - img [ref=e191]
+            - generic [ref=e193]: R$ 544,62
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - img [ref=e196]
+                - text: "-11.0%"
+              - generic [ref=e199]: Meta + Google
+          - generic [ref=e200]:
+            - generic [ref=e201]:
+              - generic [ref=e202]: Sessoes no Site
+              - img [ref=e204]
+            - generic [ref=e207]: "1.014"
+            - generic [ref=e209]:
+              - img [ref=e210]
+              - text: +63.5%
+          - generic [ref=e213]:
+            - generic [ref=e214]:
+              - generic [ref=e215]: Meta Conversoes
+              - img [ref=e217]
+            - generic [ref=e221]: "63"
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - img [ref=e224]
+                - text: +50.0%
+              - generic [ref=e227]: Leads + Mensagens
+          - generic [ref=e228]:
+            - generic [ref=e229]:
+              - generic [ref=e230]: CPL (Custo/Lead)
+              - img [ref=e232]
+            - generic [ref=e236]: R$ 8,64
+            - generic [ref=e238]:
+              - img [ref=e239]
+              - text: "-36.4%"
+        - generic [ref=e242]:
+          - generic [ref=e243]: Desempenho
+          - generic [ref=e244]:
+            - generic [ref=e245]:
+              - heading "Investimento & Conversoes por Dia" [level=3] [ref=e246]
+              - img [ref=e249]:
+                - generic [ref=e254]:
+                  - generic [ref=e256]: 04-27
+                  - generic [ref=e258]: 04-29
+                  - generic [ref=e260]: 04/27
+                  - generic [ref=e262]: 04/29
+                  - generic [ref=e264]: 05-01
+                  - generic [ref=e266]: 05/01
+                  - generic [ref=e268]: 05/03
+                - generic [ref=e270]:
+                  - generic [ref=e272]: R$0
+                  - generic [ref=e274]: R$30
+                  - generic [ref=e276]: R$60
+                  - generic [ref=e278]: R$90
+                  - generic [ref=e280]: R$120
+                - generic [ref=e282]:
+                  - generic [ref=e284]: "0"
+                  - generic [ref=e286]: "6"
+                  - generic [ref=e288]: "12"
+                  - generic [ref=e290]: "18"
+                  - generic [ref=e292]: "24"
+            - generic [ref=e312]:
+              - heading "Funil de Conversao" [level=3] [ref=e313]
+              - generic [ref=e314]:
+                - generic [ref=e316]:
+                  - generic [ref=e317]: Impressoes
+                  - generic [ref=e318]: "38.537"
+                - generic [ref=e319]:
+                  - generic [ref=e320]:
+                    - generic [ref=e321]: Cliques
+                    - generic [ref=e322]: "2.056"
+                  - generic [ref=e323]: 5.3%
+                - generic [ref=e324]:
+                  - generic [ref=e325]:
+                    - generic [ref=e326]: Sessoes Site
+                    - generic [ref=e327]: "1.014"
+                  - generic [ref=e328]: 49.3%
+                - generic [ref=e329]:
+                  - generic [ref=e330]:
+                    - generic [ref=e331]: Conversas
+                    - generic [ref=e332]: "63"
+                  - generic [ref=e333]: 6.2%
+        - generic [ref=e334]:
+          - generic [ref=e335]: Performance por Canal
+          - table [ref=e338]:
+            - rowgroup [ref=e339]:
+              - row "Canal Investimento Leads/Conv. CPL % do Invest." [ref=e340]:
+                - columnheader "Canal" [ref=e341]
+                - columnheader "Investimento" [ref=e342]
+                - columnheader "Leads/Conv." [ref=e343]
+                - columnheader "CPL" [ref=e344]
+                - columnheader "% do Invest." [ref=e345]
+            - rowgroup [ref=e346]:
+              - row "Meta Ads R$ 486,97 63 R$ 7,73 89%" [ref=e347]:
+                - cell "Meta Ads" [ref=e348]:
+                  - img [ref=e350]
+                  - text: Meta Ads
+                - cell "R$ 486,97" [ref=e352]
+                - cell "63" [ref=e353]
+                - cell "R$ 7,73" [ref=e354]
+                - cell "89%" [ref=e355]
+              - row "Google Ads R$ 57,65 0 - 11%" [ref=e356]:
+                - cell "Google Ads" [ref=e357]:
+                  - img [ref=e359]
+                  - text: Google Ads
+                - cell "R$ 57,65" [ref=e362]
+                - cell "0" [ref=e363]
+                - cell "-" [ref=e364]
+                - cell "11%" [ref=e365]
+              - row "Total R$ 544,62 63 R$ 8,64 100%" [ref=e366]:
+                - cell "Total" [ref=e367]
+                - cell "R$ 544,62" [ref=e368]
+                - cell "63" [ref=e369]
+                - cell "R$ 8,64" [ref=e370]
+                - cell "100%" [ref=e371]
+        - generic [ref=e372]:
+          - generic [ref=e373]: Sessoes do Site
+          - generic [ref=e374]:
+            - img [ref=e377]:
+              - generic [ref=e382]:
+                - generic [ref=e384]: 04-27
+                - generic [ref=e386]: 04-28
+                - generic [ref=e388]: 04-29
+                - generic [ref=e390]: 04-30
+                - generic [ref=e392]: 04/27
+                - generic [ref=e394]: 04/28
+                - generic [ref=e396]: 04/29
+                - generic [ref=e398]: 04/30
+                - generic [ref=e400]: 05-01
+                - generic [ref=e402]: 05-02
+                - generic [ref=e404]: 05/01
+                - generic [ref=e406]: 05/02
+                - generic [ref=e408]: 05/03
+              - generic [ref=e410]:
+                - generic [ref=e412]: R$0
+                - generic [ref=e414]: R$30
+                - generic [ref=e416]: R$60
+                - generic [ref=e418]: R$90
+                - generic [ref=e420]: R$120
+              - generic [ref=e422]:
+                - generic [ref=e424]: "0"
+                - generic [ref=e426]: "40"
+                - generic [ref=e428]: "80"
+                - generic [ref=e430]: "120"
+                - generic [ref=e432]: "160"
+            - generic [ref=e460]:
+              - generic [ref=e461]: Investimento
+              - generic [ref=e463]: Sessoes
+              - generic [ref=e465]: Leads
+        - generic [ref=e467]:
+          - generic [ref=e468]: Meta Ads — Resumo
+          - generic [ref=e469]:
+            - generic [ref=e470]:
+              - generic [ref=e471]: Investimento
+              - generic [ref=e472]: R$ 486,97
+            - generic [ref=e473]:
+              - generic [ref=e474]: Alcance
+              - generic [ref=e475]: "28.105"
+            - generic [ref=e476]:
+              - generic [ref=e477]: Cliques
+              - generic [ref=e478]: "2.021"
+            - generic [ref=e479]:
+              - generic [ref=e480]: Conversas
+              - generic [ref=e481]: "63"
+              - generic [ref=e483]:
+                - img [ref=e484]
+                - text: +50.0%
+            - generic [ref=e487]:
+              - generic [ref=e488]: Link Clicks
+              - generic [ref=e489]: "1.161"
+        - generic [ref=e490]:
+          - generic [ref=e491]: Google Ads — Resumo
+          - generic [ref=e492]:
+            - generic [ref=e493]:
+              - generic [ref=e494]: Investimento
+              - generic [ref=e495]: R$ 57,65
+            - generic [ref=e496]:
+              - generic [ref=e497]: Cliques
+              - generic [ref=e498]: "35"
+            - generic [ref=e499]:
+              - generic [ref=e500]: Conversoes
+              - generic [ref=e501]: "0"
+              - generic [ref=e503]:
+                - img [ref=e504]
+                - text: "-100.0%"
+        - generic [ref=e507]:
+          - generic [ref=e508]: Website — Resumo
+          - generic [ref=e509]:
+            - generic [ref=e510]:
+              - generic [ref=e511]: Sessoes
+              - generic [ref=e512]: "1.014"
+              - generic [ref=e514]:
+                - img [ref=e515]
+                - text: +63.5%
+            - generic [ref=e518]:
+              - generic [ref=e519]: Usuarios
+              - generic [ref=e520]: "989"
+              - generic [ref=e522]:
+                - img [ref=e523]
+                - text: +63.2%
+            - generic [ref=e526]:
+              - generic [ref=e527]: Engajamento
+              - generic [ref=e528]: 31.9%
+            - generic [ref=e529]:
+              - generic [ref=e530]: Rejeicao
+              - generic [ref=e531]: 68.1%
+        - generic [ref=e532]:
+          - generic [ref=e533]: Instagram — @askequipamentos
+          - generic [ref=e534]:
+            - generic [ref=e535]:
+              - generic [ref=e536]: Seguidores
+              - generic [ref=e537]: "4.281"
+            - generic [ref=e538]:
+              - generic [ref=e539]: Alcance
+              - generic [ref=e540]: "14.361"
+            - generic [ref=e541]:
+              - generic [ref=e542]: Interacoes
+              - generic [ref=e543]: "117"
+            - generic [ref=e544]:
+              - generic [ref=e545]: Taxa Engajamento
+              - generic [ref=e546]: 0.81%
+      - generic [ref=e181]:
+        - img "Dros" [ref=e182]
+        - generic [ref=e183]: "Ultima atualizacao: -"
+  - generic [ref=e547]: "40"

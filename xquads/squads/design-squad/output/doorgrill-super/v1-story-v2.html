@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DoorGrill — V1 Story V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px;
+      font-family: 'Sora', sans-serif;
+    }
+
+    .canvas {
+      width: 1080px;
+      height: 1920px;
+      position: relative;
+      overflow: hidden;
+      background: #0a0a0a;
+      flex-shrink: 0;
+    }
+
+    .top-border {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #eeb23e 0%, #f5c660 50%, #eeb23e 100%);
+      z-index: 2;
+    }
+
+    .product-area {
+      position: absolute;
+      left: 0; right: 0;
+      top: 0;
+      height: 1500px;
+      overflow: hidden;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+
+    .product-fade-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, transparent 100%);
+    }
+
+    .product-fade-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 700px;
+      background: linear-gradient(0deg, #0a0a0a 0%, rgba(10,10,10,0.92) 30%, transparent 100%);
+    }
+
+    .bg-glow {
+      position: absolute;
+      left: 50%;
+      top: 1100px;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(238,178,62,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .promo-badge {
+      position: absolute;
+      top: 200px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      z-index: 50;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .features-horizontal {
+      position: absolute;
+      top: 280px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 16px;
+      z-index: 50;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 900px;
+    }
+
+    .feature-chip {
+      background: rgba(0,0,0,0.75);
+      border: 1.5px solid rgba(238,178,62,0.5);
+      border-radius: 100px;
+      padding: 14px 28px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .bottom-section {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0 80px 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .feature-item {
+      font-size: 34px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .feature-dot {
+      color: #eeb23e;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, #eeb23e 0%, rgba(238,178,62,0.2) 60%, transparent 100%);
+    }
+
+    .pricing-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(238,178,62,0.2);
+      border-radius: 24px;
+      padding: 48px 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .pricing-left {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .price-old {
+      font-size: 32px;
+      font-weight: 500;
+      color: #bbb;
+      text-decoration: line-through;
+      text-decoration-color: #e84848;
+      text-decoration-thickness: 2px;
+    }
+
+    .price-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #eeb23e;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .price-new {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .price-currency {
+      font-size: 44px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .price-value {
+      font-size: 112px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .price-cents {
+      font-size: 44px;
+      font-weight: 700;
+      color: #fff;
+      align-self: flex-start;
+      margin-top: 22px;
+    }
+
+    .price-installment {
+      font-size: 24px;
+      color: #ddd;
+      margin-top: 4px;
+    }
+
+    .pricing-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0;
+      flex-shrink: 0;
+    }
+
+    .savings-pill {
+      background: #e84848;
+      border-radius: 16px;
+      padding: 22px 32px;
+      text-align: center;
+    }
+
+    .savings-pill-label {
+      font-size: 20px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .savings-pill-amount {
+      font-size: 56px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+    }
+
+    .handle {
+      position: absolute;
+      bottom: 320px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      font-weight: 600;
+      color: #444;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .opencode-credit {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="canvas">
+    <div class="top-border"></div>
+    <div class="bg-glow"></div>
+
+    <div class="promo-badge">🔥 PROMOÇÃO</div>
+
+    <div class="features-horizontal">
+      <div class="feature-chip">✦ 5 espetos rotativos</div>
+      <div class="feature-chip">✦ Grelha manual lateral</div>
+      <div class="feature-chip">✦ 80 centímetros</div>
+    </div>
+
+    <div class="product-area">
+      <img src="file:///C:/Users/usuar/Downloads/drive-download-20260325T172532Z-3-001/01.jpeg" class="product-img">
+      <div class="product-fade-top"></div>
+      <div class="product-fade-bottom"></div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="features-list">
+        <div class="feature-item"><span class="feature-dot">✦</span> 5 espetos rotativos</div>
+        <div class="feature-item"><span class="feature-dot">✦</span> Grelha manual lateral</div>
+        <div class="feature-item"><span class="feature-dot">✦</span> 80 centímetros de largura</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="pricing-card">
+        <div class="pricing-left">
+          <div class="price-old">De R$ 6.990,00</div>
+          <div class="price-label">Por apenas</div>
+          <div class="price-new">
+            <span class="price-currency">R$</span>
+            <span class="price-value">5.490</span>
+            <span class="price-cents">,00</span>
+          </div>
+          <div class="price-installment">à vista • ou parcelado no cartão</div>
+        </div>
+        <div class="pricing-right">
+          <div class="savings-pill">
+            <div class="savings-pill-label">Você economiza</div>
+            <div class="savings-pill-amount">R$ 1.500</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="handle">@doorgrill_projetos</div>
+    <div class="opencode-credit">opencode</div>
+
+  </div>
+
+</body>
+</html>

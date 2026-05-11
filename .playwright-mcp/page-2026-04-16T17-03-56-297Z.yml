@@ -1,0 +1,20 @@
+- generic [ref=e7]:
+  - generic [ref=e8]: Área de alunas
+  - img "Nayara Della Vechia" [ref=e11]
+  - paragraph [ref=e12]: Bem-vinda,
+  - heading "Recomeço Sistêmico" [level=1] [ref=e13]:
+    - text: Recomeço
+    - emphasis [ref=e14]: Sistêmico
+  - paragraph [ref=e15]:
+    - text: Sua jornada começa aqui —
+    - emphasis [ref=e16]: compreender, reposicionar e sustentar.
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - strong [ref=e19]: "3"
+      - text: meses
+    - generic [ref=e20]:
+      - strong [ref=e21]: "3"
+      - text: fases
+    - generic [ref=e22]:
+      - strong [ref=e23]: "06"
+      - text: encontros

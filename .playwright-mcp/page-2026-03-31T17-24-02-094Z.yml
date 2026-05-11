@@ -1,0 +1,12 @@
+- generic [ref=e791]:
+  - img "Dros" [ref=e792]
+  - heading "Dros CRM" [level=1] [ref=e793]
+  - generic [ref=e794]: Gestao de leads e pipeline de vendas
+  - generic [ref=e795]:
+    - generic [ref=e796]:
+      - generic [ref=e797]: Email
+      - textbox [ref=e798]
+    - generic [ref=e799]:
+      - generic [ref=e800]: Senha
+      - textbox [ref=e801]
+    - button "Entrar" [ref=e802] [cursor=pointer]

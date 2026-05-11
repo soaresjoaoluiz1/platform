@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Q1 2026 — Invista Imóveis SM | Dros Agência</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a25;
+      --bg-card-hover: #22222f;
+      --cyan: #0693e3;
+      --purple: #9b51e0;
+      --orange: #ff7900;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --text-primary: #f1f1f4;
+      --text-secondary: #a0a0b8;
+      --text-muted: #6b6b80;
+      --border: #2a2a3a;
+      --gradient-main: linear-gradient(135deg, #0693e3, #9b51e0);
+      --gradient-orange: linear-gradient(135deg, #ff7900, #ff9a44);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* HEADER */
+    .header {
+      background: rgba(18,18,26,0.92);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-logos {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-logos img {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .header-logos .divider {
+      width: 1px;
+      height: 32px;
+      background: var(--border);
+    }
+
+    .header-info { text-align: right; }
+
+    .header-info .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+
+    .header-info .period {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* HERO */
+    .hero {
+      padding: 64px 24px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 140%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(6,147,227,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 50%, rgba(155,81,224,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(6,147,227,0.1);
+      border: 1px solid rgba(6,147,227,0.2);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--cyan);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .hero .client-name {
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    .hero-platform {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .meta-logo {
+      width: 56px;
+      height: 56px;
+    }
+
+    .meta-label {
+      font-size: 42px;
+      font-weight: 900;
+      color: #0081FB;
+      letter-spacing: -1px;
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* SECTION */
+    .section { margin-bottom: 48px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .section-icon.blue { background: rgba(6,147,227,0.15); }
+    .section-icon.purple { background: rgba(155,81,224,0.15); }
+    .section-icon.orange { background: rgba(255,121,0,0.15); }
+    .section-icon.green { background: rgba(34,197,94,0.15); }
+
+    .section-title { font-size: 20px; font-weight: 700; }
+    .section-subtitle { font-size: 13px; color: var(--text-muted); }
+
+    /* KPI GRID */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(6,147,227,0.3);
+      transform: translateY(-2px);
+    }
+
+    .kpi-card .kpi-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .kpi-card .kpi-value {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .kpi-card .kpi-detail {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .kpi-card.highlight { border-color: rgba(6,147,227,0.3); }
+    .kpi-card.highlight::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gradient-main);
+    }
+
+    .kpi-card.highlight-orange { border-color: rgba(255,121,0,0.3); }
+    .kpi-card.highlight-orange::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gradient-orange);
+    }
+
+    .kpi-card.highlight-green { border-color: rgba(34,197,94,0.3); }
+    .kpi-card.highlight-green::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    /* INVEST BREAKDOWN */
+    .invest-breakdown {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+    }
+
+    .invest-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .invest-card {
+      flex: 1;
+      max-width: 280px;
+      background: rgba(42,42,58,0.25);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .invest-card.excluded {
+      border-color: rgba(239,68,68,0.3);
+      background: rgba(239,68,68,0.05);
+    }
+
+    .invest-card.operational {
+      border-color: rgba(34,197,94,0.3);
+      background: rgba(34,197,94,0.05);
+    }
+
+    .invest-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .invest-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .invest-card.excluded .invest-value { color: var(--red); }
+    .invest-card.operational .invest-value { color: var(--green); }
+
+    .invest-detail {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+
+    .invest-arrow {
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .invest-note {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: rgba(6,147,227,0.05);
+      border: 1px solid rgba(6,147,227,0.12);
+      border-radius: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .kpi-value .currency { font-size: 14px; font-weight: 500; opacity: 0.7; }
+    .kpi-value .unit { font-size: 13px; font-weight: 500; color: var(--cyan); }
+    .kpi-value.green { color: var(--green); }
+    .kpi-value.cyan { color: var(--cyan); }
+    .kpi-value.orange { color: var(--orange); }
+    .kpi-value.purple { color: var(--purple); }
+
+    /* BIG NUMBER ROW */
+    .big-numbers {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .big-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .big-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .big-card.c1::before { background: var(--gradient-main); }
+    .big-card.c2::before { background: var(--gradient-orange); }
+    .big-card.c3::before { background: linear-gradient(135deg, #22c55e, #16a34a); }
+
+    .big-card .big-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .big-card .big-value {
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .big-card .big-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    /* CHART CONTAINERS */
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .chart-card.full { grid-column: 1 / -1; }
+
+    .chart-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-secondary);
+    }
+
+    .chart-wrapper { position: relative; height: 260px; }
+    .chart-wrapper.small { height: 200px; }
+
+    /* TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .data-table thead th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    .data-table tbody td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(42,42,58,0.5);
+      color: var(--text-secondary);
+    }
+
+    .data-table tbody tr:hover td { background: rgba(6,147,227,0.03); }
+    .data-table .val { font-weight: 600; color: var(--text-primary); }
+    .data-table .positive { color: var(--green); }
+    .data-table .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .tag.meta { background: rgba(6,147,227,0.15); color: var(--cyan); }
+
+    /* FUNNEL */
+    .funnel { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+
+    .funnel-step { display: flex; align-items: center; gap: 12px; }
+
+    .funnel-bar-wrap {
+      flex: 1;
+      height: 34px;
+      background: rgba(42,42,58,0.3);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .funnel-bar {
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      min-width: fit-content;
+    }
+
+    .funnel-label {
+      width: 140px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* INSIGHTS */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .insight-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      border-left: 3px solid var(--cyan);
+    }
+
+    .insight-card.warn { border-left-color: var(--yellow); }
+    .insight-card.success { border-left-color: var(--green); }
+
+    .insight-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .insight-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+
+    .footer img { height: 32px; margin-bottom: 12px; }
+    .footer p { font-size: 12px; color: var(--text-muted); }
+    .footer a { color: var(--cyan); text-decoration: none; }
+
+    /* PRINT */
+    @media print {
+      body { background: #fff; color: #111; }
+      .header { position: static; }
+      .kpi-card, .chart-card, .big-card, .insight-card { break-inside: avoid; }
+    }
+
+    /* RESPONSIVE — TABLET */
+    @media (max-width: 1024px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* RESPONSIVE — MOBILE */
+    @media (max-width: 640px) {
+      .header { padding: 12px 0; }
+      .header-inner {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 16px;
+      }
+      .header-logos img { height: 32px; }
+      .header-info { text-align: center; }
+
+      .hero { padding: 40px 16px 32px; }
+      .hero h1 { font-size: 26px; }
+      .hero .subtitle { font-size: 14px; }
+      .hero-badge { font-size: 10px; padding: 5px 12px; }
+      .meta-logo { width: 40px; height: 40px; }
+      .meta-label { font-size: 30px; }
+
+      .invest-row { flex-direction: column; gap: 8px; }
+      .invest-card { max-width: 100%; }
+      .invest-arrow { font-size: 22px; transform: rotate(90deg); }
+      .invest-value { font-size: 20px; }
+      .invest-breakdown { padding: 20px 16px; }
+      .invest-note { font-size: 11px; padding: 12px 14px; }
+
+      .container { padding: 0 16px 40px; }
+
+      .section { margin-bottom: 32px; }
+      .section-title { font-size: 17px; }
+      .section-header { gap: 10px; margin-bottom: 16px; padding-bottom: 10px; }
+      .section-icon { width: 32px; height: 32px; font-size: 15px; }
+
+      .big-numbers { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .big-numbers .big-card:first-child { grid-column: 1 / -1; }
+      .big-card { padding: 20px 16px; }
+      .big-card .big-value { font-size: 28px; }
+      .big-card .big-label { font-size: 11px; }
+
+      .kpi-grid { grid-template-columns: 1fr; gap: 10px; }
+      .kpi-card { padding: 16px; }
+      .kpi-card .kpi-value { font-size: 22px; }
+
+      .chart-row { grid-template-columns: 1fr; gap: 10px; }
+      .chart-card { padding: 16px; }
+      .chart-wrapper { height: 220px; }
+      .chart-wrapper.small { height: 180px; }
+
+      .funnel-label { width: 90px; font-size: 10px; }
+      .funnel-bar { font-size: 10px; padding: 0 8px; }
+      .funnel-bar-wrap { height: 28px; }
+      .funnel-step { gap: 8px; }
+
+      .insights-grid { grid-template-columns: 1fr; gap: 10px; }
+      .insight-card { padding: 16px; }
+      .insight-card h4 { font-size: 13px; }
+      .insight-card p { font-size: 12px; }
+
+      .data-table { font-size: 12px; }
+      .data-table thead th { padding: 8px 10px; font-size: 9px; }
+      .data-table tbody td { padding: 10px; }
+      .data-table thead th:nth-child(3),
+      .data-table tbody td:nth-child(3) { display: none; }
+
+      .footer { padding: 28px 16px; }
+    }
+
+    /* ANIMATION */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate { animation: fadeUp 0.6s ease forwards; opacity: 0; }
+    .animate.d1 { animation-delay: 0.1s; }
+    .animate.d2 { animation-delay: 0.2s; }
+    .animate.d3 { animation-delay: 0.3s; }
+    .animate.d4 { animation-delay: 0.4s; }
+    .animate.d5 { animation-delay: 0.5s; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logos">
+        <img src="https://drosagencia.com.br/wp-content/uploads/2025/12/DROS-LOGO-1-1024x1024.png" alt="Dros Agência" style="border-radius: 8px;">
+        <div class="divider"></div>
+        <img src="https://s01.jetimgs.com/tnkWTw8vLclyoxtJjBuaxIkwJMN6ptXQbeSO2TTZo3reJleey13q6lc3gIMiOwqpJ1gfKwqeDHQfh4KKjaR3shgsLzVCuJr2-27IgKamTGg_eHCn4pdK/horizontalinvistapng.webp" alt="Invista Imóveis SM">
+      </div>
+      <div class="header-info">
+        <div class="label">Relatório de Performance</div>
+        <div class="period">01 Jan — 31 Mar 2026 (1o Trimestre)</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">Q1 2026 — 1o Trimestre</div>
+    <div class="hero-platform">
+      <svg class="meta-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.5 18c0-4.8 2.1-9.3 4.6-9.3 1.5 0 2.8 1.7 4.9 5.4l1.2 2.1c1.6 2.8 2.5 4.1 3.8 4.1 2.3 0 4.2-4.2 4.2-9.1 0-5.8-3.2-10.2-9.7-10.2C8.8 1 2 9.1 2 18c0 8.8 6.6 17 14.5 17 8.3 0 12-6.4 13.2-9.6l-2.4-1.2c-1.3 3-4.1 7-10.3 7C12.4 31.2 7.5 25 7.5 18z" fill="url(#metaGrad1)"/>
+        <path d="M26 11.2c-2.3 0-4 2.4-5.7 5.4l-1 1.8c-2 3.5-3.1 5.1-5 5.1-2 0-3.5-3-3.5-5.5h-3.3c0 4.2 2.5 8.5 6.5 8.5 2.8 0 4.3-1.8 6.3-5.5l1.2-2.1c1.5-2.6 2.5-4.2 4-4.2 1.7 0 3 2.4 3 5.5 0 2-.5 3.6-1.2 4.8l2.7 1.4c1.2-2 2-4.6 2-6.8 0-5-2.7-8.4-6-8.4z" fill="url(#metaGrad2)"/>
+        <defs>
+          <linearGradient id="metaGrad1" x1="2" y1="18" x2="30" y2="18" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0081FB"/>
+            <stop offset="1" stop-color="#0064E0"/>
+          </linearGradient>
+          <linearGradient id="metaGrad2" x1="8" y1="18" x2="34" y2="18" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0081FB"/>
+            <stop offset="1" stop-color="#0064E0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="meta-label">Meta Ads</span>
+    </div>
+    <h1>Performance de Marketing Digital</h1>
+    <p class="subtitle">Resultados da operação de tráfego pago para <span class="client-name">Invista Imóveis Santa Maria</span> no 1o trimestre de 2026</p>
+  </section>
+
+  <div class="container">
+
+    <!-- RESUMO EXECUTIVO -->
+    <section class="section animate d1">
+      <div class="section-header">
+        <div class="section-icon blue">📊</div>
+        <div>
+          <div class="section-title">Resumo Executivo</div>
+          <div class="section-subtitle">Visão geral dos principais resultados do trimestre</div>
+        </div>
+      </div>
+
+      <div class="big-numbers">
+        <div class="big-card c1">
+          <div class="big-label">Negócios Fechados</div>
+          <div class="big-value cyan">55</div>
+          <div class="big-sub">vendas concretizadas no trimestre</div>
+        </div>
+        <div class="big-card c2">
+          <div class="big-label">VGV Total</div>
+          <div class="big-value orange" style="font-size: 28px;"><span class="currency" style="font-size: 14px;">R$</span> 21.640.753</div>
+          <div class="big-sub">volume geral de vendas</div>
+        </div>
+        <div class="big-card c3">
+          <div class="big-label">ROAS sobre Comissão</div>
+          <div class="big-value green" style="font-size: 36px;">90,53x</div>
+          <div class="big-sub">retorno sobre investimento operacional</div>
+        </div>
+        <div class="big-card" style="border-color: rgba(255,121,0,0.3);">
+          <div class="big-label">Custo por Venda</div>
+          <div class="big-value orange" style="font-size: 28px;"><span class="currency" style="font-size: 14px;">R$</span> 239,89</div>
+          <div class="big-sub">investimento operacional por negócio</div>
+        </div>
+        <div class="big-card" style="border-color: rgba(6,147,227,0.3);">
+          <div class="big-label">CPL</div>
+          <div class="big-value" style="font-size: 20px;">
+            <span style="color: var(--text-secondary);">Hist.</span> <span class="currency">R$</span> 27,06
+            <br>
+            <span style="color: var(--green);">Atual</span> <span class="currency">R$</span> <span style="color: var(--green);">17,40</span>
+          </div>
+          <div class="big-sub">histórico vs campanhas ativas</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPOSIÇÃO DO INVESTIMENTO -->
+    <section class="section animate d1" style="animation-delay: 0.15s;">
+      <div class="section-header">
+        <div class="section-icon orange">📋</div>
+        <div>
+          <div class="section-title">Composição do Investimento</div>
+          <div class="section-subtitle">Detalhamento do investimento bruto e operacional do trimestre</div>
+        </div>
+      </div>
+
+      <div class="invest-breakdown">
+        <div class="invest-row">
+          <div class="invest-card">
+            <div class="invest-label">Investimento Bruto em Mídia</div>
+            <div class="invest-value"><span class="currency">R$</span> 15.192,11</div>
+            <div class="invest-detail">Total investido em Meta Ads no Q1</div>
+          </div>
+          <div class="invest-arrow">-</div>
+          <div class="invest-card excluded">
+            <div class="invest-label">Campanha Extraordinária</div>
+            <div class="invest-value"><span class="currency">R$</span> 1.998,31</div>
+            <div class="invest-detail">Campanha ZION — ação paralela, paga por terceiro</div>
+          </div>
+          <div class="invest-arrow">=</div>
+          <div class="invest-card operational">
+            <div class="invest-label">Investimento Operacional</div>
+            <div class="invest-value"><span class="currency">R$</span> 13.193,80</div>
+            <div class="invest-detail">Base para cálculo dos indicadores</div>
+          </div>
+        </div>
+        <div class="invest-note">
+          Parte do investimento do trimestre foi destinada a uma campanha extraordinária, fora da estratégia operacional da Invista. Por isso, os indicadores principais deste relatório consideram apenas o investimento operacional da operação.
+        </div>
+      </div>
+    </section>
+
+    <!-- MÉTRICAS FINANCEIRAS -->
+    <section class="section animate d2">
+      <div class="section-header">
+        <div class="section-icon green">💰</div>
+        <div>
+          <div class="section-title">Métricas Financeiras</div>
+          <div class="section-subtitle">Indicadores calculados sobre o investimento operacional (R$ 13.193,80)</div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card highlight">
+          <div class="kpi-label">Investimento Operacional</div>
+          <div class="kpi-value"><span class="currency">R$</span> 13.193,80</div>
+          <div class="kpi-detail">Meta Ads — excl. campanha ZION</div>
+        </div>
+        <div class="kpi-card highlight-green">
+          <div class="kpi-label">VGC (Comissão Total)</div>
+          <div class="kpi-value green"><span class="currency">R$</span> 1.194.437</div>
+          <div class="kpi-detail">receita líquida da imobiliária</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">ROAS sobre VGV</div>
+          <div class="kpi-value cyan">1.640,22<span class="unit">x</span></div>
+          <div class="kpi-detail">R$ 21,6M ÷ R$ 13,2K</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">ROAS sobre VGC</div>
+          <div class="kpi-value green">90,53<span class="unit">x</span></div>
+          <div class="kpi-detail">R$ 1,19M ÷ R$ 13,2K</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Ticket Médio (VGV)</div>
+          <div class="kpi-value"><span class="currency">R$</span> 393.468</div>
+          <div class="kpi-detail">por negócio fechado</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Comissão Média</div>
+          <div class="kpi-value"><span class="currency">R$</span> 21.717</div>
+          <div class="kpi-detail">por negócio fechado</div>
+        </div>
+        <div class="kpi-card highlight-orange">
+          <div class="kpi-label">Custo por Negócio</div>
+          <div class="kpi-value orange"><span class="currency">R$</span> 239,89</div>
+          <div class="kpi-detail">investimento operacional por venda</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">CPL Operacional Histórico</div>
+          <div class="kpi-value"><span class="currency">R$</span> 27,06</div>
+          <div class="kpi-detail">custo por lead histórico do Q1</div>
+        </div>
+        <div class="kpi-card highlight-green">
+          <div class="kpi-label">CPL Atual (campanhas ativas)</div>
+          <div class="kpi-value green"><span class="currency">R$</span> 17,40</div>
+          <div class="kpi-detail">abaixo do CPL histórico — campanhas otimizadas</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Verba Mensal</div>
+          <div class="kpi-value"><span class="currency">R$</span> 6.461,40</div>
+          <div class="kpi-detail">orçamento ativo: R$ 215,38/dia</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISTRIBUIÇÃO DO INVESTIMENTO -->
+    <section class="section animate d3">
+      <div class="section-header">
+        <div class="section-icon purple">📈</div>
+        <div>
+          <div class="section-title">Distribuição do Investimento</div>
+          <div class="section-subtitle">Proporção do investimento no trimestre</div>
+        </div>
+      </div>
+
+      <div class="chart-row" style="grid-template-columns: 1fr; max-width: 480px; margin: 0 auto;">
+        <div class="chart-card">
+          <h3>Investimento por Plataforma</h3>
+          <div class="chart-wrapper small">
+            <canvas id="chartPie"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNIL -->
+    <section class="section animate d4">
+      <div class="section-header">
+        <div class="section-icon orange">🔥</div>
+        <div>
+          <div class="section-title">Funil de Conversão</div>
+          <div class="section-subtitle">Da impressão ao negócio fechado</div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="funnel">
+          <div class="funnel-step">
+            <div class="funnel-label">Impressões</div>
+            <div class="funnel-bar-wrap">
+              <div class="funnel-bar" style="width: 100%; background: linear-gradient(90deg, var(--cyan), var(--purple));">~750K</div>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-label">Cliques no Link</div>
+            <div class="funnel-bar-wrap">
+              <div class="funnel-bar" style="width: 35%; background: linear-gradient(90deg, #0693e3, #3b82f6);">~10K</div>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-label">Leads Gerados</div>
+            <div class="funnel-bar-wrap">
+              <div class="funnel-bar" style="width: 12%; background: linear-gradient(90deg, var(--orange), #f59e0b);">~570</div>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-label">Atendimentos</div>
+            <div class="funnel-bar-wrap">
+              <div class="funnel-bar" style="width: 6%; background: linear-gradient(90deg, #f59e0b, #22c55e);">~280</div>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-label">Negócios Fechados</div>
+            <div class="funnel-bar-wrap">
+              <div class="funnel-bar" style="width: 4%; background: linear-gradient(90deg, #22c55e, #16a34a);">55</div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size: 10px; color: var(--text-muted); margin-top: 14px; text-align: center;">* Valores de impressões, cliques, leads e atendimentos são estimados com base nas métricas da plataforma</p>
+      </div>
+    </section>
+
+    <!-- CONFIGURAÇÃO OPERACIONAL -->
+    <section class="section animate d4">
+      <div class="section-header">
+        <div class="section-icon blue">⚙️</div>
+        <div>
+          <div class="section-title">Configuração Operacional</div>
+          <div class="section-subtitle">Parâmetros e metas da operação de tráfego</div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Parâmetro</th>
+              <th>Valor</th>
+              <th>Observação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CPL operacional histórico</td>
+              <td class="val">R$ 27,06</td>
+              <td>Baseado no investimento operacional do Q1</td>
+            </tr>
+            <tr>
+              <td>CPL atual (campanhas ativas)</td>
+              <td class="val positive">R$ 17,40</td>
+              <td>Campanhas ativas de conversão — abaixo do alvo</td>
+            </tr>
+            <tr>
+              <td>ROAS mínimo</td>
+              <td class="val positive">20x</td>
+              <td>Meta mínima saudável de retorno</td>
+            </tr>
+            <tr>
+              <td>ROAS real (Q1)</td>
+              <td class="val positive">90,53x</td>
+              <td>4,5x acima da meta mínima</td>
+            </tr>
+            <tr>
+              <td>Ticket médio</td>
+              <td class="val">R$ 393.468,24</td>
+              <td>Valor médio de venda dos imóveis</td>
+            </tr>
+            <tr>
+              <td>Contas de anúncio</td>
+              <td class="val">1</td>
+              <td><span class="tag meta">Meta Ads</span></td>
+            </tr>
+            <tr>
+              <td>Verba mensal</td>
+              <td class="val">R$ 6.461,40</td>
+              <td>Orçamento diário ativo: R$ 215,38/dia</td>
+            </tr>
+            <tr>
+              <td>Campanhas ativas</td>
+              <td class="val">4</td>
+              <td>Campanhas simultâneas no fechamento do Q1</td>
+            </tr>
+            <tr>
+              <td>Conversões prioritárias</td>
+              <td class="val">Lead + WhatsApp</td>
+              <td>Formulário e conversa via WhatsApp</td>
+            </tr>
+            <tr>
+              <td>Notificações diárias</td>
+              <td class="val">09:00</td>
+              <td>Horário de envio dos reports diários</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- INSIGHTS -->
+    <section class="section animate d5">
+      <div class="section-header">
+        <div class="section-icon green">💡</div>
+        <div>
+          <div class="section-title">Insights e Recomendações</div>
+          <div class="section-subtitle">Análise estratégica dos resultados do Q1</div>
+        </div>
+      </div>
+
+      <div class="insights-grid">
+        <div class="insight-card success">
+          <h4>ROAS 4,5x Acima da Meta</h4>
+          <p>O ROAS operacional sobre comissão de <strong>90,53x</strong> supera a meta mínima de 20x em 4,5 vezes. Cada R$ 1 investido retornou R$ 90,53 em comissão para a imobiliária, comprovando a eficiência máxima da operação.</p>
+        </div>
+        <div class="insight-card success">
+          <h4>CPL Abaixo do Histórico</h4>
+          <p>O CPL atual das campanhas ativas está em <strong>R$ 17,40</strong>, bem abaixo do CPL operacional histórico de R$ 27,06. Leads chegando por um custo 36% menor — sinal de campanhas bem otimizadas.</p>
+        </div>
+        <div class="insight-card success">
+          <h4>Custo por Negócio: R$ 239</h4>
+          <p>Com apenas <strong>R$ 239,89 por venda</strong> e comissão média de R$ 21,7K, o ROI por negócio é de 90x. Há margem ampla para escalar o investimento mantendo retorno excepcional.</p>
+        </div>
+        <div class="insight-card warn">
+          <h4>Oportunidade: Google Ads</h4>
+          <p>Toda a verba está em <strong>Meta Ads</strong>. Ativar Google Ads para captar buscas ativas ("comprar imóvel Santa Maria") pode trazer leads com intenção de compra mais alta e complementar a estratégia.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <img src="https://drosagencia.com.br/wp-content/uploads/2025/12/DROS-LOGO-1-1024x1024.png" alt="Dros Agência" style="border-radius: 8px;">
+    <p>Relatório gerado por <a href="https://drosagencia.com.br" target="_blank">Dros Agência</a> — Marketing Digital orientado por dados</p>
+    <p style="margin-top: 6px;">1o Trimestre 2026 (01 Jan — 31 Mar) | Cliente: Invista Imóveis Santa Maria</p>
+    <p style="margin-top: 6px; color: var(--text-muted);">© 2026 Dros Agência. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    Chart.defaults.color = '#a0a0b8';
+    Chart.defaults.borderColor = 'rgba(42,42,58,0.5)';
+    Chart.defaults.font.family = 'Inter';
+    Chart.defaults.font.size = 12;
+
+    // Distribuição de investimento (doughnut)
+    new Chart(document.getElementById('chartPie'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Meta Ads (ativo)', 'Google Ads (não ativo)'],
+        datasets: [{
+          data: [100, 0],
+          backgroundColor: ['rgba(6,147,227,0.8)', 'rgba(42,42,58,0.3)'],
+          borderColor: ['rgba(6,147,227,1)', 'rgba(42,42,58,0.5)'],
+          borderWidth: 2,
+          hoverOffset: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom', labels: { padding: 14, boxWidth: 12 } },
+          tooltip: {
+            callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}%` }
+          }
+        }
+      }
+    });
+
+    // Scroll animation
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

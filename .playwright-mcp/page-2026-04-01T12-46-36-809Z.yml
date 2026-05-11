@@ -1,0 +1,84 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "Dros" [ref=e6]
+      - generic [ref=e7]: CRM
+    - navigation [ref=e8]:
+      - generic [ref=e9]: Admin
+      - link "Dashboard Global" [ref=e10] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - img [ref=e11]
+        - text: Dashboard Global
+      - link "Clientes" [ref=e16] [cursor=pointer]:
+        - /url: /admin/clients
+        - img [ref=e17]
+        - text: Clientes
+      - link "Usuarios" [ref=e21] [cursor=pointer]:
+        - /url: /admin/users
+        - img [ref=e22]
+        - text: Usuarios
+      - generic [ref=e26]: Gestao
+      - link "Dashboard" [ref=e27] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e28]
+        - text: Dashboard
+      - link "Pipeline" [ref=e33] [cursor=pointer]:
+        - /url: /pipeline
+        - img [ref=e34]
+        - text: Pipeline
+      - link "Leads" [ref=e35] [cursor=pointer]:
+        - /url: /leads
+        - img [ref=e36]
+        - text: Leads
+      - generic [ref=e41]: Configuracoes
+      - link "Disparos" [ref=e42] [cursor=pointer]:
+        - /url: /messages
+        - img [ref=e43]
+        - text: Disparos
+      - link "Equipe" [ref=e45] [cursor=pointer]:
+        - /url: /team
+        - img [ref=e46]
+        - text: Equipe
+      - link "Funis" [ref=e58] [cursor=pointer]:
+        - /url: /funnels
+        - img [ref=e59]
+        - text: Funis
+      - link "Integracoes" [ref=e63] [cursor=pointer]:
+        - /url: /integrations
+        - img [ref=e64]
+        - text: Integracoes
+      - link "Configuracoes" [ref=e66] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e67]
+        - text: Configuracoes
+    - generic [ref=e70]:
+      - generic [ref=e71]:
+        - generic [ref=e72]: Dros Admin
+        - generic [ref=e73]: Admin
+      - button "Sair" [ref=e74] [cursor=pointer]:
+        - img [ref=e75]
+  - main [ref=e78]:
+    - generic [ref=e79]:
+      - generic [ref=e80]:
+        - heading "Configuracoes" [level=1] [ref=e81]:
+          - img [ref=e82]
+          - text: Configuracoes
+        - button "Salvo!" [active] [ref=e107] [cursor=pointer]:
+          - img [ref=e108]
+          - text: Salvo!
+      - generic [ref=e90]:
+        - generic [ref=e91]:
+          - img [ref=e92]
+          - text: Distribuicao de Leads (Roleta)
+        - paragraph [ref=e95]: Configure como os leads sao distribuidos automaticamente quando chegam via WhatsApp, formularios ou site.
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]:
+              - heading "Funil Principal" [level=3] [ref=e99]
+              - text: FUNIL PADRAO
+            - generic [ref=e100]:
+              - button "Manual" [ref=e101] [cursor=pointer]
+              - button "Roleta" [ref=e102] [cursor=pointer]:
+                - img [ref=e103]
+                - text: Roleta
+          - generic [ref=e106]: Leads chegam sem atendente. O gerente distribui manualmente.

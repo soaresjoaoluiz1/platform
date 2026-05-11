@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;600&display=swap' rel='stylesheet'>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 800px; height: 1000px; overflow: hidden; background: #2A0810; }
+
+.post {
+  position: relative;
+  width: 800px;
+  height: 1000px;
+  overflow: hidden;
+  background: #2A0810;
+}
+
+.bg { position: absolute; inset: 0; background: #2A0810; }
+
+.photo {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 105%;
+  width: auto;
+  object-fit: cover;
+}
+
+.grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    108deg,
+    #2A0810 0%,
+    #2A0810 16%,
+    rgba(42,8,16,0.97) 30%,
+    rgba(42,8,16,0.90) 44%,
+    rgba(42,8,16,0.65) 56%,
+    rgba(42,8,16,0.30) 68%,
+    rgba(42,8,16,0.08) 78%,
+    transparent 86%
+  );
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  padding: 46px 44px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #BE123C;
+  color: #FFF1F2;
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 7px 22px;
+  border-radius: 100px;
+  align-self: flex-start;
+  margin-bottom: 28px;
+}
+
+h1 {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-weight: 900;
+  font-size: 96px;
+  line-height: 0.87;
+  letter-spacing: -3px;
+  text-transform: uppercase;
+  color: #fff;
+  max-width: 450px;
+  margin-bottom: 26px;
+}
+
+h1 .ac { color: #FECDD3; display: block; }
+
+.sub {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 21px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.45;
+  max-width: 340px;
+  margin-bottom: 32px;
+}
+
+.highlight-text {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #FECDD3;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.2;
+  max-width: 380px;
+  margin-bottom: 28px;
+}
+
+.stats-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  max-width: 380px;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  padding: 14px 10px;
+  border: 1px solid rgba(190,18,60,0.4);
+  background: rgba(190,18,60,0.12);
+}
+
+.stat:not(:last-child) {
+  border-right: none;
+}
+
+.stat-num {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: #FECDD3;
+  display: block;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.date-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.date-pill {
+  background: #BE123C;
+  color: #fff;
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  padding: 6px 20px;
+  border-radius: 4px;
+}
+
+.date-sub {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.spacer { flex: 1; }
+
+.author-area {
+  padding-bottom: 18px;
+}
+
+.author-name {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.author-title {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 14px;
+  color: #FECDD3;
+}
+
+.footer {
+  background: rgba(15,3,8,0.93);
+  border-top: 2.5px solid #BE123C;
+  margin: 0 -44px;
+  padding: 16px 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.ft { font-family: 'Barlow', Arial, sans-serif; font-size: 13px; color: rgba(255,255,255,0.45); }
+
+.cta {
+  background: #BE123C;
+  color: #fff;
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+</style>
+</head>
+<body>
+<div class='post'>
+  <div class='bg'></div>
+  <img class='photo' src='https://drive.google.com/thumbnail?id=1us3L-RHCIlinbeQJmChTdeYZFdvk9xgQ&sz=w1200' alt='Josi' />
+  <div class='grad'></div>
+  <div class='content'>
+    <div class='badge'>✦ AULÃO GRATUITO</div>
+    <h1>CHEGA DE<span class='ac'>INSEGU-<br>RANÇA</span></h1>
+    <p class='sub'>Aprenda a estrutura usada em +500 casos reais de avaliação clínica</p>
+    <div class='highlight-text'>A estrutura que vai mudar<br>a forma de decidir na clínica</div>
+    <div class='stats-row'>
+      <div class='stat'><span class='stat-num'>+10</span><span class='stat-label'>anos de prática</span></div>
+      <div class='stat'><span class='stat-num'>+500</span><span class='stat-label'>casos acomp.</span></div>
+      <div class='stat'><span class='stat-num'>+200</span><span class='stat-label'>profissionais</span></div>
+    </div>
+    <div class='date-line'>
+      <div class='date-pill'>09 DE ABRIL</div>
+      <span class='date-sub'>Online · Gratuito</span>
+    </div>
+    <div class='spacer'></div>
+    <div class='author-area'>
+      <div class='author-name'>Josi Terapeuta</div>
+      <div class='author-title'>Terapeuta · Especialista em Avaliação Clínica</div>
+    </div>
+    <div class='footer'>
+      <span class='ft'>mais informações</span>
+      <button class='cta'>INSCREVA-SE GRÁTIS</button>
+      <span class='ft'>aqui abaixo</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

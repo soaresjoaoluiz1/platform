@@ -1,0 +1,5 @@
+id,name,icon,path,execution,skills,tasks
+renata-rastreio,Renata Rastreio,🔍,./agents/renata-rastreio.agent.md,subagent,"web_search,web_fetch","tasks/find-news.md,tasks/rank-stories.md"
+carlos-carrossel,Carlos Carrossel,✍️,./agents/carlos-carrossel.agent.md,inline,,"tasks/generate-angles.md,tasks/create-carousel.md,tasks/optimize-carousel.md"
+daniela-design,Daniela Design,🎨,./agents/daniela-design.agent.md,inline,image-creator,"tasks/design-slides.md,tasks/render-slides.md"
+vera-veredito,Vera Veredito,⭐,./agents/vera-veredito.agent.md,inline,,"tasks/score-content.md,tasks/generate-feedback.md"

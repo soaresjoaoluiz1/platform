@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;600&display=swap' rel='stylesheet'>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 800px; height: 1000px; overflow: hidden; background: #160B35; }
+
+.post {
+  position: relative;
+  width: 800px;
+  height: 1000px;
+  overflow: hidden;
+  background: #160B35;
+}
+
+/* Solid bg base */
+.bg { position: absolute; inset: 0; background: #160B35; }
+
+/* Photo: full height, auto width, aligned right */
+.photo {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 105%;
+  width: auto;
+  object-fit: cover;
+}
+
+/* Gradient: dark left → transparent right */
+.grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    #160B35 0%,
+    #160B35 16%,
+    rgba(22,11,53,0.96) 30%,
+    rgba(22,11,53,0.87) 44%,
+    rgba(22,11,53,0.62) 56%,
+    rgba(22,11,53,0.28) 68%,
+    rgba(22,11,53,0.08) 78%,
+    transparent 86%
+  );
+}
+
+/* Main content */
+.content {
+  position: absolute;
+  inset: 0;
+  padding: 46px 44px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #7C3AED;
+  color: #EDE9FE;
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 7px 22px;
+  border-radius: 100px;
+  align-self: flex-start;
+  margin-bottom: 30px;
+}
+
+.badge-dot { width: 7px; height: 7px; background: #C4B5FD; border-radius: 50%; display: inline-block; }
+
+h1 {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-weight: 900;
+  font-size: 106px;
+  line-height: 0.86;
+  letter-spacing: -3px;
+  text-transform: uppercase;
+  color: #fff;
+  max-width: 470px;
+  margin-bottom: 26px;
+}
+
+h1 .ac { color: #C4B5FD; display: block; }
+
+.sub {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.45;
+  max-width: 330px;
+  margin-bottom: 34px;
+}
+
+.date-block {
+  display: inline-block;
+  border-left: 4px solid #A78BFA;
+  padding-left: 16px;
+  margin-bottom: 14px;
+}
+
+.date-label {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #A78BFA;
+  margin-bottom: 4px;
+}
+
+.date-num {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #fff;
+  line-height: 1;
+}
+
+.detail {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.spacer { flex: 1; }
+
+.author-area {
+  padding-bottom: 20px;
+}
+
+.author-name {
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.author-creds {
+  display: flex;
+  gap: 18px;
+}
+
+.cred-item {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 13px;
+  color: #C4B5FD;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cred-item::before { content: '•'; color: #7C3AED; font-size: 18px; }
+
+/* Footer bar */
+.footer {
+  background: rgba(8,4,20,0.92);
+  border-top: 2.5px solid #7C3AED;
+  margin: 0 -44px;
+  padding: 16px 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.ft { font-family: 'Barlow', Arial, sans-serif; font-size: 13px; color: rgba(255,255,255,0.45); }
+
+.cta {
+  background: #7C3AED;
+  color: #fff;
+  font-family: 'Barlow Condensed', Impact, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+</style>
+</head>
+<body>
+<div class='post'>
+  <div class='bg'></div>
+  <img class='photo' src='https://drive.google.com/thumbnail?id=1AwFyjWHJcPg1xjx7KKbdvV_gyVw5QNKs&sz=w1200' alt='Josi' />
+  <div class='grad'></div>
+  <div class='content'>
+    <div class='badge'><span class='badge-dot'></span> AO VIVO · ONLINE</div>
+    <h1>AULÃO<span class='ac'>GRATUITO</span></h1>
+    <p class='sub'>Estrutura de Decisão Clínica<br>para terapeutas e psicopedagogas</p>
+    <div class='date-block'>
+      <div class='date-label'>data do evento</div>
+      <div class='date-num'>09 DE ABRIL</div>
+    </div>
+    <div class='detail'>Online · Ao vivo · Vagas limitadas</div>
+    <div class='spacer'></div>
+    <div class='author-area'>
+      <div class='author-name'>Josi Terapeuta</div>
+      <div class='author-creds'>
+        <span class='cred-item'>+10 anos</span>
+        <span class='cred-item'>+500 casos</span>
+        <span class='cred-item'>+200 profissionais</span>
+      </div>
+    </div>
+    <div class='footer'>
+      <span class='ft'>mais informações</span>
+      <button class='cta'>QUERO MEU LUGAR</button>
+      <span class='ft'>aqui abaixo</span>
+    </div>
+  </div>
+</div>
+
+<style>
+#edit-toolbar {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e1e;
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  font-family: sans-serif;
+  font-size: 13px;
+  color: #fff;
+  user-select: none;
+}
+#edit-toolbar button {
+  background: #333;
+  border: 1px solid #555;
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+#edit-toolbar button:hover { background: #555; }
+#edit-toolbar label { color: #aaa; font-size: 12px; }
+#color-picker {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+  background: none;
+}
+#font-size-display {
+  min-width: 36px;
+  text-align: center;
+  font-size: 13px;
+  color: #ccc;
+}
+</style>
+
+<div id="edit-toolbar">
+  <label>Tamanho:</label>
+  <button id="btn-minus" title="Diminuir">−</button>
+  <span id="font-size-display">—</span>
+  <button id="btn-plus" title="Aumentar">+</button>
+  <label style="margin-left:8px">Cor:</label>
+  <input type="color" id="color-picker" value="#ffffff" title="Mudar cor">
+</div>
+
+<script>
+let activeEl = null;
+
+document.querySelectorAll('h1, p, span, div, button').forEach(el => {
+  if (el.children.length === 0 || el.tagName === 'BUTTON') {
+    el.contentEditable = 'true';
+    el.style.outline = 'none';
+    el.style.cursor = 'text';
+    el.addEventListener('focus', () => {
+      activeEl = el;
+      const fs = parseFloat(window.getComputedStyle(el).fontSize);
+      document.getElementById('font-size-display').textContent = Math.round(fs) + 'px';
+      const color = window.getComputedStyle(el).color;
+      document.getElementById('color-picker').value = rgbToHex(color);
+    });
+  }
+});
+
+document.getElementById('btn-plus').addEventListener('mousedown', e => {
+  e.preventDefault();
+  if (!activeEl) return;
+  const fs = parseFloat(window.getComputedStyle(activeEl).fontSize);
+  activeEl.style.fontSize = (fs + 2) + 'px';
+  document.getElementById('font-size-display').textContent = Math.round(fs + 2) + 'px';
+});
+
+document.getElementById('btn-minus').addEventListener('mousedown', e => {
+  e.preventDefault();
+  if (!activeEl) return;
+  const fs = parseFloat(window.getComputedStyle(activeEl).fontSize);
+  activeEl.style.fontSize = Math.max(8, fs - 2) + 'px';
+  document.getElementById('font-size-display').textContent = Math.round(Math.max(8, fs - 2)) + 'px';
+});
+
+document.getElementById('color-picker').addEventListener('input', e => {
+  if (!activeEl) return;
+  activeEl.style.color = e.target.value;
+});
+
+function rgbToHex(rgb) {
+  const match = rgb.match(/\d+/g);
+  if (!match) return '#ffffff';
+  return '#' + match.slice(0,3).map(n => parseInt(n).toString(16).padStart(2,'0')).join('');
+}
+</script>
+</body>
+</html>

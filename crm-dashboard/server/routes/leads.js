@@ -1,20 +1,45 @@
 import { Router } from 'express'
+import fetch from 'node-fetch'
 import db from '../db.js'
 import { requireRole } from '../middleware/auth.js'
 import { broadcastSSE } from '../sse.js'
 
 const router = Router()
 
+// Normalize phone to Brazil format (55DDXXXXXXXXX = 13 digits)
+// Only normalizes when we have enough info. Never invents DDD.
+function normalizePhone(phone) {
+  if (!phone) return phone
+  phone = phone.replace(/[^\d]/g, '')
+  // 13 dig starting with 55 → already correct
+  if (phone.startsWith('55') && phone.length === 13) return phone
+  // 12 dig starting with 55 (55+DDD+8dig) → add 9 after DDD
+  if (phone.startsWith('55') && phone.length === 12) return phone.slice(0, 4) + '9' + phone.slice(4)
+  // 11 dig NOT starting with 55 (DDD+9+8dig) → add 55
+  if (!phone.startsWith('55') && phone.length === 11) return '55' + phone
+  // 10 dig NOT starting with 55 (DDD+8dig) → add 55 + 9 after DDD
+  if (!phone.startsWith('55') && phone.length === 10) return '55' + phone.slice(0, 2) + '9' + phone.slice(2)
+  // Anything else (9 dig, 11 with 55, etc): return as-is — can't normalize safely, no DDD
+  return phone
+}
+
 // List leads with filters
 router.get('/', (req, res) => {
   if (!req.accountId) return res.status(400).json({ error: 'account_id required' })
 
-  const { stage_id, attendant_id, funnel_id, source, tag, city, search, date_from, date_to, page = '1', limit = '50' } = req.query
+  const { stage_id, attendant_id, funnel_id, source, tag, city, search, date_from, date_to, show_archived, page = '1', limit = '50' } = req.query
   const where = ['l.account_id = ?', 'l.is_active = 1']
   const params = [req.accountId]
 
-  // Atendente sees only their leads
-  if (req.user.role === 'atendente') { where.push('l.attendant_id = ?'); params.push(req.user.id) }
+  // Archive filter: default hides archived; pass show_archived=1 to list only archived, =all to include both
+  if (show_archived === '1') where.push('l.is_archived = 1')
+  else if (show_archived !== 'all') where.push('l.is_archived = 0')
+
+  // Atendente sees leads where he is the main attendant OR assigned to any instance of the lead
+  if (req.user.role === 'atendente') {
+    where.push('(l.attendant_id = ? OR l.id IN (SELECT lead_id FROM lead_instance_assignments WHERE attendant_id = ?))')
+    params.push(req.user.id, req.user.id)
+  }
 
   if (stage_id) { where.push('l.stage_id = ?'); params.push(stage_id) }
   if (attendant_id) { where.push('l.attendant_id = ?'); params.push(attendant_id) }
@@ -35,11 +60,13 @@ router.get('/', (req, res) => {
   const offset = (parseInt(page) - 1) * parseInt(limit)
   const sql = `
     SELECT l.*, fs.name as stage_name, fs.color as stage_color, u.name as attendant_name,
+      wi.instance_name as instance_name,
       (SELECT content FROM messages WHERE lead_id = l.id ORDER BY created_at DESC LIMIT 1) as last_message,
       (SELECT COUNT(*) FROM messages WHERE lead_id = l.id) as message_count
     FROM leads l
     LEFT JOIN funnel_stages fs ON l.stage_id = fs.id
     LEFT JOIN users u ON l.attendant_id = u.id
+    LEFT JOIN whatsapp_instances wi ON l.instance_id = wi.id
     WHERE ${where.join(' AND ')}
     ORDER BY l.updated_at DESC
     LIMIT ? OFFSET ?
@@ -60,10 +87,15 @@ router.get('/', (req, res) => {
   res.json({ leads, total, page: parseInt(page), totalPages: Math.ceil(total / parseInt(limit)) })
 })
 
-// Create lead manually
-router.post('/', requireRole('super_admin', 'gerente'), (req, res) => {
+// Create lead manually — atendente can create too, but lead is force-assigned to them
+router.post('/', (req, res) => {
   if (!req.accountId) return res.status(400).json({ error: 'account_id required' })
-  const { name, phone, email, city, source, source_detail, notes, funnel_id, attendant_id } = req.body
+  let { name, phone, email, city, source, source_detail, notes, funnel_id, attendant_id, instance_id, empresa, cpf_cnpj, instagram, trabalha_anuncio, investimento_anuncios } = req.body
+
+  phone = normalizePhone(phone)
+
+  // Atendente only sees own leads, so creation always self-assigns
+  if (req.user.role === 'atendente') attendant_id = req.user.id
 
   // Get default funnel if not specified
   let fid = funnel_id
@@ -77,10 +109,16 @@ router.post('/', requireRole('super_admin', 'gerente'), (req, res) => {
   const firstStage = db.prepare('SELECT id FROM funnel_stages WHERE funnel_id = ? ORDER BY position LIMIT 1').get(fid)
   if (!firstStage) return res.status(400).json({ error: 'Funil sem etapas' })
 
+  // Default instance_id to the most recently created connected instance for this account
+  if (!instance_id) {
+    const def = db.prepare("SELECT id FROM whatsapp_instances WHERE account_id = ? AND status = 'connected' ORDER BY id DESC LIMIT 1").get(req.accountId)
+    instance_id = def?.id || null
+  }
+
   const result = db.prepare(`
-    INSERT INTO leads (account_id, funnel_id, stage_id, attendant_id, name, phone, email, city, source, source_detail, notes)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(req.accountId, fid, firstStage.id, attendant_id || null, name, phone, email, city, source || 'manual', source_detail, notes)
+    INSERT INTO leads (account_id, funnel_id, stage_id, attendant_id, instance_id, name, phone, email, city, source, source_detail, notes, empresa, cpf_cnpj, instagram, trabalha_anuncio, investimento_anuncios, opted_in_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+  `).run(req.accountId, fid, firstStage.id, attendant_id || null, instance_id || null, name, phone, email, city, source || 'manual', source_detail, notes, empresa || null, cpf_cnpj || null, instagram || null, trabalha_anuncio ? 1 : 0, investimento_anuncios || null)
 
   // Log stage history
   db.prepare('INSERT INTO stage_history (lead_id, to_stage_id, trigger_type, triggered_by) VALUES (?, ?, ?, ?)').run(
@@ -92,15 +130,32 @@ router.post('/', requireRole('super_admin', 'gerente'), (req, res) => {
   res.json({ lead })
 })
 
+// Archived count (+ count with new activity). Must be declared before `/:id`.
+router.get('/archived-count', (req, res) => {
+  if (!req.accountId) return res.json({ count: 0, withActivity: 0 })
+  const base = req.user.role === 'atendente'
+    ? { where: 'account_id = ? AND is_archived = 1 AND attendant_id = ?', args: [req.accountId, req.user.id] }
+    : { where: 'account_id = ? AND is_archived = 1', args: [req.accountId] }
+  const count = db.prepare(`SELECT COUNT(*) as n FROM leads WHERE ${base.where}`).get(...base.args).n
+  const withActivity = db.prepare(`SELECT COUNT(*) as n FROM leads WHERE ${base.where} AND has_new_after_archive = 1`).get(...base.args).n
+  res.json({ count, withActivity })
+})
+
 // Get lead detail
 router.get('/:id', (req, res) => {
   const lead = db.prepare(`
-    SELECT l.*, fs.name as stage_name, fs.color as stage_color, u.name as attendant_name
-    FROM leads l LEFT JOIN funnel_stages fs ON l.stage_id = fs.id LEFT JOIN users u ON l.attendant_id = u.id
+    SELECT l.*, fs.name as stage_name, fs.color as stage_color, u.name as attendant_name, wi.instance_name as instance_name
+    FROM leads l LEFT JOIN funnel_stages fs ON l.stage_id = fs.id LEFT JOIN users u ON l.attendant_id = u.id LEFT JOIN whatsapp_instances wi ON l.instance_id = wi.id
     WHERE l.id = ?
   `).get(req.params.id)
   if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
-  if (req.user.role === 'atendente' && lead.attendant_id !== req.user.id) return res.status(403).json({ error: 'Sem permissao' })
+  if (req.user.role === 'atendente' && lead.attendant_id !== req.user.id && !db.prepare('SELECT 1 FROM lead_instance_assignments WHERE lead_id = ? AND attendant_id = ?').get(lead.id, req.user.id)) return res.status(403).json({ error: 'Sem permissao' })
+
+  // Opening an archived lead acknowledges any new activity — clear the badge
+  if (lead.is_archived && lead.has_new_after_archive) {
+    db.prepare('UPDATE leads SET has_new_after_archive = 0 WHERE id = ?').run(lead.id)
+    lead.has_new_after_archive = 0
+  }
 
   lead.tags = db.prepare('SELECT t.id, t.name, t.color FROM lead_tags lt JOIN tags t ON lt.tag_id = t.id WHERE lt.lead_id = ?').all(lead.id)
   const messages = db.prepare('SELECT * FROM messages WHERE lead_id = ? ORDER BY created_at DESC LIMIT 50').all(lead.id)
@@ -117,12 +172,64 @@ router.get('/:id', (req, res) => {
   res.json({ lead, messages: messages.reverse(), stageHistory, notes })
 })
 
+// List conversations (instancias) of a lead — uma "tab" por instancia
+router.get('/:id/conversations', (req, res) => {
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  if (req.accountId && lead.account_id !== req.accountId) return res.status(403).json({ error: 'Sem permissao' })
+
+  // Quais instancias o user pode ver?
+  // - super_admin/gerente: todas as instancias que conversaram com este lead
+  // - atendente: apenas onde tem assignment OU e atendente principal do lead
+  let convs
+  if (req.user.role === 'atendente') {
+    convs = db.prepare(`
+      SELECT DISTINCT
+        wi.id as instance_id,
+        wi.instance_name,
+        wi.status,
+        lia.attendant_id,
+        u.name as attendant_name,
+        (SELECT COUNT(*) FROM messages WHERE lead_id = ? AND instance_id = wi.id) as msg_count,
+        (SELECT MAX(created_at) FROM messages WHERE lead_id = ? AND instance_id = wi.id) as last_msg_at
+      FROM whatsapp_instances wi
+      LEFT JOIN lead_instance_assignments lia ON lia.instance_id = wi.id AND lia.lead_id = ?
+      LEFT JOIN users u ON u.id = lia.attendant_id
+      WHERE wi.account_id = ?
+        AND (lia.attendant_id = ? OR ? = ?)
+        AND EXISTS (SELECT 1 FROM messages WHERE lead_id = ? AND instance_id = wi.id)
+      ORDER BY last_msg_at DESC
+    `).all(lead.id, lead.id, lead.id, lead.account_id, req.user.id, lead.attendant_id, req.user.id, lead.id)
+  } else {
+    convs = db.prepare(`
+      SELECT
+        wi.id as instance_id,
+        wi.instance_name,
+        wi.status,
+        lia.attendant_id,
+        u.name as attendant_name,
+        (SELECT COUNT(*) FROM messages WHERE lead_id = ? AND instance_id = wi.id) as msg_count,
+        (SELECT MAX(created_at) FROM messages WHERE lead_id = ? AND instance_id = wi.id) as last_msg_at
+      FROM whatsapp_instances wi
+      LEFT JOIN lead_instance_assignments lia ON lia.instance_id = wi.id AND lia.lead_id = ?
+      LEFT JOIN users u ON u.id = lia.attendant_id
+      WHERE wi.account_id = ?
+        AND EXISTS (SELECT 1 FROM messages WHERE lead_id = ? AND instance_id = wi.id)
+      ORDER BY last_msg_at DESC
+    `).all(lead.id, lead.id, lead.id, lead.account_id, lead.id)
+  }
+  res.json({ conversations: convs })
+})
+
 // Update lead
 router.put('/:id', (req, res) => {
   const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
   if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
 
-  const { name, phone, email, city, notes, custom_fields } = req.body
+  let { name, phone, email, city, notes, custom_fields, empresa, cpf_cnpj, instagram, trabalha_anuncio, investimento_anuncios } = req.body
+
+  phone = normalizePhone(phone)
+
   const sets = []; const params = []
   if (name !== undefined) { sets.push('name = ?'); params.push(name) }
   if (phone !== undefined) { sets.push('phone = ?'); params.push(phone) }
@@ -130,6 +237,11 @@ router.put('/:id', (req, res) => {
   if (city !== undefined) { sets.push('city = ?'); params.push(city) }
   if (notes !== undefined) { sets.push('notes = ?'); params.push(notes) }
   if (custom_fields !== undefined) { sets.push('custom_fields = ?'); params.push(JSON.stringify(custom_fields)) }
+  if (empresa !== undefined) { sets.push('empresa = ?'); params.push(empresa || null) }
+  if (cpf_cnpj !== undefined) { sets.push('cpf_cnpj = ?'); params.push(cpf_cnpj || null) }
+  if (instagram !== undefined) { sets.push('instagram = ?'); params.push(instagram || null) }
+  if (trabalha_anuncio !== undefined) { sets.push('trabalha_anuncio = ?'); params.push(trabalha_anuncio ? 1 : 0) }
+  if (investimento_anuncios !== undefined) { sets.push('investimento_anuncios = ?'); params.push(investimento_anuncios || null) }
   if (sets.length === 0) return res.status(400).json({ error: 'Nada pra atualizar' })
   sets.push("updated_at = datetime('now')")
   params.push(req.params.id)
@@ -153,8 +265,30 @@ router.put('/:id/stage', (req, res) => {
     lead.id, oldStageId, stage_id, 'manual', req.user.id
   )
 
-  const updated = db.prepare('SELECT l.*, fs.name as stage_name, fs.color as stage_color FROM leads l LEFT JOIN funnel_stages fs ON l.stage_id = fs.id WHERE l.id = ?').get(lead.id)
+  const updated = db.prepare('SELECT l.*, fs.name as stage_name, fs.color as stage_color, wi.instance_name as instance_name FROM leads l LEFT JOIN funnel_stages fs ON l.stage_id = fs.id LEFT JOIN whatsapp_instances wi ON l.instance_id = wi.id WHERE l.id = ?').get(lead.id)
   try { broadcastSSE(lead.account_id, 'lead:updated', updated) } catch {}
+  res.json({ lead: updated })
+})
+
+// Archive lead — hides from pipeline/chat; messages still stored but don't broadcast
+router.patch('/:id/archive', (req, res) => {
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  if (req.user.role === 'atendente' && lead.attendant_id !== req.user.id && !db.prepare('SELECT 1 FROM lead_instance_assignments WHERE lead_id = ? AND attendant_id = ?').get(lead.id, req.user.id)) return res.status(403).json({ error: 'Sem permissao' })
+  db.prepare("UPDATE leads SET is_archived = 1, archived_at = datetime('now'), has_new_after_archive = 0, updated_at = datetime('now') WHERE id = ?").run(lead.id)
+  const updated = db.prepare('SELECT * FROM leads WHERE id = ?').get(lead.id)
+  try { broadcastSSE(lead.account_id, 'lead:archived', { id: lead.id }) } catch {}
+  res.json({ lead: updated })
+})
+
+// Unarchive lead — returns it to the active pipeline/chat
+router.patch('/:id/unarchive', (req, res) => {
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  if (req.user.role === 'atendente' && lead.attendant_id !== req.user.id && !db.prepare('SELECT 1 FROM lead_instance_assignments WHERE lead_id = ? AND attendant_id = ?').get(lead.id, req.user.id)) return res.status(403).json({ error: 'Sem permissao' })
+  db.prepare("UPDATE leads SET is_archived = 0, archived_at = NULL, has_new_after_archive = 0, updated_at = datetime('now') WHERE id = ?").run(lead.id)
+  const updated = db.prepare('SELECT * FROM leads WHERE id = ?').get(lead.id)
+  try { broadcastSSE(lead.account_id, 'lead:unarchived', updated) } catch {}
   res.json({ lead: updated })
 })
 
@@ -167,6 +301,29 @@ router.put('/:id/assign', requireRole('super_admin', 'gerente'), (req, res) => {
   const updated = db.prepare('SELECT * FROM leads WHERE id = ?').get(lead.id)
   try { broadcastSSE(lead.account_id, 'lead:updated', updated) } catch {}
   res.json({ lead: updated })
+})
+
+// Refresh profile picture from Evolution API
+router.post('/:id/refresh-profile-pic', async (req, res) => {
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
+  if (!lead || !lead.phone) return res.status(404).json({ error: 'Lead nao encontrado ou sem telefone' })
+  const instance = lead.instance_id
+    ? db.prepare('SELECT * FROM whatsapp_instances WHERE id = ?').get(lead.instance_id)
+    : db.prepare("SELECT * FROM whatsapp_instances WHERE account_id = ? AND status = 'connected' LIMIT 1").get(lead.account_id)
+  if (!instance) return res.status(400).json({ error: 'Sem instancia WhatsApp' })
+  try {
+    const r = await fetch(`${instance.api_url}/chat/fetchProfilePictureUrl/${instance.instance_name}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: instance.api_key },
+      body: JSON.stringify({ number: lead.phone }),
+    })
+    const data = await r.json()
+    const url = data?.profilePictureUrl || null
+    db.prepare("UPDATE leads SET profile_pic_url = ?, profile_pic_updated_at = datetime('now') WHERE id = ?").run(url, lead.id)
+    res.json({ profile_pic_url: url })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
 })
 
 // Add tag
@@ -251,10 +408,57 @@ router.post('/tags/create', requireRole('super_admin', 'gerente'), (req, res) =>
   } catch { res.status(400).json({ error: 'Tag ja existe' }) }
 })
 
+router.put('/tags/:tagId', requireRole('super_admin', 'gerente'), (req, res) => {
+  if (!req.accountId) return res.status(400).json({ error: 'account_id required' })
+  const tag = db.prepare('SELECT * FROM tags WHERE id = ? AND account_id = ?').get(req.params.tagId, req.accountId)
+  if (!tag) return res.status(404).json({ error: 'Tag nao encontrada' })
+  const { name, color } = req.body
+  const sets = []
+  const params = []
+  if (name !== undefined && name.trim()) { sets.push('name = ?'); params.push(name.trim()) }
+  if (color !== undefined) { sets.push('color = ?'); params.push(color) }
+  if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
+  params.push(req.params.tagId)
+  try {
+    db.prepare(`UPDATE tags SET ${sets.join(', ')} WHERE id = ?`).run(...params)
+    const updated = db.prepare('SELECT * FROM tags WHERE id = ?').get(req.params.tagId)
+    res.json({ tag: updated })
+  } catch { res.status(400).json({ error: 'Nome ja existe' }) }
+})
+
 router.delete('/tags/:tagId', requireRole('super_admin', 'gerente'), (req, res) => {
   db.prepare('DELETE FROM lead_tags WHERE tag_id = ?').run(req.params.tagId)
   db.prepare('DELETE FROM tags WHERE id = ?').run(req.params.tagId)
   res.json({ ok: true })
+})
+
+// =============================================
+// OPT-IN / OPT-OUT (WhatsApp broadcast consent)
+// =============================================
+
+router.post('/:id/opt-in', (req, res) => {
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  db.prepare("UPDATE leads SET opted_in_at = datetime('now'), opted_out_at = NULL WHERE id = ?").run(lead.id)
+  res.json({ ok: true })
+})
+
+router.post('/:id/opt-out', (req, res) => {
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  db.prepare("UPDATE leads SET opted_out_at = datetime('now') WHERE id = ?").run(lead.id)
+  res.json({ ok: true })
+})
+
+// Bulk opt-in
+router.post('/bulk/opt-in', (req, res) => {
+  if (!req.accountId) return res.status(400).json({ error: 'account_id required' })
+  const { lead_ids } = req.body
+  if (!lead_ids?.length) return res.status(400).json({ error: 'lead_ids required' })
+  const stmt = db.prepare("UPDATE leads SET opted_in_at = datetime('now'), opted_out_at = NULL WHERE id = ? AND account_id = ?")
+  let count = 0
+  for (const id of lead_ids) { stmt.run(id, req.accountId); count++ }
+  res.json({ ok: true, count })
 })
 
 // =============================================
@@ -299,7 +503,7 @@ router.get('/pipeline/metrics', (req, res) => {
       COUNT(l.id) as lead_count,
       AVG(CASE WHEN l.updated_at != l.created_at THEN (julianday(l.updated_at) - julianday(l.created_at)) * 24 ELSE NULL END) as avg_hours_in_stage
     FROM funnel_stages fs
-    LEFT JOIN leads l ON l.stage_id = fs.id AND l.is_active = 1
+    LEFT JOIN leads l ON l.stage_id = fs.id AND l.is_active = 1 AND l.is_archived = 0
     WHERE fs.funnel_id = ?
     GROUP BY fs.id
     ORDER BY fs.position

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currículo - João Luiz Soares</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    color: #1a1a1a;
+    background: #fff;
+    font-size: 9.5pt;
+    line-height: 1.35;
+  }
+  .page {
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    display: flex;
+    overflow: hidden;
+  }
+  .sidebar {
+    width: 68mm;
+    background: #0f1b2d;
+    color: #e0e6ed;
+    padding: 20px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .sidebar h3 {
+    color: #4fc3f7;
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid #2a3a4e;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .sidebar p, .sidebar li {
+    font-size: 8pt;
+    color: #c5cdd8;
+    line-height: 1.35;
+  }
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  .sidebar ul li {
+    padding: 1px 0;
+    padding-left: 12px;
+    position: relative;
+  }
+  .sidebar ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: #4fc3f7;
+    font-size: 8pt;
+  }
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 3px;
+    font-size: 8pt;
+  }
+  .contact-icon {
+    color: #4fc3f7;
+    font-size: 8pt;
+    min-width: 14px;
+    text-align: center;
+  }
+  .main-content {
+    flex: 1;
+    padding: 20px 22px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .header-name {
+    font-size: 20pt;
+    font-weight: 700;
+    color: #0f1b2d;
+    letter-spacing: -0.5px;
+  }
+  .header-title {
+    font-size: 10pt;
+    color: #4fc3f7;
+    font-weight: 600;
+    margin-top: 1px;
+  }
+  .header-sub {
+    font-size: 8.5pt;
+    color: #666;
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .section { margin-top: 1px; }
+  .section-title {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #0f1b2d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #4fc3f7;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+  }
+  .exp-item { margin-bottom: 7px; }
+  .exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .exp-role {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .exp-period {
+    font-size: 8pt;
+    color: #888;
+    white-space: nowrap;
+  }
+  .exp-company {
+    font-size: 8.5pt;
+    color: #4fc3f7;
+    font-weight: 600;
+  }
+  .exp-desc {
+    font-size: 8.5pt;
+    color: #444;
+    margin-top: 2px;
+  }
+  .exp-desc ul {
+    list-style: none;
+    padding: 0;
+  }
+  .exp-desc ul li {
+    padding-left: 12px;
+    position: relative;
+    margin-bottom: 1px;
+  }
+  .exp-desc ul li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #4fc3f7;
+    font-size: 7pt;
+  }
+  .highlight-box {
+    background: #f0f8ff;
+    border-left: 3px solid #4fc3f7;
+    padding: 5px 10px;
+    margin-top: 3px;
+    border-radius: 0 4px 4px 0;
+  }
+  .highlight-box p {
+    font-size: 8pt;
+    color: #333;
+    margin-bottom: 1px;
+  }
+  .edu-item { margin-bottom: 4px; }
+  .edu-course {
+    font-size: 9pt;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .edu-school {
+    font-size: 8pt;
+    color: #666;
+  }
+  .skill-tag {
+    display: inline-block;
+    background: #e8f4fd;
+    color: #0f1b2d;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 8.5pt;
+    margin: 1px 2px;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div>
+      <h3>Contato</h3>
+      <div class="contact-item">
+        <span class="contact-icon">@</span>
+        <span>joaoluizsoares.m@gmail.com</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">in</span>
+        <span>linkedin.com/in/soaresjoaomkt</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">◉</span>
+        <span>Porto Alegre, RS — Brasil</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">◎</span>
+        <span>Bairro Praia de Belas</span>
+      </div>
+    </div>
+
+    <div>
+      <h3>Plataformas de Ads</h3>
+      <ul>
+        <li>Meta Ads (Facebook/Instagram)</li>
+        <li>Google Ads (Search, Display, YouTube, PMax)</li>
+        <li>LinkedIn Ads</li>
+        <li>TikTok Ads</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Ferramentas</h3>
+      <ul>
+        <li>Google Analytics 4 (GA4)</li>
+        <li>Google Tag Manager (GTM)</li>
+        <li>Looker Studio</li>
+        <li>Hotjar</li>
+        <li>RD Station</li>
+        <li>HubSpot</li>
+        <li>Zapier / N8N / Make</li>
+        <li>Monday / ClickUp</li>
+        <li>Excel / Google Sheets</li>
+        <li>Figma / Photoshop</li>
+        <li>WordPress / Elementor</li>
+        <li>Claude AI (análise de dados)</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Competências</h3>
+      <ul>
+        <li>Trackeamento avançado (Pixel, CAPI, GTM)</li>
+        <li>Otimização de CPA, ROAS, CAC, LTV</li>
+        <li>Copywriting de anúncios</li>
+        <li>Landing pages de conversão</li>
+        <li>Funis de venda (TOFU/MOFU/BOFU)</li>
+        <li>Testes A/B estruturados</li>
+        <li>Análise de dados com IA</li>
+        <li>Relatórios estratégicos</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Idiomas</h3>
+      <ul>
+        <li>Português — Nativo</li>
+        <li>Inglês — Intermediário</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Certificações</h3>
+      <ul>
+        <li>Inbound Marketing — RD Station (2024)</li>
+        <li>Inbound Marketing — HubSpot (2024)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div>
+      <div class="header-name">João Luiz Soares</div>
+      <div class="header-title">Gestor de Tráfego Pago & Estrategista de Performance</div>
+      <div class="header-sub">
+        +R$ 6MI em mídia gerenciados · +R$ 35MI em faturamento gerados · 8+ anos de experiência<br>
+        Meta Ads, Google Ads, LinkedIn Ads, TikTok Ads · Porto Alegre/RS · Notebook próprio · PJ
+      </div>
+    </div>
+
+    <!-- RESUMO -->
+    <div class="section">
+      <div class="section-title">Resumo Profissional</div>
+      <p style="font-size:8.5pt; color:#333;">
+        Estrategista de marketing e gestor de tráfego com 8+ anos de experiência em performance digital,
+        aquisição paga e análise de dados. Especializado em criar, gerenciar e otimizar campanhas
+        multiplataforma com foco em ROAS, CAC/LTV e crescimento sustentável. Experiência comprovada com
+        franquias, e-commerce, educação, SaaS e serviços B2B. Utilizo IA para análise de dados e
+        otimização contínua de campanhas, com histórico de escalar empresas do zero a R$ 5-10MI/ano.
+      </p>
+    </div>
+
+    <!-- EXPERIENCIA -->
+    <div class="section">
+      <div class="section-title">Experiência Profissional</div>
+
+      <div class="exp-item">
+        <div class="exp-header">
+          <span class="exp-role">Estrategista de Marketing & Gestor de Tráfego</span>
+          <span class="exp-period">Jan/2025 — Atual</span>
+        </div>
+        <div class="exp-company">DROS Agência · Remoto</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Gestão de campanhas multiplataforma (Meta, Google, LinkedIn, TikTok Ads)</li>
+            <li>Estratégia de aquisição paga com foco em CAC, LTV e ROAS</li>
+            <li>Trackeamento avançado: Pixel, GA4, GTM, eventos customizados e server-side (CAPI)</li>
+            <li>Análise de dados com IA para diagnóstico rápido e otimização contínua</li>
+            <li>Relatórios estratégicos orientados à tomada de decisão do cliente</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-header">
+          <span class="exp-role">Head de Marketing & Estrategista de Performance</span>
+          <span class="exp-period">Jan/2020 — Dez/2023</span>
+        </div>
+        <div class="exp-company">ALLNEXT Serviços Premium em Tecnologia · Presencial</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Liderança da estratégia completa de marketing digital (paid + orgânico + conteúdo)</li>
+            <li>Gestão de +R$ 6MI em mídia, gerando +R$ 35MI em faturamento</li>
+            <li>Cases de empresas escaladas do zero a R$ 5MI e R$ 10MI/ano</li>
+            <li>Redução média de 40-60% no CAC em projetos otimizados</li>
+            <li>Coordenação de equipes multidisciplinares (design, conteúdo, dev)</li>
+            <li>CRM e automação com RD Station e HubSpot</li>
+          </ul>
+          <div class="highlight-box">
+            <p><strong>ROAS médio 5-8x</strong> em e-commerce · Segmentos: e-commerce, SaaS, educação, saúde, varejo, B2B</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-header">
+          <span class="exp-role">Gerente de Marketing & Growth</span>
+          <span class="exp-period">Jan/2018 — Dez/2019</span>
+        </div>
+        <div class="exp-company">New Audio Reference · Presencial</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Estratégia de marketing digital 360° (Meta Ads + Google Ads)</li>
+            <li>Funis de venda, upsells, downsells e remarketing</li>
+            <li>Coordenação de equipes: design, copy, vídeo e landing pages</li>
+            <li>Trackeamento com Facebook Pixel, GTM e Analytics</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-header">
+          <span class="exp-role">Coordenador de Marketing Digital</span>
+          <span class="exp-period">Jan/2017 — Dez/2017</span>
+        </div>
+        <div class="exp-company">ConnectWise (Lab. de Tecnologia — UFSC)</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Planejamento e execução de campanhas de marketing digital</li>
+            <li>Gestão de redes sociais e estratégias de posicionamento de marca</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-header">
+          <span class="exp-role">Analista de Marketing Digital</span>
+          <span class="exp-period">Jan/2014 — Dez/2015</span>
+        </div>
+        <div class="exp-company">New Audio Reference</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Gestão de redes sociais, SEO e suporte a campanhas de e-mail marketing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMACAO -->
+    <div class="section">
+      <div class="section-title">Formação Acadêmica</div>
+      <div class="edu-item">
+        <div class="edu-course">Bacharelado em Engenharia da Computação</div>
+        <div class="edu-school">Universidade Federal de Santa Catarina (UFSC) · 2016 — 2020</div>
+      </div>
+    </div>
+
+    <!-- CASES -->
+    <div class="section">
+      <div class="section-title">Cases de Destaque</div>
+      <div class="highlight-box">
+        <p><strong>E-commerce Moda:</strong> ROAS de 3,5x → 8,15x em 30 dias (+128%) · Receita +156%</p>
+        <p><strong>SaaS B2B:</strong> 0 a R$ 5MI/ano em 14 meses com tráfego pago + copy</p>
+        <p><strong>E-commerce Nicho:</strong> R$ 1MI → R$ 10MI/ano em 24 meses</p>
+        <p><strong>Educação:</strong> Redução de 62% no CAC mantendo volume de leads</p>
+        <p><strong>Serviços B2B:</strong> CAC/LTV de 1:9 com tráfego pago estruturado</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

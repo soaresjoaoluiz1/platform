@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stories — Aulão Josi Terapeuta (3 slides)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #111;
+      display: flex;
+      gap: 32px;
+      padding: 40px;
+      min-width: fit-content;
+      font-family: 'Inter', sans-serif;
+      align-items: flex-start;
+    }
+
+    /* Label above each story */
+    .story-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .story-label {
+      color: #666;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* =============================================
+       CANVAS: 1080x1920px Instagram Story
+       ============================================= */
+    .story {
+      width: 430px;  /* scaled down to 430 for preview; actual export = 1080px */
+      height: 764px; /* maintains 9:16 ratio */
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      border-radius: 16px;
+    }
+
+    /* ─────────────────────────────────────────────
+       STORY 1 — A DOR
+       "Você vive isso no consultório?"
+       ───────────────────────────────────────────── */
+    .story-1 {
+      background: linear-gradient(160deg, #1A2F20 0%, #2D5A3D 40%, #1F3D2A 100%);
+    }
+
+    /* IG chrome — hidden (not needed for export) */
+    .story-indicators,
+    .story-profile { display: none; }
+
+    /* Decorative elements S1 */
+    .s1-circle-1 {
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .s1-circle-2 {
+      position: absolute;
+      bottom: 120px;
+      left: -60px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(212,134,76,0.1);
+    }
+    .s1-dots {
+      position: absolute;
+      top: 200px;
+      right: 20px;
+      display: grid;
+      grid-template-columns: repeat(5, 6px);
+      gap: 8px;
+    }
+    .s1-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* S1 Content */
+    .s1-content {
+      position: absolute;
+      inset: 0;
+      padding: 44px 28px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .s1-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .s1-tag {
+      background: rgba(212,134,76,0.25);
+      border: 1px solid rgba(212,134,76,0.5);
+      color: #E59A6A;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 100px;
+    }
+
+    .s1-question {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: #F7F5F0;
+      line-height: 1.22;
+      letter-spacing: -0.01em;
+      margin-bottom: 24px;
+    }
+
+    .s1-question em {
+      font-style: italic;
+      color: #8FA68E;
+    }
+
+    /* Pain checkmarks */
+    .s1-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .s1-check {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .s1-check-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(212,134,76,0.2);
+      border: 1px solid rgba(212,134,76,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .s1-check-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: #E8E4DC;
+      line-height: 1.35;
+    }
+
+    /* S1 bottom swipe */
+    .s1-swipe {
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .s1-swipe-arrow {
+      font-size: 20px;
+      color: #D4864C;
+      margin-bottom: 4px;
+    }
+
+    /* ─────────────────────────────────────────────
+       STORY 2 — A SOLUÇÃO
+       "Existe um caminho"
+       ───────────────────────────────────────────── */
+    .story-2 {
+      background: #F7F5F0;
+    }
+
+    /* Decorative S2 */
+    .s2-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #2D5A3D, #3D7A52, #D4864C);
+    }
+    .s2-circle {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,90,61,0.08) 0%, transparent 70%);
+    }
+    .s2-circle-2 {
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,134,76,0.06) 0%, transparent 70%);
+    }
+
+    /* S2 Content */
+    .s2-content {
+      position: absolute;
+      inset: 0;
+      padding: 44px 28px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .s2-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #D4864C;
+      margin-bottom: 12px;
+    }
+
+    .s2-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #1F3D2A;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .s2-title em {
+      font-style: italic;
+    }
+
+    .s2-subtitle {
+      font-size: 17px;
+      color: #4A4A4A;
+      line-height: 1.5;
+      margin-bottom: 28px;
+      font-weight: 400;
+    }
+
+    .s2-subtitle strong {
+      color: #1F3D2A;
+      font-weight: 700;
+    }
+
+    /* What you'll learn list */
+    .s2-learns {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .s2-learn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .s2-learn-num {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #2D5A3D, #3D7A52);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #F7F5F0;
+      flex-shrink: 0;
+    }
+
+    .s2-learn-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2A2A2A;
+      line-height: 1.35;
+    }
+
+    .s2-learn-text span {
+      display: block;
+      font-size: 13px;
+      font-weight: 400;
+      color: #8C8C8C;
+    }
+
+    /* Divider */
+    .s2-divider {
+      width: 50px;
+      height: 3px;
+      background: #D4864C;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    /* Instructor mini card */
+    .s2-instructor {
+      background: linear-gradient(135deg, #2D5A3D, #1F3D2A);
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .s2-inst-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #D4864C, #E59A6A);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .s2-inst-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #F7F5F0;
+      line-height: 1.2;
+    }
+
+    .s2-inst-cred {
+      font-size: 12px;
+      color: #8FA68E;
+      margin-top: 2px;
+    }
+
+    /* ─────────────────────────────────────────────
+       STORY 3 — O CONVITE (CTA)
+       "Garanta sua vaga"
+       ───────────────────────────────────────────── */
+    .story-3 {
+      background: linear-gradient(160deg, #1A2F20 0%, #2D5A3D 100%);
+    }
+
+    /* Decorative S3 */
+    .s3-ellipse-1 {
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.06);
+    }
+    .s3-ellipse-2 {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(212,134,76,0.07);
+    }
+    .s3-bottom-glow {
+      position: absolute;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,134,76,0.15) 0%, transparent 70%);
+    }
+
+    /* S3 Content */
+    .s3-content {
+      position: absolute;
+      inset: 0;
+      padding: 44px 28px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+    }
+
+    .s3-top { width: 100%; }
+
+    .s3-free-tag {
+      display: inline-block;
+      background: #D4864C;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+
+    .s3-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: #F7F5F0;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+    }
+
+    .s3-headline em {
+      font-style: italic;
+      color: #8FA68E;
+    }
+
+    .s3-subhead {
+      font-size: 17px;
+      color: #B8CCB7;
+      line-height: 1.55;
+      max-width: 340px;
+      margin: 0 auto 32px;
+    }
+
+    /* Event detail cards */
+    .s3-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .s3-detail-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .s3-detail-icon { font-size: 22px; margin-bottom: 6px; }
+
+    .s3-detail-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: #F7F5F0;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+
+    .s3-detail-label {
+      font-size: 11px;
+      color: #8FA68E;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    /* urgency / scarcity */
+    .s3-urgency {
+      background: rgba(212,134,76,0.15);
+      border: 1px solid rgba(212,134,76,0.3);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 12px;
+      color: #E59A6A;
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    /* CTA button */
+    .s3-cta {
+      background: #D4864C;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 15px 0;
+      border-radius: 100px;
+      box-shadow: 0 8px 28px rgba(212,134,76,0.4);
+      width: 88%;
+      text-align: center;
+      margin-bottom: 10px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .s3-link-bio {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+    }
+
+    .s3-link-bio strong {
+      color: rgba(255,255,255,0.8);
+      font-weight: 700;
+    }
+
+    /* Brand at bottom */
+    .s3-brand {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       STORY 1 — A DOR
+       ═══════════════════════════════════════ -->
+  <div class="story-wrapper">
+    <div class="story-label">Story 1 — A Dor</div>
+    <div class="story story-1">
+
+      <!-- IG chrome -->
+      <div class="story-indicators">
+        <div class="story-indicator active"></div>
+        <div class="story-indicator"></div>
+        <div class="story-indicator"></div>
+      </div>
+
+      <div class="story-profile">
+        <div class="story-avatar">J</div>
+        <div class="s-profile">
+          <div class="story-username">josianevargasdelfino</div>
+          <div class="story-time">Agora</div>
+        </div>
+      </div>
+
+      <!-- Decorative -->
+      <div class="s1-circle-1"></div>
+      <div class="s1-circle-2"></div>
+      <div class="s1-dots">
+        <div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div>
+        <div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div>
+        <div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div>
+        <div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div>
+        <div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div><div class="s1-dot"></div>
+      </div>
+
+      <!-- Content -->
+      <div class="s1-content">
+        <div>
+          <div class="s1-eyebrow">
+            <span class="s1-tag">Aulão Gratuito</span>
+          </div>
+          <h2 class="s1-question">
+            Você também vive<br>
+            <em>essa realidade</em><br>
+            no consultório?
+          </h2>
+          <div class="s1-checks">
+            <div class="s1-check">
+              <div class="s1-check-icon">😓</div>
+              <div class="s1-check-text">"Não sei por onde começar esse caso"</div>
+            </div>
+            <div class="s1-check">
+              <div class="s1-check-icon">🤔</div>
+              <div class="s1-check-text">"Será que escolhi o protocolo certo?"</div>
+            </div>
+            <div class="s1-check">
+              <div class="s1-check-icon">😰</div>
+              <div class="s1-check-text">"Medo de estar errando sem perceber"</div>
+            </div>
+            <div class="s1-check">
+              <div class="s1-check-icon">📋</div>
+              <div class="s1-check-text">"Autismo não-verbal me deixa sem chão"</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="s1-swipe-arrow" style="text-align:center;">↑</div>
+          <div class="s1-swipe">Deslize para a solução</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       STORY 2 — A SOLUÇÃO
+       ═══════════════════════════════════════ -->
+  <div class="story-wrapper">
+    <div class="story-label">Story 2 — A Solução</div>
+    <div class="story story-2">
+
+      <!-- Top bar -->
+      <div class="s2-top-bar"></div>
+
+      <!-- IG chrome -->
+      <div class="story-indicators">
+        <div class="story-indicator"></div>
+        <div class="story-indicator active"></div>
+        <div class="story-indicator"></div>
+      </div>
+
+      <div class="story-profile">
+        <div class="story-avatar" style="background: linear-gradient(135deg, #2D5A3D, #3D7A52);">J</div>
+        <div class="s-profile">
+          <div class="story-username" style="color:#1A1A1A;">josianevargasdelfino</div>
+          <div class="story-time" style="color:#8C8C8C;">Agora</div>
+        </div>
+      </div>
+
+      <!-- Decorative -->
+      <div class="s2-circle"></div>
+      <div class="s2-circle-2"></div>
+
+      <!-- Content -->
+      <div class="s2-content">
+        <div>
+          <div class="s2-eyebrow">A solução que você precisava</div>
+          <div class="s2-divider"></div>
+          <h2 class="s2-title">
+            Chega de atender<br>
+            <em>no escuro.</em>
+          </h2>
+          <p class="s2-subtitle">
+            O problema não é falta de estudo.<br>
+            É falta de <strong>estrutura de decisão clínica.</strong>
+          </p>
+
+          <div class="s2-learns">
+            <div class="s2-learn">
+              <div class="s2-learn-num">1</div>
+              <div class="s2-learn-text">
+                Como estruturar seu raciocínio clínico
+                <span>Antes de escolher qualquer protocolo</span>
+              </div>
+            </div>
+            <div class="s2-learn">
+              <div class="s2-learn-num">2</div>
+              <div class="s2-learn-text">
+                As 3 perguntas que organizam qualquer caso
+                <span>Da anamnese à intervenção</span>
+              </div>
+            </div>
+            <div class="s2-learn">
+              <div class="s2-learn-num">3</div>
+              <div class="s2-learn-text">
+                Como sair do atendimento com segurança
+                <span>Sem o peso da dúvida pós-sessão</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="s2-instructor">
+          <div class="s2-inst-avatar">J</div>
+          <div>
+            <div class="s2-inst-name">Josiane Vargas Delfino</div>
+            <div class="s2-inst-cred">10 anos · 500+ casos · 200+ profissionais mentorados</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       STORY 3 — O CONVITE / CTA
+       ═══════════════════════════════════════ -->
+  <div class="story-wrapper">
+    <div class="story-label">Story 3 — CTA</div>
+    <div class="story story-3">
+
+      <!-- Decorative -->
+      <div class="s3-ellipse-1"></div>
+      <div class="s3-ellipse-2"></div>
+      <div class="s3-bottom-glow"></div>
+
+      <!-- IG chrome -->
+      <div class="story-indicators">
+        <div class="story-indicator"></div>
+        <div class="story-indicator"></div>
+        <div class="story-indicator active"></div>
+      </div>
+
+      <div class="story-profile">
+        <div class="story-avatar">J</div>
+        <div class="s-profile">
+          <div class="story-username">josianevargasdelfino</div>
+          <div class="story-time">Agora</div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="s3-content">
+
+        <div class="s3-top">
+          <div class="s3-free-tag">100% Gratuito</div>
+
+          <h2 class="s3-headline">
+            Sua vez de atender<br>
+            com <em>clareza</em><br>
+            e confiança.
+          </h2>
+
+          <p class="s3-subhead">
+            Aulão ao vivo para terapeutas e psicopedagogos que querem parar de adivinhar e começar a decidir com segurança.
+          </p>
+        </div>
+
+        <div style="width:100%;">
+          <!-- Event details grid -->
+          <div class="s3-details">
+            <div class="s3-detail-card">
+              <div class="s3-detail-icon">📅</div>
+              <div class="s3-detail-value">9 de Abril</div>
+              <div class="s3-detail-label">Data</div>
+            </div>
+            <div class="s3-detail-card">
+              <div class="s3-detail-icon">💻</div>
+              <div class="s3-detail-value">Online</div>
+              <div class="s3-detail-label">Formato · Ao Vivo</div>
+            </div>
+            <div class="s3-detail-card" style="grid-column: 1/-1;">
+              <div class="s3-detail-icon">🎓</div>
+              <div class="s3-detail-value">Estrutura de Decisão Clínica</div>
+              <div class="s3-detail-label">Tema do aulão</div>
+            </div>
+          </div>
+
+          <!-- Urgency -->
+          <div class="s3-urgency">
+            ⚡ Vagas limitadas — garanta a sua agora
+          </div>
+
+          <!-- CTA -->
+          <div class="s3-cta">Quero minha vaga →</div>
+
+          <div class="s3-link-bio">
+            Acesse o link na <strong>bio</strong> para se inscrever
+          </div>
+
+          <div class="s3-brand">@josianevargasdelfino · Aulão Gratuito</div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

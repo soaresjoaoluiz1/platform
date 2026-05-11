@@ -1,0 +1,8 @@
+- generic [ref=e7]:
+  - generic [ref=e8]: Masterclass
+  - img "Nayara Della Vechia" [ref=e11]
+  - generic [ref=e12]:
+    - heading "Desordem Sistêmica" [level=1] [ref=e13]:
+      - text: Desordem
+      - emphasis [ref=e14]: Sistêmica
+    - paragraph [ref=e15]: Entenda o que se repete em você.

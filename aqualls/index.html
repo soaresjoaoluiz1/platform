@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aqualls — Vasos sanitários inteligentes e balcões com espelho LED</title>
+  <meta name="description" content="Vasos monobloco e automatizados, balcões em PVC à prova d'água com espelho LED touch. 12x sem juros, garantia oficial e entrega para todo o Brasil." />
+  <meta name="theme-color" content="#0891b2" />
+
+  <meta property="og:title" content="Aqualls — Banheiros inteligentes ao seu alcance" />
+  <meta property="og:description" content="Vasos sanitários, balcões e espelhos LED touch. Tecnologia, design e preço justo." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aqualls.com.br" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            aqua: { 50:'#ecfeff',100:'#cffafe',200:'#a5f3fc',300:'#67e8f9',400:'#22d3ee',500:'#06b6d4',600:'#0891b2',700:'#0e7490',800:'#155e75',900:'#164e63' },
+            ivory: { 50:'#fdfcfa',100:'#faf8f4',200:'#f3efe6' },
+          },
+          fontFamily: {
+            sans: ['Inter','system-ui','sans-serif'],
+            display: ['Manrope','Inter','system-ui','sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 12px 40px -16px rgba(15, 23, 42, 0.12)',
+            card: '0 1px 3px rgba(15,23,42,0.04), 0 12px 30px -12px rgba(15,23,42,0.10)',
+            cardHover: '0 4px 6px rgba(15,23,42,0.04), 0 30px 50px -20px rgba(8,145,178,0.25)',
+            glow: '0 0 60px rgba(34, 211, 238, 0.45)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    .font-display { font-family: 'Manrope', 'Inter', system-ui, sans-serif; letter-spacing: -0.035em; font-feature-settings: 'ss01','cv11'; }
+    h1.font-display, h2.font-display { letter-spacing: -0.045em; font-weight: 800; }
+
+    /* Reveal-on-scroll */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* Premium product card with SVG illustration fallback */
+    .product-card {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform .35s ease, box-shadow .35s ease;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 12px 30px -12px rgba(15,23,42,0.10);
+      border: 1px solid #f1f5f9;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 4px 6px rgba(15,23,42,0.04), 0 30px 50px -20px rgba(8,145,178,0.25);
+    }
+    .product-card .image-wrap {
+      position: relative;
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      background: linear-gradient(160deg, #fafdff 0%, #ecfeff 70%, #e0f2fe 100%);
+    }
+    .product-card .image-wrap img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .7s ease;
+      z-index: 2;
+    }
+    .product-card:hover .image-wrap img { transform: scale(1.06); }
+    .product-card .illustration {
+      position: absolute; inset: 0;
+      display: grid; place-items: center;
+      z-index: 1;
+    }
+    .product-card .illustration svg { width: 70%; height: 70%; opacity: .9; }
+    .product-card .actions {
+      position: absolute; left: 12px; right: 12px; bottom: 12px;
+      display: flex; gap: 8px;
+      transform: translateY(120%);
+      transition: transform .4s ease;
+      z-index: 3;
+    }
+    .product-card:hover .actions { transform: translateY(0); }
+    .product-card .action-btn {
+      flex: 1; padding: 10px 14px; border-radius: 9999px;
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      color: #0f172a; font-weight: 600; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: background .2s ease;
+    }
+    .product-card .action-btn:hover { background: #0891b2; color: #fff; }
+    .product-card .action-btn.primary { background: #0f172a; color: #fff; }
+    .product-card .action-btn.primary:hover { background: #0891b2; }
+
+    /* Smart mirror */
+    .mirror {
+      position: relative;
+      aspect-ratio: 3/4;
+      border-radius: 9999px 9999px 24px 24px;
+      background: linear-gradient(160deg, #1e293b, #0f172a 60%, #020617);
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow .6s ease, transform .3s ease;
+      border: 8px solid #f1f5f9;
+    }
+    .mirror::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.04), transparent 60%),
+                  radial-gradient(ellipse at 70% 80%, rgba(255,255,255,0.02), transparent 60%);
+    }
+    .mirror .ring-led {
+      position: absolute; inset: -2px;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.04);
+      pointer-events: none;
+      transition: box-shadow .6s ease;
+    }
+    .mirror.is-on { box-shadow: 0 0 0 6px rgba(34,211,238,0.25), 0 0 80px rgba(34,211,238,0.55); transform: translateY(-4px); }
+    .mirror.is-on::before {
+      background: radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.55), rgba(207,250,254,0.18) 40%, transparent 70%),
+                  linear-gradient(160deg, #67e8f9 0%, #a5f3fc 60%, #ecfeff 100%);
+    }
+    .mirror.is-on .ring-led { box-shadow: inset 0 0 0 4px rgba(255,255,255,0.85), inset 0 0 60px rgba(255,255,255,0.6); }
+    .mirror .silhouette {
+      position: absolute; bottom: 18%; left: 50%; transform: translateX(-50%);
+      width: 56%; height: 50%;
+      background: radial-gradient(ellipse at 50% 30%, rgba(15,23,42,0.55), transparent 60%);
+      filter: blur(6px); opacity: 0; transition: opacity .6s ease;
+    }
+    .mirror.is-on .silhouette { opacity: 0.7; }
+    .mirror .hint {
+      position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%);
+      color: rgba(255,255,255,0.7); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: opacity .4s ease;
+    }
+    .mirror.is-on .hint { opacity: 0; }
+
+    .pulse::after {
+      content: ''; position: absolute; inset: -6px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+      animation: pulse 2.4s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+      70% { box-shadow: 0 0 0 22px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+
+    .blob { position: absolute; filter: blur(70px); opacity: .55; pointer-events: none; }
+
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .chev { transform: rotate(180deg); }
+    .chev { transition: transform .3s ease; }
+
+    .modal-backdrop { background: rgba(15,23,42,.55); backdrop-filter: blur(6px); }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(15,23,42,0.08), transparent);
+    }
+
+    /* Filter pills */
+    .pill {
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all .2s ease;
+      border: 1px solid transparent;
+    }
+    .pill.active { background: #0f172a; color: #fff; }
+    .pill:not(.active) { background: #fff; color: #475569; border-color: #e2e8f0; }
+    .pill:not(.active):hover { border-color: #0891b2; color: #0891b2; }
+  </style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+
+  <!-- ANNOUNCEMENT BAR -->
+  <div class="bg-slate-900 text-white text-xs sm:text-sm">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-center gap-2 text-center">
+      <span><strong class="text-aqua-300">Frete grátis</strong> SP/RJ acima de R$ 1.500 • <strong class="text-aqua-300">12x sem juros</strong> • Garantia oficial</span>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header id="nav" class="sticky top-0 z-40 bg-white/85 backdrop-blur-lg border-b border-slate-100 transition-shadow">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="#hero" class="font-display font-extrabold text-2xl tracking-tight text-slate-900 hover:text-aqua-700 transition">
+        aqualls<span class="text-aqua-500">.</span>
+      </a>
+
+      <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#vasos" class="hover:text-aqua-600 transition">Vasos sanitários</a>
+        <a href="#balcoes" class="hover:text-aqua-600 transition">Balcões e espelhos</a>
+        <a href="#beneficios" class="hover:text-aqua-600 transition">Por que Aqualls</a>
+        <a href="#faq" class="hover:text-aqua-600 transition">Dúvidas</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button class="hidden sm:inline-flex w-10 h-10 grid place-items-center rounded-full hover:bg-slate-100 transition" aria-label="Buscar">
+          <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </button>
+        <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20receber%20o%20cat%C3%A1logo%20da%20Aqualls"
+           target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 bg-slate-900 hover:bg-aqua-600 text-white text-sm font-semibold px-4 py-2.5 rounded-full transition">
+          Falar conosco
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <button id="mobile-toggle" class="lg:hidden w-10 h-10 grid place-items-center rounded-lg hover:bg-slate-100" aria-label="Menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-100 bg-white">
+      <div class="px-4 py-4 flex flex-col gap-1 text-sm font-medium">
+        <a href="#vasos" class="px-3 py-2 rounded-lg hover:bg-slate-50">Vasos sanitários</a>
+        <a href="#balcoes" class="px-3 py-2 rounded-lg hover:bg-slate-50">Balcões e espelhos</a>
+        <a href="#beneficios" class="px-3 py-2 rounded-lg hover:bg-slate-50">Por que Aqualls</a>
+        <a href="#faq" class="px-3 py-2 rounded-lg hover:bg-slate-50">Dúvidas</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- SVG ASSETS (illustrations used as fallback in product cards) -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Toilet illustration -->
+      <symbol id="ill-vaso" viewBox="0 0 240 280">
+        <defs>
+          <linearGradient id="vasoCer" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset="1" stop-color="#e2e8f0"/>
+          </linearGradient>
+          <radialGradient id="vasoBowl" cx="0.5" cy="0.4" r="0.6">
+            <stop offset="0" stop-color="#cffafe"/>
+            <stop offset="0.6" stop-color="#a5f3fc"/>
+            <stop offset="1" stop-color="#67e8f9"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="120" cy="270" rx="80" ry="6" fill="rgba(15,23,42,0.08)"/>
+        <rect x="62" y="22" width="116" height="92" rx="14" fill="url(#vasoCer)" stroke="#cbd5e1" stroke-width="1.5"/>
+        <rect x="78" y="40" width="84" height="6" rx="3" fill="#94a3b8" opacity="0.4"/>
+        <circle cx="120" cy="68" r="11" fill="#cbd5e1"/>
+        <circle cx="120" cy="68" r="6" fill="#0891b2"/>
+        <ellipse cx="120" cy="200" rx="78" ry="58" fill="url(#vasoCer)" stroke="#cbd5e1" stroke-width="1.5"/>
+        <ellipse cx="120" cy="195" rx="58" ry="40" fill="url(#vasoBowl)"/>
+        <ellipse cx="120" cy="190" rx="44" ry="28" fill="#67e8f9" opacity="0.5"/>
+        <path d="M 70 245 L 70 268 Q 70 274 76 274 L 164 274 Q 170 274 170 268 L 170 245" fill="url(#vasoCer)" stroke="#cbd5e1" stroke-width="1.5"/>
+      </symbol>
+
+      <!-- Smart toilet -->
+      <symbol id="ill-smart" viewBox="0 0 240 280">
+        <defs>
+          <linearGradient id="smartCer" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset="1" stop-color="#e2e8f0"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="120" cy="270" rx="80" ry="6" fill="rgba(15,23,42,0.08)"/>
+        <rect x="50" y="50" width="140" height="60" rx="20" fill="url(#smartCer)" stroke="#cbd5e1" stroke-width="1.5"/>
+        <rect x="76" y="68" width="88" height="22" rx="6" fill="#0f172a"/>
+        <rect x="80" y="72" width="80" height="14" rx="3" fill="#06b6d4" opacity="0.6"/>
+        <circle cx="92" cy="79" r="2" fill="#22d3ee"/>
+        <circle cx="120" cy="79" r="2" fill="#22d3ee"/>
+        <circle cx="148" cy="79" r="2" fill="#22d3ee"/>
+        <ellipse cx="120" cy="200" rx="78" ry="58" fill="url(#smartCer)" stroke="#cbd5e1" stroke-width="1.5"/>
+        <ellipse cx="120" cy="195" rx="58" ry="40" fill="#cffafe"/>
+        <ellipse cx="120" cy="195" rx="50" ry="32" fill="#a5f3fc"/>
+        <circle cx="120" cy="195" r="20" fill="#06b6d4" opacity="0.3"/>
+        <path d="M 70 245 L 70 268 Q 70 274 76 274 L 164 274 Q 170 274 170 268 L 170 245" fill="url(#smartCer)" stroke="#cbd5e1" stroke-width="1.5"/>
+        <circle cx="200" cy="60" r="4" fill="#22c55e"/>
+      </symbol>
+
+      <!-- Vanity / balcão -->
+      <symbol id="ill-balcao" viewBox="0 0 280 240">
+        <defs>
+          <linearGradient id="balCab" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#475569"/>
+            <stop offset="1" stop-color="#1e293b"/>
+          </linearGradient>
+          <linearGradient id="balTop" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset="1" stop-color="#e2e8f0"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="140" cy="230" rx="110" ry="6" fill="rgba(15,23,42,0.08)"/>
+        <ellipse cx="140" cy="40" rx="60" ry="32" fill="none" stroke="#cbd5e1" stroke-width="3"/>
+        <ellipse cx="140" cy="40" rx="56" ry="28" fill="#f1f5f9"/>
+        <ellipse cx="120" cy="32" rx="20" ry="10" fill="#fff" opacity="0.5"/>
+        <rect x="36" y="100" width="208" height="14" rx="3" fill="url(#balTop)" stroke="#cbd5e1" stroke-width="1"/>
+        <ellipse cx="140" cy="107" rx="44" ry="6" fill="#0f172a" opacity="0.5"/>
+        <rect x="40" y="114" width="200" height="100" fill="url(#balCab)"/>
+        <line x1="140" y1="114" x2="140" y2="214" stroke="#0f172a" stroke-width="1.5"/>
+        <rect x="115" y="160" width="20" height="3" rx="1" fill="#cbd5e1"/>
+        <rect x="145" y="160" width="20" height="3" rx="1" fill="#cbd5e1"/>
+        <rect x="80" y="80" width="6" height="40" fill="#94a3b8"/>
+        <circle cx="83" cy="78" r="4" fill="#475569"/>
+      </symbol>
+
+      <!-- LED Mirror -->
+      <symbol id="ill-espelho" viewBox="0 0 240 280">
+        <defs>
+          <radialGradient id="mirrorGlow" cx="0.5" cy="0.4" r="0.7">
+            <stop offset="0" stop-color="#ecfeff"/>
+            <stop offset="0.6" stop-color="#cffafe"/>
+            <stop offset="1" stop-color="#67e8f9"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="120" cy="270" rx="80" ry="6" fill="rgba(15,23,42,0.08)"/>
+        <ellipse cx="120" cy="140" rx="92" ry="118" fill="#0f172a"/>
+        <ellipse cx="120" cy="140" rx="84" ry="110" fill="url(#mirrorGlow)"/>
+        <ellipse cx="100" cy="100" rx="32" ry="48" fill="#fff" opacity="0.5"/>
+        <ellipse cx="120" cy="140" rx="84" ry="110" fill="none" stroke="#22d3ee" stroke-width="2" opacity="0.6"/>
+        <circle cx="120" cy="240" r="4" fill="#06b6d4"/>
+        <rect x="116" y="250" width="8" height="20" fill="#06b6d4" opacity="0.5"/>
+      </symbol>
+
+      <!-- Combo balcão + mirror -->
+      <symbol id="ill-conjunto" viewBox="0 0 280 280">
+        <defs>
+          <linearGradient id="conjCab" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#92400e"/>
+            <stop offset="1" stop-color="#451a03"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="140" cy="270" rx="120" ry="6" fill="rgba(15,23,42,0.08)"/>
+        <rect x="80" y="20" width="120" height="120" rx="60" fill="#0f172a"/>
+        <rect x="84" y="24" width="112" height="112" rx="56" fill="#cffafe"/>
+        <rect x="84" y="24" width="112" height="112" rx="56" fill="none" stroke="#22d3ee" stroke-width="2" opacity="0.5"/>
+        <rect x="40" y="155" width="200" height="14" rx="3" fill="#fff" stroke="#cbd5e1" stroke-width="1"/>
+        <ellipse cx="140" cy="162" rx="44" ry="6" fill="#0f172a" opacity="0.4"/>
+        <rect x="44" y="169" width="192" height="90" fill="url(#conjCab)"/>
+        <line x1="140" y1="169" x2="140" y2="259" stroke="#1c1917" stroke-width="1.5"/>
+        <rect x="115" y="210" width="20" height="3" rx="1" fill="#fbbf24"/>
+        <rect x="145" y="210" width="20" height="3" rx="1" fill="#fbbf24"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- HERO -->
+  <section id="hero" class="relative overflow-hidden bg-ivory-50">
+    <div class="blob bg-aqua-200 w-[500px] h-[500px] rounded-full -top-32 -right-20"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-16 lg:pt-16 lg:pb-24 grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+      <!-- TEXT (40%) -->
+      <div class="lg:col-span-5 reveal">
+        <div class="inline-flex items-center gap-2 bg-white border border-aqua-100 text-aqua-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-aqua-500 animate-pulse"></span>
+          Importação direta • Pronta entrega
+        </div>
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02] text-slate-900">
+          Banheiros<br/>
+          <span class="text-aqua-600">inteligentes</span>,<br/>
+          ao seu alcance.
+        </h1>
+        <p class="mt-6 text-base lg:text-lg text-slate-600 max-w-md leading-relaxed">
+          Vasos sanitários monobloco e smart, balcões em PVC e espelhos LED touch.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+          <a href="#vasos" class="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-aqua-700 text-white font-semibold px-7 py-4 rounded-full transition shadow-soft">
+            Ver coleção
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+
+        <div class="mt-10 flex items-center gap-6">
+          <div class="flex -space-x-2">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mariana&backgroundColor=b6e3f4" class="w-9 h-9 rounded-full border-2 border-white" alt="" />
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos&backgroundColor=ffd5dc" class="w-9 h-9 rounded-full border-2 border-white" alt="" />
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Patricia&backgroundColor=d1d4f9" class="w-9 h-9 rounded-full border-2 border-white" alt="" />
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael&backgroundColor=c0aede" class="w-9 h-9 rounded-full border-2 border-white" alt="" />
+          </div>
+          <div>
+            <div class="text-amber-400 text-sm">★★★★★</div>
+            <div class="text-xs text-slate-600 mt-0.5"><strong class="text-slate-900">4.9/5</strong> • +1.200 clientes satisfeitos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGE (60%) -->
+      <div class="lg:col-span-7 reveal relative">
+        <div class="relative rounded-[32px] overflow-hidden bg-gradient-to-br from-aqua-50 to-aqua-100 aspect-[5/4] lg:aspect-[6/5] shadow-soft">
+          <!-- Always-visible illustration as base -->
+          <div class="absolute inset-0 grid place-items-center">
+            <svg class="w-2/3 h-2/3"><use href="#ill-smart"/></svg>
+          </div>
+          <!-- Real photo on top, hides itself if it fails -->
+          <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1400&q=85"
+               alt="Banheiro Aqualls"
+               class="absolute inset-0 w-full h-full object-cover"
+               onerror="this.style.display='none'" />
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent"></div>
+
+          <!-- Premium tag -->
+          <div class="absolute top-6 left-6 bg-white/90 backdrop-blur rounded-full px-4 py-2 text-xs font-semibold tracking-wider text-slate-900 shadow-sm">
+            <span class="text-aqua-600">★</span> COLEÇÃO 2026
+          </div>
+
+          <!-- Floating mini cards -->
+          <div class="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-4">
+            <div class="bg-white/95 backdrop-blur rounded-2xl p-4 shadow-soft">
+              <div class="text-[11px] font-semibold text-aqua-600 uppercase tracking-wider">Linha Smart</div>
+              <div class="font-display font-bold text-slate-900 text-lg mt-0.5">Aqualls Tech</div>
+              <div class="text-xs text-slate-500 mt-0.5">Bidê + aquecimento + sensor</div>
+              <div class="font-display font-bold text-aqua-700 mt-2">R$ 2.890</div>
+            </div>
+            <button class="w-12 h-12 rounded-full bg-slate-900 hover:bg-aqua-600 grid place-items-center text-white transition shrink-0" aria-label="Próximo">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="border-y border-slate-100 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="flex items-center gap-3">
+        <svg class="w-9 h-9 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm10 0a2 2 0 11-4 0 2 2 0 014 0zM3 5h2l3 13h11l3-9H6"/></svg>
+        <div>
+          <div class="font-semibold text-sm">Frete grátis</div>
+          <div class="text-xs text-slate-500">SP/RJ • Acima de R$ 1.500</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <svg class="w-9 h-9 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1M5 19h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2z"/></svg>
+        <div>
+          <div class="font-semibold text-sm">12x sem juros</div>
+          <div class="text-xs text-slate-500">Pix com 5% off</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <svg class="w-9 h-9 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <div>
+          <div class="font-semibold text-sm">Garantia 12 meses</div>
+          <div class="text-xs text-slate-500">Suporte oficial Aqualls</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <svg class="w-9 h-9 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        <div>
+          <div class="font-semibold text-sm">Atendimento humano</div>
+          <div class="text-xs text-slate-500">WhatsApp 8h–22h</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- VASOS SANITÁRIOS — SEÇÃO PRÓPRIA -->
+  <!-- ============================================== -->
+  <section id="vasos" class="py-20 lg:py-28 bg-ivory-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <!-- Section header -->
+      <div class="grid lg:grid-cols-2 gap-10 items-end mb-12 reveal">
+        <div>
+          <div class="text-aqua-600 font-semibold text-xs uppercase tracking-[0.2em] mb-4">01 — Vasos Sanitários</div>
+          <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02]">
+            Linha de <span class="text-aqua-600">vasos</span><br/>
+            que une tecnologia<br/>
+            e elegância.
+          </h2>
+        </div>
+        <div class="lg:pb-3">
+          <p class="text-slate-600 text-base lg:text-lg leading-relaxed max-w-md">
+            Modelos monobloco tradicional, com caixa acoplada e a linha smart com bidê, aquecimento e sensor de presença. Todos com saída horizontal padrão.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <button data-vaso-filter="all" class="vaso-pill pill active">Todos</button>
+            <button data-vaso-filter="monobloco" class="vaso-pill pill">Monobloco</button>
+            <button data-vaso-filter="smart" class="vaso-pill pill">Linha Smart</button>
+            <button data-vaso-filter="black" class="vaso-pill pill">Black Edition</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vaso products grid -->
+      <div id="vasos-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Vaso 1: Bianco Monobloco -->
+        <article class="vaso-item product-card group" data-vaso-cat="monobloco">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-vaso"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-rose-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">-36%</span>
+            <span class="absolute top-3 right-3 z-30 bg-emerald-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">Mais vendido</span>
+            <button class="absolute top-12 right-3 z-30 w-9 h-9 rounded-full bg-white/95 grid place-items-center hover:bg-white transition" aria-label="Favoritar">
+              <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </button>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Bianco" target="_blank" rel="noopener" class="action-btn primary">
+                Comprar agora
+              </a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Vaso monobloco</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Bianco</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(312)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 699</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 449<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 41,50 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Vaso 2: Smart Tech -->
+        <article class="vaso-item product-card group" data-vaso-cat="smart">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-smart"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-aqua-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">SMART</span>
+            <button class="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-white/95 grid place-items-center hover:bg-white transition" aria-label="Favoritar">
+              <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </button>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Tech" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Smart toilet</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Tech</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(89)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 4.290</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 2.890<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 267,12 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Vaso 3: Nero Black -->
+        <article class="vaso-item product-card group" data-vaso-cat="black monobloco">
+          <div class="image-wrap" style="background: linear-gradient(160deg,#475569,#0f172a)">
+            <div class="illustration" style="filter:invert(1) hue-rotate(180deg);opacity:.6"><svg><use href="#ill-vaso"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-slate-900 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">BLACK EDITION</span>
+            <button class="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-white/95 grid place-items-center hover:bg-white transition" aria-label="Favoritar">
+              <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </button>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Nero" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Caixa acoplada</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Nero</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(78)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 1.190</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 849<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 78,47 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Vaso 4: Pearl -->
+        <article class="vaso-item product-card group" data-vaso-cat="monobloco">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-vaso"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1564540583246-934409427776?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <button class="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-white/95 grid place-items-center hover:bg-white transition" aria-label="Favoritar">
+              <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </button>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Pearl" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Vaso monobloco</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Pearl</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(154)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 899</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 599<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 55,33 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Vaso 5: Smart Plus -->
+        <article class="vaso-item product-card group" data-vaso-cat="smart">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-smart"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1631048833611-fa5f51e08b4a?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-aqua-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">SMART</span>
+            <span class="absolute top-3 right-3 z-30 bg-amber-400 text-slate-900 text-[11px] font-bold px-2.5 py-1 rounded-full">NOVO</span>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Tech%20Plus" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Smart com remote</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Tech Plus</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(42)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 5.890</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 4.290<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 396,57 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Vaso 6: Lounge Black Smart -->
+        <article class="vaso-item product-card group" data-vaso-cat="smart black">
+          <div class="image-wrap" style="background: linear-gradient(160deg,#1e293b,#020617)">
+            <div class="illustration" style="filter:invert(1) hue-rotate(180deg);opacity:.7"><svg><use href="#ill-smart"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1584622781867-b1cca41a3ad7?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-slate-900 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">BLACK SMART</span>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Lounge%20Black" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Smart edição limitada</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Lounge Black</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(28)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 6.490</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 4.890<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 451,99 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="text-center mt-12">
+        <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20o%20cat%C3%A1logo%20completo%20de%20vasos%20Aqualls" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 text-slate-700 hover:text-aqua-700 font-semibold border-b border-slate-300 hover:border-aqua-700 transition pb-1">
+          Ver todos os modelos de vasos
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESPELHO INTERATIVO -->
+  <section class="relative py-20 lg:py-28 bg-gradient-to-b from-slate-900 to-slate-950 text-white overflow-hidden">
+    <div class="blob bg-aqua-500/30 w-[500px] h-[500px] rounded-full top-10 -right-40"></div>
+    <div class="blob bg-aqua-700/20 w-[400px] h-[400px] rounded-full -bottom-20 -left-32"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div class="reveal">
+        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-aqua-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-aqua-400 animate-pulse"></span>
+          Tecnologia LED Touch
+        </div>
+        <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02]">
+          Toque. <span class="text-aqua-300">Acende.</span><br/>
+          O catálogo é seu.
+        </h2>
+        <p class="mt-6 text-slate-300 text-lg max-w-md">
+          Sensor touch nas bordas do espelho: um toque acende a luz LED com 3 temperaturas e desembaça automaticamente.
+        </p>
+        <p class="mt-3 text-slate-400 text-base max-w-md">
+          <strong class="text-white">Toque no espelho ao lado</strong> para receber agora o catálogo completo no WhatsApp.
+        </p>
+
+        <ul class="mt-8 space-y-3 text-slate-300">
+          <li class="flex gap-3"><svg class="w-5 h-5 text-aqua-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Sensor touch capacitivo nas bordas</li>
+          <li class="flex gap-3"><svg class="w-5 h-5 text-aqua-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> 3 temperaturas: quente, neutra e fria</li>
+          <li class="flex gap-3"><svg class="w-5 h-5 text-aqua-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Desembaçador integrado</li>
+          <li class="flex gap-3"><svg class="w-5 h-5 text-aqua-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> Memória da última configuração</li>
+        </ul>
+      </div>
+
+      <div class="reveal flex justify-center">
+        <div class="w-full max-w-sm">
+          <div id="smart-mirror" class="mirror group">
+            <div class="ring-led"></div>
+            <div class="silhouette"></div>
+            <div class="hint">Toque para acender</div>
+          </div>
+          <div class="mt-6 text-center text-slate-400 text-sm">
+            <span id="mirror-status">Espelho desligado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- BALCÕES + ESPELHOS — SEÇÃO PRÓPRIA -->
+  <!-- ============================================== -->
+  <section id="balcoes" class="py-20 lg:py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <!-- Section header -->
+      <div class="grid lg:grid-cols-2 gap-10 items-end mb-12 reveal">
+        <div>
+          <div class="text-aqua-600 font-semibold text-xs uppercase tracking-[0.2em] mb-4">02 — Balcões e Espelhos</div>
+          <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02]">
+            <span class="text-aqua-600">Balcões</span> em PVC<br/>
+            que não incham.<br/>
+            Espelhos que pensam.
+          </h2>
+        </div>
+        <div class="lg:pb-3">
+          <p class="text-slate-600 text-base lg:text-lg leading-relaxed max-w-md">
+            Estrutura em PVC expandido 100% impermeável, espelhos LED com sensor touch e desembaçador. Conjuntos completos ou peças individuais.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <button data-balcao-filter="all" class="balcao-pill pill active">Todos</button>
+            <button data-balcao-filter="balcao" class="balcao-pill pill">Balcões</button>
+            <button data-balcao-filter="espelho" class="balcao-pill pill">Espelhos LED</button>
+            <button data-balcao-filter="conjunto" class="balcao-pill pill">Conjuntos</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Balcão products grid -->
+      <div id="balcoes-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Balcão 1: Lumière 80 -->
+        <article class="balcao-item product-card group" data-balcao-cat="conjunto">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-conjunto"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-emerald-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">NOVO</span>
+            <span class="absolute top-3 right-3 z-30 bg-aqua-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">LED</span>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Lumi%C3%A8re%2080" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Conjunto 80cm</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Lumière 80</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(47)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 2.190</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 1.490<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 137,69 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Balcão 2: Casal 120 -->
+        <article class="balcao-item product-card group" data-balcao-cat="balcao conjunto">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-balcao"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-rose-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">-29%</span>
+            <span class="absolute top-3 right-3 z-30 bg-emerald-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">Mais vendido</span>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Casal%20120" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Balcão duplo PVC</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Casal 120</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(124)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 3.490</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 2.490<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 230,12 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Espelho 1: Soleil -->
+        <article class="balcao-item product-card group" data-balcao-cat="espelho">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-espelho"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-aqua-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">LED Touch</span>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Soleil" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Espelho redondo 70cm</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Soleil</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(203)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 1.290</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 890<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 82,28 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Balcão 3: Solo 60 -->
+        <article class="balcao-item product-card group" data-balcao-cat="balcao">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-balcao"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Solo%2060" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Balcão compacto PVC</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Solo 60</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(91)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 1.490</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 1.090<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 100,77 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Espelho 2: Rectangular -->
+        <article class="balcao-item product-card group" data-balcao-cat="espelho">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-espelho"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1574117937414-1c12fed7eb6e?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-aqua-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">LED + Anti-fog</span>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Linea" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Espelho retangular 90cm</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Linea</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(67)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 1.690</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 1.190<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 110,02 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Conjunto 3: Premium 140 -->
+        <article class="balcao-item product-card group" data-balcao-cat="conjunto">
+          <div class="image-wrap">
+            <div class="illustration"><svg><use href="#ill-conjunto"/></svg></div>
+            <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=800&q=85" alt="" onerror="this.remove()" />
+            <span class="absolute top-3 left-3 z-30 bg-amber-400 text-slate-900 text-[11px] font-bold px-2.5 py-1 rounded-full">Premium</span>
+            <div class="actions">
+              <a href="https://wa.me/5511999999999?text=Quero%20comprar%20o%20Aqualls%20Premium%20140" target="_blank" rel="noopener" class="action-btn primary">Comprar agora</a>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="text-[11px] text-aqua-600 font-semibold uppercase tracking-wider">Conjunto premium 140cm</div>
+            <h3 class="font-display font-bold text-lg mt-1 leading-tight">Aqualls Premium 140</h3>
+            <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">★★★★★ <span class="text-slate-500 ml-1">(35)</span></div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 line-through">R$ 4.890</div>
+              <div class="font-display font-extrabold text-2xl text-slate-900 leading-none">R$ 3.690<span class="text-sm font-semibold text-slate-500">,00</span></div>
+              <div class="text-xs text-emerald-600 font-semibold mt-1">12x R$ 341,16 sem juros</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="text-center mt-12">
+        <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20o%20cat%C3%A1logo%20completo%20de%20balc%C3%B5es%20Aqualls" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 text-slate-700 hover:text-aqua-700 font-semibold border-b border-slate-300 hover:border-aqua-700 transition pb-1">
+          Ver todos os balcões e espelhos
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS -->
+  <section id="beneficios" class="py-20 lg:py-28 bg-ivory-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="max-w-2xl mx-auto text-center mb-16 reveal">
+        <div class="text-aqua-600 font-semibold text-xs uppercase tracking-[0.2em] mb-4">Por que Aqualls</div>
+        <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02]">A diferença que você sente,<br/>sem pagar caro.</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl p-6 shadow-soft reveal">
+          <div class="w-12 h-12 rounded-xl bg-aqua-50 grid place-items-center mb-4">
+            <svg class="w-6 h-6 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-xl">Importação direta</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Sem intermediários. Você paga preço de fábrica em produtos selecionados criteriosamente.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow-soft reveal">
+          <div class="w-12 h-12 rounded-xl bg-aqua-50 grid place-items-center mb-4">
+            <svg class="w-6 h-6 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-xl">PVC à prova d'água</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Balcões que não incham, não mofam e não descascam. Pensados para o uso real.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow-soft reveal">
+          <div class="w-12 h-12 rounded-xl bg-aqua-50 grid place-items-center mb-4">
+            <svg class="w-6 h-6 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-xl">Garantia de 12 meses</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Cobertura oficial Aqualls. Suporte por WhatsApp em tempo real, sem burocracia.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow-soft reveal">
+          <div class="w-12 h-12 rounded-xl bg-aqua-50 grid place-items-center mb-4">
+            <svg class="w-6 h-6 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-xl">Estoque pronto</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Centro de distribuição em SP. Despache em até 48h úteis após confirmação.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section class="py-20 lg:py-28 bg-aqua-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-end justify-between mb-12 reveal">
+        <div class="max-w-xl">
+          <div class="text-aqua-600 font-semibold text-xs uppercase tracking-[0.2em] mb-4">Quem usa, recomenda</div>
+          <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02]">Histórias reais<br/>de banheiros transformados.</h2>
+        </div>
+        <div class="hidden sm:block bg-white rounded-2xl p-5 shadow-soft text-center">
+          <div class="font-display text-3xl font-extrabold text-aqua-600">4.9/5</div>
+          <div class="text-amber-400 text-sm mt-1">★★★★★</div>
+          <div class="text-xs text-slate-500 mt-1">+1.200 avaliações</div>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <article class="bg-white rounded-2xl p-6 shadow-soft reveal">
+          <div class="text-amber-400 mb-4">★★★★★</div>
+          <p class="text-slate-700 leading-relaxed">"O balcão chegou em 5 dias e a instalação foi simples. O espelho LED é lindo, parece de hotel boutique. Já recomendei pra três amigas."</p>
+          <div class="mt-5 pt-5 border-t border-slate-100 flex items-center gap-3">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mariana&backgroundColor=b6e3f4" class="w-10 h-10 rounded-full" alt="">
+            <div>
+              <div class="font-semibold text-sm">Mariana A.</div>
+              <div class="text-xs text-slate-500">São Paulo, SP</div>
+            </div>
+          </div>
+        </article>
+        <article class="bg-white rounded-2xl p-6 shadow-soft reveal">
+          <div class="text-amber-400 mb-4">★★★★★</div>
+          <p class="text-slate-700 leading-relaxed">"Comprei o vaso smart pro meu pai (idoso). Mudou a vida dele. O bidê e o aquecimento valem cada centavo. Atendimento nota 10."</p>
+          <div class="mt-5 pt-5 border-t border-slate-100 flex items-center gap-3">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos&backgroundColor=ffd5dc" class="w-10 h-10 rounded-full" alt="">
+            <div>
+              <div class="font-semibold text-sm">Carlos M.</div>
+              <div class="text-xs text-slate-500">Curitiba, PR</div>
+            </div>
+          </div>
+        </article>
+        <article class="bg-white rounded-2xl p-6 shadow-soft reveal">
+          <div class="text-amber-400 mb-4">★★★★★</div>
+          <p class="text-slate-700 leading-relaxed">"Reformei dois banheiros do meu apê. O preço da Aqualls é metade do que paguei na primeira reforma — e a qualidade é até melhor. Recomendo demais."</p>
+          <div class="mt-5 pt-5 border-t border-slate-100 flex items-center gap-3">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Patricia&backgroundColor=d1d4f9" class="w-10 h-10 rounded-full" alt="">
+            <div>
+              <div class="font-semibold text-sm">Patrícia S.</div>
+              <div class="text-xs text-slate-500">Rio de Janeiro, RJ</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-20 lg:py-28 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 reveal">
+        <div class="text-aqua-600 font-semibold text-xs uppercase tracking-[0.2em] mb-4">Dúvidas frequentes</div>
+        <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02]">Tudo o que você<br/>precisa saber.</h2>
+      </div>
+
+      <div class="space-y-3">
+        <details class="bg-ivory-50 rounded-2xl p-5 group reveal">
+          <summary class="flex items-center justify-between font-semibold text-slate-900">
+            Os produtos têm nota fiscal e garantia oficial?
+            <svg class="chev w-5 h-5 text-aqua-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-3 text-slate-600 text-sm leading-relaxed">Sim. Toda compra inclui nota fiscal e garantia oficial Aqualls de 12 meses. Em caso de qualquer problema, falamos pelo WhatsApp e resolvemos rápido.</p>
+        </details>
+        <details class="bg-ivory-50 rounded-2xl p-5 group reveal">
+          <summary class="flex items-center justify-between font-semibold text-slate-900">
+            Os balcões em PVC realmente não incham com umidade?
+            <svg class="chev w-5 h-5 text-aqua-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-3 text-slate-600 text-sm leading-relaxed">Correto. O PVC expandido que usamos é 100% impermeável — não absorve água, não mofa e não descasca. É o mesmo material usado em estaleiros e banheiros públicos de alto tráfego.</p>
+        </details>
+        <details class="bg-ivory-50 rounded-2xl p-5 group reveal">
+          <summary class="flex items-center justify-between font-semibold text-slate-900">
+            Como funciona o frete? Atendem todo o Brasil?
+            <svg class="chev w-5 h-5 text-aqua-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-3 text-slate-600 text-sm leading-relaxed">Atendemos todo o Brasil. Frete grátis para SP e RJ acima de R$ 1.500. Para outras regiões, calculamos pelo CEP no WhatsApp. Despacho em até 48h úteis.</p>
+        </details>
+        <details class="bg-ivory-50 rounded-2xl p-5 group reveal">
+          <summary class="flex items-center justify-between font-semibold text-slate-900">
+            O vaso smart precisa de instalação especial?
+            <svg class="chev w-5 h-5 text-aqua-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-3 text-slate-600 text-sm leading-relaxed">Precisa apenas de uma tomada 110V/220V próxima e da entrada de água padrão. Acompanha manual ilustrado e suporte por WhatsApp em tempo real.</p>
+        </details>
+        <details class="bg-ivory-50 rounded-2xl p-5 group reveal">
+          <summary class="flex items-center justify-between font-semibold text-slate-900">
+            Posso devolver se não gostar?
+            <svg class="chev w-5 h-5 text-aqua-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-3 text-slate-600 text-sm leading-relaxed">Sim. Você tem 7 dias para arrependimento (CDC) e 30 dias para devolução por qualquer motivo, desde que o produto esteja na embalagem original e sem instalação.</p>
+        </details>
+        <details class="bg-ivory-50 rounded-2xl p-5 group reveal">
+          <summary class="flex items-center justify-between font-semibold text-slate-900">
+            Vocês emitem nota para arquiteto ou empresa?
+            <svg class="chev w-5 h-5 text-aqua-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-3 text-slate-600 text-sm leading-relaxed">Sim. Atendemos pessoa jurídica e arquitetos com programa de comissionamento. Fale conosco no WhatsApp para condições especiais.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="relative py-20 lg:py-28 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-aqua-500 via-aqua-600 to-aqua-800"></div>
+    <div class="blob bg-aqua-300/40 w-[500px] h-[500px] rounded-full -top-40 -right-40"></div>
+    <div class="blob bg-aqua-900/30 w-[400px] h-[400px] rounded-full -bottom-20 -left-20"></div>
+
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center text-white reveal">
+      <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.02]">Pronto para reformar<br/>seu banheiro com inteligência?</h2>
+      <p class="mt-6 text-aqua-50 text-lg max-w-xl mx-auto">Receba o catálogo completo, com todas as fotos, medidas e preços direto no seu WhatsApp.</p>
+      <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20o%20cat%C3%A1logo%20completo%20da%20Aqualls" target="_blank" rel="noopener"
+           class="inline-flex items-center justify-center gap-2 bg-white text-aqua-700 hover:bg-aqua-50 font-bold px-8 py-4 rounded-full transition shadow-soft">
+          <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.81 11.81 0 018.413 3.488 11.815 11.815 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.683 5.526l-.999 3.648 3.805-.873z"/></svg>
+          Falar agora no WhatsApp
+        </a>
+        <button id="open-leadform" class="inline-flex items-center justify-center gap-2 bg-aqua-700/40 hover:bg-aqua-700/60 backdrop-blur border border-white/30 text-white font-semibold px-8 py-4 rounded-full transition">
+          Receber por e-mail
+        </button>
+      </div>
+      <p class="mt-6 text-xs text-aqua-100">Sem spam. Você pode sair quando quiser.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-950 text-slate-400 pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-4 gap-10 mb-12">
+        <div class="md:col-span-2">
+          <a href="#hero" class="font-display font-extrabold text-2xl text-white">aqualls<span class="text-aqua-400">.</span></a>
+          <p class="text-sm max-w-sm leading-relaxed mt-4">Vasos sanitários e balcões de banheiro com tecnologia, design e preço justo. Importação direta para todo o Brasil.</p>
+          <div class="flex gap-3 mt-6">
+            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-slate-900 hover:bg-aqua-600 transition grid place-items-center" aria-label="WhatsApp">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.81 11.81 0 018.413 3.488 11.815 11.815 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.683 5.526l-.999 3.648 3.805-.873z"/></svg>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-slate-900 hover:bg-aqua-600 transition grid place-items-center" aria-label="Instagram">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-bold text-white mb-4">Produtos</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#vasos" class="hover:text-aqua-400 transition">Vasos sanitários</a></li>
+            <li><a href="#vasos" class="hover:text-aqua-400 transition">Linha Smart</a></li>
+            <li><a href="#balcoes" class="hover:text-aqua-400 transition">Balcões PVC</a></li>
+            <li><a href="#balcoes" class="hover:text-aqua-400 transition">Espelhos LED</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-white mb-4">Aqualls</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#beneficios" class="hover:text-aqua-400 transition">Por que comprar</a></li>
+            <li><a href="#faq" class="hover:text-aqua-400 transition">Dúvidas frequentes</a></li>
+            <li><a href="https://wa.me/5511999999999" class="hover:text-aqua-400 transition" target="_blank" rel="noopener">Atendimento</a></li>
+            <li><a href="#" class="hover:text-aqua-400 transition">Política de troca</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row gap-4 justify-between items-center text-xs">
+        <div>© 2026 Aqualls. Todos os direitos reservados. CNPJ XX.XXX.XXX/0001-XX</div>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-aqua-400 transition">Termos de uso</a>
+          <a href="#" class="hover:text-aqua-400 transition">Privacidade</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20o%20cat%C3%A1logo%20completo%20da%20Aqualls"
+     target="_blank" rel="noopener"
+     class="fixed bottom-5 right-5 z-50 group">
+    <div class="pulse relative w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 grid place-items-center shadow-soft transition">
+      <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.81 11.81 0 018.413 3.488 11.815 11.815 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.683 5.526l-.999 3.648 3.805-.873z"/></svg>
+    </div>
+  </a>
+
+  <!-- LEAD CAPTURE MODAL -->
+  <div id="leadform-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-soft relative">
+      <button id="close-leadform" class="absolute top-4 right-4 w-9 h-9 grid place-items-center rounded-full hover:bg-slate-100" aria-label="Fechar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div class="w-14 h-14 rounded-2xl bg-aqua-50 grid place-items-center mb-5">
+        <svg class="w-7 h-7 text-aqua-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      </div>
+      <h3 class="font-display text-2xl font-bold">Receba o catálogo completo</h3>
+      <p class="text-slate-600 mt-2 text-sm">Em segundos, no seu e-mail e WhatsApp. Cupom exclusivo de 10% pra primeira compra.</p>
+
+      <form id="leadform" class="mt-6 space-y-3">
+        <input type="text" name="nome" placeholder="Seu nome" required
+               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-aqua-500 focus:ring-2 focus:ring-aqua-100 outline-none transition" />
+        <input type="email" name="email" placeholder="Seu melhor e-mail" required
+               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-aqua-500 focus:ring-2 focus:ring-aqua-100 outline-none transition" />
+        <input type="tel" name="whatsapp" placeholder="WhatsApp com DDD" required
+               class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-aqua-500 focus:ring-2 focus:ring-aqua-100 outline-none transition" />
+        <button type="submit" class="w-full bg-aqua-600 hover:bg-aqua-700 text-white font-semibold py-3.5 rounded-xl transition">
+          Receber catálogo + cupom
+        </button>
+        <p class="text-xs text-slate-500 text-center">Ao continuar você aceita nossa política de privacidade.</p>
+      </form>
+
+      <div id="leadform-success" class="hidden text-center py-8">
+        <div class="w-16 h-16 rounded-full bg-emerald-50 grid place-items-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h4 class="font-display text-xl font-bold">Pronto! Catálogo enviado.</h4>
+        <p class="text-slate-600 text-sm mt-2">Confira seu e-mail e WhatsApp. Em até 5 minutos uma de nossas consultoras vai te chamar com o cupom exclusivo.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    const mt = document.getElementById('mobile-toggle');
+    const mm = document.getElementById('mobile-menu');
+    mt?.addEventListener('click', () => mm.classList.toggle('hidden'));
+    mm?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mm.classList.add('hidden')));
+
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 12) nav.classList.add('shadow-soft');
+      else nav.classList.remove('shadow-soft');
+    });
+
+    const mirror = document.getElementById('smart-mirror');
+    const mirrorStatus = document.getElementById('mirror-status');
+    const leadModal = document.getElementById('leadform-modal');
+    let mirrorTimer;
+    mirror?.addEventListener('click', () => {
+      mirror.classList.toggle('is-on');
+      const on = mirror.classList.contains('is-on');
+      mirrorStatus.textContent = on ? 'Espelho ligado • LED Touch ativado' : 'Espelho desligado';
+      if (on) {
+        clearTimeout(mirrorTimer);
+        mirrorTimer = setTimeout(() => openLeadModal(), 900);
+      }
+    });
+
+    function openLeadModal() {
+      leadModal.classList.remove('hidden');
+      leadModal.classList.add('flex');
+    }
+    function closeLeadModal() {
+      leadModal.classList.add('hidden');
+      leadModal.classList.remove('flex');
+    }
+    document.getElementById('open-leadform')?.addEventListener('click', openLeadModal);
+    document.getElementById('close-leadform')?.addEventListener('click', closeLeadModal);
+    leadModal?.addEventListener('click', (e) => { if (e.target === leadModal) closeLeadModal(); });
+
+    document.getElementById('leadform')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      console.log('Lead capturado:', data);
+      document.getElementById('leadform').classList.add('hidden');
+      document.getElementById('leadform-success').classList.remove('hidden');
+      setTimeout(() => {
+        const msg = encodeURIComponent(`Olá! Sou ${data.nome}, acabei de me cadastrar no site da Aqualls e quero o catálogo completo.`);
+        window.open(`https://wa.me/5511999999999?text=${msg}`, '_blank');
+      }, 1500);
+    });
+
+    // Filter pills — Vasos
+    function setupFilter(prefix, gridId, itemSel) {
+      const pills = document.querySelectorAll('.' + prefix + '-pill');
+      const items = document.querySelectorAll(itemSel);
+      pills.forEach(p => p.addEventListener('click', () => {
+        const f = p.dataset[prefix + 'Filter'];
+        pills.forEach(b => b.classList.remove('active'));
+        p.classList.add('active');
+        items.forEach(it => {
+          const cats = it.dataset[prefix + 'Cat'] || '';
+          if (f === 'all' || cats.includes(f)) it.style.display = '';
+          else it.style.display = 'none';
+        });
+      }));
+    }
+    setupFilter('vaso', 'vasos-grid', '.vaso-item');
+    setupFilter('balcao', 'balcoes-grid', '.balcao-item');
+  </script>
+</body>
+</html>

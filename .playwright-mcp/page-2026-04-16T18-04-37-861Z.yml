@@ -1,0 +1,444 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e6]: Nayara Della Vechia
+    - link "Inscrever-se →" [ref=e7] [cursor=pointer]:
+      - /url: "#inscricao"
+      - generic [ref=e8]: Inscrever-se
+      - generic [ref=e9]: →
+  - generic [ref=e11]:
+    - generic [ref=e15]: Recomeço Sistêmico · Inscrições abertas
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - heading "Você não está cansada só da dor. Você está cansada de viver a mesma história com rostos diferentes." [level=1] [ref=e18]:
+          - text: Você não está cansada só da dor. Você está cansada de viver a
+          - emphasis [ref=e19]: mesma história com rostos diferentes
+          - text: .
+        - paragraph [ref=e20]:
+          - text: Talvez você já tenha tentado mudar. Tentado entender. Feito o possível com o que sabia. Mas, no fundo, ainda sente que
+          - strong [ref=e21]: algo continua se repetindo
+          - text: .
+        - paragraph [ref=e22]:
+          - text: O
+          - strong [ref=e23]: Recomeço Sistêmico
+          - text: é um processo guiado para mulheres que querem parar de tratar o sintoma e começar a enxergar a raiz do que está travando sua vida.
+        - generic [ref=e24]:
+          - link "Quero garantir minha vaga →" [ref=e25] [cursor=pointer]:
+            - /url: "#inscricao"
+            - generic [ref=e26]: Quero garantir minha vaga
+            - generic [ref=e27]: →
+          - generic [ref=e28]:
+            - generic [ref=e29]:
+              - generic [ref=e30]: M
+              - generic [ref=e31]: L
+              - generic [ref=e32]: A
+              - generic [ref=e33]: +
+            - generic [ref=e34]:
+              - text: Grupo
+              - strong [ref=e35]: limitado
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - text: "06"
+              - emphasis [ref=e39]: encontros
+            - generic [ref=e40]: ao vivo comigo
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - text: "03"
+              - emphasis [ref=e43]: meses
+            - generic [ref=e44]: de acompanhamento
+          - generic [ref=e45]:
+            - generic [ref=e46]:
+              - text: "12"
+              - emphasis [ref=e47]: meses
+            - generic [ref=e48]: de acesso ao conteúdo
+      - complementary [ref=e49]:
+        - img "Nayara Della Vechia" [ref=e50]
+        - generic [ref=e51]:
+          - generic [ref=e52]: Nayara Della Vechia
+          - generic [ref=e53]: Mentora sistêmica
+        - generic [ref=e54]:
+          - generic [ref=e55]: 12x
+          - generic [ref=e56]:
+            - generic [ref=e57]: R$
+            - generic [ref=e58]: 103,11
+  - generic [ref=e59]:
+    - generic [ref=e60]:
+      - heading "Talvez o que mais te machuca nem seja só o que aconteceu. Talvez seja perceber que isso continua se repetindo." [level=2] [ref=e61]:
+        - text: Talvez o que mais te machuca nem seja só o que aconteceu. Talvez seja perceber que isso
+        - emphasis [ref=e62]: continua se repetindo
+        - text: .
+      - paragraph [ref=e63]: Você tenta seguir em frente. Tenta não olhar mais para trás. Tenta mudar. Tenta controlar o que sente. Tenta começar de novo. Mas, em algum momento, tudo parece te puxar de volta.
+    - generic [ref=e64]:
+      - generic [ref=e65]:
+        - generic [ref=e66]: Cenário atual
+        - heading "Você se reconhece aqui?" [level=3] [ref=e67]
+        - paragraph [ref=e68]: O pior não é só a dor. É a sensação de que, por mais que você tente, a raiz continua intacta.
+        - list [ref=e69]:
+          - listitem [ref=e70]: ✕ Você se sente travada e não entende por quê
+          - listitem [ref=e71]: ✕ Tenta se posicionar, mas não consegue como gostaria
+          - listitem [ref=e72]: ✕ Carrega conflitos que parecem nunca acabar
+          - listitem [ref=e73]: ✕ Se sente sobrecarregada emocionalmente
+          - listitem [ref=e74]: ✕ Vive a mesma dor com rostos diferentes
+      - generic [ref=e75]:
+        - generic [ref=e76]: Verdade silenciosa
+        - heading "Muda o cenário. Mas a sensação continua." [level=3] [ref=e77]
+        - paragraph [ref=e78]: Muda a fase. Muda a pessoa. Muda o ambiente. Muda a promessa que você faz pra si mesma. E ainda assim a sensação interna permanece parecida.
+      - generic [ref=e79]:
+        - generic [ref=e80]: Por que isso acontece
+        - heading "Quando a raiz não é vista, a vida continua te devolvendo o mesmo tema." [level=3] [ref=e81]
+        - paragraph [ref=e82]: A roupa muda. O rosto muda. O dia muda. Mas o que sustenta a repetição segue intocado.
+  - generic [ref=e83]:
+    - generic [ref=e84]:
+      - heading "Um processo em etapas claras para olhar o que ainda não foi visto." [level=2] [ref=e85]:
+        - text: Um processo em etapas claras para
+        - emphasis [ref=e86]: olhar o que ainda não foi visto
+        - text: .
+      - paragraph [ref=e87]: O Recomeço Sistêmico é conduzido comigo, passo a passo, com ensino + escuta + espaço para reorganizar. Não é um curso para assistir. É um processo para viver.
+    - generic [ref=e88]:
+      - generic [ref=e93]: recomeço-sistêmico / método
+      - generic [ref=e95]:
+        - generic [ref=e96]:
+          - generic [ref=e97]: "01"
+          - generic [ref=e98]:
+            - text: Compreender
+            - emphasis [ref=e99]: a raiz
+            - text: dos ciclos que se repetem
+          - generic [ref=e100]: Aulas gravadas
+        - generic [ref=e101]:
+          - generic [ref=e102]: "02"
+          - generic [ref=e103]:
+            - text: Identificar
+            - emphasis [ref=e104]: padrões
+            - text: que hoje te travam
+          - generic [ref=e105]: Encontro 1–2
+        - generic [ref=e106]:
+          - generic [ref=e107]: "03"
+          - generic [ref=e108]:
+            - text: Reorganizar
+            - emphasis [ref=e109]: vínculos e emoções
+            - text: que pesam
+          - generic [ref=e110]: Encontro 3–4
+        - generic [ref=e111]:
+          - generic [ref=e112]: "04"
+          - generic [ref=e113]:
+            - text: Se posicionar com
+            - emphasis [ref=e114]: verdade
+            - text: e sustentar
+          - generic [ref=e115]: Encontro 5
+        - generic [ref=e116]:
+          - generic [ref=e117]: "05"
+          - generic [ref=e118]:
+            - text: Construir
+            - emphasis [ref=e119]: direção concreta
+            - text: para os próximos meses
+          - generic [ref=e120]: Encontro 6
+        - generic [ref=e121]:
+          - generic [ref=e122]: "06"
+          - generic [ref=e123]:
+            - text: Continuar com
+            - emphasis [ref=e124]: acompanhamento e integração
+          - generic [ref=e125]: 3 meses
+  - generic [ref=e126]:
+    - heading "Esse processo não é para todo mundo. É para a mulher certa." [level=2] [ref=e128]:
+      - text: Esse processo não é para todo mundo.
+      - emphasis [ref=e129]: É para a mulher certa.
+    - generic [ref=e130]:
+      - generic [ref=e131]:
+        - generic [ref=e132]: É para você que
+        - list [ref=e133]:
+          - listitem [ref=e134]: ✓ sente que sua vida entrou num ciclo de repetição
+          - listitem [ref=e135]: ✓ vive conflitos que parecem nunca acabar
+          - listitem [ref=e136]: ✓ sente travas nos relacionamentos, na vida emocional ou até no dinheiro
+          - listitem [ref=e137]: ✓ quer entender a raiz do que está vivendo
+          - listitem [ref=e138]: ✓ está cansada de tentar mudar e voltar pro mesmo lugar
+          - listitem [ref=e139]: ✓ quer um caminho guiado, não mais uma explicação rasa
+          - listitem [ref=e140]: ✓ deseja um recomeço com profundidade, direção e acompanhamento
+      - generic [ref=e141]:
+        - generic [ref=e142]: Não é para você que
+        - list [ref=e143]:
+          - listitem [ref=e144]: ✕ busca fórmula mágica e resposta instantânea
+          - listitem [ref=e145]: ✕ quer só consumir conteúdo sem se comprometer com o processo
+          - listitem [ref=e146]: ✕ não deseja olhar com sinceridade para o que precisa ser visto
+          - listitem [ref=e147]: ✕ espera mudar sem encarar a própria raiz
+          - listitem [ref=e148]: ✕ quer apenas mais motivação para aliviar o momento
+  - generic [ref=e149]:
+    - generic [ref=e150]:
+      - heading "Tudo o que você recebe ao entrar no Recomeço Sistêmico." [level=2] [ref=e151]:
+        - text: Tudo o que você recebe ao entrar no
+        - emphasis [ref=e152]: Recomeço Sistêmico
+        - text: .
+      - paragraph [ref=e153]: "Um processo completo: ensino, acompanhamento, presença e tempo. Tudo o que uma jornada profunda precisa para acontecer de verdade."
+    - generic [ref=e154]:
+      - button "3 fases Como funciona o Método Recomeço Sistêmico 3 meses de acompanhamento, divididos em 3 fases, para ajudar você a compreender sua história, ajustar sua direção e sustentar mudanças reais na prática. Entender o método" [ref=e155] [cursor=pointer]:
+        - img [ref=e157]
+        - generic [ref=e161]: 3 fases
+        - heading "Como funciona o Método Recomeço Sistêmico" [level=3] [ref=e162]
+        - paragraph [ref=e163]: 3 meses de acompanhamento, divididos em 3 fases, para ajudar você a compreender sua história, ajustar sua direção e sustentar mudanças reais na prática.
+        - generic [ref=e164]:
+          - generic [ref=e165]: Entender o método
+          - generic [ref=e166]: ↓
+      - generic [ref=e167]:
+        - img [ref=e169]
+        - text: "06"
+        - heading "Encontros em grupo comigo" [level=3] [ref=e174]
+        - paragraph [ref=e175]: Encontros ao vivo para aprofundar, esclarecer, trazer direção e sustentar sua caminhada.
+      - generic [ref=e176]:
+        - img [ref=e178]
+        - text: 3m
+        - heading "Acompanhamento" [level=3] [ref=e180]
+        - paragraph [ref=e181]: Condução, continuidade e espaço para integração das mudanças.
+      - generic [ref=e182]:
+        - img [ref=e184]
+        - text: 1 ano
+        - heading "Acesso" [level=3] [ref=e187]
+        - paragraph [ref=e188]: Para viver o processo no seu tempo, sem correria e sem pressão.
+      - generic [ref=e189]:
+        - img [ref=e191]
+        - heading "Grupo exclusivo" [level=3] [ref=e193]
+        - paragraph [ref=e194]: Troca, apoio, pertencimento. Você não caminha sozinha.
+      - generic [ref=e196]:
+        - img [ref=e198]
+        - generic [ref=e200]:
+          - generic [ref=e201]: Bônus · 20 primeiras inscritas
+          - heading "2 encontros individuais comigo" [level=3] [ref=e202]
+          - paragraph [ref=e203]: Para aprofundar sua jornada de forma ainda mais próxima e personalizada. Uma oportunidade rara de ter acompanhamento 1:1 dentro de um processo em grupo.
+  - generic [ref=e204]:
+    - generic [ref=e205]:
+      - generic [ref=e206]: Histórias em vídeo
+      - heading "Mulheres que mudaram o que se repetia" [level=2] [ref=e207]:
+        - text: Mulheres que mudaram
+        - emphasis [ref=e208]: o que se repetia
+    - generic [ref=e209]:
+      - button "Assistir depoimento de Eline" [ref=e210] [cursor=pointer]:
+        - img [ref=e212]
+        - generic [ref=e214]:
+          - generic [ref=e215]: Depoimento
+          - paragraph [ref=e216]: Eline
+          - paragraph [ref=e217]: Assista a história completa em vídeo.
+      - button "Assistir depoimento de Emili" [ref=e218] [cursor=pointer]:
+        - img [ref=e220]
+        - generic [ref=e222]:
+          - generic [ref=e223]: Depoimento
+          - paragraph [ref=e224]: Emili
+          - paragraph [ref=e225]: Assista a história completa em vídeo.
+      - button "Assistir depoimento de Ana Paula" [ref=e226] [cursor=pointer]:
+        - img [ref=e228]
+        - generic [ref=e230]:
+          - generic [ref=e231]: Depoimento
+          - paragraph [ref=e232]: Ana Paula
+          - paragraph [ref=e233]: Assista a história completa em vídeo.
+  - generic [ref=e234]:
+    - generic [ref=e235]:
+      - generic [ref=e236]: E em palavras
+      - heading "Histórias reais de quem viveu o processo" [level=2] [ref=e237]:
+        - text: Histórias
+        - emphasis [ref=e238]: reais
+        - text: de quem viveu o processo
+    - figure "Talita após 1 ano de mentoria · com o marido" [ref=e239]:
+      - generic: “
+      - blockquote [ref=e240]:
+        - text: Hoje temos um
+        - emphasis [ref=e241]: casamento sólido
+        - text: . Nosso lar se tornou o refúgio pra nós e nossos filhos.
+      - generic [ref=e242]:
+        - generic [ref=e243]: Talita
+        - generic [ref=e244]: após 1 ano de mentoria · com o marido
+    - generic [ref=e245]:
+      - article [ref=e246]:
+        - generic [ref=e247]:
+          - generic [ref=e248]: T
+          - generic [ref=e250]: Talita
+        - generic [ref=e251]:
+          - paragraph [ref=e252]: "Quando eu iniciei estava sem perspectiva nenhuma. Estagnada na vida em todos os sentidos: profissional, financeiro, sentimental. Me sentia perdida, sem razão para continuar ou tentar algo novo."
+          - paragraph [ref=e253]: O processo se iniciou com um diagnóstico, que a Nayara fez comigo e com meu marido. A partir desse ponto a Nayara nos apontou e nos fez compreender o porquê de cada situação, como deveríamos agir para mudar o rumo de nossas vidas. Não foi simples, apesar de hoje tudo estar claro, mas a gente estava tão emaranhado que era difícil enxergar uma saída ou solução.
+          - paragraph [ref=e254]: Os alinhamentos individuais foram fundamentais para que a gente pudesse enxergar o que precisávamos melhorar e mudar. Não é fácil saber que muitas das situações difíceis foram fruto de decisões e atitudes nossas que tinham nos levado até ali. Alguns momentos foi doloroso, pois mudar não é mais confortável.
+          - paragraph [ref=e255]:
+            - text: "Mas aos poucos a gente foi se alinhando como casal com o propósito do que mais importa nas nossas vidas: nosso lar, nossa família. Aprendemos a ser melhores amigos. Um exemplo simples que mudamos e que faz toda diferença é que em cada decisão a gente conversa e se pergunta:"
+            - emphasis [ref=e256]: isso nos aproxima ou nos afasta do nosso objetivo como família?
+          - paragraph [ref=e257]: Hoje posso dizer que temos um casamento sólido, onde um confia no outro. Onde eu me sinto segura. Nosso lar se tornou o refúgio para nós e nossos filhos. Sempre juntos somos prioridade para todas as ocasiões. No financeiro começamos a juntar as contas e proventos, trabalhamos juntos para nossa família.
+          - paragraph [ref=e258]: Já conseguimos nesse um ano sair do vermelho, iniciamos um empreendimento e adquirimos o início de um dos nossos sonhos. O mais importante é que aprendemos que a vida terá altos e baixos, mas como reagir nessas situações é o que nos difere de quem ainda está perdido e sem rumo.
+          - paragraph [ref=e259]: A mentoria nos capacitou a vivenciar os momentos de crise de uma forma diferente, sempre olhando e tentando entender o porquê daquela situação e como podemos resolver. Somos muito gratos por ter feito a mentoria, com você Nayara, e também durante o processo o Daniel também acrescentou muito na parte masculina do casal.
+        - button "Ver depoimento completo" [ref=e260] [cursor=pointer]:
+          - generic [ref=e261]: Ver depoimento completo
+          - generic [ref=e262]: ▾
+      - article [ref=e263]:
+        - generic [ref=e264]:
+          - generic [ref=e265]: F
+          - generic [ref=e267]: Fernanda
+        - generic [ref=e268]:
+          - paragraph [ref=e269]: Durante 3 meses participei do programa de mentoria em grupo e atendimento individual com Nayara e Daniel, que de forma brilhante conseguem aliar os conhecimentos da inteligência sistêmica com a inteligência relacional.
+          - paragraph [ref=e270]: Me ajudaram a enxergar o lugar que eu deveria ocupar como empresária, como mãe e como esposa, e sair de um lugar de tentar salvar os outros a todo custo (inclusive financeiro na empresa).
+          - paragraph [ref=e271]: Ao longo deste processo pude também reconhecer partes de minha identidade que tinham ficado um pouco de lado na correria do dia a dia ou mesmo por estar enredada em questões que nem eram minhas.
+          - paragraph [ref=e272]: Agora uma fase nova, mais consciente de alguns padrões comportamentais e emocionais que surgem, podendo tomar decisões embasadas e mais firmes.
+          - paragraph [ref=e273]: Agradeço todo o cuidado e dedicação que tiveram comigo. Um abraço fraterno.
+        - button "Ver depoimento completo" [ref=e274] [cursor=pointer]:
+          - generic [ref=e275]: Ver depoimento completo
+          - generic [ref=e276]: ▾
+      - article [ref=e277]:
+        - generic [ref=e278]:
+          - generic [ref=e279]: M
+          - generic [ref=e281]: Marcela
+        - generic [ref=e282]:
+          - paragraph [ref=e283]: Conhecer o trabalho da Nayara foi essencial para todo o meu processo de crescimento e autoconhecimento. Eu vinha de anos tentando aplicar diversas técnicas e me fortalecer, quando na verdade o que eu precisava era me despir de todas as vestes, armaduras e verdades que havia me vestido ao longo dos anos.
+          - paragraph [ref=e284]: Mas isso só é possível quando temos um profissional preparado e que nos suporta nesse processo. Hoje sou uma mulher mais leve, mais feminina e muito mais empoderada. Porque o poder das mulheres está no feminino. Obrigada!
+        - button "Ver depoimento completo" [ref=e285] [cursor=pointer]:
+          - generic [ref=e286]: Ver depoimento completo
+          - generic [ref=e287]: ▾
+  - generic [ref=e288]:
+    - generic [ref=e289]:
+      - heading "Mentoria individual comigo, hoje, custa R$ 25.000. Aqui, a condição é outra." [level=2] [ref=e290]:
+        - text: Mentoria individual comigo, hoje, custa R$ 25.000.
+        - emphasis [ref=e291]: Aqui, a condição é outra.
+      - paragraph [ref=e292]: O valor dessa jornada não está só no conteúdo. Está no nível de acompanhamento e acesso que você terá.
+    - generic [ref=e293]:
+      - heading "Valores individuais de referência" [level=3] [ref=e295]
+      - generic [ref=e296]:
+        - generic [ref=e297]: Mentoria individual · 6 meses
+        - generic [ref=e298]: R$ 25.000
+      - generic [ref=e299]:
+        - generic [ref=e300]: 3 encontros individuais comigo
+        - generic [ref=e301]: R$ 2.900
+      - generic [ref=e302]:
+        - generic [ref=e303]: 1 hora individual comigo
+        - generic [ref=e304]: R$ 900
+      - generic [ref=e305]:
+        - generic [ref=e306]: Hoje, jornada completa por
+        - generic [ref=e307]: 12x R$ 103,11
+        - generic [ref=e308]: ou R$ 997 à vista no Pix
+  - generic [ref=e309]:
+    - heading "Recomeço Sistêmico. Condição especial." [level=2] [ref=e311]:
+      - text: Recomeço Sistêmico.
+      - emphasis [ref=e312]: Condição especial
+      - text: .
+    - generic [ref=e313]:
+      - generic [ref=e314]: Condição especial · tempo limitado
+      - generic [ref=e315]: Recomeço Sistêmico · Jornada completa
+      - generic [ref=e316]: 12x R$103,11
+      - paragraph [ref=e317]:
+        - text: ou
+        - strong [ref=e318]: R$ 997 à vista
+        - text: no Pix
+      - list [ref=e319]:
+        - listitem [ref=e320]:
+          - img [ref=e321]
+          - generic [ref=e323]:
+            - strong [ref=e324]: Aulas gravadas
+            - text: do método Recomeço Sistêmico
+        - listitem [ref=e325]:
+          - img [ref=e326]
+          - generic [ref=e328]:
+            - strong [ref=e329]: 6 encontros em grupo
+            - text: ao vivo comigo
+        - listitem [ref=e330]:
+          - img [ref=e331]
+          - generic [ref=e333]:
+            - strong [ref=e334]: 3 meses
+            - text: de acompanhamento direto
+        - listitem [ref=e335]:
+          - img [ref=e336]
+          - generic [ref=e338]:
+            - strong [ref=e339]: 1 ano
+            - text: de acesso ao conteúdo
+        - listitem [ref=e340]:
+          - img [ref=e341]
+          - generic [ref=e343]:
+            - strong [ref=e344]: Grupo exclusivo
+            - text: de alunas
+        - listitem [ref=e345]:
+          - img [ref=e346]
+          - generic [ref=e348]:
+            - strong [ref=e349]: "Bônus (20 primeiras):"
+            - text: 2 encontros individuais comigo
+      - link "QUERO GARANTIR MINHA VAGA →" [ref=e350] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e351]: QUERO GARANTIR MINHA VAGA
+        - generic [ref=e352]: →
+      - paragraph [ref=e353]: Checkout seguro · Kiwify
+  - generic [ref=e354]:
+    - heading "Talvez algumas dessas dúvidas estejam passando pela sua cabeça agora." [level=2] [ref=e356]:
+      - text: Talvez algumas dessas dúvidas estejam passando pela sua cabeça
+      - emphasis [ref=e357]: agora
+      - text: .
+    - generic [ref=e358]:
+      - generic [ref=e359]:
+        - paragraph [ref=e360]: "\" Eu ainda não entendi a raiz do meu problema."
+        - paragraph [ref=e361]:
+          - text: Esse é justamente um dos motivos para entrar. Você não precisa chegar com todas as respostas. O processo foi criado para
+          - strong [ref=e362]: te ajudar a enxergar o que, sozinha, você ainda não conseguiu nomear
+          - text: .
+      - generic [ref=e363]:
+        - paragraph [ref=e364]: "\" Tenho medo de mexer em dores profundas."
+        - paragraph [ref=e365]:
+          - text: Eu entendo. Mas
+          - strong [ref=e366]: continuar repetindo as mesmas dores também tem um custo alto
+          - text: . Aqui, você não entra em um processo solto. Entra em um caminho guiado, com direção e acompanhamento.
+      - generic [ref=e367]:
+        - paragraph [ref=e368]: "\" Já tentei outras coisas antes."
+        - paragraph [ref=e369]:
+          - text: Muitas mulheres chegam aqui depois de já terem tentado caminhos diferentes. O diferencial desse processo é
+          - strong [ref=e370]: não parar no sintoma. É olhar a raiz
+          - text: .
+      - generic [ref=e371]:
+        - paragraph [ref=e372]: "\" Não sei se isso é pra mim."
+        - paragraph [ref=e373]:
+          - text: Se você sente repetições na sua vida, se está cansada de voltar sempre pro mesmo lugar, e quer clareza para começar um novo ciclo,
+          - strong [ref=e374]: esse processo pode fazer muito sentido para você
+          - text: .
+      - generic [ref=e375]:
+        - paragraph [ref=e376]: "\" Agora estou sem dinheiro."
+        - paragraph [ref=e377]:
+          - text: "Eu sei que essa decisão pesa. Mas adiar a raiz do que te trava também custa caro:"
+          - strong [ref=e378]: na sua paz, no seu tempo, na sua energia e nas suas relações
+          - text: . Por isso essa condição foi pensada para tornar possível a sua entrada hoje.
+  - generic [ref=e380]:
+    - generic [ref=e383]: Inscrições abertas
+    - heading "Você não precisa continuar vivendo a mesma dor com outra roupa." [level=2] [ref=e384]:
+      - text: Você não precisa continuar vivendo
+      - emphasis [ref=e385]: a mesma dor com outra roupa
+      - text: .
+    - paragraph [ref=e386]:
+      - text: Chega uma hora em que continuar como está começa a doer mais do que mudar. Talvez você já tenha adiado esse olhar. Esperado o momento certo. Mas,
+      - strong [ref=e387]: quando a raiz não é vista, a vida tende a repetir
+      - text: .
+    - paragraph [ref=e388]: O Recomeço Sistêmico é o seu convite para começar diferente. Com clareza. Com direção. Com acompanhamento.
+    - link "SIM, EU QUERO COMEÇAR MEU RECOMEÇO →" [ref=e389] [cursor=pointer]:
+      - /url: "#"
+      - generic [ref=e390]: SIM, EU QUERO COMEÇAR MEU RECOMEÇO
+      - generic [ref=e391]: →
+    - paragraph [ref=e392]: 12x R$ 103,11 · ou R$ 997 à vista · Condição por tempo limitado
+  - generic [ref=e393]:
+    - heading "Perguntas frequentes" [level=2] [ref=e395]
+    - generic [ref=e396]:
+      - group [ref=e397]:
+        - generic "Como vou acessar o conteúdo? +" [ref=e398] [cursor=pointer]
+      - group [ref=e399]:
+        - generic "Por quanto tempo terei acesso? +" [ref=e400] [cursor=pointer]
+      - group [ref=e401]:
+        - generic "Os encontros são ao vivo? +" [ref=e402] [cursor=pointer]
+      - group [ref=e403]:
+        - generic "Quanto tempo dura o acompanhamento? +" [ref=e404] [cursor=pointer]
+      - group [ref=e405]:
+        - generic "Existe grupo de apoio? +" [ref=e406] [cursor=pointer]
+      - group [ref=e407]:
+        - generic "O bônus é para todas? +" [ref=e408] [cursor=pointer]
+      - group [ref=e409]:
+        - generic "Qual é o investimento? +" [ref=e410] [cursor=pointer]
+  - contentinfo [ref=e411]:
+    - generic [ref=e412]:
+      - generic [ref=e413]:
+        - heading "Nayara Della Vechia" [level=3] [ref=e414]
+        - paragraph [ref=e415]: Mentora sistêmica. Conduzo mulheres em processos de clareza, reorganização e recomeço, olhando para aquilo que se repete e pede compreensão.
+      - generic [ref=e416]:
+        - heading "Acompanhar" [level=5] [ref=e417]
+        - link "Instagram" [ref=e418] [cursor=pointer]:
+          - /url: https://www.instagram.com/nayaradellavechiaa/
+        - link "Inscrever-se" [ref=e419] [cursor=pointer]:
+          - /url: "#inscricao"
+      - generic [ref=e420]:
+        - heading "Contato" [level=5] [ref=e421]
+        - link "contato@nayaradellavechia.com.br" [ref=e422] [cursor=pointer]:
+          - /url: mailto:contato@nayaradellavechia.com.br
+    - generic [ref=e423]:
+      - generic [ref=e424]: © 2026 Nayara Della Vechia
+      - generic [ref=e425]: Todos os direitos reservados
+      - generic [ref=e426]: LGPD compliant

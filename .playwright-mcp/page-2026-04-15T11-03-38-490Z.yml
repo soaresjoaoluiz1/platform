@@ -1,0 +1,39 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: Mentoria em grupo · Inscrições abertas
+    - heading "Recomeço Sistêmico" [level=1] [ref=e7]:
+      - text: Recomeço
+      - emphasis [ref=e8]: Sistêmico
+    - paragraph [ref=e9]:
+      - text: Um processo guiado para mulheres que decidiram parar de tratar apenas o sintoma e começar a enxergar
+      - strong [ref=e10]: a raiz do que se repete
+      - text: .
+    - generic [ref=e13]:
+      - generic [ref=e14]: Conduzido por
+      - generic [ref=e15]: Nayara Della Vechia
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - text: "06"
+          - emphasis [ref=e19]: encontros
+        - generic [ref=e20]: Ao vivo comigo
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - text: "03"
+          - emphasis [ref=e23]: meses
+        - generic [ref=e24]: De acompanhamento
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - text: "12"
+          - emphasis [ref=e27]: meses
+        - generic [ref=e28]: De acesso
+  - generic [ref=e29]:
+    - img "Nayara Della Vechia" [ref=e31]
+    - generic [ref=e32]:
+      - generic [ref=e33]: 12x
+      - generic [ref=e34]:
+        - generic [ref=e35]: R$
+        - generic [ref=e36]: 103,11
+    - generic [ref=e37]:
+      - generic [ref=e38]: Nayara Della Vechia
+      - generic [ref=e39]: Mentora sistêmica

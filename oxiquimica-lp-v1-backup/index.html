@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seja um Revendedor Oxiquímica Varginha</title>
+  <meta name="description" content="Torne-se revendedor Oxiquímica Varginha. Produtos de limpeza profissional com alta margem de lucro, suporte completo e entrega na sua região.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ========== RESET & BASE ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1a1a2e;
+      background: #fff;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ========== UTILITIES ========== */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 80px 0; }
+    .section--alt { background: #f7f8fc; }
+    .section--dark { background: linear-gradient(135deg, #0a1628 0%, #162544 100%); color: #fff; }
+    .section--gradient { background: linear-gradient(135deg, #0052cc 0%, #00a3ff 100%); color: #fff; }
+    .text-center { text-align: center; }
+    .badge {
+      display: inline-block;
+      background: rgba(0, 82, 204, 0.1);
+      color: #0052cc;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+    }
+    .badge--light {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #5a6580;
+      max-width: 640px;
+      margin: 0 auto 48px;
+    }
+    .section--dark .section-subtitle,
+    .section--gradient .section-subtitle { color: rgba(255,255,255,0.8); }
+    .highlight { color: #0052cc; }
+    .highlight--green { color: #00b67a; }
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn--primary {
+      background: linear-gradient(135deg, #0052cc 0%, #00a3ff 100%);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0,82,204,0.35);
+    }
+    .btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,82,204,0.45);
+    }
+    .btn--white {
+      background: #fff;
+      color: #0052cc;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .btn--white:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+    .btn--outline {
+      background: transparent;
+      color: #0052cc;
+      border: 2px solid #0052cc;
+    }
+    .btn--outline:hover { background: #0052cc; color: #fff; }
+    .btn--large { padding: 18px 40px; font-size: 1.1rem; }
+    .btn--full { width: 100%; }
+
+    /* ========== HEADER ========== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      transition: box-shadow 0.3s;
+    }
+    .header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+    .header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .header__logo {
+      display: flex;
+      align-items: center;
+    }
+    .header__logo img { height: 60px; width: auto; }
+    .header__cta .btn { padding: 10px 24px; font-size: 0.9rem; }
+
+    /* ========== HERO ========== */
+    .hero {
+      padding: 140px 0 100px;
+      background: linear-gradient(170deg, #f0f6ff 0%, #fff 60%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0,163,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      align-items: center;
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,182,122,0.1);
+      color: #00875a;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+    }
+    .hero__tag::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #00b67a;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero__title {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: #5a6580;
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero__buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .hero__stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid #e2e8f0;
+      justify-content: center;
+    }
+    .hero__stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0052cc;
+      line-height: 1;
+    }
+    .hero__stat-label {
+      font-size: 0.85rem;
+      color: #7a8599;
+      margin-top: 4px;
+    }
+    .hero__visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero__card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+      width: 100%;
+      max-width: 440px;
+    }
+    .hero__card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .hero__card-sub {
+      font-size: 0.9rem;
+      color: #7a8599;
+      margin-bottom: 24px;
+    }
+    .hero__card .floating-badge {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background: linear-gradient(135deg, #00b67a 0%, #00d68f 100%);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(0,182,122,0.4);
+    }
+
+    /* ========== SOCIAL PROOF BAR ========== */
+    .proof-bar {
+      background: #fff;
+      border-bottom: 1px solid #eef1f6;
+      padding: 24px 0;
+    }
+    .proof-bar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .proof-bar__item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #5a6580;
+      font-weight: 500;
+    }
+    .proof-bar__icon {
+      width: 40px;
+      height: 40px;
+      background: #f0f6ff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    /* ========== BENEFITS ========== */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .benefit-card {
+      background: #fff;
+      border: 1px solid #eef1f6;
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s ease;
+    }
+    .benefit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+      border-color: transparent;
+    }
+    .benefit-card__icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .benefit-card__icon--blue { background: linear-gradient(135deg, #e6f0ff 0%, #cce0ff 100%); }
+    .benefit-card__icon--green { background: linear-gradient(135deg, #e6fff5 0%, #b3ffe0 100%); }
+    .benefit-card__icon--purple { background: linear-gradient(135deg, #f0e6ff 0%, #dcc8ff 100%); }
+    .benefit-card__icon--orange { background: linear-gradient(135deg, #fff3e6 0%, #ffe0b3 100%); }
+    .benefit-card__icon--teal { background: linear-gradient(135deg, #e6fffe 0%, #b3fff9 100%); }
+    .benefit-card__icon--red { background: linear-gradient(135deg, #ffe6e6 0%, #ffb3b3 100%); }
+    .benefit-card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .benefit-card__text {
+      font-size: 0.95rem;
+      color: #5a6580;
+      line-height: 1.6;
+    }
+
+    /* ========== SEGMENTS ========== */
+    .segments-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .segment-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .segment-card:hover {
+      background: rgba(255,255,255,0.14);
+      transform: translateY(-4px);
+    }
+    .segment-card__icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .segment-card__name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+    .segment-card__desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+
+    /* ========== TIMELINE ========== */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+      margin-top: 20px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 3px;
+      background: linear-gradient(90deg, #0052cc, #00a3ff, #00b67a, #00d68f);
+      border-radius: 2px;
+    }
+    .timeline__step { text-align: center; position: relative; padding: 0 12px; }
+    .timeline__number {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0052cc 0%, #00a3ff 100%);
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 4px 20px rgba(0,82,204,0.3);
+    }
+    .timeline__step:nth-child(3) .timeline__number,
+    .timeline__step:nth-child(4) .timeline__number {
+      background: linear-gradient(135deg, #00b67a 0%, #00d68f 100%);
+      box-shadow: 0 4px 20px rgba(0,182,122,0.3);
+    }
+    .timeline__title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .timeline__desc {
+      font-size: 0.85rem;
+      color: #5a6580;
+      line-height: 1.5;
+    }
+
+    /* ========== NUMBERS ========== */
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+    .number-card { text-align: center; }
+    .number-card__value {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .number-card__label {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+    }
+
+    /* ========== TESTIMONIALS ========== */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: #fff;
+      border: 1px solid #eef1f6;
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s ease;
+    }
+    .testimonial-card:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+    }
+    .testimonial-card__stars {
+      color: #f5a623;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    .testimonial-card__text {
+      font-size: 0.95rem;
+      color: #3d4663;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .testimonial-card__author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-card__avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0052cc 0%, #00a3ff 100%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .testimonial-card__name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .testimonial-card__role {
+      font-size: 0.8rem;
+      color: #7a8599;
+    }
+
+    /* ========== FAQ ========== */
+    .faq-list { max-width: 760px; margin: 0 auto; }
+    .faq-item {
+      border: 1px solid #eef1f6;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .faq-item:hover { border-color: #cce0ff; }
+    .faq-item.active { border-color: #0052cc; background: #fafcff; }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      user-select: none;
+      gap: 16px;
+    }
+    .faq-question__icon {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      background: #f0f6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #0052cc;
+      transition: transform 0.3s;
+    }
+    .faq-item.active .faq-question__icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+    .faq-item.active .faq-answer { max-height: 300px; }
+    .faq-answer__inner {
+      padding: 0 24px 20px;
+      font-size: 0.95rem;
+      color: #5a6580;
+      line-height: 1.7;
+    }
+
+    /* ========== FORM SECTION ========== */
+    .form-section {
+      padding: 100px 0;
+      background: linear-gradient(170deg, #f0f6ff 0%, #fff 100%);
+      position: relative;
+    }
+    .form-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .form-content__list { margin: 32px 0; }
+    .form-content__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .form-content__check {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00b67a 0%, #00d68f 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      margin-top: 2px;
+    }
+    .form-content__text {
+      font-size: 1rem;
+      color: #3d4663;
+      line-height: 1.5;
+    }
+    .form-content__text strong { color: #1a1a2e; }
+    .form-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+      position: relative;
+    }
+    .form-card__badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #00b67a 0%, #00d68f 100%);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 50px;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(0,182,122,0.3);
+    }
+    .form-card__title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 4px;
+      margin-top: 8px;
+    }
+    .form-card__subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #7a8599;
+      margin-bottom: 28px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #3d4663;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #eef1f6;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: #1a1a2e;
+      transition: border-color 0.3s;
+      background: #fafcff;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #0052cc;
+      background: #fff;
+    }
+    .form-group input::placeholder { color: #b0b8c9; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-card .btn { margin-top: 8px; }
+    .form-card__privacy {
+      text-align: center;
+      font-size: 0.78rem;
+      color: #7a8599;
+      margin-top: 12px;
+    }
+
+    /* ========== FINAL CTA ========== */
+    .final-cta { text-align: center; }
+    .final-cta .section-title { color: #fff; margin-bottom: 16px; }
+    .final-cta__buttons { display: flex; gap: 16px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      background: #0a1628;
+      color: rgba(255,255,255,0.6);
+      padding: 48px 0 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 32px;
+    }
+    .footer__logo {
+      margin-bottom: 12px;
+    }
+    .footer__logo img { height: 48px; width: auto; }
+    .footer__desc { font-size: 0.9rem; line-height: 1.6; max-width: 340px; }
+    .footer__title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .footer__link {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+    }
+    .footer__link:hover { color: #00a3ff; }
+    .footer__bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ========== WHATSAPP FAB ========== */
+    .whatsapp-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .whatsapp-fab:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(37,211,102,0.5); }
+    .whatsapp-fab svg { width: 32px; height: 32px; fill: #fff; }
+
+    /* ========== ANIMATIONS ========== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+      .hero__grid { grid-template-columns: 1fr; gap: 0; }
+      .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+      .segments-grid { grid-template-columns: repeat(2, 1fr); }
+      .timeline { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+      .timeline::before { display: none; }
+      .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .form-wrapper { grid-template-columns: 1fr; }
+      .footer__grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+    @media (max-width: 640px) {
+      .section { padding: 60px 0; }
+      .hero { padding: 110px 0 60px; }
+      .hero__stats { flex-direction: column; gap: 20px; }
+      .hero__buttons { flex-direction: column; }
+      .hero__buttons .btn { width: 100%; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .segments-grid { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr; }
+      .numbers-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-card { padding: 28px 20px; }
+      .proof-bar__inner { gap: 24px; }
+      .header__inner { height: 64px; }
+      .final-cta__buttons { flex-direction: column; align-items: center; }
+      .footer__bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#" class="header__logo"><img src="logo.png" alt="Oxi Química Varginha"></a>
+      <div class="header__cta">
+        <a href="#cadastro" class="btn btn--primary">Quero ser revendedor</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__grid">
+        <div class="hero__content">
+          <div class="hero__tag">Vagas abertas para revendedores na sua região</div>
+          <h1 class="hero__title">
+            Revenda produtos de limpeza profissional e <span class="highlight">fature de R$3.000 a R$10.000/mês</span>
+          </h1>
+          <p class="hero__subtitle">
+            A Oxiquímica Varginha fornece produtos registrados na ANVISA direto da fábrica para você revender com margens de lucro de até 100%. Sem taxa de franquia, sem estoque mínimo exagerado.
+          </p>
+          <div class="hero__buttons">
+            <a href="#cadastro" class="btn btn--primary btn--large">Cadastre-se agora</a>
+            <a href="#como-funciona" class="btn btn--outline btn--large">Como funciona</a>
+          </div>
+          <div class="hero__stats">
+            <div>
+              <div class="hero__stat-number">9+</div>
+              <div class="hero__stat-label">Segmentos atendidos</div>
+            </div>
+            <div>
+              <div class="hero__stat-number">60-100%</div>
+              <div class="hero__stat-label">Margem de lucro</div>
+            </div>
+            <div>
+              <div class="hero__stat-number">20+</div>
+              <div class="hero__stat-label">Anos de mercado</div>
+            </div>
+          </div>
+        </div>
+        <!-- SIMULADOR DE GANHOS (desativado — reativar quando necessário)
+        <div class="hero__visual">
+          <div class="hero__card" style="position:relative;">
+            <div class="floating-badge">Cadastro gratuito</div>
+            <div class="hero__card-title">Simulador de ganhos</div>
+            <div class="hero__card-sub">Veja quanto você pode faturar por mês</div>
+            <div style="margin-bottom:16px;">
+              <label style="font-size:0.85rem;font-weight:600;color:#3d4663;display:block;margin-bottom:6px;">Quantos clientes por semana?</label>
+              <input type="range" id="simClientes" min="5" max="40" value="15" style="width:100%;accent-color:#0052cc;">
+              <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#7a8599;"><span>5</span><span id="simClientesVal">15</span><span>40</span></div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <label style="font-size:0.85rem;font-weight:600;color:#3d4663;display:block;margin-bottom:6px;">Ticket médio por venda</label>
+              <input type="range" id="simTicket" min="30" max="200" value="80" step="10" style="width:100%;accent-color:#0052cc;">
+              <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#7a8599;"><span>R$30</span><span id="simTicketVal">R$80</span><span>R$200</span></div>
+            </div>
+            <div style="background:linear-gradient(135deg,#f0f6ff,#e6f0ff);border-radius:14px;padding:20px;text-align:center;">
+              <div style="font-size:0.85rem;color:#5a6580;margin-bottom:4px;">Seu faturamento estimado/mês</div>
+              <div id="simResult" style="font-size:2.2rem;font-weight:900;color:#0052cc;">R$ 4.800</div>
+              <div style="font-size:0.78rem;color:#00875a;font-weight:600;margin-top:4px;">Com margem líquida de ~65%</div>
+            </div>
+          </div>
+        </div>
+        -->
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF BAR -->
+  <section class="proof-bar">
+    <div class="container">
+      <div class="proof-bar__inner">
+        <div class="proof-bar__item">
+          <div class="proof-bar__icon">🛡️</div>
+          Registrado na ANVISA
+        </div>
+        <div class="proof-bar__item">
+          <div class="proof-bar__icon">🏭</div>
+          Direto da fábrica
+        </div>
+        <div class="proof-bar__item">
+          <div class="proof-bar__icon">🚚</div>
+          Entrega na sua região
+        </div>
+        <div class="proof-bar__item">
+          <div class="proof-bar__icon">📋</div>
+          Pessoa física ou jurídica
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="section section--alt fade-in" id="vantagens">
+    <div class="container text-center">
+      <span class="badge">Vantagens</span>
+      <h2 class="section-title">Por que revender <span class="highlight">Oxiquímica</span>?</h2>
+      <p class="section-subtitle">Diferente de outras marcas, oferecemos uma estrutura completa para você começar a vender e lucrar desde a primeira semana.</p>
+    </div>
+    <div class="container">
+      <div class="benefits-grid">
+        <div class="benefit-card fade-in">
+          <div class="benefit-card__icon benefit-card__icon--blue">💰</div>
+          <div class="benefit-card__title">Margem de 60% a 100%</div>
+          <div class="benefit-card__text">Preço direto de fábrica. Você define seu preço de revenda e controla seu lucro em cada produto.</div>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-card__icon benefit-card__icon--green">🚚</div>
+          <div class="benefit-card__title">Frete grátis em rotas</div>
+          <div class="benefit-card__text">Entregamos na sua porta sem custo adicional nas rotas disponíveis em Minas Gerais e região.</div>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-card__icon benefit-card__icon--purple">📦</div>
+          <div class="benefit-card__title">Kit de boas-vindas grátis</div>
+          <div class="benefit-card__text">Receba amostras dos principais produtos para apresentar aos seus clientes e fechar vendas na hora.</div>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-card__icon benefit-card__icon--orange">📱</div>
+          <div class="benefit-card__title">Conteúdo digital semanal</div>
+          <div class="benefit-card__text">Artes prontas para WhatsApp e Instagram para você divulgar sem precisar criar nada do zero.</div>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-card__icon benefit-card__icon--teal">🏢</div>
+          <div class="benefit-card__title">9 segmentos de mercado</div>
+          <div class="benefit-card__text">Agro, automotivo, hospitalar, alimentício, corporativo e mais — atenda qualquer tipo de cliente.</div>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-card__icon benefit-card__icon--red">⚡</div>
+          <div class="benefit-card__title">Início rápido e simples</div>
+          <div class="benefit-card__text">Investimento inicial a partir de R$800. Cadastre-se hoje, receba os produtos e comece a vender na mesma semana.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGMENTS -->
+  <section class="section section--dark fade-in">
+    <div class="container text-center">
+      <span class="badge badge--light">Portfólio completo</span>
+      <h2 class="section-title">Atenda <span style="color:#00a3ff;">todos os segmentos</span> com um único fornecedor</h2>
+      <p class="section-subtitle">Produtos profissionais de limpeza para cada tipo de negócio. Quanto mais segmentos você atende, mais você fatura.</p>
+    </div>
+    <div class="container">
+      <div class="segments-grid">
+        <div class="segment-card fade-in">
+          <div class="segment-card__icon">🌾</div>
+          <div class="segment-card__name">Agro</div>
+          <div class="segment-card__desc">Fazendas e agroindústrias</div>
+        </div>
+        <div class="segment-card fade-in">
+          <div class="segment-card__icon">🚗</div>
+          <div class="segment-card__name">Automotivo</div>
+          <div class="segment-card__desc">Lava-rápidos e oficinas</div>
+        </div>
+        <div class="segment-card fade-in">
+          <div class="segment-card__icon">🏥</div>
+          <div class="segment-card__name">Hospitalar</div>
+          <div class="segment-card__desc">Clínicas e hospitais</div>
+        </div>
+        <div class="segment-card fade-in">
+          <div class="segment-card__icon">🍔</div>
+          <div class="segment-card__name">Ind. Alimentícia</div>
+          <div class="segment-card__desc">Restaurantes e indústrias</div>
+        </div>
+        <div class="segment-card fade-in">
+          <div class="segment-card__icon">🏢</div>
+          <div class="segment-card__name">Corporativo</div>
+          <div class="segment-card__desc">Escritórios e condomínios</div>
+        </div>
+        <div class="segment-card fade-in">
+          <div class="segment-card__icon">🏗️</div>
+          <div class="segment-card__name">Construção</div>
+          <div class="segment-card__desc">Construtoras e obras</div>
+        </div>
+        <div class="segment-card fade-in">
+          <div class="segment-card__icon">🧪</div>
+          <div class="segment-card__name">Matéria Prima</div>
+          <div class="segment-card__desc">Indústrias e formuladores</div>
+        </div>
+        <div class="segment-card fade-in">
+          <div class="segment-card__icon">🏠</div>
+          <div class="segment-card__name">Casa</div>
+          <div class="segment-card__desc">Limpeza residencial</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS / TIMELINE -->
+  <section class="section fade-in" id="como-funciona">
+    <div class="container text-center">
+      <span class="badge">Passo a passo</span>
+      <h2 class="section-title">Do cadastro à <span class="highlight">primeira venda</span> em 7 dias</h2>
+      <p class="section-subtitle">Um processo simples e direto. Você se cadastra, recebe tudo o que precisa e já começa a faturar.</p>
+    </div>
+    <div class="container">
+      <div class="timeline">
+        <div class="timeline__step fade-in">
+          <div class="timeline__number">1</div>
+          <div class="timeline__title">Cadastre-se</div>
+          <div class="timeline__desc">Preencha o formulário abaixo. Em até 24h um consultor entra em contato.</div>
+        </div>
+        <div class="timeline__step fade-in">
+          <div class="timeline__number">2</div>
+          <div class="timeline__title">Receba o kit</div>
+          <div class="timeline__desc">Catálogo completo, amostras grátis e materiais de divulgação digital.</div>
+        </div>
+        <div class="timeline__step fade-in">
+          <div class="timeline__number">3</div>
+          <div class="timeline__title">Faça seu pedido</div>
+          <div class="timeline__desc">Escolha seus produtos com preço de fábrica. Investimento inicial a partir de R$800.</div>
+        </div>
+        <div class="timeline__step fade-in">
+          <div class="timeline__number">4</div>
+          <div class="timeline__title">Comece a vender</div>
+          <div class="timeline__desc">Entrega rápida na sua região. Comece a lucrar já na primeira semana.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUMBERS -->
+  <section class="section section--gradient fade-in">
+    <div class="container">
+      <div class="numbers-grid">
+        <div class="number-card">
+          <div class="number-card__value">20+</div>
+          <div class="number-card__label">Anos de experiência</div>
+        </div>
+        <div class="number-card">
+          <div class="number-card__value">150+</div>
+          <div class="number-card__label">Produtos no catálogo</div>
+        </div>
+        <div class="number-card">
+          <div class="number-card__value">9</div>
+          <div class="number-card__label">Segmentos atendidos</div>
+        </div>
+        <div class="number-card">
+          <div class="number-card__value">MG+</div>
+          <div class="number-card__label">Cobertura regional</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section section--alt fade-in" id="depoimentos">
+    <div class="container text-center">
+      <span class="badge">Depoimentos</span>
+      <h2 class="section-title">Quem revende, <span class="highlight">recomenda</span></h2>
+      <p class="section-subtitle">Histórias reais de revendedores que transformaram sua renda com produtos Oxiquímica.</p>
+    </div>
+    <div class="container">
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <div class="testimonial-card__text">"Comecei como renda extra e em 3 meses já estava faturando mais que meu salário. Os produtos vendem sozinhos porque a qualidade é muito boa."</div>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">MF</div>
+            <div>
+              <div class="testimonial-card__name">Marcos F.</div>
+              <div class="testimonial-card__role">Revendedor há 2 anos — Varginha/MG</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <div class="testimonial-card__text">"Atendo restaurantes e lava-rápidos na região. A margem é ótima e a Oxiquímica sempre entrega no prazo. O suporte faz toda a diferença."</div>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">CL</div>
+            <div>
+              <div class="testimonial-card__name">Carla L.</div>
+              <div class="testimonial-card__role">Revendedora PJ — Três Corações/MG</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <div class="testimonial-card__text">"Sou aposentado e encontrei nos produtos de limpeza profissional uma forma de manter minha renda ativa. Investimento baixo e retorno rápido."</div>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">JR</div>
+            <div>
+              <div class="testimonial-card__name">José R.</div>
+              <div class="testimonial-card__role">Revendedor há 1 ano — Alfenas/MG</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section fade-in" id="faq">
+    <div class="container text-center">
+      <span class="badge">Dúvidas frequentes</span>
+      <h2 class="section-title">Tudo que você precisa saber</h2>
+      <p class="section-subtitle">As respostas para as perguntas mais comuns de quem quer começar a revender.</p>
+    </div>
+    <div class="container">
+      <div class="faq-list">
+        <div class="faq-item active">
+          <div class="faq-question">
+            <span>Qual é o investimento inicial para começar?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">O investimento inicial gira em torno de R$800 a R$1.500 no primeiro pedido, dependendo dos produtos escolhidos. Mas podemos conversar e ajustar esse valor à sua realidade — o importante é você começar.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Preciso ter CNPJ para revender?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">Não. Vendemos tanto para pessoa física quanto jurídica. Você pode começar como pessoa física e formalizar quando sentir que é o momento certo.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Qual a margem de lucro real dos produtos?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">A margem varia de 60% a 100% dependendo do produto e do preço que você pratica na sua região. Você tem total liberdade para definir seu preço de revenda. Muitos revendedores trabalham com margem média de 70-80%.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Vocês entregam na minha cidade?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">Atendemos Varginha e toda a região do Sul de Minas. Para outras localidades, consulte-nos — estamos sempre expandindo nossas rotas de entrega. O frete é grátis nas rotas disponíveis.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Tem quantidade mínima de pedido?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">Temos um valor mínimo sugerido para o primeiro pedido, mas somos flexíveis. Cadastre-se e nosso consultor vai entender sua necessidade para montar o pedido ideal para você começar.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Em quanto tempo começo a vender?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">O processo é rápido: cadastro hoje, contato do consultor em até 24h, pedido processado e entregue em poucos dias. Muitos revendedores fazem sua primeira venda na mesma semana que recebem os produtos.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Vocês oferecem treinamento?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">Sim! Além do catálogo detalhado com fichas técnicas, você recebe orientação do consultor sobre os melhores produtos para cada segmento, dicas de venda e conteúdo digital semanal pronto para divulgar.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Posso usar a marca Oxiquímica nas minhas redes sociais?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">Sim! Autorizamos o uso da marca em suas redes sociais e materiais de divulgação. Isso fortalece sua credibilidade junto aos clientes e associa seu trabalho a uma empresa consolidada no mercado.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Os produtos são regularizados?</span>
+            <div class="faq-question__icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer__inner">Todos os nossos produtos possuem registro na ANVISA e atendem às normas vigentes de segurança e qualidade. Você revende com total tranquilidade e confiança para seus clientes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM SECTION -->
+  <section class="form-section fade-in" id="cadastro">
+    <div class="container">
+      <div class="form-wrapper">
+        <div class="form-content">
+          <span class="badge">Cadastro gratuito</span>
+          <h2 class="section-title">Comece a revender <span class="highlight">Oxiquímica</span> agora</h2>
+          <p style="font-size:1.05rem;color:#5a6580;margin-top:12px;">Preencha o formulário e um consultor dedicado entra em contato em até 24h para montar seu plano de revenda personalizado.</p>
+          <div class="form-content__list">
+            <div class="form-content__item">
+              <div class="form-content__check">✓</div>
+              <div class="form-content__text"><strong>Sem taxa de adesão</strong> — o cadastro é 100% gratuito</div>
+            </div>
+            <div class="form-content__item">
+              <div class="form-content__check">✓</div>
+              <div class="form-content__text"><strong>Kit de amostras grátis</strong> — para apresentar aos seus primeiros clientes</div>
+            </div>
+            <div class="form-content__item">
+              <div class="form-content__check">✓</div>
+              <div class="form-content__text"><strong>Catálogo + materiais digitais</strong> — tudo pronto pra você divulgar</div>
+            </div>
+            <div class="form-content__item">
+              <div class="form-content__check">✓</div>
+              <div class="form-content__text"><strong>Consultor exclusivo</strong> — suporte personalizado na sua jornada</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-card">
+          <div class="form-card__badge">Vagas limitadas na sua região</div>
+          <div class="form-card__title">Quero ser revendedor</div>
+          <div class="form-card__subtitle">Preencha seus dados e dê o primeiro passo</div>
+          <form id="leadForm" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+              <label for="nome">Seu nome completo</label>
+              <input type="text" id="nome" name="nome" placeholder="Ex: João da Silva" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="telefone">WhatsApp</label>
+                <input type="tel" id="telefone" name="telefone" placeholder="(35) 99999-9999" required>
+              </div>
+              <div class="form-group">
+                <label for="cidade">Cidade/UF</label>
+                <input type="text" id="cidade" name="cidade" placeholder="Ex: Varginha/MG" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="segmento">Qual segmento mais te interessa?</label>
+              <select id="segmento" name="segmento" required>
+                <option value="" disabled selected>Selecione um segmento</option>
+                <option value="agro">Agro</option>
+                <option value="automotivo">Automotivo</option>
+                <option value="hospitalar">Hospitalar</option>
+                <option value="alimenticio">Indústria Alimentícia</option>
+                <option value="corporativo">Corporativo</option>
+                <option value="construcao">Casa e Construção</option>
+                <option value="residencial">Limpeza Residencial</option>
+                <option value="varios">Vários segmentos</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="objetivo">O que você busca?</label>
+              <select id="objetivo" name="objetivo" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="renda-extra">Renda extra para complementar meu salário</option>
+                <option value="negocio-proprio">Montar meu próprio negócio de revenda</option>
+                <option value="loja">Vender em minha loja ou estabelecimento</option>
+                <option value="ja-revendo">Já revendo outros produtos e quero ampliar</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn--primary btn--large btn--full" id="submitBtn">
+              Quero me cadastrar agora
+            </button>
+            <p class="form-card__privacy">🔒 Seus dados estão protegidos. Não enviamos spam.</p>
+          </form>
+          <div id="formSuccess" style="display:none;text-align:center;padding:40px 0;">
+            <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
+            <div style="font-size:1.3rem;font-weight:800;color:#00875a;margin-bottom:8px;">Cadastro realizado!</div>
+            <div style="font-size:0.95rem;color:#5a6580;">Um consultor entrará em contato pelo WhatsApp em até 24h. Fique de olho!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="section section--gradient final-cta">
+    <div class="container">
+      <h2 class="section-title">Pronto para começar a lucrar com produtos de limpeza profissional?</h2>
+      <p class="section-subtitle">Junte-se aos revendedores Oxiquímica e tenha acesso a preço de fábrica, suporte completo e margens que realmente fazem diferença.</p>
+      <div class="final-cta__buttons">
+        <a href="#cadastro" class="btn btn--white btn--large">Cadastre-se gratuitamente</a>
+        <a href="https://wa.me/5535997148855?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20revenda%20Oxiqu%C3%ADmica!" class="btn btn--outline btn--large" style="border-color:#fff;color:#fff;" target="_blank" rel="noopener">Falar no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__logo"><img src="logo.png" alt="Oxi Química Varginha"></div>
+          <p class="footer__desc">Fábrica de produtos de limpeza profissional. Atendendo diversos segmentos com qualidade, registro ANVISA e entrega na sua região.</p>
+        </div>
+        <div>
+          <div class="footer__title">Contato</div>
+          <a href="tel:+5535997148855" class="footer__link">(35) 99714-8855</a>
+          <a href="mailto:contato@oxiquimicavarginha.com.br" class="footer__link">contato@oxiquimicavarginha.com.br</a>
+          <span class="footer__link">Av. Dr. Módena, 723 - Fátima<br>Varginha/MG — CEP 37010-085</span>
+        </div>
+        <div>
+          <div class="footer__title">Horário</div>
+          <span class="footer__link">Seg a Qui: 08h – 17h30</span>
+          <span class="footer__link">Sexta: 08h – 16h30</span>
+          <span class="footer__link">Sábado: 08h – 12h</span>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 Oxiquímica Varginha. Todos os direitos reservados.</span>
+        <span>Desenvolvido por Dros Agência</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FAB -->
+  <a href="https://wa.me/5535997148855?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20revenda%20Oxiqu%C3%ADmica!" class="whatsapp-fab" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script>
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // SIMULADOR DE GANHOS (desativado — reativar quando necessário)
+    // const simClientes = document.getElementById('simClientes');
+    // const simTicket = document.getElementById('simTicket');
+    // const simClientesVal = document.getElementById('simClientesVal');
+    // const simTicketVal = document.getElementById('simTicketVal');
+    // const simResult = document.getElementById('simResult');
+    // function updateSim() {
+    //   const clientes = parseInt(simClientes.value);
+    //   const ticket = parseInt(simTicket.value);
+    //   const faturamento = clientes * ticket * 4;
+    //   simClientesVal.textContent = clientes;
+    //   simTicketVal.textContent = 'R$' + ticket;
+    //   simResult.textContent = 'R$ ' + faturamento.toLocaleString('pt-BR');
+    // }
+    // simClientes.addEventListener('input', updateSim);
+    // simTicket.addEventListener('input', updateSim);
+
+    // Phone mask
+    document.getElementById('telefone').addEventListener('input', function(e) {
+      let v = e.target.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 6) {
+        v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+      } else if (v.length > 2) {
+        v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+      } else if (v.length > 0) {
+        v = '(' + v;
+      }
+      e.target.value = v;
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const wasActive = item.classList.contains('active');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+        if (!wasActive) item.classList.add('active');
+      });
+    });
+
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Form submit
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+
+      // Simulate submit (replace with real endpoint)
+      setTimeout(() => {
+        document.getElementById('leadForm').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>

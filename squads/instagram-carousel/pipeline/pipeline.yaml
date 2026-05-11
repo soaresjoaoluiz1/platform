@@ -1,0 +1,19 @@
+name: Instagram Carousel Pipeline
+squad: instagram-carousel
+version: "1.0.0"
+
+steps:
+  - steps/step-01-research-focus.md
+  - steps/step-02-research.md
+  - steps/step-03-news-selection.md
+  - steps/step-04-generate-angles.md
+  - steps/step-05-angle-selection.md
+  - steps/step-06-create-carousel.md
+  - steps/step-07-content-approval.md
+  - steps/step-08-design-slides.md
+  - steps/step-09-visual-approval.md
+  - steps/step-10-review.md
+  - steps/step-11-final-approval.md
+
+on_reject:
+  step-10-review: step-06-create-carousel

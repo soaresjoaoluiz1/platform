@@ -1,0 +1,197 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e6]: Nayara Della Vechia
+      - button "Quero participar" [active] [ref=e8] [cursor=pointer]
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - generic [ref=e13]: Masterclass Gratuita
+      - 'heading "Desordem Sistêmica: Entendendo a Raiz do que Se Repete" [level=1] [ref=e14]':
+        - text: "Desordem Sistêmica:"
+        - generic [ref=e15]:
+          - text: Entendendo a Raiz
+          - text: do que Se Repete
+      - paragraph [ref=e16]: Uma aula para mulheres emocionalmente cansadas que querem compreender por que certas dores, conflitos e travas insistem em voltar, mesmo quando tentam mudar.
+      - generic [ref=e17]:
+        - button "Quero Garantir Minha Vaga" [ref=e18] [cursor=pointer]:
+          - generic [ref=e19]: Quero Garantir Minha Vaga
+        - paragraph [ref=e21]: Dia 16 de abril às 20h • Aula gratuita
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]: Vagas preenchidas
+          - generic [ref=e25]: 78%
+        - paragraph [ref=e28]: Restam poucas vagas
+    - img "Nayara Della Vechia" [ref=e30]
+  - generic [ref=e32]:
+    - generic [ref=e33]:
+      - heading "Essa masterclass foi criada para a mulher certa" [level=2] [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: Essa masterclass não foi pensada para falar de forma genérica sobre emoções, relacionamentos ou desenvolvimento pessoal.
+        - paragraph [ref=e37]: Ela foi criada para mulheres que já perceberam que existe algo se repetindo na própria vida, mas ainda não conseguem compreender com clareza por que isso acontece, de onde isso vem e por que parece tão difícil mudar de verdade.
+        - paragraph [ref=e38]: É por isso que essa aula não é para todo mundo.
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - heading "Essa masterclass é para você que:" [level=3] [ref=e45]
+        - list [ref=e46]:
+          - listitem [ref=e47]:
+            - generic [ref=e49]: sente que vive a mesma dor com rostos diferentes
+          - listitem [ref=e50]:
+            - generic [ref=e52]: percebe repetição de conflitos no amor, na família ou nas emoções
+          - listitem [ref=e53]:
+            - generic [ref=e55]: está emocionalmente cansada e quer entender a raiz disso
+          - listitem [ref=e56]:
+            - generic [ref=e58]: tenta mudar, mas continua voltando para o mesmo lugar
+          - listitem [ref=e59]:
+            - generic [ref=e61]: sente que carrega pesos, culpas ou travas que não consegue explicar
+          - listitem [ref=e62]:
+            - generic [ref=e64]: deseja viver um recomeço com mais clareza, verdade e direção
+      - generic [ref=e65]:
+        - heading "Essa masterclass não é para você que:" [level=3] [ref=e70]
+        - list [ref=e71]:
+          - listitem [ref=e72]:
+            - generic [ref=e74]: busca uma solução mágica e rápida
+          - listitem [ref=e75]:
+            - generic [ref=e77]: quer apenas frases motivacionais para aliviar o momento
+          - listitem [ref=e78]:
+            - generic [ref=e80]: não está disposta a olhar com mais profundidade para o que vive
+          - listitem [ref=e81]:
+            - generic [ref=e83]: prefere continuar tratando só o sintoma sem tocar na raiz
+          - listitem [ref=e84]:
+            - generic [ref=e86]: ainda não sente que chegou a hora de olhar para a própria história com mais verdade
+    - paragraph [ref=e88]: Se você se reconhece na parte de cima, essa aula pode ser o primeiro passo que faltava para começar a entender o que hoje parece apenas confusão, dor ou repetição.
+  - generic [ref=e92]:
+    - heading "Talvez o que mais te canse não seja só a dor. Talvez seja a repetição." [level=2] [ref=e93]
+    - generic [ref=e94]:
+      - paragraph [ref=e95]: Tem dores que machucam. Mas tem dores que, além de machucar, vão desgastando aos poucos porque continuam voltando.
+      - paragraph [ref=e96]: É como se a vida mudasse de cenário, mas a sensação interna permanecesse parecida. Você muda de fase, mas o peso emocional continua. Tenta fazer diferente, mas acaba vivendo conflitos parecidos. Se esforça para se posicionar, mas em alguns momentos sente que volta para o mesmo lugar por dentro.
+      - paragraph [ref=e97]: Às vezes isso aparece no relacionamento. Outras vezes aparece na relação com pai e mãe. Em outros momentos, aparece na culpa, no excesso de cobrança, na sensação de travamento, na dificuldade de confiar, de se abrir, de decidir ou até de seguir em paz.
+      - paragraph [ref=e98]: E o que mais cansa não é só o problema em si. É não entender por que ele continua acontecendo.
+      - paragraph [ref=e100]: "\"Por que isso sempre volta? Por que eu tento tanto e parece que nada muda de verdade?\""
+      - paragraph [ref=e101]: Quando uma dor se repete, ela deixa de parecer apenas uma fase ruim. Ela começa a se tornar um sinal.
+    - paragraph [ref=e103]: Nem tudo que se repete é coincidência. Às vezes, é um pedido de compreensão.
+  - generic [ref=e106]:
+    - generic [ref=e107]:
+      - heading "Nem sempre o problema está só no que está acontecendo agora" [level=2] [ref=e110]
+      - generic [ref=e111]:
+        - paragraph [ref=e112]: Uma das maiores armadilhas emocionais é acreditar que o que está doendo hoje começou hoje.
+        - paragraph [ref=e113]: Nem sempre.
+        - paragraph [ref=e114]: Muitas vezes, a dor que hoje aparece no amor, na família, na culpa, na dificuldade de se posicionar ou no cansaço emocional não começou no presente. Ela apenas ficou mais visível agora.
+        - paragraph [ref=e115]: Isso acontece porque, quando a raiz de um padrão não é vista, a vida continua encontrando formas de mostrar o mesmo tema em cenários diferentes.
+        - generic [ref=e116]:
+          - paragraph [ref=e117]: O sintoma muda. A situação muda. As pessoas mudam.
+          - paragraph [ref=e118]: Mas o desconforto interno continua parecido.
+        - paragraph [ref=e119]: Essa masterclass nasce justamente para lançar luz sobre isso. Não para complicar sua história, mas para te ajudar a compreender melhor aquilo que, até hoje, talvez tenha parecido só um problema isolado.
+      - paragraph [ref=e121]: Aquilo que se repete pode estar revelando algo que ainda não foi visto da forma certa.
+    - generic [ref=e123]:
+      - img "Nayara Della Vechia" [ref=e124]
+      - paragraph [ref=e127]: "\"A clareza começa quando olhamos para a raiz, não apenas para os sintomas.\""
+  - generic [ref=e130]:
+    - generic [ref=e131]:
+      - heading "Na masterclass Desordem Sistêmica, você vai entender com mais clareza o que pode estar por trás do que se repete na sua vida" [level=2] [ref=e132]
+      - paragraph [ref=e133]: Essa aula foi construída para te ajudar a sair da sensação de confusão e começar a compreender, com mais profundidade, por que certos conflitos, dores e travas insistem em voltar.
+    - generic [ref=e134]:
+      - generic [ref=e135]:
+        - generic [ref=e137]: "01"
+        - heading "Por que certos padrões continuam se repetindo" [level=3] [ref=e138]
+        - paragraph [ref=e139]: Você vai entender por que algumas dores continuam aparecendo, mesmo quando você tenta mudar, amadurecer ou fazer diferente. Nem sempre repetição é falta de esforço. Muitas vezes, é falta de clareza sobre a raiz.
+      - generic [ref=e140]:
+        - generic [ref=e142]: "02"
+        - heading "Como a desordem aparece na vida prática" [level=3] [ref=e143]
+        - paragraph [ref=e144]: A desordem não aparece só em grandes crises. Ela pode aparecer na forma como você se relaciona, nas culpas que carrega, nos conflitos que se repetem, nas decisões que travam e na sensação constante de que algo está fora do lugar.
+      - generic [ref=e145]:
+        - generic [ref=e147]: "03"
+        - heading "Por que olhar só para o sintoma não resolve" [level=3] [ref=e148]
+        - paragraph [ref=e149]: Você vai compreender por que tantas vezes a pessoa tenta melhorar o que sente, mas continua voltando para o mesmo padrão. Enquanto apenas o sintoma é tratado, a raiz continua sustentando a repetição.
+      - generic [ref=e150]:
+        - generic [ref=e152]: "04"
+        - heading "Por onde começa um recomeço real" [level=3] [ref=e153]
+        - paragraph [ref=e154]: Recomeço não começa quando tudo se resolve de uma vez. Ele começa quando você passa a olhar para o lugar certo, com mais consciência, mais verdade e mais clareza sobre o que precisa ser reorganizado.
+    - generic [ref=e155]:
+      - paragraph [ref=e156]: O objetivo da aula é te ajudar a compreender melhor o que vive hoje, para que o seu próximo passo não venha só do cansaço, mas também da consciência.
+      - button "Quero Participar da Masterclass" [ref=e157] [cursor=pointer]
+  - generic [ref=e159]:
+    - generic [ref=e160]:
+      - heading "O que pode começar a mudar quando você olha para a raiz" [level=2] [ref=e161]
+      - paragraph [ref=e162]: "Quando uma mulher começa a compreender a raiz do que vive, algo importante acontece: ela para de lutar apenas contra o que sente e começa a enxergar com mais verdade o que precisa ser visto."
+    - generic [ref=e163]:
+      - paragraph [ref=e164]: Isso não significa que tudo se resolve de forma instantânea. Mas significa que ela deixa de caminhar no escuro.
+      - heading "A clareza muda muita coisa" [level=3] [ref=e165]
+      - generic [ref=e166]:
+        - paragraph [ref=e170]: se culpar menos pelo que não conseguia explicar
+        - paragraph [ref=e174]: perceber com mais nitidez o que está sustentando seus conflitos
+        - paragraph [ref=e178]: desenvolver mais consciência sobre a forma como se relaciona
+        - paragraph [ref=e182]: se posicionar com mais verdade
+        - paragraph [ref=e186]: sair da sensação de estar sempre presa no mesmo lugar
+        - paragraph [ref=e190]: abrir espaço para um recomeço mais inteiro e mais lúcido
+      - generic [ref=e191]:
+        - paragraph [ref=e192]: A transformação, aqui, não é vendida como mágica
+        - paragraph [ref=e193]: Ela é apresentada como um movimento real de consciência, reorganização e direção.
+    - generic [ref=e194]:
+      - paragraph [ref=e195]: Às vezes, o primeiro grande passo não é mudar tudo. É finalmente entender o que precisa mudar e de onde isso começa.
+      - button "Garantir Minha Vaga Gratuita" [ref=e196] [cursor=pointer]
+  - generic [ref=e198]:
+    - heading "Essa aula não é uma palestra genérica para te emocionar por alguns minutos e depois passar" [level=2] [ref=e201]
+    - generic [ref=e202]:
+      - paragraph [ref=e203]: A proposta da masterclass Desordem Sistêmica não é te entregar frases prontas, motivação vazia ou um discurso bonito que te toca por alguns instantes, mas não te ajuda a compreender o que realmente está vivendo.
+      - paragraph [ref=e204]: Essa aula também não foi construída para simplificar dores profundas em respostas rasas.
+      - paragraph [ref=e206]:
+        - text: Não é sobre te ensinar a ser forte.
+        - text: Não é sobre fingir que está tudo bem.
+        - text: Não é sobre te fazer acreditar que basta querer muito para tudo mudar.
+      - paragraph [ref=e207]: É sobre começar a olhar com mais verdade para a raiz daquilo que hoje pesa, confunde, trava e se repete.
+      - paragraph [ref=e208]: É uma aula para quem sente que não precisa apenas de mais motivação. Precisa de mais clareza.
+    - paragraph [ref=e210]: Porque, em muitos casos, o que falta não é força. É compreensão.
+  - generic [ref=e213]:
+    - img "Nayara Della Vechia" [ref=e216]
+    - generic [ref=e218]:
+      - generic [ref=e219]: Quem vai conduzir
+      - heading "Nayara Della Vechia" [level=2] [ref=e220]
+      - generic [ref=e221]:
+        - paragraph [ref=e222]: Nayara Della Vechia é mentora sistêmica e conduz mulheres em processos de clareza, reorganização e recomeço.
+        - paragraph [ref=e223]: Seu trabalho parte de uma visão profunda sobre aquilo que se repete na vida e que, muitas vezes, não pode ser compreendido apenas olhando para o sintoma ou para a dor mais visível do momento.
+        - paragraph [ref=e224]: Ao longo da sua atuação, Nayara tem ajudado mulheres a enxergarem com mais clareza os padrões familiares e emocionais que travam relacionamentos, paz, direção e posicionamento.
+        - paragraph [ref=e226]: "\"Sua forma de conduzir não parte de respostas rasas. Parte de uma escuta sensível, de uma leitura mais profunda do que se repete e de um olhar comprometido com a verdade do processo.\""
+        - paragraph [ref=e227]: "Essa masterclass nasce exatamente desse lugar: do desejo de ajudar mulheres emocionalmente cansadas a entenderem melhor o que vivem e a começarem um novo olhar sobre si, sobre suas relações e sobre a própria história."
+      - paragraph [ref=e229]: Se você sente que já não quer mais apenas suportar o que vive, mas compreender com mais verdade o que está por trás disso, essa aula pode fazer muito sentido para você.
+  - generic [ref=e233]:
+    - heading "Se essa mensagem falou com você, essa aula pode ser o melhor lugar para começar" [level=2] [ref=e234]
+    - generic [ref=e235]:
+      - paragraph [ref=e236]: Talvez você não precise, agora, de mais uma tentativa aleatória de se sentir melhor.
+      - paragraph [ref=e237]: Talvez o que você precise seja começar a enxergar com mais clareza por que alguns padrões continuam se repetindo e o que isso está tentando revelar.
+      - paragraph [ref=e238]: A masterclass Desordem Sistêmica foi criada para ser esse ponto de partida.
+    - generic [ref=e239]:
+      - paragraph [ref=e240]: Dia 16 de abril às 20h
+      - paragraph [ref=e241]: Preencha seus dados e participe gratuitamente da masterclass.
+      - button "QUERO GARANTIR MINHA VAGA" [ref=e242] [cursor=pointer]
+      - paragraph [ref=e243]: Após se inscrever, você receberá as orientações para participar da aula.
+      - generic [ref=e244]:
+        - generic [ref=e245]:
+          - generic [ref=e246]: Vagas preenchidas
+          - generic [ref=e247]: 78%
+        - paragraph [ref=e250]: Restam poucas vagas
+  - contentinfo [ref=e251]:
+    - generic [ref=e252]:
+      - paragraph [ref=e253]: Nayara Della Vechia
+      - paragraph [ref=e254]: © 2026 Todos os direitos reservados.
+  - generic [ref=e258]:
+    - button [ref=e259] [cursor=pointer]
+    - generic [ref=e261]:
+      - img "Nayara Della Vechia" [ref=e263]
+      - heading "Inscreva-se na Masterclass" [level=3] [ref=e264]
+      - paragraph [ref=e265]: Dia 16 de abril às 20h
+      - paragraph [ref=e266]: Preencha seus dados para garantir seu acesso à aula gratuita.
+    - generic [ref=e267]:
+      - generic [ref=e268]:
+        - generic [ref=e269]: Nome completo
+        - textbox "Seu nome" [ref=e270]
+      - generic [ref=e271]:
+        - generic [ref=e272]: E-mail
+        - textbox "seu@email.com" [ref=e273]
+      - generic [ref=e274]:
+        - generic [ref=e275]: WhatsApp
+        - textbox "(00) 00000-0000" [ref=e276]
+      - button "QUERO GARANTIR MINHA VAGA" [ref=e277] [cursor=pointer]
+      - paragraph [ref=e278]: Ao se inscrever, você concorda em receber comunicações sobre a masterclass.
+      - generic [ref=e280]:
+        - generic [ref=e281]: Vagas preenchidas
+        - generic [ref=e282]: 78%

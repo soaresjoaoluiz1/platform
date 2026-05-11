@@ -1,0 +1,7 @@
+- generic [ref=e3]:
+  - img "Nayara Della Vechia" [ref=e6]
+  - generic [ref=e7]:
+    - heading "Recomeço Sistêmico" [level=1] [ref=e8]:
+      - text: Recomeço
+      - emphasis [ref=e9]: Sistêmico
+    - paragraph [ref=e10]: A dor pode terminar em você.

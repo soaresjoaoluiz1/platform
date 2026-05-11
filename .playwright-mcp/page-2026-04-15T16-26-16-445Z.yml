@@ -1,0 +1,8 @@
+- generic [ref=e7]:
+  - generic [ref=e8]:
+    - img [ref=e9]
+    - generic [ref=e14]: Aula gravada
+  - img "Nayara Della Vechia" [ref=e17]
+  - heading "Desordem Sistêmica" [level=1] [ref=e19]:
+    - text: Desordem
+    - emphasis [ref=e20]: Sistêmica

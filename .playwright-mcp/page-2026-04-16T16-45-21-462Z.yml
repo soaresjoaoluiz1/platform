@@ -1,0 +1,25 @@
+- generic [ref=e7]:
+  - generic [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]: Mentoria
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - strong [ref=e13]: "3"
+          - text: meses
+        - generic [ref=e14]:
+          - strong [ref=e15]: "3"
+          - text: fases
+        - generic [ref=e16]:
+          - strong [ref=e17]: "06"
+          - text: encontros ao vivo
+      - heading "Recomeço Sistêmico" [level=1] [ref=e18]:
+        - text: Recomeço
+        - emphasis [ref=e19]: Sistêmico
+      - paragraph [ref=e20]:
+        - text: Compreender, reposicionar e
+        - emphasis [ref=e21]: sustentar
+        - text: o que você decide mudar.
+    - generic [ref=e22]:
+      - generic [ref=e24]: Conduzido por
+      - generic [ref=e25]: Nayara Della Vechia
+  - img "Nayara Della Vechia" [ref=e28]

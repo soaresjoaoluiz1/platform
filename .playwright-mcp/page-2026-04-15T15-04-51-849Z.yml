@@ -1,0 +1,10 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - img [ref=e5]
+    - generic [ref=e10]: Mentoria · 6 encontros ao vivo
+  - img "Nayara Della Vechia" [ref=e14]
+  - generic [ref=e15]:
+    - heading "Recomeço Sistêmico" [level=1] [ref=e16]:
+      - text: Recomeço
+      - emphasis [ref=e17]: Sistêmico
+    - paragraph [ref=e18]: com Nayara Della Vechia · Mentora Sistêmica

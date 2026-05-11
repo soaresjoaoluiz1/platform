@@ -1,57 +1,168 @@
 import { useState, useEffect } from 'react'
-import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 import { useAccount } from '../context/AccountContext'
-import { fetchBroadcasts, fetchLeads, createBroadcast, sendBroadcast, formatNumber, type Broadcast, type Lead } from '../lib/api'
-import { MessageCircle, Plus, Send, CheckCircle, XCircle, Clock } from 'lucide-react'
+import { fetchBroadcasts, fetchLeads, createBroadcast, sendBroadcast, fetchTags, fetchFunnels, fetchWhatsAppInstances, type Broadcast, type Lead, type Tag, type Funnel, type WhatsAppInstance } from '../lib/api'
+import { MessageCircle, Plus, Send, CheckCircle, Clock, Trash2, Filter, Tag as TagIcon, GitBranch, Smartphone, AlertTriangle, Eye, PauseCircle } from 'lucide-react'
+import { parseSqlDate } from '../lib/dates'
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
   draft: { label: 'Rascunho', color: '#9B96B0' },
   scheduled: { label: 'Agendado', color: '#FBBC04' },
   sending: { label: 'Enviando', color: '#5DADE2' },
+  paused: { label: 'Pausado', color: '#FBBC04' },
   completed: { label: 'Concluido', color: '#34C759' },
   failed: { label: 'Falhou', color: '#FF6B6B' },
 }
 
+const MIN_VARIATIONS = 3 // total messages (principal + 2 variations)
+const MIN_DELAY = 8
+const DEFAULT_DELAY = 15
+
+function formatDuration(seconds: number): string {
+  if (seconds < 60) return `${Math.round(seconds)}s`
+  const m = Math.floor(seconds / 60)
+  if (m < 60) return `${m}min`
+  const h = Math.floor(m / 60)
+  const mm = m % 60
+  return mm > 0 ? `${h}h${mm}min` : `${h}h`
+}
+
 export default function Messages() {
-  const { user } = useAuth()
+  const navigate = useNavigate()
   const { accountId } = useAccount()
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([])
   const [loading, setLoading] = useState(true)
   const [showNew, setShowNew] = useState(false)
   const [newName, setNewName] = useState('')
   const [newTemplate, setNewTemplate] = useState('')
+  const [newVariations, setNewVariations] = useState<string[]>(['', ''])
+  const [newDelay, setNewDelay] = useState(DEFAULT_DELAY)
+  const [newInstanceId, setNewInstanceId] = useState<number | ''>('')
   const [selectedLeads, setSelectedLeads] = useState<Lead[]>([])
   const [leadSearch, setLeadSearch] = useState('')
   const [searchResults, setSearchResults] = useState<Lead[]>([])
   const [step, setStep] = useState(1)
+  const [tags, setTags] = useState<Tag[]>([])
+  const [funnels, setFunnels] = useState<Funnel[]>([])
+  const [instances, setInstances] = useState<WhatsAppInstance[]>([])
+  const [filterTags, setFilterTags] = useState<number[]>([])
+  const [filterStages, setFilterStages] = useState<number[]>([])
+  const [creating, setCreating] = useState(false)
 
   const load = () => { if (accountId) { setLoading(true); fetchBroadcasts(accountId).then(setBroadcasts).finally(() => setLoading(false)) } }
   useEffect(load, [accountId])
 
+  // Auto-refresh enquanto tiver disparos em andamento
+  useEffect(() => {
+    if (!accountId) return
+    const hasActive = broadcasts.some(b => b.status === 'sending' || b.status === 'paused')
+    if (!hasActive) return
+    const id = setInterval(load, 3000)
+    return () => clearInterval(id)
+  }, [broadcasts.map(b => `${b.id}:${b.status}:${b.sent_count}`).join(','), accountId])
+
+  // Carrega tags, funis, instancias ao abrir modal
+  useEffect(() => {
+    if (showNew && accountId) {
+      fetchTags(accountId).then(setTags).catch(() => {})
+      fetchFunnels(accountId).then(setFunnels).catch(() => {})
+      fetchWhatsAppInstances(accountId).then(insts => {
+        setInstances(insts)
+        const connected = insts.find(i => i.status === 'connected')
+        if (connected && !newInstanceId) setNewInstanceId(connected.id)
+      }).catch(() => {})
+    }
+  }, [showNew, accountId])
+
   const searchLeads = async () => {
     if (!accountId) return
-    const data = await fetchLeads(accountId, { search: leadSearch, limit: 50 })
-    setSearchResults(data.leads.filter(l => l.phone))
+    const queries: Promise<{ leads: Lead[] }>[] = []
+
+    // Combina resultados: para cada tag selecionada faz uma query, para cada etapa idem
+    if (filterTags.length > 0) {
+      queries.push(...filterTags.map(tagId => fetchLeads(accountId, { tag: tagId, limit: 500 })))
+    }
+    if (filterStages.length > 0) {
+      queries.push(...filterStages.map(stageId => fetchLeads(accountId, { stage_id: stageId, limit: 500 })))
+    }
+    if (queries.length === 0 && leadSearch.length > 1) {
+      queries.push(fetchLeads(accountId, { search: leadSearch, limit: 500 }))
+    } else if (queries.length > 0 && leadSearch.length > 1) {
+      // Filtra texto sobre o resultado depois (busca client-side)
+    }
+
+    if (queries.length === 0) { setSearchResults([]); return }
+
+    try {
+      const all = await Promise.all(queries)
+      // Dedup por id
+      const map = new Map<number, Lead>()
+      all.forEach(r => r.leads.forEach(l => map.set(l.id, l)))
+      let merged = Array.from(map.values()).filter(l => l.phone)
+      // Aplica busca de texto sobre o set unificado quando ha filtros
+      if (leadSearch.length > 1 && (filterTags.length > 0 || filterStages.length > 0)) {
+        const q = leadSearch.toLowerCase()
+        merged = merged.filter(l => (l.name || '').toLowerCase().includes(q) || (l.phone || '').includes(q))
+      }
+      setSearchResults(merged)
+    } catch { setSearchResults([]) }
   }
 
-  useEffect(() => { if (leadSearch.length > 1 && accountId) searchLeads() }, [leadSearch])
+  useEffect(() => {
+    if (!accountId) return
+    if (leadSearch.length > 1 || filterTags.length > 0 || filterStages.length > 0) searchLeads()
+    else setSearchResults([])
+  }, [leadSearch, filterTags.join(','), filterStages.join(','), accountId])
 
   const toggleLead = (lead: Lead) => {
     setSelectedLeads(prev => prev.some(l => l.id === lead.id) ? prev.filter(l => l.id !== lead.id) : [...prev, lead])
   }
+  // Adiciona ao ja selecionado, nao substitui
+  const selectAll = () => {
+    setSelectedLeads(prev => {
+      const existing = new Set(prev.map(l => l.id))
+      const additions = searchResults.filter(l => l.phone && !existing.has(l.id))
+      return [...prev, ...additions]
+    })
+  }
+  const toggleTag = (id: number) => setFilterTags(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
+  const toggleStage = (id: number) => setFilterStages(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
 
-  const selectAll = () => setSelectedLeads(searchResults.filter(l => l.phone))
+  const totalMessagesCount = 1 + newVariations.filter(v => v.trim()).length
+  const enoughVariations = totalMessagesCount >= MIN_VARIATIONS
+  const validDelay = newDelay >= MIN_DELAY
+
+  // Estimativa: leads × delay médio (delay com jitter ±30% = mesmo delay médio)
+  const estimatedSeconds = selectedLeads.length * newDelay
+  const estimatedDuration = formatDuration(estimatedSeconds)
+
+  const resetForm = () => {
+    setShowNew(false); setStep(1); setNewName(''); setNewTemplate('')
+    setNewVariations(['', '']); setNewDelay(DEFAULT_DELAY); setNewInstanceId('')
+    setSelectedLeads([]); setLeadSearch(''); setFilterTags([]); setFilterStages([])
+  }
 
   const handleCreate = async () => {
-    if (!accountId || !newName || !newTemplate || selectedLeads.length === 0) return
-    await createBroadcast(accountId, { name: newName, message_template: newTemplate, lead_ids: selectedLeads.map(l => l.id) })
-    setShowNew(false); setNewName(''); setNewTemplate(''); setSelectedLeads([]); setStep(1); load()
+    if (!accountId || !newName || !newTemplate || selectedLeads.length === 0 || !newInstanceId) return
+    if (!enoughVariations) { alert(`Adicione pelo menos ${MIN_VARIATIONS - 1} variacoes (total ${MIN_VARIATIONS} mensagens diferentes).`); return }
+    if (!validDelay) { alert(`Delay minimo: ${MIN_DELAY}s. Valores menores aumentam risco de bloqueio no WhatsApp.`); return }
+    setCreating(true)
+    try {
+      await createBroadcast(accountId, {
+        name: newName, message_template: newTemplate,
+        message_variations: newVariations.filter(v => v.trim()),
+        delay_seconds: newDelay, lead_ids: selectedLeads.map(l => l.id),
+        instance_id: Number(newInstanceId),
+      })
+      resetForm(); load()
+    } catch (e: any) { alert('Erro: ' + e.message) }
+    setCreating(false)
   }
 
   const handleSend = async (id: number) => {
     if (!accountId || !confirm('Enviar disparo agora?')) return
-    await sendBroadcast(id, accountId)
-    load()
+    try { await sendBroadcast(id, accountId); load() }
+    catch (e: any) { alert('Erro: ' + e.message) }
   }
 
   return (
@@ -64,22 +175,40 @@ export default function Messages() {
       {loading ? <div className="loading-container"><div className="spinner" /></div> : (
         <div className="table-card">
           <table>
-            <thead><tr><th>Nome</th><th>Status</th><th className="right">Enviados</th><th className="right">Falhas</th><th className="right">Total</th><th className="right">Criado em</th><th className="right">Acoes</th></tr></thead>
+            <thead><tr><th>Nome</th><th>Numero</th><th>Status</th><th className="right">Progresso</th><th className="right">Falhas</th><th className="right">Criado</th><th className="right">Acoes</th></tr></thead>
             <tbody>
               {broadcasts.map(b => {
                 const st = STATUS_MAP[b.status] || { label: b.status, color: '#9B96B0' }
+                const isPaused = !!b.paused_at
+                const displayStatus = isPaused ? STATUS_MAP.paused : st
+                const pct = b.total_count > 0 ? Math.round((b.sent_count + b.failed_count) / b.total_count * 100) : 0
                 return (
                   <tr key={b.id}>
                     <td className="name">{b.name}</td>
-                    <td><span className="stage-badge" style={{ background: `${st.color}20`, color: st.color }}>{st.label}</span></td>
-                    <td className="right" style={{ color: '#34C759' }}>{b.sent_count}</td>
+                    <td style={{ fontSize: 11, color: '#9B96B0' }}>
+                      {b.instance_name || '—'}
+                      {b.instance_status && b.instance_status !== 'connected' && <span style={{ color: '#FF6B6B', marginLeft: 4 }}>⚠</span>}
+                    </td>
+                    <td>
+                      <span className="stage-badge" style={{ background: `${displayStatus.color}20`, color: displayStatus.color }}>
+                        {displayStatus.label}
+                      </span>
+                    </td>
+                    <td className="right" style={{ fontSize: 12 }}>
+                      {b.status === 'completed'
+                        ? <span style={{ color: '#34C759' }}>{b.sent_count}/{b.total_count}</span>
+                        : <span>{b.sent_count + b.failed_count}/{b.total_count} ({pct}%)</span>}
+                    </td>
                     <td className="right" style={{ color: b.failed_count > 0 ? '#FF6B6B' : undefined }}>{b.failed_count}</td>
-                    <td className="right">{b.total_count}</td>
-                    <td className="right">{new Date(b.created_at).toLocaleDateString('pt-BR')}</td>
+                    <td className="right" style={{ fontSize: 11 }}>{parseSqlDate(b.created_at).toLocaleDateString('pt-BR')}</td>
                     <td className="right">
-                      {b.status === 'draft' && <button className="btn btn-primary btn-sm" onClick={() => handleSend(b.id)}><Send size={12} /> Enviar</button>}
-                      {b.status === 'completed' && <CheckCircle size={14} style={{ color: '#34C759' }} />}
-                      {b.status === 'sending' && <Clock size={14} style={{ color: '#5DADE2' }} />}
+                      <div style={{ display: 'inline-flex', gap: 4 }}>
+                        <button className="btn btn-secondary btn-sm btn-icon" onClick={() => navigate(`/messages/${b.id}`)} title="Ver detalhes"><Eye size={12} /></button>
+                        {b.status === 'draft' && <button className="btn btn-primary btn-sm" onClick={() => handleSend(b.id)} style={{ fontSize: 11 }}><Send size={11} /> Enviar</button>}
+                        {b.status === 'completed' && <CheckCircle size={14} style={{ color: '#34C759' }} />}
+                        {b.status === 'sending' && !isPaused && <Clock size={14} style={{ color: '#5DADE2' }} className="spinning" />}
+                        {isPaused && <PauseCircle size={14} style={{ color: '#FBBC04' }} />}
+                      </div>
                     </td>
                   </tr>
                 )
@@ -92,50 +221,194 @@ export default function Messages() {
 
       {/* New broadcast modal */}
       {showNew && (
-        <div className="modal-overlay" onClick={() => { setShowNew(false); setStep(1) }}>
-          <div className="modal" style={{ maxWidth: 600 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onClick={resetForm}>
+          <div className="modal" style={{ maxWidth: 620 }} onClick={e => e.stopPropagation()}>
             <h2>Novo Disparo — Etapa {step}/3</h2>
 
             {step === 1 && (
               <>
-                <div className="form-group"><label>Nome do disparo</label><input className="input" value={newName} onChange={e => setNewName(e.target.value)} placeholder="Ex: Promo Marco 2026" /></div>
-                <div className="form-group"><label>Mensagem (use {'{{name}}'} pra nome do lead)</label>
-                  <textarea className="input" rows={4} value={newTemplate} onChange={e => setNewTemplate(e.target.value)} placeholder="Ola {{name}}, temos uma oferta especial..." />
+                {/* Numero de saida (instancia) */}
+                <div className="form-group">
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Smartphone size={12} /> Numero de saida do disparo
+                  </label>
+                  {instances.length === 0 && (
+                    <div style={{ padding: 10, background: 'rgba(255,107,107,0.08)', borderRadius: 6, fontSize: 12, color: '#FF6B6B', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <AlertTriangle size={14} /> Nenhuma instancia WhatsApp cadastrada. Cadastre uma em Integracoes antes de criar disparos.
+                    </div>
+                  )}
+                  {instances.length === 1 && (
+                    <div style={{ padding: 10, background: instances[0].status === 'connected' ? 'rgba(52,199,89,0.08)' : 'rgba(255,107,107,0.08)', borderRadius: 6, fontSize: 12, color: instances[0].status === 'connected' ? '#34C759' : '#FF6B6B', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Smartphone size={14} /> Disparando de <strong>{instances[0].instance_name}</strong>
+                      {instances[0].status === 'connected' ? ' (conectado)' : ' — DESCONECTADO. Conecte antes de enviar.'}
+                    </div>
+                  )}
+                  {instances.length > 1 && (
+                    <select className="select" value={newInstanceId} onChange={e => setNewInstanceId(Number(e.target.value))} style={{ width: '100%' }}>
+                      <option value="">Selecione um numero...</option>
+                      {instances.map(i => (
+                        <option key={i.id} value={i.id} disabled={i.status !== 'connected'}>
+                          {i.instance_name} {i.status === 'connected' ? '✓ conectado' : '✗ desconectado'}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  {instances.length > 1 && newInstanceId && instances.find(i => i.id === newInstanceId)?.status !== 'connected' && (
+                    <div style={{ fontSize: 11, color: '#FF6B6B', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <AlertTriangle size={11} /> Esta instancia nao esta conectada. Voce pode criar como rascunho mas o envio sera bloqueado.
+                    </div>
+                  )}
                 </div>
+
+                <div className="form-group"><label>Nome do disparo</label><input className="input" value={newName} onChange={e => setNewName(e.target.value)} placeholder="Ex: Promo Marco 2026" /></div>
+                <div className="form-group"><label>Mensagem principal (use {'{{name}}'} pra nome do lead)</label>
+                  <textarea className="input" rows={3} value={newTemplate} onChange={e => setNewTemplate(e.target.value)} placeholder="Ola {{name}}, temos uma oferta especial..." />
+                </div>
+
+                {/* Variacoes — minimo MIN_VARIATIONS - 1 = 2 */}
+                <div className="form-group" style={{ marginTop: 12 }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    Variacoes da mensagem (minimo {MIN_VARIATIONS - 1})
+                    {enoughVariations && <CheckCircle size={12} style={{ color: '#34C759' }} />}
+                  </label>
+                  <div style={{ fontSize: 11, color: '#9B96B0', marginBottom: 6 }}>
+                    Sistema rotaciona entre principal + variacoes pra parecer humano. Quanto mais variacao, menor o risco de bloqueio.
+                  </div>
+                  {newVariations.map((v, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 6, marginBottom: 4 }}>
+                      <textarea className="input" rows={2} value={v} onChange={e => setNewVariations(prev => prev.map((x, j) => j === i ? e.target.value : x))} placeholder={`Variacao ${i + 2}... (reescreva a msg principal de outro jeito)`} style={{ flex: 1 }} />
+                      <button className="btn btn-danger btn-sm btn-icon" onClick={() => setNewVariations(prev => prev.filter((_, j) => j !== i))} style={{ alignSelf: 'flex-start', marginTop: 4 }}><Trash2 size={12} /></button>
+                    </div>
+                  ))}
+                  <button className="btn btn-secondary btn-sm" onClick={() => setNewVariations(prev => [...prev, ''])} style={{ marginTop: 4 }}>
+                    <Plus size={12} /> Adicionar variacao
+                  </button>
+                  <div style={{ fontSize: 11, color: enoughVariations ? '#34C759' : '#FF6B6B', marginTop: 4, fontWeight: 500 }}>
+                    Total: {totalMessagesCount}/{MIN_VARIATIONS} mensagens diferentes {enoughVariations ? '✓' : `— faltam ${MIN_VARIATIONS - totalMessagesCount}`}
+                  </div>
+                </div>
+
+                {/* Delay */}
+                <div className="form-group" style={{ marginTop: 8 }}>
+                  <label>Delay entre envios (segundos)</label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input type="number" className="input" value={newDelay} onChange={e => setNewDelay(parseInt(e.target.value) || DEFAULT_DELAY)} min={MIN_DELAY} max={120} style={{ width: 90 }} />
+                    <span style={{ fontSize: 11, color: validDelay ? '#9B96B0' : '#FF6B6B' }}>
+                      segundos · sistema aplica variacao aleatoria ±30% pra parecer humano
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#FBBC04', marginTop: 4 }}>
+                    💡 Recomendado: <strong>15-30s</strong>. Minimo {MIN_DELAY}s. Valores baixos = ban no WhatsApp.
+                  </div>
+                </div>
+
                 {newTemplate && (
                   <div style={{ marginTop: 8, padding: 12, background: 'rgba(255,255,255,0.03)', borderRadius: 8, fontSize: 12 }}>
-                    <div style={{ color: '#9B96B0', marginBottom: 4 }}>Preview:</div>
+                    <div style={{ color: '#9B96B0', marginBottom: 4 }}>Preview (msg principal):</div>
                     <div>{newTemplate.replace(/\{\{name\}\}/g, 'Joao Silva')}</div>
                   </div>
                 )}
                 <div className="modal-actions">
-                  <button className="btn btn-secondary" onClick={() => { setShowNew(false); setStep(1) }}>Cancelar</button>
-                  <button className="btn btn-primary" onClick={() => setStep(2)} disabled={!newName || !newTemplate}>Proximo</button>
+                  <button className="btn btn-secondary" onClick={resetForm}>Cancelar</button>
+                  <button className="btn btn-primary" onClick={() => setStep(2)} disabled={!newName || !newTemplate || !enoughVariations || !validDelay || !newInstanceId}>Proximo</button>
                 </div>
               </>
             )}
 
             {step === 2 && (
               <>
+                {/* Tags como chips multi-select */}
+                {tags.length > 0 && (
+                  <div style={{ marginBottom: 10 }}>
+                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+                      <TagIcon size={11} /> Filtrar por tag {filterTags.length > 0 && <span style={{ color: '#FFB300' }}>({filterTags.length} ativa{filterTags.length > 1 ? 's' : ''})</span>}
+                    </label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                      {tags.map(t => {
+                        const active = filterTags.includes(t.id)
+                        return (
+                          <button key={t.id} type="button" onClick={() => toggleTag(t.id)}
+                            style={{
+                              padding: '4px 10px', borderRadius: 12, fontSize: 11, cursor: 'pointer',
+                              border: `1px solid ${active ? (t.color || '#FFB300') : 'rgba(255,255,255,0.1)'}`,
+                              background: active ? `${t.color || '#FFB300'}25` : 'rgba(255,255,255,0.03)',
+                              color: active ? (t.color || '#FFB300') : '#9B96B0',
+                              fontWeight: active ? 600 : 400,
+                            }}>
+                            {active ? '✓ ' : ''}{t.name}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Etapas como chips multi-select, agrupadas por funil */}
+                {funnels.length > 0 && (
+                  <div style={{ marginBottom: 10 }}>
+                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+                      <GitBranch size={11} /> Filtrar por etapa {filterStages.length > 0 && <span style={{ color: '#FFB300' }}>({filterStages.length} ativa{filterStages.length > 1 ? 's' : ''})</span>}
+                    </label>
+                    {funnels.map(f => (
+                      <div key={f.id} style={{ marginBottom: 6 }}>
+                        {funnels.length > 1 && <div style={{ fontSize: 10, color: '#6B6580', marginBottom: 3 }}>{f.name}</div>}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                          {(f.stages || []).map(s => {
+                            const active = filterStages.includes(s.id)
+                            return (
+                              <button key={s.id} type="button" onClick={() => toggleStage(s.id)}
+                                style={{
+                                  padding: '4px 10px', borderRadius: 12, fontSize: 11, cursor: 'pointer',
+                                  border: `1px solid ${active ? (s.color || '#FFB300') : 'rgba(255,255,255,0.1)'}`,
+                                  background: active ? `${s.color || '#FFB300'}25` : 'rgba(255,255,255,0.03)',
+                                  color: active ? (s.color || '#FFB300') : '#9B96B0',
+                                  fontWeight: active ? 600 : 400,
+                                }}>
+                                {active ? '✓ ' : ''}{s.name}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {(filterTags.length > 0 || filterStages.length > 0) && (
+                  <button className="btn btn-secondary btn-sm" onClick={() => { setFilterTags([]); setFilterStages([]) }} style={{ fontSize: 10, marginBottom: 8 }}>
+                    <Filter size={10} /> Limpar filtros
+                  </button>
+                )}
+
                 <div className="form-group">
                   <label>Buscar leads (apenas com telefone)</label>
-                  <input className="input" value={leadSearch} onChange={e => setLeadSearch(e.target.value)} placeholder="Buscar por nome, telefone..." />
+                  <input className="input" value={leadSearch} onChange={e => setLeadSearch(e.target.value)} placeholder="Buscar por nome, telefone... (ou use os filtros acima)" />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '8px 0' }}>
-                  <span style={{ fontSize: 12, color: '#9B96B0' }}>{selectedLeads.length} selecionados</span>
-                  {searchResults.length > 0 && <button className="btn btn-secondary btn-sm" onClick={selectAll}>Selecionar todos ({searchResults.length})</button>}
+                  <span style={{ fontSize: 12, color: '#9B96B0' }}>
+                    <strong style={{ color: '#FFB300' }}>{selectedLeads.length} selecionados</strong>
+                    {searchResults.length > 0 && ` · ${searchResults.length} no filtro atual`}
+                  </span>
+                  {searchResults.length > 0 && <button className="btn btn-primary btn-sm" onClick={selectAll}>Adicionar todos do filtro ({searchResults.filter(l => !selectedLeads.some(s => s.id === l.id)).length})</button>}
                 </div>
-                <div style={{ maxHeight: 300, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <div style={{ maxHeight: 280, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
                   {searchResults.map(l => (
                     <label key={l.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', borderRadius: 6, background: selectedLeads.some(s => s.id === l.id) ? 'rgba(255,179,0,0.08)' : 'transparent', cursor: 'pointer', fontSize: 12 }}>
                       <input type="checkbox" checked={selectedLeads.some(s => s.id === l.id)} onChange={() => toggleLead(l)} />
                       <span style={{ fontWeight: 500 }}>{l.name || 'Sem nome'}</span>
                       <span style={{ color: '#9B96B0' }}>{l.phone}</span>
+                      {l.stage_name && <span style={{ fontSize: 10, color: l.stage_color || '#FFB300', marginLeft: 'auto' }}>{l.stage_name}</span>}
                     </label>
                   ))}
-                  {searchResults.length === 0 && leadSearch.length > 1 && <div style={{ padding: 20, textAlign: 'center', color: '#6B6580' }}>Nenhum lead encontrado</div>}
-                  {leadSearch.length <= 1 && <div style={{ padding: 20, textAlign: 'center', color: '#6B6580' }}>Digite pra buscar leads...</div>}
+                  {searchResults.length === 0 && (leadSearch.length > 1 || filterTags.length > 0 || filterStages.length > 0) && <div style={{ padding: 20, textAlign: 'center', color: '#6B6580' }}>Nenhum lead encontrado neste filtro</div>}
+                  {searchResults.length === 0 && leadSearch.length <= 1 && filterTags.length === 0 && filterStages.length === 0 && <div style={{ padding: 20, textAlign: 'center', color: '#6B6580' }}>Selecione tags, etapas, ou digite pra buscar...</div>}
                 </div>
+                {selectedLeads.length > 0 && (
+                  <div style={{ marginTop: 6, padding: '6px 10px', background: 'rgba(255,179,0,0.05)', borderRadius: 6, fontSize: 11, color: '#9B96B0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>Total acumulado: <strong style={{ color: '#FFB300' }}>{selectedLeads.length} leads</strong></span>
+                    <button className="btn btn-secondary btn-sm" onClick={() => setSelectedLeads([])} style={{ fontSize: 10, padding: '2px 8px' }}>Limpar selecao</button>
+                  </div>
+                )}
                 <div className="modal-actions">
                   <button className="btn btn-secondary" onClick={() => setStep(1)}>Voltar</button>
                   <button className="btn btn-primary" onClick={() => setStep(3)} disabled={selectedLeads.length === 0}>Proximo ({selectedLeads.length} leads)</button>
@@ -145,19 +418,25 @@ export default function Messages() {
 
             {step === 3 && (
               <>
-                <div className="card" style={{ marginBottom: 16 }}>
+                <div className="card" style={{ marginBottom: 12 }}>
                   <div style={{ fontSize: 12, color: '#9B96B0', marginBottom: 8 }}>Resumo</div>
                   <div style={{ fontSize: 13 }}><strong>Nome:</strong> {newName}</div>
+                  <div style={{ fontSize: 13, marginTop: 4 }}><strong>Numero de saida:</strong> {instances.find(i => i.id === newInstanceId)?.instance_name || '—'}</div>
                   <div style={{ fontSize: 13, marginTop: 4 }}><strong>Destinatarios:</strong> {selectedLeads.length} leads</div>
-                  <div style={{ fontSize: 13, marginTop: 4 }}><strong>Mensagem:</strong></div>
-                  <div style={{ padding: 10, background: 'rgba(255,255,255,0.03)', borderRadius: 6, fontSize: 12, marginTop: 4 }}>{newTemplate}</div>
+                  <div style={{ fontSize: 13, marginTop: 4 }}><strong>Mensagens diferentes:</strong> {totalMessagesCount} (rotacionadas)</div>
+                  <div style={{ fontSize: 13, marginTop: 4 }}><strong>Delay entre envios:</strong> ~{newDelay}s (variacao ±30%)</div>
                 </div>
+
+                <div style={{ padding: 12, background: 'rgba(91,173,226,0.08)', borderRadius: 8, fontSize: 12, color: '#5DADE2', display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                  <Clock size={14} /> Tempo estimado de envio: <strong>~{estimatedDuration}</strong> ({selectedLeads.length} × {newDelay}s)
+                </div>
+
                 <div style={{ padding: 10, background: 'rgba(255,179,0,0.08)', borderRadius: 8, fontSize: 12, color: '#FFB300' }}>
-                  O disparo sera criado como rascunho. Voce podera enviar depois na lista.
+                  Disparo criado como rascunho. Voce envia depois clicando no botao "Enviar".
                 </div>
                 <div className="modal-actions">
                   <button className="btn btn-secondary" onClick={() => setStep(2)}>Voltar</button>
-                  <button className="btn btn-primary" onClick={handleCreate}>Criar Disparo</button>
+                  <button className="btn btn-primary" onClick={handleCreate} disabled={creating}>{creating ? 'Criando...' : 'Criar Disparo'}</button>
                 </div>
               </>
             )}

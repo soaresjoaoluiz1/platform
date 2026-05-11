@@ -1,0 +1,49 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Oxi Química Varginha" [ref=e3] [cursor=pointer]:
+      - /url: index-v2.html
+      - img "Oxi Química Varginha" [ref=e4]
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: Cadastro confirmado
+      - heading "Obrigado pelo seu interesse em ser revendedor!" [level=1] [ref=e11]
+      - paragraph [ref=e12]:
+        - text: Seu cadastro foi recebido com sucesso.
+        - text: Um consultor da
+        - strong [ref=e13]: Oxiquímica Varginha
+        - text: vai entrar em contato pelo seu WhatsApp em até
+        - strong [ref=e14]: 24 horas úteis
+        - text: .
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: "1"
+          - generic [ref=e18]:
+            - generic [ref=e19]: Aguarde o contato do consultor
+            - generic [ref=e20]: Em até 24h úteis pelo WhatsApp que você informou.
+        - generic [ref=e21]:
+          - generic [ref=e22]: "2"
+          - generic [ref=e23]:
+            - generic [ref=e24]: Receba o kit de boas-vindas
+            - generic [ref=e25]: Catálogo completo, amostras grátis e materiais digitais.
+        - generic [ref=e26]:
+          - generic [ref=e27]: "3"
+          - generic [ref=e28]:
+            - generic [ref=e29]: Faça seu primeiro pedido
+            - generic [ref=e30]: Preço direto de fábrica. Investimento a partir de R$800.
+        - generic [ref=e31]:
+          - generic [ref=e32]: "4"
+          - generic [ref=e33]:
+            - generic [ref=e34]: Comece a vender e lucrar
+            - generic [ref=e35]: Margem de 60–100%. Muitos revendedores vendem já na primeira semana.
+      - generic [ref=e36]:
+        - link "Falar no WhatsApp agora" [ref=e37] [cursor=pointer]:
+          - /url: https://wa.me/5535997148855?text=Ol%C3%A1%21+Acabei+de+me+cadastrar+como+revendedor+Oxiqu%C3%ADmica+e+aguardo+o+contato.
+          - img [ref=e38]
+          - text: Falar no WhatsApp agora
+        - link "Voltar à página inicial" [ref=e40] [cursor=pointer]:
+          - /url: index-v2.html
+  - contentinfo [ref=e41]:
+    - text: © 2026 Oxiquímica Varginha · Desenvolvido por
+    - link "Dros Agência" [ref=e42] [cursor=pointer]:
+      - /url: https://drosagencia.com.br

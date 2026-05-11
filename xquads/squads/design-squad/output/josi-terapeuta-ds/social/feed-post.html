@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feed Post — Aulão Josi Terapeuta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* =============================================
+       CANVAS: 1080x1080px Instagram Feed
+       ============================================= */
+    .canvas {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+      background: #F7F5F0;
+      flex-shrink: 0;
+    }
+
+    /* Background layers */
+    .bg-texture {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 110% -10%, rgba(45,90,61,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at -10% 110%, rgba(212,134,76,0.08) 0%, transparent 60%),
+        linear-gradient(160deg, #F7F5F0 0%, #EDE9E1 50%, #E3DDD3 100%);
+    }
+
+    /* Top accent bar */
+    .accent-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #2D5A3D 0%, #3D7A52 50%, #D4864C 100%);
+    }
+
+    /* Left green stripe */
+    .side-stripe {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      background: linear-gradient(180deg, #2D5A3D 0%, #1F3D2A 100%);
+    }
+
+    /* Decorative circle — top right */
+    .deco-circle-1 {
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: rgba(45, 90, 61, 0.06);
+      border: 2px solid rgba(45, 90, 61, 0.08);
+    }
+    .deco-circle-2 {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(45, 90, 61, 0.05);
+    }
+
+    /* Decorative circle — bottom left */
+    .deco-circle-3 {
+      position: absolute;
+      bottom: -80px;
+      left: 60px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: rgba(212, 134, 76, 0.06);
+      border: 1px solid rgba(212, 134, 76, 0.08);
+    }
+
+    /* CONTENT WRAPPER */
+    .content {
+      position: absolute;
+      inset: 0;
+      padding: 68px 80px 60px 88px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* TOP SECTION */
+    .top {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* Label / eyebrow */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow-pill {
+      background: #2D5A3D;
+      color: #F7F5F0;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 12px 28px;
+      border-radius: 100px;
+    }
+
+    .eyebrow-pill--orange {
+      background: #D4864C;
+      color: #fff;
+    }
+
+    /* The big pain hook */
+    .pain-hook {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.18;
+      color: #1F3D2A;
+      letter-spacing: -0.02em;
+      max-width: 820px;
+      margin-bottom: 32px;
+    }
+
+    .pain-hook em {
+      font-style: italic;
+      color: #3D7A52;
+    }
+
+    .pain-hook .highlight {
+      position: relative;
+      display: inline-block;
+    }
+
+    .pain-hook .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #D4864C;
+      border-radius: 100px;
+    }
+
+    /* Subtext / pain elaboration */
+    .pain-sub {
+      font-size: 22px;
+      line-height: 1.55;
+      color: #4A4A4A;
+      max-width: 680px;
+      font-weight: 400;
+      margin-bottom: 0;
+    }
+
+    .pain-sub strong {
+      color: #1F3D2A;
+      font-weight: 700;
+    }
+
+    /* MIDDLE — pain bullets */
+    .pain-list {
+      display: flex;
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    .pain-item {
+      flex: 1;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(45,90,61,0.1);
+      border-radius: 16px;
+      padding: 26px 26px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .pain-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(45,90,61,0.08);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 22px;
+      margin-top: 2px;
+    }
+
+    .pain-text {
+      font-size: 22px;
+      line-height: 1.4;
+      color: #2A2A2A;
+      font-weight: 600;
+    }
+
+    /* BOTTOM SECTION */
+    .bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    /* Event info block */
+    .event-block {
+      background: linear-gradient(135deg, #2D5A3D 0%, #1F3D2A 100%);
+      border-radius: 20px;
+      padding: 32px 40px;
+      color: white;
+      flex: 1;
+      max-width: 480px;
+    }
+
+    .event-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #8FA68E;
+      margin-bottom: 8px;
+    }
+
+    .event-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #F7F5F0;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+
+    .event-details {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .event-detail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .event-detail-icon {
+      font-size: 16px;
+    }
+
+    .event-detail-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: #E8E4DC;
+    }
+
+    .event-detail-text span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #8FA68E;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* CTA Button */
+    .cta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 16px;
+    }
+
+    .cta-btn {
+      background: #D4864C;
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 22px 44px;
+      border-radius: 100px;
+      box-shadow: 0 8px 30px rgba(212,134,76,0.35);
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .cta-sub {
+      font-size: 19px;
+      color: #8C8C8C;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .free-tag {
+      display: inline-block;
+      background: #F7F5F0;
+      border: 2.5px solid #D4864C;
+      color: #D4864C;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border-radius: 100px;
+    }
+
+    /* Author / brand strip */
+    .author-strip {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .author-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2D5A3D, #3D7A52);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #F7F5F0;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .author-info {}
+
+    .author-name {
+      font-size: 19px;
+      font-weight: 700;
+      color: #F7F5F0;
+      line-height: 1.2;
+    }
+
+    .author-cred {
+      font-size: 15px;
+      color: #8FA68E;
+      font-weight: 400;
+      margin-top: 3px;
+    }
+
+    /* Brand handle */
+    .brand-handle {
+      position: absolute;
+      top: 28px;
+      right: 80px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #2D5A3D;
+      letter-spacing: 0.03em;
+    }
+
+    /* Divider line */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: #D4864C;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    /* Quote mark decoration */
+    .quote-mark {
+      position: absolute;
+      top: 160px;
+      right: 80px;
+      font-family: 'Playfair Display', serif;
+      font-size: 180px;
+      color: rgba(45,90,61,0.06);
+      line-height: 1;
+      font-weight: 900;
+      pointer-events: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="canvas">
+  <!-- Background layers -->
+  <div class="bg-texture"></div>
+  <div class="deco-circle-1"></div>
+  <div class="deco-circle-2"></div>
+  <div class="deco-circle-3"></div>
+  <div class="accent-bar"></div>
+  <div class="side-stripe"></div>
+  <div class="quote-mark">"</div>
+
+  <!-- Brand handle top right -->
+  <div class="brand-handle">@josianevargasdelfino</div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- TOP -->
+    <div class="top">
+      <div class="eyebrow">
+        <span class="eyebrow-pill">Aulão Gratuito</span>
+        <span class="eyebrow-pill eyebrow-pill--orange">9 de abril · Online</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <h1 class="pain-hook">
+        Você termina o atendimento<br>
+        e ainda fica se perguntando:<br>
+        <em>"Fiz a escolha <span class="highlight">certa</span>?"</em>
+      </h1>
+
+      <p class="pain-sub">
+        A insegurança não é falta de estudo.<br>
+        É falta de <strong>estrutura de decisão clínica.</strong>
+      </p>
+
+      <!-- Pain bullets -->
+      <div class="pain-list">
+        <div class="pain-item">
+          <div class="pain-icon">🎯</div>
+          <div class="pain-text">Dificuldade de escolher<br>a intervenção certa</div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-icon">🔍</div>
+          <div class="pain-text">Não sabe por onde<br>começar o caso</div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-icon">😰</div>
+          <div class="pain-text">Pressão para ter<br>resultados rápidos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="bottom">
+
+      <!-- Event block (green card) -->
+      <div class="event-block">
+        <div class="event-label">Você vai aprender</div>
+        <div class="event-name">Estrutura de Decisão Clínica<br>para Terapeutas e Psicopedagogos</div>
+        <div class="author-strip">
+          <div class="author-avatar">J</div>
+          <div class="author-info">
+            <div class="author-name">Josiane Vargas Delfino</div>
+            <div class="author-cred">10 anos de prática · 500+ casos · 200+ profissionais mentorados</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA block -->
+      <div class="cta-block">
+        <span class="free-tag">100% Gratuito</span>
+        <div class="cta-btn">Garanta sua vaga</div>
+        <div class="cta-sub">Vagas limitadas · Link na bio</div>
+      </div>
+
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /canvas -->
+
+</body>
+</html>

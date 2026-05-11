@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuração — Invista Imóveis SM | Dros Agência</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-card: #1a1a25;
+      --cyan: #0693e3;
+      --purple: #9b51e0;
+      --orange: #ff7900;
+      --green: #22c55e;
+      --text-primary: #f1f1f4;
+      --text-secondary: #a0a0b8;
+      --text-muted: #6b6b80;
+      --border: #2a2a3a;
+      --gradient-main: linear-gradient(135deg, #0693e3, #9b51e0);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 680px;
+      width: 100%;
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-header img {
+      height: 80px;
+      margin-bottom: 18px;
+      border-radius: 12px;
+    }
+
+    .card-header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .card-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .card-header .client {
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .answer-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: rgba(42,42,58,0.2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .answer-row:hover {
+      border-color: rgba(6,147,227,0.2);
+    }
+
+    .answer-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      flex: 1;
+    }
+
+    .answer-label strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .answer-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-align: right;
+      flex-shrink: 0;
+      margin-left: 20px;
+    }
+
+    .answer-value.green { color: var(--green); }
+
+    .answer-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .tag.meta { background: rgba(0,129,251,0.15); color: #0081FB; }
+    .tag.google { background: rgba(52,168,83,0.15); color: #34a853; }
+
+    .footer-note {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 20px 16px; }
+      .card { padding: 20px; }
+      .answer-row { flex-direction: column; gap: 4px; }
+      .answer-value { text-align: left; margin-left: 0; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="card-header">
+      <img src="https://drosagencia.com.br/wp-content/uploads/2025/12/DROS-LOGO-1-1024x1024.png" alt="Dros Agência">
+      <h1>Configuração Operacional</h1>
+      <p><span class="client">Invista Imóveis Santa Maria</span> — Q1 2026</p>
+    </div>
+
+    <div class="answers">
+      <div class="answer-row">
+        <div class="answer-label"><strong>Custo por venda</strong> — investimento operacional por negócio</div>
+        <div class="answer-value">R$ 350,46</div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>CPL histórico</strong> — custo por lead no Q1</div>
+        <div class="answer-value">R$ 27,06</div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>CPL atual</strong> — campanhas ativas (abaixo do histórico)</div>
+        <div class="answer-value green">R$ 17,40</div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>ROAS mínimo</strong> — retorno mínimo aceitável</div>
+        <div class="answer-value green">20x</div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>Ticket médio</strong> — valor médio por venda</div>
+        <div class="answer-value">R$ 393.468,24</div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>Quantidade de contas</strong> de anúncio ativas</div>
+        <div class="answer-value">2 <span class="answer-sub"><span class="tag meta">Meta Ads</span> <span class="tag google">Google Ads</span></span></div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>Verba mensal</strong> — investimento Meta + Google</div>
+        <div class="answer-value">R$ 6.425,09</div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>Horário preferido</strong> para notificações diárias</div>
+        <div class="answer-value">09:00</div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>Conversões prioritárias</strong> — lead, venda ou agendamento</div>
+        <div class="answer-value">Lead + WhatsApp</div>
+      </div>
+
+      <div class="answer-row">
+        <div class="answer-label"><strong>Volume de campanhas</strong> ativas simultaneamente</div>
+        <div class="answer-value">6 <span class="answer-sub">4 Meta + 2 Google</span></div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      * Existe 1 campanha adicional no Google Ads com status ativado, mas sem gasto no período.
+    </div>
+  </div>
+
+</body>
+</html>

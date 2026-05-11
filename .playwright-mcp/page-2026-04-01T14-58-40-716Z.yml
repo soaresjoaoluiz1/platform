@@ -1,0 +1,116 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e7]:
+      - img "Dros" [ref=e8]
+      - generic [ref=e9]: CRM
+    - navigation [ref=e10]:
+      - generic [ref=e11]: Admin
+      - link "Dashboard Global" [ref=e12] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - img [ref=e13]
+        - text: Dashboard Global
+      - link "Clientes" [ref=e18] [cursor=pointer]:
+        - /url: /admin/clients
+        - img [ref=e19]
+        - text: Clientes
+      - link "Usuarios" [ref=e23] [cursor=pointer]:
+        - /url: /admin/users
+        - img [ref=e24]
+        - text: Usuarios
+      - generic [ref=e28]: Gestao
+      - link "Dashboard" [ref=e29] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e30]
+        - text: Dashboard
+      - link "Pipeline" [ref=e35] [cursor=pointer]:
+        - /url: /pipeline
+        - img [ref=e36]
+        - text: Pipeline
+      - link "Leads" [ref=e37] [cursor=pointer]:
+        - /url: /leads
+        - img [ref=e38]
+        - text: Leads
+      - generic [ref=e43]: Configuracoes
+      - link "Disparos" [ref=e44] [cursor=pointer]:
+        - /url: /messages
+        - img [ref=e45]
+        - text: Disparos
+      - link "Equipe" [ref=e47] [cursor=pointer]:
+        - /url: /team
+        - img [ref=e48]
+        - text: Equipe
+      - link "Funis" [ref=e60] [cursor=pointer]:
+        - /url: /funnels
+        - img [ref=e61]
+        - text: Funis
+      - link "Integracoes" [ref=e65] [cursor=pointer]:
+        - /url: /integrations
+        - img [ref=e66]
+        - text: Integracoes
+      - link "Configuracoes" [ref=e68] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e69]
+        - text: Configuracoes
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - generic [ref=e74]: Dros Admin
+        - generic [ref=e75]: Admin
+      - button "Sair" [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+  - main [ref=e80]:
+    - generic [ref=e81]:
+      - generic [ref=e82]:
+        - heading "Equipe" [level=1] [ref=e83]
+        - button "Novo Atendente" [ref=e84] [cursor=pointer]:
+          - img [ref=e85]
+          - text: Novo Atendente
+      - generic [ref=e88]:
+        - generic [ref=e89]: Gerentes
+        - table [ref=e91]:
+          - rowgroup [ref=e92]:
+            - row "Nome Email Status" [ref=e93]:
+              - columnheader "Nome" [ref=e94]
+              - columnheader "Email" [ref=e95]
+              - columnheader "Status" [ref=e96]
+          - rowgroup [ref=e97]:
+            - row "Carlos Gerente carlos@bg.com Ativo" [ref=e98]:
+              - cell "Carlos Gerente" [ref=e99]
+              - cell "carlos@bg.com" [ref=e100]
+              - cell "Ativo" [ref=e101]
+      - generic [ref=e102]:
+        - generic [ref=e103]: Atendentes (3)
+        - table [ref=e105]:
+          - rowgroup [ref=e106]:
+            - row "Nome Email Status Acoes" [ref=e107]:
+              - columnheader "Nome" [ref=e108]
+              - columnheader "Email" [ref=e109]
+              - columnheader "Status" [ref=e110]
+              - columnheader "Acoes" [ref=e111]
+          - rowgroup [ref=e112]:
+            - row "Brenda Corretora brenda@bg.com Ativo" [ref=e113]:
+              - cell "Brenda Corretora" [ref=e114]
+              - cell "brenda@bg.com" [ref=e115]
+              - cell "Ativo" [ref=e116]
+              - cell [ref=e117]:
+                - button "Desativar" [ref=e118] [cursor=pointer]:
+                  - img [ref=e119]
+                - button [ref=e122] [cursor=pointer]:
+                  - img [ref=e123]
+            - row "Dionathan Corretor dionathan@bg.com Ativo" [ref=e126]:
+              - cell "Dionathan Corretor" [ref=e127]
+              - cell "dionathan@bg.com" [ref=e128]
+              - cell "Ativo" [ref=e129]
+              - cell [ref=e130]:
+                - button "Desativar" [ref=e131] [cursor=pointer]:
+                  - img [ref=e132]
+                - button [ref=e135] [cursor=pointer]:
+                  - img [ref=e136]
+            - row "Julia Corretora julia@bg.com Ativo" [ref=e139]:
+              - cell "Julia Corretora" [ref=e140]
+              - cell "julia@bg.com" [ref=e141]
+              - cell "Ativo" [ref=e142]
+              - cell [ref=e143]:
+                - button "Desativar" [ref=e144] [cursor=pointer]:
+                  - img [ref=e145]
+                - button [ref=e148] [cursor=pointer]:
+                  - img [ref=e149]

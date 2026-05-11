@@ -1,0 +1,8 @@
+- generic [ref=e7]:
+  - generic [ref=e8]: Mentoria
+  - img "Nayara Della Vechia" [ref=e11]
+  - generic [ref=e12]:
+    - heading "Recomeço Sistêmico" [level=1] [ref=e13]:
+      - text: Recomeço
+      - emphasis [ref=e14]: Sistêmico
+    - paragraph [ref=e15]: A dor pode terminar em você.

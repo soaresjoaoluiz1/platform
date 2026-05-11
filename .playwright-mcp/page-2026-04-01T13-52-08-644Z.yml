@@ -1,0 +1,164 @@
+- generic [ref=e3]:
+  - button [active] [ref=e4] [cursor=pointer]:
+    - img [ref=e5]
+  - complementary [ref=e6]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - img "Dros" [ref=e10]
+        - generic [ref=e11]: CRM
+      - button [ref=e12] [cursor=pointer]:
+        - img [ref=e13]
+    - navigation [ref=e16]:
+      - generic [ref=e17]: Admin
+      - link "Dashboard Global" [ref=e18] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - img [ref=e19]
+        - text: Dashboard Global
+      - link "Clientes" [ref=e24] [cursor=pointer]:
+        - /url: /admin/clients
+        - img [ref=e25]
+        - text: Clientes
+      - link "Usuarios" [ref=e29] [cursor=pointer]:
+        - /url: /admin/users
+        - img [ref=e30]
+        - text: Usuarios
+      - generic [ref=e34]: Gestao
+      - link "Dashboard" [ref=e35] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e36]
+        - text: Dashboard
+      - link "Pipeline" [ref=e41] [cursor=pointer]:
+        - /url: /pipeline
+        - img [ref=e42]
+        - text: Pipeline
+      - link "Leads" [ref=e43] [cursor=pointer]:
+        - /url: /leads
+        - img [ref=e44]
+        - text: Leads
+      - generic [ref=e49]: Configuracoes
+      - link "Disparos" [ref=e50] [cursor=pointer]:
+        - /url: /messages
+        - img [ref=e51]
+        - text: Disparos
+      - link "Equipe" [ref=e53] [cursor=pointer]:
+        - /url: /team
+        - img [ref=e54]
+        - text: Equipe
+      - link "Funis" [ref=e66] [cursor=pointer]:
+        - /url: /funnels
+        - img [ref=e67]
+        - text: Funis
+      - link "Integracoes" [ref=e71] [cursor=pointer]:
+        - /url: /integrations
+        - img [ref=e72]
+        - text: Integracoes
+      - link "Configuracoes" [ref=e74] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e75]
+        - text: Configuracoes
+    - generic [ref=e78]:
+      - generic [ref=e79]:
+        - generic [ref=e80]: Dros Admin
+        - generic [ref=e81]: Admin
+      - button "Sair" [ref=e82] [cursor=pointer]:
+        - img [ref=e83]
+  - main [ref=e86]:
+    - generic [ref=e87]:
+      - generic [ref=e88]:
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e93]:
+            - heading "Bruno Nunes" [level=1] [ref=e94]
+            - generic [ref=e95]:
+              - img [ref=e96]
+              - text: 48-991824641
+        - generic [ref=e98]:
+          - combobox [ref=e99] [cursor=pointer]:
+            - option "Novo Lead" [selected]
+            - option "Em Atendimento"
+            - option "Qualificado"
+            - option "Visita Agendada"
+            - option "Proposta"
+            - option "Venda"
+            - option "Perdido"
+          - combobox [ref=e100] [cursor=pointer]:
+            - option "Sem atendente"
+            - option "Brenda Corretora" [selected]
+            - option "Dionathan Corretor"
+            - option "Julia Corretora"
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - generic [ref=e103]:
+            - generic [ref=e104]:
+              - generic [ref=e105]: Informacoes
+              - button "Editar" [ref=e106] [cursor=pointer]:
+                - img [ref=e107]
+                - text: Editar
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - generic [ref=e111]: Nome
+                - generic [ref=e112]: Bruno Nunes
+              - generic [ref=e113]:
+                - generic [ref=e114]:
+                  - img [ref=e115]
+                  - text: Telefone
+                - generic [ref=e117]: 48-991824641
+              - generic [ref=e118]:
+                - generic [ref=e119]:
+                  - img [ref=e120]
+                  - text: Email
+                - generic [ref=e123]: bruno@email.com
+              - generic [ref=e124]:
+                - generic [ref=e125]:
+                  - img [ref=e126]
+                  - text: Cidade
+                - generic [ref=e129]: Ararangua
+              - generic [ref=e130]:
+                - generic [ref=e131]: Fonte
+                - generic [ref=e132]: whatsapp
+              - generic [ref=e133]:
+                - generic [ref=e134]: Etapa
+                - generic [ref=e135]: Novo Lead
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - img [ref=e138]
+                  - text: Atendente
+                - generic [ref=e141]: Brenda Corretora
+              - generic [ref=e142]:
+                - generic [ref=e143]:
+                  - img [ref=e144]
+                  - text: Criado
+                - generic [ref=e147]: 31/03/2026, 17:11:01
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - img [ref=e151]
+                - text: Tags
+              - button [ref=e155] [cursor=pointer]:
+                - img [ref=e156]
+            - generic [ref=e158]: Sem tags
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - img [ref=e161]
+              - text: Historico
+            - generic [ref=e167]:
+              - generic [ref=e168]: "Entrada: Novo Lead"
+              - generic [ref=e169]: Manual por Dros Admin · 31/03/2026, 17:11:01
+        - generic [ref=e170]:
+          - generic [ref=e171]:
+            - button "Chat (0)" [ref=e172] [cursor=pointer]:
+              - img [ref=e173]
+              - text: Chat (0)
+            - button "Notas (0)" [ref=e175] [cursor=pointer]:
+              - img [ref=e176]
+              - text: Notas (0)
+            - button "Historico" [ref=e179] [cursor=pointer]:
+              - img [ref=e180]
+              - text: Historico
+          - generic [ref=e184]:
+            - generic [ref=e186]: Nenhuma mensagem
+            - generic [ref=e187]:
+              - textbox "Mensagem..." [ref=e188]
+              - button [disabled] [ref=e189] [cursor=pointer]:
+                - img [ref=e190]

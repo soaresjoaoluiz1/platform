@@ -1,0 +1,9 @@
+{
+  "name": "psd-gen",
+  "version": "1.0.0",
+  "description": "PSD generator for Josi posts",
+  "dependencies": {
+    "ag-psd": "^30.1.0",
+    "sharp": "^0.34.5"
+  }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #060e08; padding: 30px; font-family: sans-serif; }
+h2 { color: #D4864C; font-size: 18px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px; }
+p { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 24px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.card { border: 2px solid #1a2e1a; border-radius: 8px; overflow: hidden; cursor: pointer; transition: border-color 0.2s; }
+.card:hover { border-color: #D4864C; }
+.card img { width: 100%; height: 220px; object-fit: cover; display: block; background: #1a2e1a; }
+.card .label { background: #0e1e10; padding: 8px 10px; }
+.card .num { color: #D4864C; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
+.card .id { color: rgba(255,255,255,0.35); font-size: 10px; word-break: break-all; margin-top: 3px; }
+.used .num::after { content: ' — já usada'; color: rgba(255,255,255,0.25); font-size: 10px; font-weight: 400; }
+.copied { border-color: #4ade80 !important; }
+</style>
+</head>
+<body>
+<h2>Fotos disponíveis no Drive</h2>
+<p>Clique em qualquer card para copiar o ID — depois me diz qual usar no slide 1 e qual no slide 5.</p>
+<div class="grid" id="grid"></div>
+<script>
+const photos = [
+  { id: '1AwFyjWHJcPg1xjx7KKbdvV_gyVw5QNKs', label: 'Foto A', used: true },
+  { id: '1AClhXPHpbtrtNp6l4v-cCp_9PqszJcdy', label: 'Foto B', used: true },
+  { id: '1us3L-RHCIlinbeQJmChTdeYZFdvk9xgQ', label: 'Foto C', used: true },
+  { id: '109i7XEnGO7W8JsJjmCmT0Um2XvdauDf7', label: 'Foto D', used: false },
+  { id: '12-G5tr5RX6wEgDMDGRrejyJqUNRy7qUn', label: 'Foto E', used: false },
+  { id: '15aUnECWz99m-ekOiPS37kAy8nemyaWW3', label: 'Foto F', used: false },
+  { id: '1_L7j_6Os-Qa-t31zSOEGX1czfzDTNebR', label: 'Foto G', used: false },
+  { id: '1bi3w4mz_rdOjiwX1NGAFrchheCMr1xge', label: 'Foto H', used: false },
+  { id: '1bxARzwloBVTNQLRXpzzM8twve2bv-jdv', label: 'Foto I', used: false },
+  { id: '1d6_mU7vo2N_2Lk9hJetXHruIjftU4kei', label: 'Foto J', used: false },
+  { id: '1gmhnigsLqdUp6JlGMhOg9F_CONFJAafP', label: 'Foto K', used: false },
+  { id: '1pZdXJs3mB8infm_E21bQ4x89si3dxlQn', label: 'Foto L', used: false },
+  { id: '1qYR7kSib24-u349CiDUJfsD1X0d5TS-N', label: 'Foto M', used: false },
+  { id: '1sEeOwZQKPCCeemjUhlG0PnXCW_qtkcIy', label: 'Foto N', used: false },
+];
+const grid = document.getElementById('grid');
+photos.forEach(p => {
+  const card = document.createElement('div');
+  card.className = 'card' + (p.used ? ' used' : '');
+  card.innerHTML = `
+    <img src="https://drive.google.com/thumbnail?id=${p.id}&sz=w400" alt="${p.label}" loading="lazy">
+    <div class="label">
+      <div class="num">${p.label}${p.used ? ' — já usada' : ''}</div>
+      <div class="id">${p.id}</div>
+    </div>`;
+  card.onclick = () => {
+    navigator.clipboard.writeText(p.id).then(() => {
+      card.classList.add('copied');
+      setTimeout(() => card.classList.remove('copied'), 1200);
+    });
+  };
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import fs from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, resolve } from 'path'
 
@@ -18,8 +19,17 @@ import dashboardRoutes from './routes/dashboard.js'
 import webhookRoutes from './routes/webhooks.js'
 import integrationRoutes from './routes/integrations.js'
 import broadcastRoutes from './routes/broadcasts.js'
+import cadenceRoutes from './routes/cadences.js'
+import readyMessageRoutes from './routes/ready-messages.js'
+import qualificationRoutes from './routes/qualifications.js'
+import launchRoutes from './routes/launches.js'
+import taskRoutes from './routes/tasks.js'
+import proposalRoutes, { publicProposalHandler } from './routes/proposals.js'
+import adminRoutes from './routes/admin.js'
 import { authenticate, scopeToAccount } from './middleware/auth.js'
 import { addSSEClient, removeSSEClient } from './sse.js'
+import { startScheduler } from './scheduler.js'
+import { recoverPendingBroadcasts } from './routes/broadcasts.js'
 
 const app = express()
 app.use(cors())
@@ -27,9 +37,20 @@ app.use(express.json({ limit: '5mb' }))
 
 const PORT = 3002
 
+// Strip /crm prefix so /crm/api/* maps to /api/*
+app.use((req, res, next) => {
+  if (req.url.startsWith('/crm/api/')) req.url = req.url.slice(4)
+  else if (req.url === '/crm/api') req.url = '/api'
+  next()
+})
+
 // Public routes
 app.use('/api/auth', authRoutes)
 app.use('/api/webhooks', webhookRoutes)
+
+// Public proposal viewer (sem auth) — /crm/proposta/:slug ou /proposta/:slug
+app.get('/proposta/:slug', publicProposalHandler)
+app.get('/crm/proposta/:slug', publicProposalHandler)
 
 // Protected routes (all require auth)
 app.use('/api/accounts', authenticate, accountRoutes)
@@ -40,6 +61,13 @@ app.use('/api/messages', authenticate, scopeToAccount, messageRoutes)
 app.use('/api/dashboard', authenticate, scopeToAccount, dashboardRoutes)
 app.use('/api/integrations', authenticate, scopeToAccount, integrationRoutes)
 app.use('/api/broadcasts', authenticate, scopeToAccount, broadcastRoutes)
+app.use('/api/cadences', authenticate, scopeToAccount, cadenceRoutes)
+app.use('/api/ready-messages', authenticate, scopeToAccount, readyMessageRoutes)
+app.use('/api/qualifications', authenticate, scopeToAccount, qualificationRoutes)
+app.use('/api/launches', authenticate, scopeToAccount, launchRoutes)
+app.use('/api/tasks', authenticate, scopeToAccount, taskRoutes)
+app.use('/api/proposals', authenticate, proposalRoutes)
+app.use('/api/admin', authenticate, adminRoutes)
 
 // Settings: distribution rules
 app.get('/api/settings/distribution', authenticate, scopeToAccount, (req, res) => {
@@ -83,6 +111,30 @@ app.get('/api/events', async (req, res) => {
   req.on('close', () => removeSSEClient(accountId, res))
 })
 
+// ─── Production: serve built frontend ────────────────────────────
+const distPath = resolve(__dirname, '../dist')
+if (fs.existsSync(distPath)) {
+  app.use('/crm', (req, res, next) => {
+    // Cache immutable assets for 1 year
+    if (req.path.startsWith('/assets/')) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    } else if (req.path.endsWith('.html') || req.path === '/') {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+    }
+    next()
+  }, express.static(distPath))
+
+  // SPA fallback: any /crm/* route that doesn't match API → serve index.html
+  app.get('/crm/*', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+    res.sendFile(resolve(distPath, 'index.html'))
+  })
+  console.log('[Dros CRM] Serving frontend from /crm/')
+}
+
 app.listen(PORT, () => {
   console.log(`[Dros CRM API] Running on http://localhost:${PORT}`)
+  startScheduler()
+  // Retoma disparos que estavam enviando quando o servidor caiu
+  setTimeout(() => recoverPendingBroadcasts(), 2000)
 })

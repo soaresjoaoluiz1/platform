@@ -1,0 +1,56 @@
+name: Instagram Carousel Squad
+code: instagram-carousel
+description: >
+  Cria carrosséis de alta performance para o Instagram para clientes da Dros Agência.
+  Pipeline completo: pesquisa de notícias → geração de ângulos → redação → design visual → revisão.
+version: "1.0.0"
+language: pt-BR
+performance_mode: alta-performance
+created: 2026-03-24
+
+investigation:
+  enriched: false
+  profiles_analyzed: 1
+  date: 2026-03-24
+  dir: squads/instagram-carousel/_investigations
+  note: "Sherlock investigou @josianevargasdelfino. Enriquecer arquivos de dados quando investigação completar."
+
+skills:
+  - web_search
+  - web_fetch
+  - image-creator
+
+data:
+  - pipeline/data/research-brief.md
+  - pipeline/data/domain-framework.md
+  - pipeline/data/quality-criteria.md
+  - pipeline/data/output-examples.md
+  - pipeline/data/anti-patterns.md
+  - pipeline/data/tone-of-voice.md
+
+agents:
+  - id: renata-rastreio
+    name: Renata Rastreio
+    icon: "🔍"
+    path: ./agents/renata-rastreio.agent.md
+    execution: subagent
+
+  - id: carlos-carrossel
+    name: Carlos Carrossel
+    icon: "✍️"
+    path: ./agents/carlos-carrossel.agent.md
+    execution: inline
+
+  - id: daniela-design
+    name: Daniela Design
+    icon: "🎨"
+    path: ./agents/daniela-design.agent.md
+    execution: inline
+
+  - id: vera-veredito
+    name: Vera Veredito
+    icon: "⭐"
+    path: ./agents/vera-veredito.agent.md
+    execution: inline
+
+pipeline: pipeline/pipeline.yaml

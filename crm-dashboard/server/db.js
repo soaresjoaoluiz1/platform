@@ -227,6 +227,273 @@ db.exec(`
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
   );
   CREATE INDEX IF NOT EXISTS idx_notes_lead ON lead_notes(lead_id, created_at DESC);
+
+  -- Cadences (sequential contact workflows)
+  CREATE TABLE IF NOT EXISTS cadences (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id  INTEGER NOT NULL,
+    name        TEXT NOT NULL,
+    description TEXT,
+    is_active   INTEGER NOT NULL DEFAULT 1,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS cadence_attempts (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    cadence_id  INTEGER NOT NULL,
+    position    INTEGER NOT NULL DEFAULT 0,
+    action_type TEXT NOT NULL CHECK (action_type IN ('mensagem', 'ligacao', 'email', 'reuniao', 'whatsapp', 'visita')),
+    description TEXT,
+    instructions TEXT,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (cadence_id) REFERENCES cadences(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_cadence_attempts_cadence ON cadence_attempts(cadence_id, position);
+
+  CREATE TABLE IF NOT EXISTS lead_cadences (
+    id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id               INTEGER NOT NULL,
+    cadence_id            INTEGER NOT NULL,
+    current_attempt_id    INTEGER,
+    status                TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'completed', 'paused')),
+    started_at            TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at            TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
+    FOREIGN KEY (cadence_id) REFERENCES cadences(id) ON DELETE CASCADE,
+    FOREIGN KEY (current_attempt_id) REFERENCES cadence_attempts(id) ON DELETE SET NULL
+  );
+  CREATE INDEX IF NOT EXISTS idx_lead_cadences_lead ON lead_cadences(lead_id);
+
+  -- Ready messages (quick templates)
+  CREATE TABLE IF NOT EXISTS ready_messages (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id  INTEGER NOT NULL,
+    title       TEXT NOT NULL,
+    content     TEXT NOT NULL,
+    image_url   TEXT,
+    video_url   TEXT,
+    stage_id    INTEGER,
+    is_active   INTEGER NOT NULL DEFAULT 1,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (stage_id) REFERENCES funnel_stages(id) ON DELETE SET NULL
+  );
+
+  -- Qualification sequences (lead scoring questions)
+  CREATE TABLE IF NOT EXISTS qualification_sequences (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id  INTEGER NOT NULL,
+    question    TEXT NOT NULL,
+    position    INTEGER NOT NULL DEFAULT 0,
+    is_active   INTEGER NOT NULL DEFAULT 1,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_qual_seq_account ON qualification_sequences(account_id, position);
+
+  CREATE TABLE IF NOT EXISTS lead_qualifications (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id         INTEGER NOT NULL,
+    sequence_id     INTEGER NOT NULL,
+    answer          TEXT,
+    answered_at     TEXT,
+    answered_by     INTEGER,
+    FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
+    FOREIGN KEY (sequence_id) REFERENCES qualification_sequences(id) ON DELETE CASCADE,
+    FOREIGN KEY (answered_by) REFERENCES users(id) ON DELETE SET NULL,
+    UNIQUE(lead_id, sequence_id)
+  );
+
+  -- Launches (product/property listings)
+  CREATE TABLE IF NOT EXISTS launches (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id      INTEGER NOT NULL,
+    title           TEXT NOT NULL,
+    identification  TEXT,
+    is_active       INTEGER NOT NULL DEFAULT 1,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS launch_messages (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    launch_id   INTEGER NOT NULL,
+    position    INTEGER NOT NULL DEFAULT 0,
+    question    TEXT NOT NULL,
+    answer      TEXT NOT NULL,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (launch_id) REFERENCES launches(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_launch_messages_launch ON launch_messages(launch_id, position);
+`)
+
+// ─── Schema migrations (add columns safely) ─────────────────────
+function addColumnIfNotExists(table, column, type) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all()
+  if (!cols.some(c => c.name === column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`)
+    console.log(`[DB] Added column ${table}.${column}`)
+  }
+}
+// whatsapp_instances: qr_code for QR code base64
+addColumnIfNotExists('whatsapp_instances', 'qr_code', 'TEXT')
+// whatsapp_instances: default attendant for new inbound leads (overrides round-robin when set)
+addColumnIfNotExists('whatsapp_instances', 'default_attendant_id', 'INTEGER REFERENCES users(id) ON DELETE SET NULL')
+// leads: instance_id to track which WhatsApp number received this lead
+addColumnIfNotExists('leads', 'instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
+// accounts: Evolution API credentials (shared across all instances)
+addColumnIfNotExists('accounts', 'evolution_api_url', 'TEXT')
+addColumnIfNotExists('accounts', 'evolution_api_key', 'TEXT')
+
+// Defaults centralizados da Evolution API (ja preenche em todas contas)
+export const DEFAULT_EVOLUTION_API_URL = process.env.EVOLUTION_API_URL || 'http://127.0.0.1:8080'
+export const DEFAULT_EVOLUTION_API_KEY = process.env.EVOLUTION_API_KEY || 'dros-evo-key-2026'
+
+// Backfill: aplica defaults em contas que ainda nao tem credenciais salvas
+db.prepare("UPDATE accounts SET evolution_api_url = ? WHERE evolution_api_url IS NULL OR evolution_api_url = ''").run(DEFAULT_EVOLUTION_API_URL)
+db.prepare("UPDATE accounts SET evolution_api_key = ? WHERE evolution_api_key IS NULL OR evolution_api_key = ''").run(DEFAULT_EVOLUTION_API_KEY)
+// cadence_attempts: D+N days from lead creation + scheduled time
+addColumnIfNotExists('cadence_attempts', 'delay_days', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('cadence_attempts', 'scheduled_time', 'TEXT')
+// cadence_attempts: auto-send message template (for WhatsApp auto)
+addColumnIfNotExists('cadence_attempts', 'auto_message', 'TEXT')
+// cadence_attempts: schedule mode ('date' = D+N HH:MM, 'duration' = delay_minutes from anchor)
+addColumnIfNotExists('cadence_attempts', 'schedule_mode', "TEXT NOT NULL DEFAULT 'date'")
+addColumnIfNotExists('cadence_attempts', 'delay_minutes', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('cadence_attempts', 'call_script', 'TEXT')
+// lead_cadences: track when each attempt was executed/skipped
+addColumnIfNotExists('lead_cadences', 'last_executed_at', 'TEXT')
+addColumnIfNotExists('lead_cadences', 'last_executed_attempt_id', 'INTEGER')
+// leads: WhatsApp profile picture URL (cached, expires periodically)
+addColumnIfNotExists('leads', 'profile_pic_url', 'TEXT')
+addColumnIfNotExists('leads', 'profile_pic_updated_at', 'TEXT')
+// leads: archive flag + unread marker for messages that arrived after archiving
+addColumnIfNotExists('leads', 'is_archived', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('leads', 'archived_at', 'TEXT')
+addColumnIfNotExists('leads', 'has_new_after_archive', 'INTEGER NOT NULL DEFAULT 0')
+
+// Accounts: extra business fields
+addColumnIfNotExists('accounts', 'cnpj', 'TEXT')
+addColumnIfNotExists('accounts', 'razao_social', 'TEXT')
+addColumnIfNotExists('accounts', 'segmento', 'TEXT')
+addColumnIfNotExists('accounts', 'website', 'TEXT')
+addColumnIfNotExists('accounts', 'instagram', 'TEXT')
+addColumnIfNotExists('accounts', 'whatsapp_comercial', 'TEXT')
+addColumnIfNotExists('accounts', 'valor_mensal', 'REAL')
+addColumnIfNotExists('accounts', 'contrato_inicio', 'TEXT')
+addColumnIfNotExists('accounts', 'cidade', 'TEXT')
+addColumnIfNotExists('accounts', 'estado', 'TEXT')
+addColumnIfNotExists('accounts', 'observacoes', 'TEXT')
+addColumnIfNotExists('accounts', 'trabalha_anuncio', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('accounts', 'investimento_anuncios', 'REAL')
+
+// Leads: extra business fields
+addColumnIfNotExists('leads', 'empresa', 'TEXT')
+addColumnIfNotExists('leads', 'cpf_cnpj', 'TEXT')
+addColumnIfNotExists('leads', 'instagram', 'TEXT')
+addColumnIfNotExists('leads', 'trabalha_anuncio', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('leads', 'investimento_anuncios', 'REAL')
+// Opt-in/opt-out for WhatsApp broadcasts (Meta compliance)
+addColumnIfNotExists('leads', 'opted_in_at', 'TEXT')
+addColumnIfNotExists('leads', 'opted_out_at', 'TEXT')
+addColumnIfNotExists('leads', 'last_broadcast_at', 'TEXT')
+
+// Broadcasts: message variations (JSON array) + delay between sends
+addColumnIfNotExists('broadcasts', 'message_variations', 'TEXT')
+addColumnIfNotExists('broadcasts', 'delay_seconds', 'INTEGER NOT NULL DEFAULT 3')
+addColumnIfNotExists('broadcasts', 'instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
+addColumnIfNotExists('broadcasts', 'paused_at', 'TEXT')
+addColumnIfNotExists('broadcasts', 'paused_reason', 'TEXT')
+addColumnIfNotExists('broadcasts', 'started_at', 'TEXT')
+
+// ─── Multi-instance routing (decide which WhatsApp number to use when sending)
+// leads.last_instance_id: ultima instancia que conversou com este lead (origem ou recepcao)
+addColumnIfNotExists('leads', 'last_instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
+// users.primary_instance_id: instancia padrao do usuario para envios manuais quando lead nao tem instancia
+addColumnIfNotExists('users', 'primary_instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
+// users.can_manage_proposals: permissao granular pra acessar a area de Propostas (super_admin sempre tem)
+addColumnIfNotExists('users', 'can_manage_proposals', 'INTEGER NOT NULL DEFAULT 0')
+// messages.instance_id: qual instancia enviou/recebeu cada mensagem (mostrado internamente no chat)
+addColumnIfNotExists('messages', 'instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
+
+// ─── Multi-conversation: cada lead pode ter conversa com varias instancias
+// e cada conversa tem seu proprio atendente
+db.exec(`
+  CREATE TABLE IF NOT EXISTS lead_instance_assignments (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id       INTEGER NOT NULL,
+    instance_id   INTEGER NOT NULL,
+    attendant_id  INTEGER,
+    created_at    TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(lead_id, instance_id),
+    FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
+    FOREIGN KEY (instance_id) REFERENCES whatsapp_instances(id) ON DELETE CASCADE,
+    FOREIGN KEY (attendant_id) REFERENCES users(id) ON DELETE SET NULL
+  );
+  CREATE INDEX IF NOT EXISTS idx_lia_lead ON lead_instance_assignments(lead_id);
+  CREATE INDEX IF NOT EXISTS idx_lia_instance ON lead_instance_assignments(instance_id);
+  CREATE INDEX IF NOT EXISTS idx_lia_attendant ON lead_instance_assignments(attendant_id);
+`)
+
+// Backfill: pra cada lead com instance_id, cria assignment se nao existir
+try {
+  db.prepare(`
+    INSERT OR IGNORE INTO lead_instance_assignments (lead_id, instance_id, attendant_id)
+    SELECT id, instance_id, attendant_id FROM leads WHERE instance_id IS NOT NULL
+  `).run()
+  // Tambem cria assignments pra cada lead com last_instance_id != instance_id
+  db.prepare(`
+    INSERT OR IGNORE INTO lead_instance_assignments (lead_id, instance_id, attendant_id)
+    SELECT id, last_instance_id, attendant_id FROM leads
+    WHERE last_instance_id IS NOT NULL AND last_instance_id != COALESCE(instance_id, -1)
+  `).run()
+} catch (e) { console.log('[DB] Backfill lead_instance_assignments:', e.message) }
+
+// Standalone tasks (not tied to cadences)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS standalone_tasks (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id      INTEGER NOT NULL,
+    lead_id         INTEGER,
+    assigned_to     INTEGER,
+    title           TEXT NOT NULL,
+    description     TEXT,
+    due_datetime    TEXT NOT NULL,
+    status          TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed')),
+    created_by      INTEGER,
+    completed_at    TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (lead_id) REFERENCES leads(id),
+    FOREIGN KEY (assigned_to) REFERENCES users(id),
+    FOREIGN KEY (created_by) REFERENCES users(id)
+  )
+`)
+
+// Proposals (proposta comercial gerada pelo super_admin)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS proposals (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug              TEXT NOT NULL UNIQUE,
+    client_name       TEXT NOT NULL,
+    phone             TEXT,
+    segmento          TEXT,
+    has_production    INTEGER NOT NULL DEFAULT 1,
+    num_videos        INTEGER NOT NULL DEFAULT 0,
+    num_images        INTEGER NOT NULL DEFAULT 0,
+    valor             REAL NOT NULL DEFAULT 0,
+    contrato_meses    INTEGER NOT NULL DEFAULT 3,
+    observacoes       TEXT,
+    created_by        INTEGER,
+    created_at        TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at        TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+  );
+  CREATE INDEX IF NOT EXISTS idx_proposals_slug ON proposals(slug);
 `)
 
 // Seed super_admin if not exists

@@ -18,14 +18,15 @@ export function SSEProvider({ children }: { children: ReactNode }) {
     const token = localStorage.getItem('dros_crm_token')
     if (!token) return
 
-    const es = new EventSource(`/api/events?token=${token}`)
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+    const es = new EventSource(`${base}/api/events?token=${token}`)
     esRef.current = es
 
     es.onopen = () => setConnected(true)
     es.onerror = () => setConnected(false)
 
     // Listen to all event types we care about
-    const eventTypes = ['lead:created', 'lead:updated', 'lead:message', 'broadcast:completed']
+    const eventTypes = ['lead:created', 'lead:updated', 'lead:message', 'lead:archived', 'lead:unarchived', 'lead:archived-activity', 'broadcast:completed', 'task:updated', 'task:due']
     for (const type of eventTypes) {
       es.addEventListener(type, (e) => {
         try {

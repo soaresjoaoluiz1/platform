@@ -1,0 +1,90 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e7]:
+      - img "Dros" [ref=e8]
+      - generic [ref=e9]: CRM
+    - navigation [ref=e10]:
+      - generic [ref=e11]: Admin
+      - link "Dashboard Global" [ref=e12] [cursor=pointer]:
+        - /url: /admin/dashboard
+        - img [ref=e13]
+        - text: Dashboard Global
+      - link "Clientes" [ref=e18] [cursor=pointer]:
+        - /url: /admin/clients
+        - img [ref=e19]
+        - text: Clientes
+      - link "Usuarios" [ref=e23] [cursor=pointer]:
+        - /url: /admin/users
+        - img [ref=e24]
+        - text: Usuarios
+      - generic [ref=e28]: Gestao
+      - link "Dashboard" [ref=e29] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e30]
+        - text: Dashboard
+      - link "Pipeline" [ref=e35] [cursor=pointer]:
+        - /url: /pipeline
+        - img [ref=e36]
+        - text: Pipeline
+      - link "Leads" [ref=e37] [cursor=pointer]:
+        - /url: /leads
+        - img [ref=e38]
+        - text: Leads
+      - generic [ref=e43]: Configuracoes
+      - link "Disparos" [ref=e44] [cursor=pointer]:
+        - /url: /messages
+        - img [ref=e45]
+        - text: Disparos
+      - link "Equipe" [ref=e47] [cursor=pointer]:
+        - /url: /team
+        - img [ref=e48]
+        - text: Equipe
+      - link "Funis" [ref=e60] [cursor=pointer]:
+        - /url: /funnels
+        - img [ref=e61]
+        - text: Funis
+      - link "Integracoes" [ref=e65] [cursor=pointer]:
+        - /url: /integrations
+        - img [ref=e66]
+        - text: Integracoes
+      - link "Configuracoes" [ref=e68] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e69]
+        - text: Configuracoes
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - generic [ref=e74]: Dros Admin
+        - generic [ref=e75]: Admin
+      - button "Sair" [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+  - main [ref=e80]:
+    - generic [ref=e81]:
+      - generic [ref=e82]:
+        - heading "Leads (0)" [level=1] [ref=e84]:
+          - text: Leads
+          - generic [ref=e85]: (0)
+        - generic [ref=e86]:
+          - link "Exportar" [ref=e87] [cursor=pointer]:
+            - /url: /api/leads/export?account_id=null
+            - img [ref=e88]
+            - text: Exportar
+          - button "Novo Lead" [ref=e91] [cursor=pointer]:
+            - img [ref=e92]
+            - text: Novo Lead
+      - generic [ref=e93]:
+        - textbox "Buscar nome, telefone, email..." [ref=e94]
+        - combobox [ref=e95] [cursor=pointer]:
+          - option "Todas etapas" [selected]
+        - combobox [ref=e96] [cursor=pointer]:
+          - option "Todas fontes" [selected]
+          - option "WhatsApp"
+          - option "Meta Form"
+          - option "Website"
+          - option "Manual"
+        - combobox [ref=e97] [cursor=pointer]:
+          - option "Todos atendentes" [selected]
+          - option "Sem atendente"
+      - generic [ref=e98]:
+        - textbox [ref=e99]
+        - generic [ref=e100]: ate
+        - textbox [ref=e101]

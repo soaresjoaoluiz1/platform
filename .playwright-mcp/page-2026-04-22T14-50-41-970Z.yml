@@ -1,0 +1,382 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Oxiquímica Varginha — página inicial" [ref=e4] [cursor=pointer]:
+        - /url: "#"
+        - img "Oxi Química Varginha" [ref=e5]
+      - link "Quero ser revendedor" [ref=e7] [cursor=pointer]:
+        - /url: "#cadastro"
+  - generic [ref=e9]:
+    - generic [ref=e10]: Vagas abertas para revendedores na sua região
+    - heading "Revenda produtos de limpeza profissional e fature até R$10.000/mês" [level=1] [ref=e12]
+    - paragraph [ref=e13]: A Oxiquímica Varginha fornece produtos registrados na ANVISA direto da fábrica — com margem de lucro de até 100%, suporte completo e entrega na sua região.
+    - generic [ref=e14]:
+      - link "Quero me cadastrar" [ref=e15] [cursor=pointer]:
+        - /url: "#cadastro"
+      - link "Como funciona" [ref=e16] [cursor=pointer]:
+        - /url: "#como-funciona"
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]: 9+
+        - generic [ref=e20]: Segmentos atendidos
+      - generic [ref=e21]:
+        - generic [ref=e22]: 60–100%
+        - generic [ref=e23]: Margem de lucro
+      - generic [ref=e24]:
+        - generic [ref=e25]: 20+
+        - generic [ref=e26]: Anos de mercado
+  - generic [ref=e29]:
+    - generic [ref=e30]:
+      - img [ref=e32]
+      - text: Registrado na ANVISA
+    - generic [ref=e34]:
+      - img [ref=e36]
+      - text: Direto da fábrica
+    - generic [ref=e41]:
+      - img [ref=e43]
+      - text: Frete grátis em rotas
+    - generic [ref=e45]:
+      - img [ref=e47]
+      - text: Pessoa física ou jurídica
+  - generic [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e53]: Vantagens
+      - heading "Por que revender Oxiquímica?" [level=2] [ref=e54]
+      - paragraph [ref=e55]: Uma estrutura completa para você começar a vender e lucrar já na primeira semana.
+    - generic [ref=e57]:
+      - generic [ref=e58]:
+        - img [ref=e60]
+        - heading "Margem de 60% a 100%" [level=3] [ref=e62]
+        - paragraph [ref=e63]: Preço direto de fábrica. Você define o valor de revenda e controla seu lucro em cada produto.
+      - generic [ref=e64]:
+        - img [ref=e66]
+        - heading "Frete grátis em rotas" [level=3] [ref=e71]
+        - paragraph [ref=e72]: Entrega sem custo adicional na sua porta nas rotas disponíveis em Minas Gerais e região.
+      - generic [ref=e73]:
+        - img [ref=e75]
+        - heading "Kit de boas-vindas grátis" [level=3] [ref=e77]
+        - paragraph [ref=e78]: Amostras dos principais produtos para apresentar aos seus clientes e fechar vendas na hora.
+      - generic [ref=e79]:
+        - img [ref=e81]
+        - heading "Conteúdo digital semanal" [level=3] [ref=e83]
+        - paragraph [ref=e84]: Artes prontas para WhatsApp e Instagram. Você divulga sem precisar criar nada do zero.
+      - generic [ref=e85]:
+        - img [ref=e87]
+        - heading "9 segmentos de mercado" [level=3] [ref=e90]
+        - paragraph [ref=e91]: Agro, automotivo, hospitalar, alimentício e mais — atenda qualquer tipo de cliente na sua região.
+      - generic [ref=e92]:
+        - img [ref=e94]
+        - heading "Início rápido e simples" [level=3] [ref=e96]
+        - paragraph [ref=e97]: Investimento a partir de R$800. Receba seus produtos e comece a vender na mesma semana.
+  - generic [ref=e98]:
+    - generic [ref=e100]:
+      - generic:
+        - img "Linha de produtos Oxiquímica"
+      - generic [ref=e101]:
+        - generic [ref=e102]: Linha completa
+        - heading "Mais de 150 produtos pra você revender" [level=2] [ref=e103]
+        - paragraph [ref=e104]: Amaciante, desinfetante, neutralav, iodo protect, sabão e muito mais — todos registrados na ANVISA, com embalagens profissionais que vendem sozinhas.
+        - link "Quero ser revendedor" [ref=e105] [cursor=pointer]:
+          - /url: "#cadastro"
+    - heading "Conheça alguns dos galões do catálogo" [level=3] [ref=e107]
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - img "Oxi Alcalino" [ref=e111]
+        - generic [ref=e112]: Oxi Alcalino
+        - generic [ref=e113]: Agro
+      - generic [ref=e114]:
+        - img "Oxi Acid" [ref=e115]
+        - generic [ref=e116]: Oxi Acid
+        - generic [ref=e117]: Agro
+      - generic [ref=e118]:
+        - img "Oxi Car" [ref=e119]
+        - generic [ref=e120]: Oxi Car
+        - generic [ref=e121]: Automotivo
+      - generic [ref=e122]:
+        - img "Oxi Limpneu" [ref=e123]
+        - generic [ref=e124]: Oxi Limpneu
+        - generic [ref=e125]: Automotivo
+      - generic [ref=e126]:
+        - img "Oxi Clor" [ref=e127]
+        - generic [ref=e128]: Oxi Clor
+        - generic [ref=e129]: Hospitalar
+      - generic [ref=e130]:
+        - img "Oxi Clean" [ref=e131]
+        - generic [ref=e132]: Oxi Clean
+        - generic [ref=e133]: Corporativo
+      - generic [ref=e134]:
+        - img "Oxi Detergente" [ref=e135]
+        - generic [ref=e136]: Oxi Detergente
+        - generic [ref=e137]: Ind. Alimentícia
+      - generic [ref=e138]:
+        - img "Oxi Pine" [ref=e139]
+        - generic [ref=e140]: Oxi Pine
+        - generic [ref=e141]: Corporativo
+  - generic [ref=e142]:
+    - generic [ref=e143]:
+      - generic [ref=e144]: Portfólio completo
+      - heading "Atenda todos os segmentos com um único fornecedor" [level=2] [ref=e145]
+      - paragraph [ref=e146]: Quanto mais segmentos você atende, maior o seu faturamento mensal.
+    - generic [ref=e148]:
+      - generic [ref=e149]:
+        - img [ref=e151]
+        - generic [ref=e154]: Agro
+        - generic [ref=e155]: Fazendas e agroindústrias
+      - generic [ref=e156]:
+        - img [ref=e158]
+        - generic [ref=e163]: Automotivo
+        - generic [ref=e164]: Lava-rápidos e oficinas
+      - generic [ref=e165]:
+        - img [ref=e167]
+        - generic [ref=e169]: Hospitalar
+        - generic [ref=e170]: Clínicas e hospitais
+      - generic [ref=e171]:
+        - img [ref=e173]
+        - generic [ref=e176]: Ind. Alimentícia
+        - generic [ref=e177]: Restaurantes e indústrias
+      - generic [ref=e178]:
+        - img [ref=e180]
+        - generic [ref=e183]: Corporativo
+        - generic [ref=e184]: Escritórios e condomínios
+      - generic [ref=e185]:
+        - img [ref=e187]
+        - generic [ref=e189]: Casa e Construção
+        - generic [ref=e190]: Construtoras e obras
+      - generic [ref=e191]:
+        - img [ref=e193]
+        - generic [ref=e195]: Matéria Prima
+        - generic [ref=e196]: Indústrias e formuladores
+      - generic [ref=e197]:
+        - img [ref=e199]
+        - generic [ref=e201]: Residencial
+        - generic [ref=e202]: Limpeza doméstica
+  - generic [ref=e203]:
+    - generic [ref=e204]:
+      - generic [ref=e205]: Passo a passo
+      - heading "Do cadastro à primeira venda em 7 dias" [level=2] [ref=e206]
+      - paragraph [ref=e207]: Um processo simples e direto. Cadastre-se hoje e comece a faturar ainda esta semana.
+    - generic [ref=e209]:
+      - generic [ref=e210]:
+        - generic [ref=e211]: "1"
+        - heading "Cadastre-se" [level=3] [ref=e212]
+        - paragraph [ref=e213]: Preencha o formulário. Em até 24h um consultor entra em contato.
+      - generic [ref=e214]:
+        - generic [ref=e215]: "2"
+        - heading "Receba o kit" [level=3] [ref=e216]
+        - paragraph [ref=e217]: Catálogo completo, amostras grátis e materiais de divulgação digital.
+      - generic [ref=e218]:
+        - generic [ref=e219]: "3"
+        - heading "Faça seu pedido" [level=3] [ref=e220]
+        - paragraph [ref=e221]: Escolha produtos com preço de fábrica. Investimento a partir de R$800.
+      - generic [ref=e222]:
+        - generic [ref=e223]: "4"
+        - heading "Comece a vender" [level=3] [ref=e224]
+        - paragraph [ref=e225]: Entrega rápida na sua região. Lucre já na primeira semana.
+  - generic [ref=e228]:
+    - generic [ref=e229]:
+      - generic [ref=e230]: 20+
+      - generic [ref=e231]: Anos de experiência
+    - generic [ref=e232]:
+      - generic [ref=e233]: 150+
+      - generic [ref=e234]: Produtos no catálogo
+    - generic [ref=e235]:
+      - generic [ref=e236]: "9"
+      - generic [ref=e237]: Segmentos atendidos
+    - generic [ref=e238]:
+      - generic [ref=e239]: MG+
+      - generic [ref=e240]: Cobertura regional
+  - generic [ref=e241]:
+    - generic [ref=e242]:
+      - generic [ref=e243]: Depoimentos
+      - heading "Quem revende, recomenda" [level=2] [ref=e244]
+      - paragraph [ref=e245]: Histórias reais de revendedores que transformaram sua renda com Oxiquímica.
+    - generic [ref=e247]:
+      - generic [ref=e248]:
+        - generic "5 estrelas" [ref=e249]: ★★★★★
+        - paragraph [ref=e250]: "\"Comecei como renda extra e em 3 meses já estava faturando mais que meu salário. Os produtos vendem sozinhos porque a qualidade é excelente.\""
+        - generic [ref=e251]:
+          - generic [ref=e252]: MF
+          - generic [ref=e253]:
+            - generic [ref=e254]: Marcos F.
+            - generic [ref=e255]: Revendedor há 2 anos · Varginha/MG
+      - generic [ref=e256]:
+        - generic "5 estrelas" [ref=e257]: ★★★★★
+        - paragraph [ref=e258]: "\"Atendo restaurantes e lava-rápidos da região. A margem é ótima, a Oxiquímica sempre entrega no prazo e o suporte faz toda a diferença.\""
+        - generic [ref=e259]:
+          - generic [ref=e260]: CL
+          - generic [ref=e261]:
+            - generic [ref=e262]: Carla L.
+            - generic [ref=e263]: Revendedora PJ · Três Corações/MG
+      - generic [ref=e264]:
+        - generic "5 estrelas" [ref=e265]: ★★★★★
+        - paragraph [ref=e266]: "\"Sou aposentado e encontrei uma forma de manter minha renda ativa. Investimento baixo, retorno rápido e suporte sempre disponível.\""
+        - generic [ref=e267]:
+          - generic [ref=e268]: JR
+          - generic [ref=e269]:
+            - generic [ref=e270]: José R.
+            - generic [ref=e271]: Revendedor há 1 ano · Alfenas/MG
+  - generic [ref=e272]:
+    - generic [ref=e273]:
+      - generic [ref=e274]: Dúvidas frequentes
+      - heading "Tudo que você precisa saber" [level=2] [ref=e275]
+      - paragraph [ref=e276]: Respondemos as perguntas mais comuns de quem quer começar a revender.
+    - generic [ref=e278]:
+      - generic [ref=e279]:
+        - button "Qual é o investimento inicial para começar?" [expanded] [ref=e280] [cursor=pointer]:
+          - generic [ref=e281]: Qual é o investimento inicial para começar?
+          - img [ref=e282]
+        - region [ref=e285]:
+          - paragraph [ref=e286]: O investimento inicial gira em torno de R$800 a R$1.500 no primeiro pedido, dependendo dos produtos escolhidos. Podemos conversar e ajustar esse valor à sua realidade — o importante é você começar.
+      - generic [ref=e287]:
+        - button "Preciso ter CNPJ para revender?" [ref=e288] [cursor=pointer]:
+          - generic [ref=e289]: Preciso ter CNPJ para revender?
+          - img [ref=e290]
+        - region:
+          - paragraph [ref=e291]: Não. Vendemos para pessoa física e jurídica. Você pode começar como PF e formalizar quando sentir que é o momento certo.
+      - generic [ref=e292]:
+        - button "Qual a margem de lucro real dos produtos?" [ref=e293] [cursor=pointer]:
+          - generic [ref=e294]: Qual a margem de lucro real dos produtos?
+          - img [ref=e295]
+        - region:
+          - paragraph [ref=e296]: A margem varia de 60% a 100% dependendo do produto e do preço que você pratica. Você tem total liberdade para definir seu preço de revenda. A maioria dos revendedores trabalha com margem média de 70–80%.
+      - generic [ref=e297]:
+        - button "Vocês entregam na minha cidade?" [ref=e298] [cursor=pointer]:
+          - generic [ref=e299]: Vocês entregam na minha cidade?
+          - img [ref=e300]
+        - region:
+          - paragraph [ref=e301]: Atendemos Varginha e toda a região do Sul de Minas. Para outras localidades, consulte-nos — estamos sempre expandindo nossas rotas. O frete é grátis nas rotas disponíveis.
+      - generic [ref=e302]:
+        - button "Em quanto tempo começo a vender?" [ref=e303] [cursor=pointer]:
+          - generic [ref=e304]: Em quanto tempo começo a vender?
+          - img [ref=e305]
+        - region:
+          - paragraph [ref=e306]: Cadastro hoje, contato do consultor em até 24h, pedido processado e entregue em poucos dias. Muitos revendedores fazem a primeira venda na mesma semana que recebem os produtos.
+      - generic [ref=e307]:
+        - button "Vocês oferecem treinamento?" [ref=e308] [cursor=pointer]:
+          - generic [ref=e309]: Vocês oferecem treinamento?
+          - img [ref=e310]
+        - region:
+          - paragraph [ref=e311]: Sim! Além do catálogo detalhado com fichas técnicas, você recebe orientação do consultor sobre os melhores produtos para cada segmento, dicas de venda e conteúdo digital semanal pronto para divulgar.
+      - generic [ref=e312]:
+        - button "Posso usar a marca Oxiquímica nas minhas redes sociais?" [ref=e313] [cursor=pointer]:
+          - generic [ref=e314]: Posso usar a marca Oxiquímica nas minhas redes sociais?
+          - img [ref=e315]
+        - region:
+          - paragraph [ref=e316]: Sim! Autorizamos o uso da marca em suas redes sociais e materiais de divulgação. Isso fortalece sua credibilidade junto aos clientes e associa seu trabalho a uma empresa consolidada.
+      - generic [ref=e317]:
+        - button "Os produtos são regularizados?" [ref=e318] [cursor=pointer]:
+          - generic [ref=e319]: Os produtos são regularizados?
+          - img [ref=e320]
+        - region:
+          - paragraph [ref=e321]: Todos os nossos produtos possuem registro na ANVISA e atendem às normas vigentes de segurança e qualidade. Você revende com total tranquilidade.
+      - generic [ref=e322]:
+        - button "Tem quantidade mínima de pedido?" [ref=e323] [cursor=pointer]:
+          - generic [ref=e324]: Tem quantidade mínima de pedido?
+          - img [ref=e325]
+        - region:
+          - paragraph [ref=e326]: Temos um valor mínimo sugerido para o primeiro pedido, mas somos flexíveis. Cadastre-se e nosso consultor monta o pedido ideal para o seu perfil.
+  - generic [ref=e329]:
+    - generic [ref=e330]:
+      - generic [ref=e331]: Cadastro gratuito
+      - heading "Comece a revender Oxiquímica agora" [level=2] [ref=e332]
+      - paragraph [ref=e333]: Preencha o formulário e um consultor dedicado entra em contato em até 24h com seu plano personalizado.
+      - generic [ref=e334]:
+        - generic [ref=e335]:
+          - img [ref=e337]
+          - paragraph [ref=e339]:
+            - strong [ref=e340]: Sem taxa de adesão
+            - text: — cadastro 100% gratuito
+        - generic [ref=e341]:
+          - img [ref=e343]
+          - paragraph [ref=e345]:
+            - strong [ref=e346]: Kit de amostras grátis
+            - text: — para seus primeiros clientes
+        - generic [ref=e347]:
+          - img [ref=e349]
+          - paragraph [ref=e351]:
+            - strong [ref=e352]: Catálogo + materiais digitais
+            - text: — tudo pronto pra divulgar
+        - generic [ref=e353]:
+          - img [ref=e355]
+          - paragraph [ref=e357]:
+            - strong [ref=e358]: Consultor exclusivo
+            - text: — suporte em toda sua jornada
+    - generic [ref=e360]:
+      - generic [ref=e361]: Vagas limitadas na sua região
+      - generic [ref=e362]: Quero ser revendedor
+      - generic [ref=e363]: Preencha seus dados e dê o primeiro passo
+      - generic [ref=e364]:
+        - generic [ref=e365]:
+          - generic [ref=e366]: Nome completo *
+          - textbox "Nome completo" [ref=e367]:
+            - /placeholder: "Ex: João da Silva"
+        - generic [ref=e368]:
+          - generic [ref=e369]:
+            - generic [ref=e370]: WhatsApp *
+            - textbox "WhatsApp" [ref=e371]:
+              - /placeholder: (35) 99999-9999
+          - generic [ref=e372]:
+            - generic [ref=e373]: Cidade/UF *
+            - textbox "Cidade/UF" [ref=e374]:
+              - /placeholder: "Ex: Varginha/MG"
+        - generic [ref=e375]:
+          - generic [ref=e376]: Segmento de interesse *
+          - combobox "Segmento de interesse" [ref=e377]:
+            - option "Selecione um segmento" [disabled] [selected]
+            - option "Agro"
+            - option "Automotivo"
+            - option "Hospitalar"
+            - option "Indústria Alimentícia"
+            - option "Corporativo"
+            - option "Casa e Construção"
+            - option "Residencial"
+            - option "Vários segmentos"
+        - generic [ref=e378]:
+          - generic [ref=e379]: O que você busca? *
+          - combobox "O que você busca?" [ref=e380]:
+            - option "Selecione" [disabled] [selected]
+            - option "Renda extra para complementar meu salário"
+            - option "Montar meu próprio negócio de revenda"
+            - option "Vender em minha loja ou estabelecimento"
+            - option "Já revendo e quero ampliar o portfólio"
+        - button "Quero me cadastrar agora" [ref=e381] [cursor=pointer]
+        - paragraph [ref=e382]:
+          - img [ref=e383]
+          - text: Seus dados estão protegidos. Não enviamos spam.
+  - generic [ref=e387]:
+    - heading "Pronto para começar a lucrar com limpeza profissional?" [level=2] [ref=e388]
+    - paragraph [ref=e389]: Junte-se aos revendedores Oxiquímica. Preço de fábrica, suporte completo e margens que realmente fazem diferença.
+    - generic [ref=e390]:
+      - link "Cadastre-se gratuitamente" [ref=e391] [cursor=pointer]:
+        - /url: "#cadastro"
+      - link "Falar no WhatsApp" [ref=e392] [cursor=pointer]:
+        - /url: https://wa.me/5535997148855?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20revenda%20Oxiqu%C3%ADmica!
+  - contentinfo [ref=e393]:
+    - generic [ref=e394]:
+      - generic [ref=e395]:
+        - generic [ref=e396]:
+          - img "Oxi Química Varginha" [ref=e398]
+          - paragraph [ref=e399]: Fábrica de produtos de limpeza profissional. Atendendo 9 segmentos com qualidade ANVISA e entrega na sua região.
+        - generic [ref=e400]:
+          - generic [ref=e401]: Contato
+          - link "(35) 99714-8855" [ref=e402] [cursor=pointer]:
+            - /url: tel:+5535997148855
+          - link "contato@oxiquimicavarginha.com.br" [ref=e403] [cursor=pointer]:
+            - /url: mailto:contato@oxiquimicavarginha.com.br
+          - generic [ref=e404]:
+            - text: Av. Dr. Módena, 723 – Fátima
+            - text: Varginha/MG · CEP 37010-085
+        - generic [ref=e405]:
+          - generic [ref=e406]: Horário
+          - generic [ref=e407]: "Seg a Qui: 08h – 17h30"
+          - generic [ref=e408]: "Sexta: 08h – 16h30"
+          - generic [ref=e409]: "Sábado: 08h – 12h"
+      - generic [ref=e410]:
+        - generic [ref=e411]: © 2026 Oxiquímica Varginha. Todos os direitos reservados.
+        - generic [ref=e412]:
+          - text: Desenvolvido por
+          - link "Dros Agência" [ref=e413] [cursor=pointer]:
+            - /url: https://drosagencia.com.br
+  - link "Falar no WhatsApp" [ref=e414] [cursor=pointer]:
+    - /url: https://wa.me/5535997148855?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20revenda%20Oxiqu%C3%ADmica!
+    - img [ref=e415]

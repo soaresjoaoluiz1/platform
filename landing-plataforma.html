@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dros Plataforma — Hub, Performance e CRM para Agencias</title>
+<meta property="og:title" content="Dros Plataforma — Ferramentas para Agencias de Marketing">
+<meta property="og:description" content="3 sistemas pensados para agencias: gestao de tarefas, painel de performance e CRM com WhatsApp. Tudo em um so ecossistema.">
+<meta property="og:image" content="https://drosagencia.com.br/hub/logo-dros-bg-blue.png">
+<link rel="icon" type="image/png" href="https://drosagencia.com.br/hub/logo-dros-bg-blue.png">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0118;
+  --bg2: #110920;
+  --bg3: #16102A;
+  --accent: #FFB300;
+  --accent2: #FFAA83;
+  --green: #25D366;
+  --green2: #128C7E;
+  --blue: #4285F4;
+  --purple: #9B59B6;
+  --red: #FF6B6B;
+  --text: #F0EDF5;
+  --text2: #A8A3B8;
+  --text3: #6B6580;
+  --border: rgba(255,255,255,0.08);
+  --glow: rgba(255,179,0,0.15);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.7; overflow-x: hidden; }
+h1,h2,h3,h4 { font-family: 'Outfit', sans-serif; line-height: 1.2; }
+a { color: var(--accent); text-decoration: none; }
+
+/* Nav */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 0; transition: all 0.3s; }
+.nav.scrolled { background: rgba(10,1,24,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { height: 36px; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { color: var(--text2); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.3s; text-decoration: none; }
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0A0118; box-shadow: 0 4px 20px var(--glow); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,179,0,0.3); }
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text2); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-lg { padding: 16px 36px; font-size: 16px; border-radius: 12px; }
+
+/* Hero */
+.hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 24px 80px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,179,0,0.08), transparent 70%); border-radius: 50%; }
+.hero::after { content: ''; position: absolute; bottom: -200px; left: -150px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(155,89,182,0.06), transparent 70%); border-radius: 50%; }
+.hero-inner { max-width: 1100px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,179,0,0.1); border: 1px solid rgba(255,179,0,0.2); color: var(--accent); padding: 6px 16px; border-radius: 50px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 24px; }
+.hero h1 { font-size: clamp(36px, 5.5vw, 56px); font-weight: 800; margin-bottom: 20px; max-width: 850px; margin-left: auto; margin-right: auto; }
+.hero h1 span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 18px; color: var(--text2); margin-bottom: 36px; max-width: 620px; margin-left: auto; margin-right: auto; }
+
+/* Section */
+.section { padding: 100px 24px; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-tag { display: inline-block; background: rgba(255,179,0,0.1); color: var(--accent); padding: 4px 14px; border-radius: 50px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+.section h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; margin-bottom: 16px; }
+.section p.sub { font-size: 16px; color: var(--text2); max-width: 560px; margin-bottom: 48px; }
+.text-center { text-align: center; }
+.text-center p.sub { margin-left: auto; margin-right: auto; }
+
+/* Products Grid */
+.products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 60px; }
+.product-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 24px; padding: 40px 32px; transition: all 0.4s; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 24px 24px 0 0; }
+.product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+.product-card.hub { border-color: rgba(255,179,0,0.15); }
+.product-card.hub::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.product-card.hub:hover { border-color: rgba(255,179,0,0.3); box-shadow: 0 20px 60px rgba(255,179,0,0.1); }
+
+.product-card.performance { border-color: rgba(66,133,244,0.15); }
+.product-card.performance::before { background: linear-gradient(90deg, var(--blue), #5DADE2); }
+.product-card.performance:hover { border-color: rgba(66,133,244,0.3); box-shadow: 0 20px 60px rgba(66,133,244,0.1); }
+
+.product-card.crm { border-color: rgba(37,211,102,0.15); }
+.product-card.crm::before { background: linear-gradient(90deg, var(--green), #34D399); }
+.product-card.crm:hover { border-color: rgba(37,211,102,0.3); box-shadow: 0 20px 60px rgba(37,211,102,0.1); }
+
+.product-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 20px; }
+.product-card.hub .product-icon { background: rgba(255,179,0,0.1); }
+.product-card.performance .product-icon { background: rgba(66,133,244,0.1); }
+.product-card.crm .product-icon { background: rgba(37,211,102,0.1); }
+
+.product-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.product-card .product-tagline { font-size: 13px; color: var(--text3); margin-bottom: 16px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.product-card .product-desc { font-size: 15px; color: var(--text2); margin-bottom: 24px; line-height: 1.7; }
+
+.product-features { list-style: none; margin-bottom: 32px; flex-grow: 1; }
+.product-features li { font-size: 13px; color: var(--text2); padding: 6px 0; display: flex; align-items: center; gap: 10px; }
+.product-features li .check { font-weight: 700; font-size: 12px; }
+.product-card.hub .product-features li .check { color: var(--accent); }
+.product-card.performance .product-features li .check { color: var(--blue); }
+.product-card.crm .product-features li .check { color: var(--green); }
+
+.product-card .product-price { font-family: 'Outfit', sans-serif; font-size: 14px; color: var(--text3); margin-bottom: 20px; }
+.product-card .product-price strong { font-size: 24px; color: var(--text); font-weight: 800; }
+
+.btn-hub { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0A0118; }
+.btn-hub:hover { box-shadow: 0 8px 30px rgba(255,179,0,0.3); }
+.btn-performance { background: linear-gradient(135deg, var(--blue), #5DADE2); color: #fff; }
+.btn-performance:hover { box-shadow: 0 8px 30px rgba(66,133,244,0.3); }
+.btn-crm { background: linear-gradient(135deg, var(--green), var(--green2)); color: #fff; }
+.btn-crm:hover { box-shadow: 0 8px 30px rgba(37,211,102,0.3); }
+
+.btn-product { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.3s; text-decoration: none; width: 100%; }
+.btn-product:hover { transform: translateY(-2px); }
+
+/* Why Section */
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.why-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px; text-align: center; transition: all 0.3s; }
+.why-card:hover { border-color: rgba(255,179,0,0.2); transform: translateY(-4px); }
+.why-icon { font-size: 32px; margin-bottom: 16px; }
+.why-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.why-card p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* CTA */
+.cta-section { background: linear-gradient(135deg, rgba(255,179,0,0.08), rgba(155,89,182,0.06)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+/* Footer */
+.footer { padding: 40px 24px; text-align: center; border-top: 1px solid var(--border); }
+.footer p { font-size: 13px; color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .products-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .nav-links a:not(.btn) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <img src="https://drosagencia.com.br/wp-content/uploads/2025/12/DROS-LOGO-1-1024x1024.png" alt="Dros" class="nav-logo">
+    <div class="nav-links">
+      <a href="#produtos">Produtos</a>
+      <a href="#por-que">Por que a Dros</a>
+      <a href="#produtos" class="btn btn-primary">Ver produtos &#8594;</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">&#9889; Ecossistema completo para agencias</div>
+    <h1>3 ferramentas. <span>1 ecossistema.</span> Sua agencia no controle total.</h1>
+    <p>Gestao de tarefas, painel de performance e CRM com WhatsApp. Tudo construido por quem vive agencia, para quem vive agencia.</p>
+    <a href="#produtos" class="btn btn-primary btn-lg">Conhecer os produtos &#8594;</a>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="section" id="produtos" style="background: var(--bg2);">
+  <div class="section-inner text-center">
+    <div class="section-tag">Produtos</div>
+    <h2>Escolha o que sua agencia precisa</h2>
+    <p class="sub">Cada produto resolve um problema diferente. Use separados ou juntos para o maximo de resultado.</p>
+
+    <div class="products-grid">
+
+      <!-- Hub -->
+      <div class="product-card hub">
+        <div class="product-icon">&#9776;</div>
+        <h3>Dros Hub</h3>
+        <div class="product-tagline">Gestao de tarefas e aprovacoes</div>
+        <p class="product-desc">Pipeline visual, aprovacoes de clientes, controle de tempo e onboarding automatico. Tudo que sua agencia precisa pra escalar sem perder o controle.</p>
+        <ul class="product-features">
+          <li><span class="check">&#10003;</span> Pipeline Kanban visual</li>
+          <li><span class="check">&#10003;</span> Aprovacao do cliente pelo sistema</li>
+          <li><span class="check">&#10003;</span> Timer por tarefa</li>
+          <li><span class="check">&#10003;</span> Onboarding automatico</li>
+          <li><span class="check">&#10003;</span> Notificacoes em tempo real</li>
+          <li><span class="check">&#10003;</span> 3 niveis de acesso</li>
+        </ul>
+        <div class="product-price">A partir de <strong>R$ 597</strong>/mes</div>
+        <a href="agency-hub/landing.html" class="btn-product btn-hub">Conhecer o Hub &#8594;</a>
+      </div>
+
+      <!-- Performance -->
+      <div class="product-card performance">
+        <div class="product-icon">&#128202;</div>
+        <h3>Dros Performance</h3>
+        <div class="product-tagline">Painel de dados e metricas</div>
+        <p class="product-desc">Meta Ads, Google Ads, Instagram, Analytics, CRM, Kiwify. Todos os dados dos seus clientes centralizados em um unico painel inteligente.</p>
+        <ul class="product-features">
+          <li><span class="check">&#10003;</span> 6+ plataformas integradas</li>
+          <li><span class="check">&#10003;</span> Comparacao de periodos</li>
+          <li><span class="check">&#10003;</span> Visao geral unificada</li>
+          <li><span class="check">&#10003;</span> Google Analytics 4</li>
+          <li><span class="check">&#10003;</span> IA para tomada de decisao</li>
+          <li><span class="check">&#10003;</span> Deduplicacao inteligente</li>
+        </ul>
+        <div class="product-price">A partir de <strong>R$ 447</strong>/mes</div>
+        <a href="client-dashboard/landing.html" class="btn-product btn-performance">Conhecer o Performance &#8594;</a>
+      </div>
+
+      <!-- CRM -->
+      <div class="product-card crm">
+        <div class="product-icon">&#128172;</div>
+        <h3>Dros CRM</h3>
+        <div class="product-tagline">CRM + WhatsApp API + IA</div>
+        <p class="product-desc">WhatsApp API oficial, chatbot inteligente, agentes de IA, SDR automatico, pipeline Kanban e distribuicao round-robin. O CRM mais completo para agencias.</p>
+        <ul class="product-features">
+          <li><span class="check">&#10003;</span> WhatsApp API oficial Meta</li>
+          <li><span class="check">&#10003;</span> Chatbot + Agentes de IA</li>
+          <li><span class="check">&#10003;</span> SDR automatico (follow-up)</li>
+          <li><span class="check">&#10003;</span> Pipeline Kanban de vendas</li>
+          <li><span class="check">&#10003;</span> Distribuicao round-robin</li>
+          <li><span class="check">&#10003;</span> Broadcasts em massa</li>
+        </ul>
+        <div class="product-price">A partir de <strong>R$ 597</strong>/mes</div>
+        <a href="crm-dashboard/landing.html" class="btn-product btn-crm">Conhecer o CRM &#8594;</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Why Dros -->
+<section class="section" id="por-que">
+  <div class="section-inner text-center">
+    <div class="section-tag">Por que a Dros</div>
+    <h2>Feito por quem vive agencia</h2>
+    <p class="sub">Nao somos uma empresa de software que acha que sabe o que agencia precisa. Somos uma agencia que construiu o que precisava.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">&#127919;</div>
+        <h3>Feito para agencias BR</h3>
+        <p>Cada funcionalidade foi pensada para a realidade das agencias de marketing brasileiras. Sem adaptacoes forcadas de ferramentas gringa.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">&#128640;</div>
+        <h3>Setup em minutos</h3>
+        <p>Sem instalacao complicada, sem integracao demorada. Crie sua conta e comece a usar imediatamente.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">&#129309;</div>
+        <h3>Suporte de quem entende</h3>
+        <p>Nosso time de suporte sabe o que e briefing, aprovacao de cliente e campanha de trafego. Falamos sua lingua.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta-section">
+  <div class="section-inner text-center">
+    <h2>Sua agencia merece ferramentas <br>que foram feitas pra ela</h2>
+    <p class="sub">Escolha o produto que resolve seu problema mais urgente. Ou use todos juntos para o controle total.</p>
+    <a href="#produtos" class="btn btn-primary btn-lg">Ver os produtos &#8594;</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <img src="https://drosagencia.com.br/wp-content/uploads/2025/12/DROS-LOGO-1-1024x1024.png" alt="Dros" style="height: 32px; margin-bottom: 12px; opacity: 0.6;">
+  <p>&copy; 2026 Dros Agencia. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+// Navbar scroll
+const nav = document.getElementById('nav')
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50)
+})
+
+// Smooth reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)' } })
+}, { threshold: 0.1 })
+document.querySelectorAll('.product-card, .why-card').forEach(el => {
+  el.style.opacity = '0'; el.style.transform = 'translateY(24px)'; el.style.transition = 'all 0.6s ease'
+  observer.observe(el)
+})
+</script>
+</body>
+</html>

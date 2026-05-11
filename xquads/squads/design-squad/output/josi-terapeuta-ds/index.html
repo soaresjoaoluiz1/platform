@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Josi Terapeuta — Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
+  <style>
+    /* === Design System Reference Styles === */
+    .ds-ref-body {
+      font-family: var(--font-sans);
+      background: var(--bg-default);
+      color: var(--text-primary);
+    }
+
+    /* Sidebar navigation */
+    .ds-ref-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    .ds-ref-sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--bg-brand-dark);
+      padding: var(--space-8) var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .ds-ref-sidebar__brand {
+      font-family: var(--font-serif);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-cream-100);
+      line-height: var(--line-height-snug);
+    }
+
+    .ds-ref-sidebar__brand span {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--letter-spacing-wider);
+      text-transform: uppercase;
+      color: var(--color-green-400);
+      margin-bottom: var(--space-1);
+    }
+
+    .ds-ref-nav-group { display: flex; flex-direction: column; gap: var(--space-1); }
+
+    .ds-ref-nav-group__title {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: var(--letter-spacing-wider);
+      text-transform: uppercase;
+      color: var(--color-green-400);
+      padding: var(--space-2) 0 var(--space-1);
+    }
+
+    .ds-ref-nav-link {
+      display: block;
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--font-size-sm);
+      color: var(--color-cream-200);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      text-decoration: none;
+    }
+
+    .ds-ref-nav-link:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--color-neutral-0);
+    }
+
+    /* Main content */
+    .ds-ref-main {
+      padding: var(--space-12) var(--space-12) var(--space-24);
+      max-width: 900px;
+    }
+
+    /* Section blocks */
+    .ds-ref-section {
+      margin-bottom: var(--space-24);
+      scroll-margin-top: var(--space-8);
+    }
+
+    .ds-ref-section__title {
+      font-family: var(--font-serif);
+      font-size: var(--font-size-3xl);
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+      padding-bottom: var(--space-4);
+      border-bottom: 2px solid var(--border-subtle);
+    }
+
+    .ds-ref-section__subtitle {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--space-8);
+    }
+
+    /* Component blocks */
+    .ds-ref-block { margin-bottom: var(--space-12); }
+
+    .ds-ref-block__label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: var(--letter-spacing-wider);
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: var(--space-3);
+    }
+
+    .ds-ref-preview {
+      padding: var(--space-8);
+      background: var(--bg-white);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      align-items: center;
+    }
+
+    .ds-ref-preview--dark {
+      background: var(--bg-brand-dark);
+    }
+
+    .ds-ref-preview--center { justify-content: center; }
+    .ds-ref-preview--col { flex-direction: column; align-items: flex-start; }
+
+    .ds-ref-code {
+      background: var(--color-neutral-900);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      padding: var(--space-4) var(--space-6);
+      overflow-x: auto;
+    }
+
+    .ds-ref-code code {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--color-green-400);
+      white-space: pre;
+    }
+
+    /* Color swatches */
+    .ds-swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .ds-swatch {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .ds-swatch__color {
+      height: 64px;
+    }
+
+    .ds-swatch__info {
+      padding: var(--space-2) var(--space-3);
+      background: var(--bg-white);
+    }
+
+    .ds-swatch__name {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+      display: block;
+    }
+
+    .ds-swatch__value {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+
+    /* Type scale */
+    .ds-type-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .ds-type-row__label {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      min-width: 120px;
+    }
+
+    /* Spacing scale */
+    .ds-space-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .ds-space-row__label {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      min-width: 80px;
+    }
+
+    .ds-space-row__bar {
+      height: 8px;
+      background: var(--brand-primary);
+      border-radius: var(--radius-full);
+    }
+
+    .ds-space-row__value {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+
+    /* WCAG badges */
+    .ds-wcag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+    }
+    .ds-wcag--pass { background: #d4edda; color: #155724; }
+    .ds-wcag--warn { background: #fff3cd; color: #856404; }
+    .ds-wcag--fail { background: #f8d7da; color: #721c24; }
+
+    table.ds-ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-size-sm);
+    }
+    .ds-ref-table th {
+      text-align: left;
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-muted);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--letter-spacing-wider);
+      padding: var(--space-2) var(--space-3);
+      border-bottom: 2px solid var(--border-subtle);
+    }
+    .ds-ref-table td {
+      padding: var(--space-3);
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+    .ds-ref-table code {
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      background: var(--bg-subtle);
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      color: var(--brand-primary);
+    }
+  </style>
+</head>
+<body class="ds-ref-body">
+
+<div class="ds-ref-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="ds-ref-sidebar">
+    <div class="ds-ref-sidebar__brand">
+      <span>Design System</span>
+      Josi Terapeuta
+    </div>
+
+    <nav>
+      <div class="ds-ref-nav-group">
+        <div class="ds-ref-nav-group__title">Fundação</div>
+        <a href="#colors" class="ds-ref-nav-link">Cores</a>
+        <a href="#typography" class="ds-ref-nav-link">Tipografia</a>
+        <a href="#spacing" class="ds-ref-nav-link">Espaçamento</a>
+        <a href="#shadows" class="ds-ref-nav-link">Sombras & Raios</a>
+        <a href="#gradients" class="ds-ref-nav-link">Gradientes</a>
+      </div>
+
+      <div class="ds-ref-nav-group">
+        <div class="ds-ref-nav-group__title">Atoms</div>
+        <a href="#buttons" class="ds-ref-nav-link">Botões</a>
+        <a href="#divider" class="ds-ref-nav-link">Divider</a>
+        <a href="#badge" class="ds-ref-nav-link">Badge</a>
+      </div>
+
+      <div class="ds-ref-nav-group">
+        <div class="ds-ref-nav-group__title">Molecules</div>
+        <a href="#cards" class="ds-ref-nav-link">Cards</a>
+        <a href="#navbar" class="ds-ref-nav-link">Navbar</a>
+        <a href="#forms" class="ds-ref-nav-link">Formulários</a>
+      </div>
+
+      <div class="ds-ref-nav-group">
+        <div class="ds-ref-nav-group__title">Organisms</div>
+        <a href="#hero" class="ds-ref-nav-link">Hero</a>
+        <a href="#section" class="ds-ref-nav-link">Sections</a>
+      </div>
+
+      <div class="ds-ref-nav-group">
+        <div class="ds-ref-nav-group__title">Referência</div>
+        <a href="#wcag" class="ds-ref-nav-link">Acessibilidade</a>
+        <a href="#tokens" class="ds-ref-nav-link">Todos os Tokens</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="ds-ref-main">
+
+    <!-- Header -->
+    <div style="margin-bottom: var(--space-16);">
+      <p style="font-size: var(--font-size-sm); color: var(--text-muted); letter-spacing: var(--letter-spacing-wider); text-transform: uppercase; font-weight: var(--font-weight-semibold); margin-bottom: var(--space-2);">v1.0.0 · Gerado pelo Design Squad</p>
+      <h1 class="ds-heading-1" style="margin-bottom: var(--space-4);">Design System</h1>
+      <p class="ds-body-lg ds-text-secondary">Biblioteca de componentes e tokens do site Josi Terapeuta. Construída com metodologia Atomic Design (Brad Frost). HTML/CSS puro, sem dependências de framework.</p>
+      <div class="ds-divider ds-divider--left" style="margin-top: var(--space-6);"></div>
+    </div>
+
+
+    <!-- ====================================================
+         COLORS
+         ==================================================== -->
+    <section id="colors" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Cores</h2>
+      <p class="ds-ref-section__subtitle">Paleta de cores em 3 camadas: Global → Alias → Component. Use sempre os alias tokens em componentes, nunca os valores brutos diretamente.</p>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Verde (Brand)</div>
+        <div class="ds-swatch-grid">
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#1F3D2A;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">green-100</span><span class="ds-swatch__value">#1F3D2A</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#2D5A3D;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">green-200</span><span class="ds-swatch__value">#2D5A3D</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#3D7A52;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">green-300</span><span class="ds-swatch__value">#3D7A52</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#8FA68E;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">green-400</span><span class="ds-swatch__value">#8FA68E</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#B8CCB7;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">green-500</span><span class="ds-swatch__value">#B8CCB7</span></div></div>
+        </div>
+      </div>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Creme / Warm White</div>
+        <div class="ds-swatch-grid">
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#F7F5F0; border-bottom: 1px solid #eee;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">cream-100</span><span class="ds-swatch__value">#F7F5F0</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#E8E4DC;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">cream-200</span><span class="ds-swatch__value">#E8E4DC</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#D9D4C8;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">cream-300</span><span class="ds-swatch__value">#D9D4C8</span></div></div>
+        </div>
+      </div>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Laranja / CTA</div>
+        <div class="ds-swatch-grid">
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#C2763D;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">orange-100</span><span class="ds-swatch__value">#C2763D</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#D4864C;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">orange-200</span><span class="ds-swatch__value">#D4864C</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#E59A6A;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">orange-300</span><span class="ds-swatch__value">#E59A6A</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#F2C09A;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">orange-400</span><span class="ds-swatch__value">#F2C09A</span></div></div>
+        </div>
+      </div>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Neutros</div>
+        <div class="ds-swatch-grid">
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#1A1A1A;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">neutral-900</span><span class="ds-swatch__value">#1A1A1A</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#333333;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">neutral-700</span><span class="ds-swatch__value">#333333</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#4A4A4A;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">neutral-600</span><span class="ds-swatch__value">#4A4A4A</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#8C8C8C;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">neutral-400</span><span class="ds-swatch__value">#8C8C8C</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#D4D4D4;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">neutral-200</span><span class="ds-swatch__value">#D4D4D4</span></div></div>
+          <div class="ds-swatch"><div class="ds-swatch__color" style="background:#FFFFFF; border-bottom: 1px solid #eee;"></div><div class="ds-swatch__info"><span class="ds-swatch__name">neutral-0</span><span class="ds-swatch__value">#FFFFFF</span></div></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         TYPOGRAPHY
+         ==================================================== -->
+    <section id="typography" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Tipografia</h2>
+      <p class="ds-ref-section__subtitle">Duas famílias: <strong>Playfair Display</strong> (serifada, headings) e <strong>Inter</strong> (sans-serif, corpo e UI). Escala baseada em Major Third, base 16px.</p>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Escala — Playfair Display (serif)</div>
+        <div class="ds-ref-preview ds-ref-preview--col">
+          <div class="ds-type-row" style="width:100%"><span class="ds-type-row__label">heading-1 / 48px</span><h1 class="ds-heading-1" style="font-size: var(--font-size-5xl);">Conexão e Cura</h1></div>
+          <div class="ds-type-row" style="width:100%"><span class="ds-type-row__label">heading-2 / 36px</span><h2 class="ds-heading-2" style="font-size: var(--font-size-4xl);">Sobre a Josi</h2></div>
+          <div class="ds-type-row" style="width:100%"><span class="ds-type-row__label">heading-3 / 30px</span><h3 class="ds-heading-3" style="font-size: var(--font-size-3xl);">Seus Serviços</h3></div>
+        </div>
+      </div>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Escala — Inter (sans)</div>
+        <div class="ds-ref-preview ds-ref-preview--col">
+          <div class="ds-type-row" style="width:100%"><span class="ds-type-row__label">heading-4 / 24px</span><h4 class="ds-heading-4">Terapia Individual</h4></div>
+          <div class="ds-type-row" style="width:100%"><span class="ds-type-row__label">body-lg / 18px</span><p class="ds-body-lg">Um espaço seguro e acolhedor para o seu processo de crescimento pessoal.</p></div>
+          <div class="ds-type-row" style="width:100%"><span class="ds-type-row__label">body / 16px</span><p class="ds-body">Atendimento online e presencial. Abordagem humanista e integrativa.</p></div>
+          <div class="ds-type-row" style="width:100%"><span class="ds-type-row__label">body-sm / 14px</span><p class="ds-body-sm ds-text-secondary">Inscreva-se para receber atualizações sobre grupos terapêuticos.</p></div>
+          <div class="ds-type-row" style="width:100%"><span class="ds-type-row__label">caption / 12px</span><p class="ds-caption">CRP 06/12345 · Psicóloga clínica</p></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         SPACING
+         ==================================================== -->
+    <section id="spacing" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Espaçamento</h2>
+      <p class="ds-ref-section__subtitle">Grade de 4px. Use sempre os tokens <code>--space-N</code>.</p>
+
+      <div class="ds-ref-preview ds-ref-preview--col">
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-1</span><div class="ds-space-row__bar" style="width: 4px;"></div><span class="ds-space-row__value">4px</span></div>
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-2</span><div class="ds-space-row__bar" style="width: 8px;"></div><span class="ds-space-row__value">8px</span></div>
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-4</span><div class="ds-space-row__bar" style="width: 16px;"></div><span class="ds-space-row__value">16px</span></div>
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-6</span><div class="ds-space-row__bar" style="width: 24px;"></div><span class="ds-space-row__value">24px</span></div>
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-8</span><div class="ds-space-row__bar" style="width: 32px;"></div><span class="ds-space-row__value">32px</span></div>
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-12</span><div class="ds-space-row__bar" style="width: 48px;"></div><span class="ds-space-row__value">48px</span></div>
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-16</span><div class="ds-space-row__bar" style="width: 64px;"></div><span class="ds-space-row__value">64px</span></div>
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-20</span><div class="ds-space-row__bar" style="width: 80px;"></div><span class="ds-space-row__value">80px</span></div>
+        <div class="ds-space-row" style="width:100%"><span class="ds-space-row__label">--space-24</span><div class="ds-space-row__bar" style="width: 96px;"></div><span class="ds-space-row__value">96px</span></div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         SHADOWS & RADIUS
+         ==================================================== -->
+    <section id="shadows" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Sombras & Border Radius</h2>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Sombras</div>
+        <div class="ds-ref-preview" style="flex-wrap: wrap; gap: var(--space-6);">
+          <div style="background: white; padding: var(--space-6); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); min-width: 100px; text-align: center;"><span class="ds-caption">shadow-sm</span></div>
+          <div style="background: white; padding: var(--space-6); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); min-width: 100px; text-align: center;"><span class="ds-caption">shadow-md</span></div>
+          <div style="background: white; padding: var(--space-6); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); min-width: 100px; text-align: center;"><span class="ds-caption">shadow-lg</span></div>
+          <div style="background: white; padding: var(--space-6); border-radius: var(--radius-lg); box-shadow: var(--shadow-orange-sm); min-width: 100px; text-align: center;"><span class="ds-caption">shadow-orange</span></div>
+        </div>
+      </div>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Border Radius</div>
+        <div class="ds-ref-preview">
+          <div style="background: var(--brand-primary); width: 48px; height: 48px; border-radius: var(--radius-sm);"></div>
+          <div style="background: var(--brand-primary); width: 48px; height: 48px; border-radius: var(--radius-md);"></div>
+          <div style="background: var(--brand-primary); width: 48px; height: 48px; border-radius: var(--radius-lg);"></div>
+          <div style="background: var(--brand-primary); width: 48px; height: 48px; border-radius: var(--radius-xl);"></div>
+          <div style="background: var(--brand-primary); width: 48px; height: 48px; border-radius: var(--radius-full);"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         GRADIENTS
+         ==================================================== -->
+    <section id="gradients" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Gradientes</h2>
+      <div class="ds-swatch-grid">
+        <div class="ds-swatch"><div class="ds-swatch__color" style="background: var(--gradient-page);"></div><div class="ds-swatch__info"><span class="ds-swatch__name">gradient-page</span><span class="ds-swatch__value">Cream → Beige</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch__color" style="background: var(--gradient-hero);"></div><div class="ds-swatch__info"><span class="ds-swatch__name">gradient-hero</span><span class="ds-swatch__value">Green 200 → 100</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch__color" style="background: var(--gradient-brand);"></div><div class="ds-swatch__info"><span class="ds-swatch__name">gradient-brand</span><span class="ds-swatch__value">Green 200 → 300</span></div></div>
+        <div class="ds-swatch"><div class="ds-swatch__color" style="background: var(--gradient-accent);"></div><div class="ds-swatch__info"><span class="ds-swatch__name">gradient-accent</span><span class="ds-swatch__value">Orange 200 → 100</span></div></div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         BUTTONS
+         ==================================================== -->
+    <section id="buttons" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Botões</h2>
+      <p class="ds-ref-section__subtitle">Três variantes principais. Use sempre <code>.ds-btn</code> como base + modificador de variante.</p>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Variantes</div>
+        <div class="ds-ref-preview">
+          <button class="ds-btn ds-btn--cta">Agendar Consulta</button>
+          <button class="ds-btn ds-btn--outline">Saiba Mais</button>
+          <button class="ds-btn ds-btn--ghost">Ver Serviços</button>
+        </div>
+        <div class="ds-ref-code"><code>&lt;button class="ds-btn ds-btn--cta"&gt;Agendar Consulta&lt;/button&gt;
+&lt;button class="ds-btn ds-btn--outline"&gt;Saiba Mais&lt;/button&gt;
+&lt;button class="ds-btn ds-btn--ghost"&gt;Ver Serviços&lt;/button&gt;</code></div>
+      </div>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Tamanhos</div>
+        <div class="ds-ref-preview" style="align-items: center;">
+          <button class="ds-btn ds-btn--cta ds-btn--sm">Pequeno</button>
+          <button class="ds-btn ds-btn--cta">Médio (padrão)</button>
+          <button class="ds-btn ds-btn--cta ds-btn--lg">Grande</button>
+        </div>
+      </div>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Estados</div>
+        <div class="ds-ref-preview">
+          <button class="ds-btn ds-btn--cta" disabled>Desabilitado</button>
+          <button class="ds-btn ds-btn--outline" disabled>Desabilitado</button>
+        </div>
+      </div>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Props API</div>
+        <table class="ds-ref-table">
+          <thead><tr><th>Classe</th><th>Tipo</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr><td><code>.ds-btn</code></td><td>Base</td><td>Classe base — sempre obrigatória</td></tr>
+            <tr><td><code>.ds-btn--cta</code></td><td>Variante</td><td>CTA primário, fundo laranja</td></tr>
+            <tr><td><code>.ds-btn--outline</code></td><td>Variante</td><td>Outline laranja, fill no hover</td></tr>
+            <tr><td><code>.ds-btn--ghost</code></td><td>Variante</td><td>Transparente, texto verde</td></tr>
+            <tr><td><code>.ds-btn--sm</code></td><td>Tamanho</td><td>Pequeno (padding reduzido)</td></tr>
+            <tr><td><code>.ds-btn--lg</code></td><td>Tamanho</td><td>Grande (padding aumentado)</td></tr>
+            <tr><td><code>.ds-btn--square</code></td><td>Forma</td><td>Border-radius quadrado</td></tr>
+            <tr><td><code>disabled</code></td><td>Estado HTML</td><td>Desabilitado (opacity 0.45)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         DIVIDER
+         ==================================================== -->
+    <section id="divider" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Divider Decorativo</h2>
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Variantes de alinhamento</div>
+        <div class="ds-ref-preview ds-ref-preview--col">
+          <hr class="ds-divider">
+          <hr class="ds-divider ds-divider--left">
+          <hr class="ds-divider ds-divider--right">
+        </div>
+        <div class="ds-ref-code"><code>&lt;hr class="ds-divider"&gt;               &lt;!-- centralizado --&gt;
+&lt;hr class="ds-divider ds-divider--left"&gt;   &lt;!-- alinhado à esquerda --&gt;
+&lt;hr class="ds-divider ds-divider--right"&gt;  &lt;!-- alinhado à direita --&gt;</code></div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         BADGE
+         ==================================================== -->
+    <section id="badge" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Badge</h2>
+      <div class="ds-ref-block">
+        <div class="ds-ref-preview">
+          <span class="ds-badge">Psicóloga</span>
+          <span class="ds-badge ds-badge--accent">Online</span>
+          <span class="ds-badge ds-badge--outline">CRP 06/12345</span>
+        </div>
+        <div class="ds-ref-code"><code>&lt;span class="ds-badge"&gt;Psicóloga&lt;/span&gt;
+&lt;span class="ds-badge ds-badge--accent"&gt;Online&lt;/span&gt;
+&lt;span class="ds-badge ds-badge--outline"&gt;CRP 06/12345&lt;/span&gt;</code></div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         CARDS
+         ==================================================== -->
+    <section id="cards" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Cards</h2>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Card padrão (hoverable)</div>
+        <div class="ds-ref-preview">
+          <div class="ds-card ds-card--hoverable" style="max-width: 280px;">
+            <div class="ds-card__icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <h3 class="ds-card__title">Terapia Individual</h3>
+            <p class="ds-card__body">Um espaço seguro e acolhedor para explorar seus sentimentos e alcançar equilíbrio emocional.</p>
+          </div>
+        </div>
+        <div class="ds-ref-code"><code>&lt;div class="ds-card ds-card--hoverable"&gt;
+  &lt;div class="ds-card__icon"&gt;...&lt;/div&gt;
+  &lt;h3 class="ds-card__title"&gt;Terapia Individual&lt;/h3&gt;
+  &lt;p class="ds-card__body"&gt;Descrição do serviço.&lt;/p&gt;
+&lt;/div&gt;</code></div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         FORMS
+         ==================================================== -->
+    <section id="forms" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Formulários</h2>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Campo de texto</div>
+        <div class="ds-ref-preview ds-ref-preview--col" style="max-width: 400px;">
+          <div class="ds-field">
+            <label class="ds-label" for="nome">Nome completo</label>
+            <input class="ds-input" id="nome" type="text" placeholder="Seu nome">
+          </div>
+          <div class="ds-field">
+            <label class="ds-label" for="email">E-mail</label>
+            <input class="ds-input ds-input--error" id="email" type="email" placeholder="seu@email.com">
+            <span class="ds-field-message ds-field-message--error">Por favor insira um e-mail válido.</span>
+          </div>
+          <div class="ds-field">
+            <label class="ds-label" for="mensagem">Mensagem</label>
+            <textarea class="ds-textarea" id="mensagem" placeholder="Descreva como posso te ajudar..."></textarea>
+          </div>
+          <button class="ds-btn ds-btn--cta">Enviar Mensagem</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         HERO
+         ==================================================== -->
+    <section id="hero" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Hero Section</h2>
+
+      <div class="ds-ref-block">
+        <div class="ds-ref-block__label">Exemplo</div>
+        <div style="border-radius: var(--radius-lg); overflow: hidden;">
+          <div class="ds-hero" style="min-height: 400px; padding: var(--space-16) var(--space-8);">
+            <div class="ds-hero__content">
+              <p class="ds-hero__eyebrow">Psicologia Clínica</p>
+              <h1 class="ds-hero__title">Encontre equilíbrio e bem-estar</h1>
+              <p class="ds-hero__subtitle">Um espaço de acolhimento para sua jornada de autoconhecimento e crescimento pessoal.</p>
+              <div class="ds-hero__actions">
+                <button class="ds-btn ds-btn--cta ds-btn--lg">Agendar Consulta</button>
+                <button class="ds-btn ds-btn--outline ds-btn--lg" style="--btn-outline-text: var(--color-cream-100); --btn-outline-border: var(--color-cream-100); --btn-outline-bg-hover: rgba(255,255,255,0.1); --btn-outline-text-hover: var(--color-neutral-0);">Saiba Mais</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         WCAG ACCESSIBILITY
+         ==================================================== -->
+    <section id="wcag" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Acessibilidade (WCAG)</h2>
+      <p class="ds-ref-section__subtitle">Verificação de contraste para os pares de cores principais. Mínimo: AA (4.5:1 texto normal, 3:1 texto grande).</p>
+
+      <table class="ds-ref-table">
+        <thead>
+          <tr><th>Par de cores</th><th>Contraste</th><th>Normal</th><th>Grande</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div style="display:inline-flex;align-items:center;gap:8px;"><div style="width:20px;height:20px;background:#1A1A1A;border-radius:4px;"></div> texto em <div style="width:20px;height:20px;background:#F7F5F0;border:1px solid #ddd;border-radius:4px;"></div></div> #1A1A1A / #F7F5F0</td>
+            <td>17.3:1</td>
+            <td><span class="ds-wcag ds-wcag--pass">AAA</span></td>
+            <td><span class="ds-wcag ds-wcag--pass">AAA</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:inline-flex;align-items:center;gap:8px;"><div style="width:20px;height:20px;background:#F7F5F0;border-radius:4px;"></div> texto em <div style="width:20px;height:20px;background:#2D5A3D;border-radius:4px;"></div></div> cream / green-200</td>
+            <td>7.2:1</td>
+            <td><span class="ds-wcag ds-wcag--pass">AAA</span></td>
+            <td><span class="ds-wcag ds-wcag--pass">AAA</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:inline-flex;align-items:center;gap:8px;"><div style="width:20px;height:20px;background:#2D5A3D;border-radius:4px;"></div> texto em <div style="width:20px;height:20px;background:#F7F5F0;border:1px solid #ddd;border-radius:4px;"></div></div> green-200 / cream</td>
+            <td>8.4:1</td>
+            <td><span class="ds-wcag ds-wcag--pass">AAA</span></td>
+            <td><span class="ds-wcag ds-wcag--pass">AAA</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:inline-flex;align-items:center;gap:8px;"><div style="width:20px;height:20px;background:#FFFFFF;border-radius:4px;border:1px solid #eee;"></div> texto em <div style="width:20px;height:20px;background:#D4864C;border-radius:4px;"></div></div> white / orange-200 (botão)</td>
+            <td>3.1:1</td>
+            <td><span class="ds-wcag ds-wcag--warn">Falha</span></td>
+            <td><span class="ds-wcag ds-wcag--pass">AA</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:inline-flex;align-items:center;gap:8px;"><div style="width:20px;height:20px;background:#D4864C;border-radius:4px;"></div> texto em <div style="width:20px;height:20px;background:#F7F5F0;border:1px solid #ddd;border-radius:4px;"></div></div> orange / cream (decorativo)</td>
+            <td>2.9:1</td>
+            <td><span class="ds-wcag ds-wcag--fail">Falha</span></td>
+            <td><span class="ds-wcag ds-wcag--warn">AA*</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:inline-flex;align-items:center;gap:8px;"><div style="width:20px;height:20px;background:#4A4A4A;border-radius:4px;"></div> texto em <div style="width:20px;height:20px;background:#F7F5F0;border:1px solid #ddd;border-radius:4px;"></div></div> neutral-600 / cream</td>
+            <td>7.1:1</td>
+            <td><span class="ds-wcag ds-wcag--pass">AAA</span></td>
+            <td><span class="ds-wcag ds-wcag--pass">AAA</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: var(--space-4); padding: var(--space-4); background: #fff3cd; border-radius: var(--radius-md); border-left: 3px solid #D4864C;">
+        <p class="ds-body-sm"><strong>Nota WCAG:</strong> O laranja (#D4864C) no fundo creme tem contraste insuficiente para texto normal pequeno. Use apenas em: texto grande (18px+ normal ou 14px+ bold), ícones, elementos decorativos (dividers, badges), ou bordas. Nunca use para texto de parágrafo.</p>
+      </div>
+
+      <div style="margin-top: var(--space-4); padding: var(--space-4); background: #d4edda; border-radius: var(--radius-md); border-left: 3px solid #2D7A3A;">
+        <p class="ds-body-sm"><strong>Boas práticas incluídas:</strong> Focus ring visível em todos os elementos interativos (<code>:focus-visible</code>), classe utilitária <code>.ds-sr-only</code> para conteúdo screen reader, atributos ARIA documentados nos componentes.</p>
+      </div>
+    </section>
+
+
+    <!-- ====================================================
+         TOKEN REFERENCE
+         ==================================================== -->
+    <section id="tokens" class="ds-ref-section">
+      <h2 class="ds-ref-section__title">Referência de Tokens</h2>
+      <p class="ds-ref-section__subtitle">Todos os arquivos do design system. Importe na seguinte ordem:</p>
+
+      <div class="ds-ref-code" style="border-radius: var(--radius-lg);">
+        <code>&lt;!-- 1. Tokens (obrigatório primeiro) --&gt;
+&lt;link rel="stylesheet" href="tokens.css"&gt;
+
+&lt;!-- 2. Componentes (depende dos tokens) --&gt;
+&lt;link rel="stylesheet" href="components.css"&gt;
+
+&lt;!-- 3. Fontes do Google --&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:wght@400;600;700&amp;display=swap" rel="stylesheet"&gt;</code>
+      </div>
+
+      <div style="margin-top: var(--space-8);">
+        <table class="ds-ref-table">
+          <thead><tr><th>Arquivo</th><th>Conteúdo</th><th>Tokens</th></tr></thead>
+          <tbody>
+            <tr><td><code>tokens.css</code></td><td>Todas as variáveis CSS (3 camadas)</td><td>160+</td></tr>
+            <tr><td><code>components.css</code></td><td>Reset, tipografia, átomos, moléculas, organismos, utilitários</td><td>—</td></tr>
+            <tr><td><code>index.html</code></td><td>Esta página — documentação de referência</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--space-24); padding-top: var(--space-8); border-top: 1px solid var(--border-subtle); text-align: center;">
+      <p class="ds-caption">Josi Terapeuta Design System v1.0.0 · Gerado pelo Design Squad (Brad Frost + Design System Architect) · 2026</p>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>

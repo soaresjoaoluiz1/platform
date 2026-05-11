@@ -1,0 +1,56 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: Você vai receber
+    - heading "Tudo que você recebe" [level=2] [ref=e6]:
+      - text: Tudo que você
+      - emphasis [ref=e7]: recebe
+  - generic [ref=e8]:
+    - generic [ref=e9]:
+      - img [ref=e11]
+      - generic [ref=e13]:
+        - strong [ref=e14]: 6 encontros ao vivo
+        - text: com Nayara Della Vechia
+    - generic [ref=e15]:
+      - img [ref=e17]
+      - generic [ref=e19]:
+        - strong [ref=e20]: Grupo privado
+        - text: de alunas no WhatsApp
+    - generic [ref=e21]:
+      - img [ref=e23]
+      - generic [ref=e25]:
+        - strong [ref=e26]: Gravações
+        - text: de todos os encontros
+    - generic [ref=e27]:
+      - img [ref=e29]
+      - generic [ref=e31]:
+        - strong [ref=e32]: Material de apoio
+        - text: dos 3 Movimentos
+    - generic [ref=e33]:
+      - img [ref=e35]
+      - generic [ref=e37]:
+        - strong [ref=e38]: 12 meses
+        - text: de acesso a todo o conteúdo
+  - generic [ref=e39]:
+    - generic [ref=e40]: Bônus incluído
+    - paragraph [ref=e41]: Você também leva o Ritual dos 3 Movimentos — guia prático para o seu dia a dia.
+  - generic [ref=e42]:
+    - img [ref=e43]
+    - generic [ref=e49]: Comunidade
+    - heading "Grupo só de alunas" [level=3] [ref=e50]:
+      - text: Grupo
+      - emphasis [ref=e51]: só de alunas
+    - paragraph [ref=e52]: Um espaço seguro para compartilhar e caminhar junto.
+  - generic [ref=e53]:
+    - img [ref=e55]
+    - generic [ref=e58]:
+      - text: Compra
+      - strong [ref=e59]: 100% Segura
+  - generic [ref=e63]:
+    - generic [ref=e64]: Garantia de
+    - generic [ref=e65]: "7"
+    - generic [ref=e66]: dias
+    - generic [ref=e67]: Incondicional
+  - generic [ref=e68]:
+    - img [ref=e69]
+    - generic [ref=e74]: Ordem Sistêmica
+    - generic [ref=e75]: Nayara Della Vechia · Mentora

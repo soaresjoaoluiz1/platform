@@ -4,18 +4,20 @@ import { useAccount } from '../context/AccountContext'
 import { useSSE } from '../context/SSEContext'
 import {
   fetchWhatsAppInstances, fetchLeads, fetchLead, fetchFunnels, fetchUsers, fetchTags,
-  sendMessage, updateLead, moveLeadStage, assignLead, addLeadNote, addLeadTag, removeLeadTag,
+  sendMessage, sendMessageMedia, updateLead, moveLeadStage, assignLead, addLeadNote, addLeadTag, removeLeadTag,
   fetchLeadCadence, advanceLeadCadence, removeLeadCadence, fetchCadences, assignLeadCadence, createTag,
-  archiveLead, createStandaloneTask,
+  archiveLead, createStandaloneTask, fetchLeadTasks, completeStandaloneTask, deleteStandaloneTask, completeTask, skipTask, fetchLeadConversations, type LeadConversation,
   type WhatsAppInstance, type Lead, type Message, type StageHistoryEntry, type LeadNote,
   type Funnel, type User as UserType, type Tag, type LeadCadence, type Cadence,
 } from '../lib/api'
+import EditTaskModal from '../components/EditTaskModal'
 import {
   MessageCircle, Search, Send, Phone, User, Edit3, Save, X, Plus,
-  StickyNote, Tag as TagIcon, GitBranch, Smartphone, ListOrdered, ChevronRight, Check, Clock, Archive, ListTodo, ChevronDown, ChevronUp,
+  StickyNote, Tag as TagIcon, GitBranch, Smartphone, ListOrdered, ChevronRight, Check, Clock, Archive, ListTodo, ChevronDown, ChevronUp, Trash2, Paperclip, FileText,
 } from 'lucide-react'
 import MessageMedia from '../components/MessageMedia'
 import { applyMessageVars } from '../lib/messageVars'
+import { parseSqlDate, formatTime } from '../lib/dates'
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -50,11 +52,27 @@ export default function Chat() {
   const [showCadenceMenu, setShowCadenceMenu] = useState(false)
   const [search, setSearch] = useState('')
   const [tagFilter, setTagFilter] = useState<number | ''>('')
+  const [attendantFilter, setAttendantFilter] = useState<number | 'all' | 'unassigned'>('all')
+  const [stageFilter, setStageFilter] = useState<number | ''>('')
+  const [showArchived, setShowArchived] = useState(false)
   const [msgText, setMsgText] = useState('')
   const [noteText, setNoteText] = useState('')
   const [sending, setSending] = useState(false)
+  const [attachFile, setAttachFile] = useState<File | null>(null)
+  const [attachCaption, setAttachCaption] = useState('')
+  const [attachPreview, setAttachPreview] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [editingNotes, setEditingNotes] = useState(false)
+  const [notesDraft, setNotesDraft] = useState('')
+  const [savingNotes, setSavingNotes] = useState(false)
   const [editing, setEditing] = useState(false)
-  const [infoCollapsed, setInfoCollapsed] = useState(() => localStorage.getItem('chat_info_collapsed') === '1')
+  const [infoCollapsed, setInfoCollapsed] = useState(() => localStorage.getItem('chat_info_collapsed') !== '0')
+  const [leadTasks, setLeadTasks] = useState<any[]>([])
+  const [editingTask, setEditingTask] = useState<any>(null)
+  const [sendInstanceOverride, setSendInstanceOverride] = useState<number | null>(null)
+  const [showSendInstance, setShowSendInstance] = useState(false)
+  const [conversations, setConversations] = useState<LeadConversation[]>([])
+  const [activeConvInstance, setActiveConvInstance] = useState<number | null>(null)
   const [editData, setEditData] = useState<Record<string, any>>({ name: '', phone: '', email: '', city: '' })
   const [rightTab, setRightTab] = useState<'info' | 'notes' | 'history'>('info')
   const [showTagMenu, setShowTagMenu] = useState(false)
@@ -67,6 +85,7 @@ export default function Chat() {
   const [taskTime, setTaskTime] = useState('')
   const [creatingTask, setCreatingTask] = useState(false)
   const [cadenceMsgText, setCadenceMsgText] = useState('')
+  const [scriptModal, setScriptModal] = useState<{ text: string } | null>(null)
   const chatEndRef = useRef<HTMLDivElement>(null)
 
   // Load instances + globals
@@ -82,21 +101,32 @@ export default function Chat() {
   // Load leads list (with optional instance filter)
   const loadLeadsList = useCallback(() => {
     if (!accountId) return
-    fetchLeads(accountId, { limit: 200 }).then(data => {
+    const filters: any = { limit: 200 }
+    if (showArchived) filters.show_archived = 'all'
+    fetchLeads(accountId, filters).then(data => {
       const filtered = selectedInstance === 'all' ? data.leads : data.leads.filter(l => l.instance_id === selectedInstance)
       setLeads(filtered)
     })
-  }, [accountId, selectedInstance])
+  }, [accountId, selectedInstance, showArchived])
   useEffect(() => { loadLeadsList() }, [loadLeadsList])
 
   // Load selected lead detail
   const loadLead = useCallback(async () => {
-    if (!selectedLeadId || !accountId) { setLead(null); setMessages([]); return }
+    if (!selectedLeadId || !accountId) { setLead(null); setMessages([]); setLeadTasks([]); setConversations([]); setActiveConvInstance(null); return }
     const data = await fetchLead(selectedLeadId, accountId)
     setLead(data.lead)
     setMessages(data.messages)
     setHistory(data.stageHistory)
     setNotes(data.notes || [])
+    fetchLeadTasks(selectedLeadId, accountId).then(setLeadTasks).catch(() => setLeadTasks([]))
+    fetchLeadConversations(selectedLeadId, accountId).then(convs => {
+      setConversations(convs)
+      // Default: ultima instancia conversada (ou primeira que o user tem acesso)
+      if (convs.length > 0) {
+        const last = data.lead.last_instance_id && convs.find(c => c.instance_id === data.lead.last_instance_id)
+        setActiveConvInstance(last ? last.instance_id : convs[0].instance_id)
+      } else setActiveConvInstance(null)
+    }).catch(() => { setConversations([]); setActiveConvInstance(null) })
     setEditData({ name: data.lead.name || '', phone: data.lead.phone || '', email: data.lead.email || '', city: data.lead.city || '', empresa: data.lead.empresa || '', cpf_cnpj: data.lead.cpf_cnpj || '', instagram: data.lead.instagram || '', trabalha_anuncio: data.lead.trabalha_anuncio || 0, investimento_anuncios: data.lead.investimento_anuncios || '' })
     try {
       const lc = await fetchLeadCadence(selectedLeadId, accountId)
@@ -142,24 +172,108 @@ export default function Chat() {
   const filteredLeads = useMemo(() => {
     let result = leads
     if (tagFilter) result = result.filter(l => l.tags?.some(t => t.id === tagFilter))
+    if (attendantFilter === 'unassigned') result = result.filter(l => !l.attendant_id)
+    else if (typeof attendantFilter === 'number') result = result.filter(l => l.attendant_id === attendantFilter)
+    if (stageFilter) result = result.filter(l => l.stage_id === stageFilter)
     if (search.trim()) {
       const s = search.toLowerCase()
       result = result.filter(l => (l.name || '').toLowerCase().includes(s) || (l.phone || '').includes(s))
     }
     return result
-  }, [leads, search, tagFilter])
+  }, [leads, search, tagFilter, attendantFilter, stageFilter])
 
   const handleSendMsg = async () => {
     if (!msgText.trim() || !lead || !accountId) return
     setSending(true)
     try {
-      const result = await sendMessage(lead.id, accountId, msgText)
+      // Tab ativa = instancia que vai enviar (override manual sobreescreve)
+      const override = sendInstanceOverride || activeConvInstance || undefined
+      const result = await sendMessage(lead.id, accountId, msgText, override)
       setMessages(prev => [...prev, result.message])
       setMsgText('')
       if (!result.delivered) alert('Mensagem salva mas NAO enviada no WhatsApp. Verifique a conexao.')
+      setSendInstanceOverride(null)
+      loadLead()
     } catch (e: any) { alert('Erro: ' + (e?.message || 'desconhecido')) }
     setSending(false)
   }
+
+  const MEDIA_LIMITS_MB: Record<string, number> = { image: 5, audio: 16, video: 64, document: 100 }
+  const detectMediaType = (mime: string): 'image' | 'video' | 'audio' | 'document' => {
+    if (mime.startsWith('image/')) return 'image'
+    if (mime.startsWith('video/')) return 'video'
+    if (mime.startsWith('audio/')) return 'audio'
+    return 'document'
+  }
+
+  const handlePickFile = (file: File | null) => {
+    if (!file) return
+    const type = detectMediaType(file.type || '')
+    const maxMb = MEDIA_LIMITS_MB[type]
+    if (file.size > maxMb * 1024 * 1024) {
+      alert(`Arquivo muito grande. Limite para ${type}: ${maxMb}MB.`)
+      return
+    }
+    setAttachFile(file)
+    setAttachCaption('')
+    if (type === 'image') {
+      const reader = new FileReader()
+      reader.onload = () => setAttachPreview(reader.result as string)
+      reader.readAsDataURL(file)
+    } else {
+      setAttachPreview(null)
+    }
+  }
+
+  const handleCancelAttach = () => {
+    setAttachFile(null)
+    setAttachCaption('')
+    setAttachPreview(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const handleSendAttach = async () => {
+    if (!attachFile || !lead || !accountId) return
+    setSending(true)
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const result = reader.result as string
+          resolve(result.split(',')[1] || '')
+        }
+        reader.onerror = () => reject(new Error('Falha ao ler arquivo'))
+        reader.readAsDataURL(attachFile)
+      })
+      const override = sendInstanceOverride || activeConvInstance || undefined
+      const result = await sendMessageMedia(lead.id, accountId, {
+        base64,
+        mime: attachFile.type || 'application/octet-stream',
+        file_name: attachFile.name,
+        caption: attachCaption || undefined,
+        instance_id: override,
+      })
+      setMessages(prev => [...prev, result.message])
+      if (!result.delivered) alert('Anexo salvo mas NAO enviado no WhatsApp. Verifique a conexao.')
+      handleCancelAttach()
+      setSendInstanceOverride(null)
+      loadLead()
+    } catch (e: any) { alert('Erro: ' + (e?.message || 'desconhecido')) }
+    setSending(false)
+  }
+
+  // Tab ativa define a instancia de envio
+  const resolvedSendInstance = (() => {
+    if (!lead || !instances.length) return null
+    if (sendInstanceOverride) return instances.find(i => i.id === sendInstanceOverride)
+    if (activeConvInstance) return instances.find(i => i.id === activeConvInstance)
+    return null
+  })()
+
+  // Filtrar mensagens pela tab ativa
+  const visibleMessages = activeConvInstance
+    ? messages.filter(m => (m as any).instance_id === activeConvInstance)
+    : messages
 
   const handleSaveEdit = async () => {
     if (!lead) return
@@ -178,6 +292,7 @@ export default function Chat() {
   const handleAddTag = async (tagId: number) => { if (lead) { await addLeadTag(lead.id, tagId); loadLead(); setShowTagMenu(false) } }
   const handleRemoveTag = async (tagId: number) => { if (lead) { await removeLeadTag(lead.id, tagId); loadLead() } }
   const handleAdvanceCadence = async () => { if (leadCadence && accountId) { await advanceLeadCadence(leadCadence.id, accountId); loadLead() } }
+  const handleViewScript = () => { if (leadCadence?.attempt_script) setScriptModal({ text: leadCadence.attempt_script }) }
   const handleSendCadenceMessage = async () => {
     if (!cadenceMsgText.trim() || !lead || !accountId || !leadCadence) return
     setSending(true)
@@ -228,6 +343,24 @@ export default function Chat() {
               <option key={t.id} value={t.id}>{t.name}</option>
             ))}
           </select>
+          <select className="select" style={{ width: 180 }} value={stageFilter} onChange={e => setStageFilter(e.target.value ? +e.target.value : '')}>
+            <option value="">Todas etapas</option>
+            {allStages.map(s => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+          {user?.role !== 'atendente' && (
+            <select className="select" style={{ width: 180 }} value={attendantFilter} onChange={e => setAttendantFilter(e.target.value === 'all' ? 'all' : e.target.value === 'unassigned' ? 'unassigned' : +e.target.value)}>
+              <option value="all">Todos atendentes</option>
+              <option value="unassigned">Sem atendente</option>
+              {attendants.map(a => (
+                <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </select>
+          )}
+          <button onClick={() => setShowArchived(s => !s)} className={`btn btn-sm ${showArchived ? 'btn-primary' : 'btn-secondary'}`} style={{ fontSize: 11 }} title="Mostrar leads arquivados">
+            <Archive size={12} /> {showArchived ? 'Ocultar arquivados' : 'Mostrar arquivados'}
+          </button>
         </div>
       </div>
 
@@ -303,9 +436,28 @@ export default function Chat() {
                   <Archive size={12} />
                 </button>
               </div>
+
+              {/* Tabs por instancia (uma conversa por numero) */}
+              {conversations.length > 0 && (
+                <div style={{ display: 'flex', gap: 0, padding: '0 12px', borderBottom: '1px solid rgba(255,255,255,0.06)', overflowX: 'auto' }}>
+                  {conversations.map(conv => {
+                    const isActive = conv.instance_id === activeConvInstance
+                    return (
+                      <button key={conv.instance_id} onClick={() => setActiveConvInstance(conv.instance_id)}
+                        style={{ padding: '10px 14px', background: 'transparent', border: 'none', borderBottom: `2px solid ${isActive ? '#FFB300' : 'transparent'}`, color: isActive ? '#FFB300' : '#9B96B0', fontSize: 12, fontWeight: isActive ? 700 : 500, cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <Smartphone size={11} />
+                        {conv.instance_name}
+                        <span style={{ background: 'rgba(255,255,255,0.08)', padding: '1px 6px', borderRadius: 8, fontSize: 10 }}>{conv.msg_count}</span>
+                        {conv.attendant_name && <span style={{ fontSize: 9, color: '#6B6580' }}>· {conv.attendant_name}</span>}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+
               <div className="chat-messages">
-                {messages.length === 0 && <div style={{ textAlign: 'center', color: '#6B6580', padding: 40, fontSize: 13 }}>Nenhuma mensagem</div>}
-                {messages.map(m => (
+                {visibleMessages.length === 0 && <div style={{ textAlign: 'center', color: '#6B6580', padding: 40, fontSize: 13 }}>Nenhuma mensagem nesta conversa</div>}
+                {visibleMessages.map(m => (
                   <div key={m.id} className={`chat-msg-row ${m.direction}`}>
                     <div className={`chat-bubble ${m.direction}`} style={m.direction === 'outbound' && !m.wa_msg_id ? { border: '1px solid #FF6B6B', opacity: 0.8 } : undefined}>
                       {m.media_type && m.media_type !== 'text'
@@ -314,7 +466,11 @@ export default function Chat() {
                     </div>
                     <div className="chat-bubble-time">
                       {m.sender_name && <span>{m.sender_name} · </span>}
-                      <span>{new Date(m.created_at).toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                      <span>{formatTime(m.created_at)}</span>
+                      {(m as any).instance_id && (() => {
+                        const inst = instances.find(i => i.id === (m as any).instance_id)
+                        return inst ? <span style={{ marginLeft: 4, padding: '0 5px', borderRadius: 3, background: 'rgba(255,179,0,0.12)', color: '#FFB300', fontSize: 9, fontWeight: 600 }}>via {inst.instance_name}</span> : null
+                      })()}
                       {m.direction === 'outbound' && (
                         m.wa_msg_id
                           ? <span style={{ color: '#53BDEB', marginLeft: 2 }}>✓✓</span>
@@ -325,10 +481,67 @@ export default function Chat() {
                 ))}
                 <div ref={chatEndRef} />
               </div>
+              {resolvedSendInstance && (
+                <div style={{ padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#9B96B0', borderTop: '1px solid rgba(255,255,255,0.04)', position: 'relative' }}>
+                  <Smartphone size={11} style={{ color: '#FFB300' }} />
+                  <span>Respondendo por:</span>
+                  <button onClick={() => setShowSendInstance(s => !s)} style={{ background: 'none', border: 'none', color: '#FFB300', fontWeight: 600, cursor: 'pointer', padding: 0, fontSize: 11 }}>
+                    {resolvedSendInstance.instance_name} ▾
+                  </button>
+                  {showSendInstance && (
+                    <div style={{ position: 'absolute', bottom: '100%', left: 12, marginBottom: 4, background: '#1a1625', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, padding: 4, minWidth: 220, zIndex: 10, boxShadow: '0 4px 14px rgba(0,0,0,0.4)' }}>
+                      {instances.filter(i => i.status === 'connected').map(i => (
+                        <button key={i.id} onClick={() => { setSendInstanceOverride(i.id); setShowSendInstance(false) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 10px', background: i.id === resolvedSendInstance.id ? 'rgba(255,179,0,0.12)' : 'transparent', color: i.id === resolvedSendInstance.id ? '#FFB300' : '#fff', border: 'none', borderRadius: 4, fontSize: 12, cursor: 'pointer' }}>
+                          {i.instance_name}{i.id === resolvedSendInstance.id ? ' ✓' : ''}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="chat-input">
+                <input ref={fileInputRef} type="file" style={{ display: 'none' }} onChange={e => handlePickFile(e.target.files?.[0] || null)} accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.txt,.csv" />
+                <button
+                  className="btn btn-secondary btn-icon"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={sending}
+                  title="Anexar arquivo (imagem, audio, video ou documento)"
+                >
+                  <Paperclip size={16} />
+                </button>
                 <input className="input" placeholder="Mensagem..." value={msgText} onChange={e => setMsgText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); handleSendMsg() } }} disabled={sending} />
                 <button className="btn btn-primary btn-icon" onClick={handleSendMsg} disabled={sending || !msgText.trim()}><Send size={16} /></button>
               </div>
+              {attachFile && (
+                <div className="modal-overlay" onClick={handleCancelAttach}>
+                  <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
+                    <h2 style={{ display: 'flex', alignItems: 'center', gap: 8 }}><Paperclip size={16} /> Enviar anexo</h2>
+                    <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', borderRadius: 8, padding: 12, marginBottom: 12 }}>
+                      {attachPreview ? (
+                        <img src={attachPreview} alt={attachFile.name} style={{ maxWidth: '100%', maxHeight: 240, display: 'block', borderRadius: 6, margin: '0 auto' }} />
+                      ) : (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 4px' }}>
+                          <Paperclip size={20} style={{ color: '#FFB300' }} />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{attachFile.name}</div>
+                            <div style={{ fontSize: 11, color: '#9B96B0' }}>{detectMediaType(attachFile.type || '')} • {(attachFile.size / 1024 / 1024).toFixed(2)} MB</div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    {detectMediaType(attachFile.type || '') !== 'audio' && (
+                      <div className="form-group">
+                        <label>Legenda (opcional)</label>
+                        <textarea className="input" value={attachCaption} onChange={e => setAttachCaption(e.target.value)} rows={2} placeholder="Texto que vai junto com o arquivo..." />
+                      </div>
+                    )}
+                    <div className="modal-actions">
+                      <button className="btn btn-secondary" onClick={handleCancelAttach} disabled={sending}>Cancelar</button>
+                      <button className="btn btn-primary" onClick={handleSendAttach} disabled={sending}>{sending ? 'Enviando...' : 'Enviar'}</button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
@@ -419,9 +632,38 @@ export default function Chat() {
                         </div>
                         {lead.investimento_anuncios && <div><span style={{ color: '#6B6580' }}>Investimento:</span> R$ {Number(lead.investimento_anuncios).toLocaleString('pt-BR')}</div>}
                         <div><span style={{ color: '#6B6580' }}>Fonte:</span> {lead.source || '-'}</div>
-                        <div><span style={{ color: '#6B6580' }}>Criado:</span> {new Date(lead.created_at).toLocaleDateString('pt-BR')}</div>
+                        <div><span style={{ color: '#6B6580' }}>Criado:</span> {parseSqlDate(lead.created_at).toLocaleDateString('pt-BR')}</div>
                       </div>
                     ))}
+                  </div>
+
+                  {/* Observacoes */}
+                  <div className="card" style={{ padding: 12, marginBottom: 12 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                      <div style={{ fontSize: 10, color: '#9B96B0', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 3 }}><FileText size={10} /> Observacoes</div>
+                      {!editingNotes ? (
+                        <button className="btn btn-secondary btn-sm" onClick={() => { setNotesDraft(lead.notes || ''); setEditingNotes(true) }} style={{ padding: '2px 6px' }}><Edit3 size={10} /></button>
+                      ) : (
+                        <div style={{ display: 'flex', gap: 4 }}>
+                          <button className="btn btn-primary btn-sm" disabled={savingNotes} onClick={async () => {
+                            setSavingNotes(true)
+                            try { await updateLead(lead.id, { notes: notesDraft }); await loadLead(); setEditingNotes(false) }
+                            catch (e: any) { alert('Erro: ' + e.message) }
+                            setSavingNotes(false)
+                          }} style={{ padding: '2px 6px' }}><Save size={10} /></button>
+                          <button className="btn btn-secondary btn-sm" onClick={() => setEditingNotes(false)} style={{ padding: '2px 6px' }}><X size={10} /></button>
+                        </div>
+                      )}
+                    </div>
+                    {editingNotes ? (
+                      <textarea className="input" value={notesDraft} onChange={e => setNotesDraft(e.target.value)} rows={4} style={{ width: '100%', resize: 'vertical', fontSize: 11, lineHeight: 1.4 }} placeholder="Anotacoes sobre o lead..." />
+                    ) : (
+                      lead.notes ? (
+                        <div style={{ fontSize: 11, color: '#C8C4D4', whiteSpace: 'pre-wrap', lineHeight: 1.4 }}>{lead.notes}</div>
+                      ) : (
+                        <div style={{ fontSize: 10, color: '#6B6580' }}>Sem observacoes</div>
+                      )
+                    )}
                   </div>
 
                   {/* Tags */}
@@ -505,6 +747,11 @@ export default function Chat() {
                                 <button className="btn btn-primary btn-sm" style={{ marginTop: 8, width: '100%', fontSize: 11 }} onClick={handleSendCadenceMessage} disabled={sending || !cadenceMsgText.trim()}><Send size={10} /> Enviar e avancar</button>
                                 <button className="btn btn-secondary btn-sm" style={{ marginTop: 6, width: '100%', fontSize: 10 }} onClick={handleAdvanceCadence}><ChevronRight size={10} /> So avancar (sem enviar)</button>
                               </>
+                            ) : leadCadence.attempt_script ? (
+                              <>
+                                <button className="btn btn-primary btn-sm" style={{ marginTop: 8, width: '100%', fontSize: 11 }} onClick={handleViewScript}><FileText size={10} /> Ver script</button>
+                                <button className="btn btn-secondary btn-sm" style={{ marginTop: 6, width: '100%', fontSize: 10 }} onClick={handleAdvanceCadence}><ChevronRight size={10} /> Avancar</button>
+                              </>
                             ) : (
                               <button className="btn btn-primary btn-sm" style={{ marginTop: 8, width: '100%', fontSize: 11 }} onClick={handleAdvanceCadence}><ChevronRight size={10} /> Avancar</button>
                             )}
@@ -515,6 +762,74 @@ export default function Chat() {
                       <div style={{ fontSize: 11, color: '#6B6580' }}>Nenhuma cadencia atribuida</div>
                     )}
                   </div>
+
+                  {/* Lead pending tasks */}
+                  {leadTasks.length > 0 && (
+                    <div className="card" style={{ padding: 12, marginTop: 12 }}>
+                      <div style={{ fontSize: 10, color: '#9B96B0', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 3, marginBottom: 8 }}>
+                        <ListTodo size={10} /> Tarefas Pendentes ({leadTasks.length})
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {leadTasks.map((t: any) => {
+                          const due = parseSqlDate(t.due_datetime)
+                          const overdue = due.getTime() < Date.now()
+                          const isCadence = t.type === 'cadence'
+                          const accent = isCadence ? '#FFB300' : '#9B59B6'
+                          const key = isCadence ? `c-${t.lead_cadence_id}` : `s-${t.id}`
+                          const title = isCadence
+                            ? `${t.cadence_name} · Etapa ${(t.attempt_position || 0) + 1}/${t.total_attempts}`
+                            : t.title
+                          const desc = isCadence ? (t.attempt_description || t.auto_message) : t.description
+                          return (
+                            <div key={key} style={{ padding: '8px 10px', background: overdue ? 'rgba(255,107,107,0.06)' : `${accent}10`, border: `1px solid ${overdue ? 'rgba(255,107,107,0.2)' : `${accent}30`}`, borderLeft: `3px solid ${accent}`, borderRadius: 6 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
+                                <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 3, background: `${accent}25`, color: accent, fontWeight: 700, textTransform: 'uppercase' }}>
+                                  {isCadence ? 'Cadencia' : 'Avulsa'}
+                                </span>
+                                <div style={{ fontSize: 12, fontWeight: 600, flex: 1 }}>{title}</div>
+                              </div>
+                              {desc && <div style={{ fontSize: 11, color: '#9B96B0', marginBottom: 4 }}>{desc.substring(0, 100)}{desc.length > 100 ? '...' : ''}</div>}
+                              <div style={{ fontSize: 10, color: overdue ? '#FF6B6B' : '#9B96B0', display: 'flex', alignItems: 'center', gap: 3, marginBottom: 6 }}>
+                                <Clock size={9} /> {due.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                {!isCadence && t.assigned_name && <span> · {t.assigned_name}</span>}
+                                {isCadence && t.action_type && <span> · {t.action_type}</span>}
+                              </div>
+                              <div style={{ display: 'flex', gap: 4 }}>
+                                <button className="btn btn-primary btn-sm" onClick={async () => {
+                                  if (!accountId || !lead) return
+                                  try {
+                                    if (isCadence) await completeTask(t.lead_cadence_id, accountId)
+                                    else await completeStandaloneTask(t.id, accountId)
+                                    fetchLeadTasks(lead.id, accountId).then(setLeadTasks)
+                                  } catch (e: any) { alert('Erro: ' + e.message) }
+                                }} style={{ fontSize: 10, padding: '3px 8px', background: '#34C759', borderColor: '#34C759', flex: 1 }}>
+                                  <Check size={10} /> Concluir
+                                </button>
+                                {isCadence ? (
+                                  <button className="btn btn-secondary btn-sm" onClick={async () => {
+                                    if (!accountId || !lead) return
+                                    if (!confirm('Pular esta etapa da cadencia?')) return
+                                    try { await skipTask(t.lead_cadence_id, accountId); fetchLeadTasks(lead.id, accountId).then(setLeadTasks) } catch (e: any) { alert('Erro: ' + e.message) }
+                                  }} style={{ fontSize: 10, padding: '3px 8px' }} title="Pular etapa">
+                                    <ChevronRight size={10} />
+                                  </button>
+                                ) : (
+                                  <>
+                                    <button className="btn btn-secondary btn-sm" onClick={() => setEditingTask(t)} style={{ fontSize: 10, padding: '3px 8px' }} title="Editar">
+                                      <Edit3 size={10} />
+                                    </button>
+                                    <button className="btn btn-secondary btn-sm" onClick={async () => { if (!accountId || !lead) return; if (!confirm('Excluir tarefa?')) return; await deleteStandaloneTask(t.id, accountId); fetchLeadTasks(lead.id, accountId).then(setLeadTasks) }} style={{ fontSize: 10, padding: '3px 8px', color: '#FF6B6B' }} title="Excluir">
+                                      <Trash2 size={10} />
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Standalone Task */}
                   <div className="card" style={{ padding: 12, marginTop: 12 }}>
@@ -548,6 +863,7 @@ export default function Chat() {
                           due_time: taskTime,
                         })
                         setTaskTitle(''); setTaskMinutes('10'); setTaskDate(''); setTaskTime('')
+                        if (lead) fetchLeadTasks(lead.id, accountId).then(setLeadTasks)
                         alert('Tarefa criada!')
                       } catch (e: any) { alert('Erro: ' + (e?.message || 'desconhecido')) }
                       setCreatingTask(false)
@@ -577,7 +893,7 @@ export default function Chat() {
                     {notes.map(n => (
                       <div key={n.id} style={{ padding: '8px 10px', background: 'rgba(255,179,0,0.05)', borderRadius: 6, border: '1px solid rgba(255,179,0,0.1)' }}>
                         <div style={{ fontSize: 12 }}>{n.content}</div>
-                        <div style={{ fontSize: 9, color: '#6B6580', marginTop: 2 }}>{n.user_name} · {new Date(n.created_at).toLocaleString('pt-BR')}</div>
+                        <div style={{ fontSize: 9, color: '#6B6580', marginTop: 2 }}>{n.user_name} · {parseSqlDate(n.created_at).toLocaleString('pt-BR')}</div>
                       </div>
                     ))}
                     {notes.length === 0 && <div style={{ textAlign: 'center', color: '#6B6580', padding: 20, fontSize: 11 }}>Sem notas</div>}
@@ -593,7 +909,7 @@ export default function Chat() {
                       <div>
                         <div style={{ fontSize: 11 }}>{h.from_stage_name ? `${h.from_stage_name} → ${h.to_stage_name}` : `Entrada: ${h.to_stage_name}`}</div>
                         <div style={{ fontSize: 9, color: '#6B6580' }}>{h.trigger_type}{h.user_name ? ` · ${h.user_name}` : ''}</div>
-                        <div style={{ fontSize: 9, color: '#6B6580' }}>{new Date(h.created_at).toLocaleString('pt-BR')}</div>
+                        <div style={{ fontSize: 9, color: '#6B6580' }}>{parseSqlDate(h.created_at).toLocaleString('pt-BR')}</div>
                       </div>
                     </div>
                   ))}
@@ -604,6 +920,22 @@ export default function Chat() {
           </div>
         )}
       </div>
+      {editingTask && lead && accountId && (
+        <EditTaskModal task={editingTask} onClose={() => setEditingTask(null)} onSaved={() => { fetchLeadTasks(lead.id, accountId).then(setLeadTasks); setEditingTask(null) }} />
+      )}
+      {scriptModal && (
+        <div className="modal-overlay" onClick={() => setScriptModal(null)}>
+          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 600 }}>
+            <h2 style={{ display: 'flex', alignItems: 'center', gap: 8 }}><Phone size={16} style={{ color: '#FFB300' }} /> Script de Ligacao</h2>
+            <div style={{ background: 'rgba(255,179,0,0.05)', border: '1px solid rgba(255,179,0,0.2)', borderRadius: 8, padding: 16, marginTop: 12, maxHeight: 400, overflowY: 'auto', whiteSpace: 'pre-wrap', fontSize: 13, lineHeight: 1.6, color: '#F0EDF5' }}>
+              {scriptModal.text}
+            </div>
+            <div className="modal-actions">
+              <button className="btn btn-primary" onClick={() => setScriptModal(null)}>Fechar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

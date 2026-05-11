@@ -1,0 +1,22 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e6]
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - text: Nayara
+          - emphasis [ref=e18]: Della Vechia
+        - generic [ref=e19]: Recomeço Sistêmico
+    - generic [ref=e20]:
+      - generic [ref=e21]: Área de alunas
+      - paragraph [ref=e22]: Bem-vinda de volta,
+      - heading "Recomeço Sistêmico" [level=1] [ref=e23]:
+        - text: Recomeço
+        - emphasis [ref=e24]: Sistêmico
+      - paragraph [ref=e25]:
+        - text: Sua jornada continua aqui —
+        - emphasis [ref=e26]: compreender, reposicionar e sustentar.
+    - generic [ref=e27]:
+      - generic [ref=e29]: Conduzido por
+      - generic [ref=e30]: Nayara Della Vechia
+  - img "Nayara Della Vechia" [ref=e33]

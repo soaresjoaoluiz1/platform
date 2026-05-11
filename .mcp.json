@@ -1,8 +1,11 @@
 {
   "mcpServers": {
     "playwright": {
-      "command": "npx",
-      "args": ["@playwright/mcp@latest", "--config", "_opensquad/config/playwright.config.json"]
+      "command": "C:\\Program Files\\nodejs\\npx.cmd",
+      "args": ["@playwright/mcp@latest", "--config", "_opensquad/config/playwright.config.json"],
+      "env": {
+        "PATH": "C:\\Program Files\\nodejs;C:\\Windows\\System32;C:\\Windows"
+      }
     }
   }
 }

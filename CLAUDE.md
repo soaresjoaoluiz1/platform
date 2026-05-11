@@ -1,5 +1,11 @@
 # Opensquad — Project Instructions
 
+## Codebase Navigation
+**Always read `CODEBASE_INDEX.md` before opening any source file.**
+It contains the complete file map with exports and purpose for every file.
+Use it to locate the exact file you need, then read only that file.
+
+
 This project uses **Opensquad**, a multi-agent orchestration framework.
 
 ## Quick Start
@@ -13,7 +19,6 @@ Type `/opensquad` to open the main menu, or use any of these commands:
 
 - `_opensquad/` — Opensquad core files (do not modify manually)
 - `_opensquad/_memory/` — Persistent memory (company context, preferences)
-- `skills/` — Installed skills (integrations, scripts, prompts)
 - `squads/` — User-created squads
 - `squads/{name}/_investigations/` — Sherlock content investigations (profile analyses)
 - `squads/{name}/output/` — Generated content and files

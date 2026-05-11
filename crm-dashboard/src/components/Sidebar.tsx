@@ -7,12 +7,12 @@ import { apiFetch, fetchTaskCounts } from '../lib/api'
 import {
   LayoutDashboard, Kanban, Users, MessageCircle, UserCog, GitBranch,
   Plug, Settings, Building2, LogOut, UsersRound, Menu, X,
-  ListOrdered, MessageSquarePlus, ClipboardList, Rocket, ListTodo, ExternalLink,
+  ListOrdered, MessageSquarePlus, ClipboardList, Rocket, ListTodo, ExternalLink, Tag as TagIcon, FileText,
 } from 'lucide-react'
 
 export default function Sidebar() {
   const { user, logout } = useAuth()
-  const { accountId } = useAccount()
+  const { accountId, accounts, setAccountId } = useAccount()
   const [newLeadsCount, setNewLeadsCount] = useState(0)
   const [taskCount, setTaskCount] = useState(0)
 
@@ -63,6 +63,15 @@ export default function Sidebar() {
           </div>
         </div>
 
+        {isAdmin && accounts.length > 0 && (
+          <div style={{ padding: '8px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <label style={{ fontSize: 10, color: '#6B6580', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 4 }}>Visualizando conta</label>
+            <select className="select" value={accountId || ''} onChange={e => setAccountId(Number(e.target.value))} style={{ width: '100%', fontSize: 12, padding: '6px 8px' }}>
+              {accounts.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+            </select>
+          </div>
+        )}
+
         <nav className="sidebar-nav">
           {isAdmin && (
             <>
@@ -75,6 +84,18 @@ export default function Sidebar() {
               </NavLink>
               <NavLink to="/admin/users" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}>
                 <UsersRound size={16} /> Usuarios
+              </NavLink>
+              <NavLink to="/admin/propostas" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}>
+                <FileText size={16} /> Propostas
+              </NavLink>
+            </>
+          )}
+
+          {!isAdmin && (user as any).can_manage_proposals === 1 && (
+            <>
+              <div className="nav-section">Comercial</div>
+              <NavLink to="/admin/propostas" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}>
+                <FileText size={16} /> Propostas
               </NavLink>
             </>
           )}
@@ -106,6 +127,7 @@ export default function Sidebar() {
               <NavLink to="/messages" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><MessageCircle size={16} /> Disparos</NavLink>
               <NavLink to="/team" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><UserCog size={16} /> Equipe</NavLink>
               <NavLink to="/funnels" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><GitBranch size={16} /> Funis</NavLink>
+              <NavLink to="/tags" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><TagIcon size={16} /> Tags</NavLink>
               <NavLink to="/integrations" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><Plug size={16} /> Integracoes</NavLink>
               <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeMobile}><Settings size={16} /> Configuracoes</NavLink>
               <div className="nav-section">Automacao</div>

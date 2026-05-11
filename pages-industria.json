@@ -1,0 +1,566 @@
+{
+  "totalCards": 456,
+  "totalPages": 330,
+  "top80": [
+    {
+      "pageName": "MAG SAC",
+      "ads": 1,
+      "maxDays": 2570,
+      "oldestStart": "23 de abr de 2019",
+      "sampleId": "462266167845820"
+    },
+    {
+      "pageName": "Panil Estofados",
+      "ads": 1,
+      "maxDays": 1599,
+      "oldestStart": "19 de dez de 2021",
+      "sampleId": "441995014119504"
+    },
+    {
+      "pageName": "Pefisacg",
+      "ads": 2,
+      "maxDays": 1507,
+      "oldestStart": "21 de mar de 2022",
+      "sampleId": "2857993421105933"
+    },
+    {
+      "pageName": "Mostpowerturbos",
+      "ads": 1,
+      "maxDays": 1401,
+      "oldestStart": "5 de jul de 2022",
+      "sampleId": "602238044517528"
+    },
+    {
+      "pageName": "Castelo dos Parafusos",
+      "ads": 1,
+      "maxDays": 1305,
+      "oldestStart": "9 de out de 2022",
+      "sampleId": "675385367005514"
+    },
+    {
+      "pageName": "Contabilista Play",
+      "ads": 2,
+      "maxDays": 1122,
+      "oldestStart": "10 de abr de 2023",
+      "sampleId": "1211043069556486"
+    },
+    {
+      "pageName": "Rede Milionária",
+      "ads": 1,
+      "maxDays": 1055,
+      "oldestStart": "16 de jun de 2023",
+      "sampleId": "171926048993147"
+    },
+    {
+      "pageName": "Loop Aromas e Sucos",
+      "ads": 1,
+      "maxDays": 938,
+      "oldestStart": "11 de out de 2023",
+      "sampleId": "1274775446523990"
+    },
+    {
+      "pageName": "Elétrica Academy",
+      "ads": 2,
+      "maxDays": 918,
+      "oldestStart": "31 de out de 2023",
+      "sampleId": "1768317150260972"
+    },
+    {
+      "pageName": "Central Máquinas Para Sorvetes",
+      "ads": 2,
+      "maxDays": 911,
+      "oldestStart": "7 de nov de 2023",
+      "sampleId": "3222672274704218"
+    },
+    {
+      "pageName": "Gigatudo by Distrinox EPI",
+      "ads": 1,
+      "maxDays": 859,
+      "oldestStart": "29 de dez de 2023",
+      "sampleId": "296215372906814"
+    },
+    {
+      "pageName": "School House Coimbra",
+      "ads": 1,
+      "maxDays": 845,
+      "oldestStart": "12 de jan de 2024",
+      "sampleId": "921590802863621"
+    },
+    {
+      "pageName": "Rofreios Indústria e Comércio de peças LTDA",
+      "ads": 1,
+      "maxDays": 811,
+      "oldestStart": "15 de fev de 2024",
+      "sampleId": "1072401344026252"
+    },
+    {
+      "pageName": "Belgo Arames",
+      "ads": 2,
+      "maxDays": 791,
+      "oldestStart": "6 de mar de 2024",
+      "sampleId": "1123558562114120"
+    },
+    {
+      "pageName": "é-Simples Auditoria Eletrônica",
+      "ads": 1,
+      "maxDays": 776,
+      "oldestStart": "21 de mar de 2024",
+      "sampleId": "7275756679185507"
+    },
+    {
+      "pageName": "Bella Photo Equipamentos Fotográficos",
+      "ads": 1,
+      "maxDays": 755,
+      "oldestStart": "11 de abr de 2024",
+      "sampleId": "402592975901018"
+    },
+    {
+      "pageName": "RM Paraguay S/A",
+      "ads": 1,
+      "maxDays": 726,
+      "oldestStart": "10 de mai de 2024",
+      "sampleId": "2481151772075218"
+    },
+    {
+      "pageName": "Pegorari Agrícola",
+      "ads": 2,
+      "maxDays": 707,
+      "oldestStart": "29 de mai de 2024",
+      "sampleId": "1653913905381616"
+    },
+    {
+      "pageName": "Reparador S/A",
+      "ads": 1,
+      "maxDays": 706,
+      "oldestStart": "30 de mai de 2024",
+      "sampleId": "1484547902150282"
+    },
+    {
+      "pageName": "Grupo FCC",
+      "ads": 1,
+      "maxDays": 700,
+      "oldestStart": "5 de jun de 2024",
+      "sampleId": "987180706415089"
+    },
+    {
+      "pageName": "Perflex Metais",
+      "ads": 1,
+      "maxDays": 686,
+      "oldestStart": "19 de jun de 2024",
+      "sampleId": "1929170984184343"
+    },
+    {
+      "pageName": "AMS Home Ambientes Planejados",
+      "ads": 1,
+      "maxDays": 677,
+      "oldestStart": "28 de jun de 2024",
+      "sampleId": "1492627684965474"
+    },
+    {
+      "pageName": "Copperbarras",
+      "ads": 1,
+      "maxDays": 661,
+      "oldestStart": "14 de jul de 2024",
+      "sampleId": "322670714233284"
+    },
+    {
+      "pageName": "Saler Kourly",
+      "ads": 2,
+      "maxDays": 660,
+      "oldestStart": "15 de jul de 2024",
+      "sampleId": "514376641248295"
+    },
+    {
+      "pageName": "AURUS Indústria E Comercio",
+      "ads": 1,
+      "maxDays": 655,
+      "oldestStart": "20 de jul de 2024",
+      "sampleId": "478255014822775"
+    },
+    {
+      "pageName": "Unopar Universidade",
+      "ads": 1,
+      "maxDays": 642,
+      "oldestStart": "2 de ago de 2024",
+      "sampleId": "1013314896929624"
+    },
+    {
+      "pageName": "Indústria Brazza",
+      "ads": 1,
+      "maxDays": 639,
+      "oldestStart": "5 de ago de 2024",
+      "sampleId": "482666388054622"
+    },
+    {
+      "pageName": "Cantu Alimentando Gerações",
+      "ads": 2,
+      "maxDays": 638,
+      "oldestStart": "6 de ago de 2024",
+      "sampleId": "624114912768818"
+    },
+    {
+      "pageName": "BluestOne",
+      "ads": 1,
+      "maxDays": 629,
+      "oldestStart": "15 de ago de 2024",
+      "sampleId": "459134046992899"
+    },
+    {
+      "pageName": "Nico Seoane",
+      "ads": 1,
+      "maxDays": 621,
+      "oldestStart": "23 de ago de 2024",
+      "sampleId": "2176795199362237"
+    },
+    {
+      "pageName": "DSC Indústria",
+      "ads": 1,
+      "maxDays": 621,
+      "oldestStart": "23 de ago de 2024",
+      "sampleId": "488912540514057"
+    },
+    {
+      "pageName": "Sombrear Indústria Metalúrgica",
+      "ads": 1,
+      "maxDays": 620,
+      "oldestStart": "24 de ago de 2024",
+      "sampleId": "522430726976993"
+    },
+    {
+      "pageName": "Maqtec Empilhadeiras",
+      "ads": 1,
+      "maxDays": 617,
+      "oldestStart": "27 de ago de 2024",
+      "sampleId": "533986392440760"
+    },
+    {
+      "pageName": "Montal Para Raios",
+      "ads": 1,
+      "maxDays": 614,
+      "oldestStart": "30 de ago de 2024",
+      "sampleId": "396283023495981"
+    },
+    {
+      "pageName": "WBenassi Móveis Planejados",
+      "ads": 2,
+      "maxDays": 609,
+      "oldestStart": "4 de set de 2024",
+      "sampleId": "431709529906375"
+    },
+    {
+      "pageName": "Malu Osowski",
+      "ads": 1,
+      "maxDays": 606,
+      "oldestStart": "7 de set de 2024",
+      "sampleId": "8645154732184063"
+    },
+    {
+      "pageName": "Guerra Custom Design",
+      "ads": 2,
+      "maxDays": 594,
+      "oldestStart": "19 de set de 2024",
+      "sampleId": "874040757640671"
+    },
+    {
+      "pageName": "Roma Baterias",
+      "ads": 1,
+      "maxDays": 590,
+      "oldestStart": "23 de set de 2024",
+      "sampleId": "1047744313712942"
+    },
+    {
+      "pageName": "CADCAM Brasil",
+      "ads": 2,
+      "maxDays": 590,
+      "oldestStart": "23 de set de 2024",
+      "sampleId": "535485448957963"
+    },
+    {
+      "pageName": "Smartkitchens",
+      "ads": 1,
+      "maxDays": 583,
+      "oldestStart": "30 de set de 2024",
+      "sampleId": "544093858050826"
+    },
+    {
+      "pageName": "Top Art Indústria e Comércio de Quadros",
+      "ads": 1,
+      "maxDays": 580,
+      "oldestStart": "3 de out de 2024",
+      "sampleId": "545283681353223"
+    },
+    {
+      "pageName": "Ampri Indústria e Comércio Ltda.",
+      "ads": 2,
+      "maxDays": 575,
+      "oldestStart": "8 de out de 2024",
+      "sampleId": "896650478522977"
+    },
+    {
+      "pageName": "Armarinho São José",
+      "ads": 2,
+      "maxDays": 538,
+      "oldestStart": "14 de nov de 2024",
+      "sampleId": "579284061302642"
+    },
+    {
+      "pageName": "Kator",
+      "ads": 1,
+      "maxDays": 512,
+      "oldestStart": "10 de dez de 2024",
+      "sampleId": "871618965138556"
+    },
+    {
+      "pageName": "Telas Nova Resende",
+      "ads": 2,
+      "maxDays": 509,
+      "oldestStart": "13 de dez de 2024",
+      "sampleId": "1493554894642370"
+    },
+    {
+      "pageName": "Inbraell Indústria",
+      "ads": 2,
+      "maxDays": 509,
+      "oldestStart": "13 de dez de 2024",
+      "sampleId": "2500188693519319"
+    },
+    {
+      "pageName": "SIMECS",
+      "ads": 3,
+      "maxDays": 473,
+      "oldestStart": "18 de jan de 2025",
+      "sampleId": "1120168546509417"
+    },
+    {
+      "pageName": "Haxia",
+      "ads": 1,
+      "maxDays": 463,
+      "oldestStart": "28 de jan de 2025",
+      "sampleId": "1128069138700442"
+    },
+    {
+      "pageName": "Roma Mercantil Industria",
+      "ads": 2,
+      "maxDays": 455,
+      "oldestStart": "5 de fev de 2025",
+      "sampleId": "957326649689670"
+    },
+    {
+      "pageName": "Kopempack Equipamentos",
+      "ads": 1,
+      "maxDays": 454,
+      "oldestStart": "6 de fev de 2025",
+      "sampleId": "1142279683565381"
+    },
+    {
+      "pageName": "Agecon",
+      "ads": 1,
+      "maxDays": 446,
+      "oldestStart": "14 de fev de 2025",
+      "sampleId": "1630695964481279"
+    },
+    {
+      "pageName": "ViniPlast Industria e Comércio de Lonas",
+      "ads": 3,
+      "maxDays": 446,
+      "oldestStart": "14 de fev de 2025",
+      "sampleId": "1115576000367138"
+    },
+    {
+      "pageName": "ACIL & Weber Equipamentos Analíticos",
+      "ads": 1,
+      "maxDays": 441,
+      "oldestStart": "19 de fev de 2025",
+      "sampleId": "856581079873021"
+    },
+    {
+      "pageName": "Centro de Enseñanza sobre la Industria del Helado Artesanal",
+      "ads": 1,
+      "maxDays": 439,
+      "oldestStart": "21 de fev de 2025",
+      "sampleId": "1386063906167892"
+    },
+    {
+      "pageName": "Burgosofc",
+      "ads": 1,
+      "maxDays": 433,
+      "oldestStart": "27 de fev de 2025",
+      "sampleId": "1003897667738589"
+    },
+    {
+      "pageName": "CNX Industry",
+      "ads": 3,
+      "maxDays": 432,
+      "oldestStart": "28 de fev de 2025",
+      "sampleId": "1144698673788564"
+    },
+    {
+      "pageName": "PPA - Portas e Portões Automáticos",
+      "ads": 2,
+      "maxDays": 421,
+      "oldestStart": "11 de mar de 2025",
+      "sampleId": "1047369583898688"
+    },
+    {
+      "pageName": "Bioset Indústria Eletrônica",
+      "ads": 5,
+      "maxDays": 420,
+      "oldestStart": "12 de mar de 2025",
+      "sampleId": "643987971614217"
+    },
+    {
+      "pageName": "Medeiros Distribuidora",
+      "ads": 2,
+      "maxDays": 416,
+      "oldestStart": "16 de mar de 2025",
+      "sampleId": "1160272595888876"
+    },
+    {
+      "pageName": "Love Intercambio",
+      "ads": 2,
+      "maxDays": 413,
+      "oldestStart": "19 de mar de 2025",
+      "sampleId": "493712203561780"
+    },
+    {
+      "pageName": "KEK",
+      "ads": 1,
+      "maxDays": 412,
+      "oldestStart": "20 de mar de 2025",
+      "sampleId": "1442123180499924"
+    },
+    {
+      "pageName": "MoldaTec Pré-Moldados",
+      "ads": 1,
+      "maxDays": 412,
+      "oldestStart": "20 de mar de 2025",
+      "sampleId": "2701524830041484"
+    },
+    {
+      "pageName": "Nova Velha Agricultura",
+      "ads": 2,
+      "maxDays": 407,
+      "oldestStart": "25 de mar de 2025",
+      "sampleId": "1360982911708933"
+    },
+    {
+      "pageName": "América Móveis",
+      "ads": 6,
+      "maxDays": 407,
+      "oldestStart": "25 de mar de 2025",
+      "sampleId": "635240839275202"
+    },
+    {
+      "pageName": "Smartwalk",
+      "ads": 2,
+      "maxDays": 397,
+      "oldestStart": "4 de abr de 2025",
+      "sampleId": "1727056931491717"
+    },
+    {
+      "pageName": "Dr. Pipoca",
+      "ads": 1,
+      "maxDays": 397,
+      "oldestStart": "4 de abr de 2025",
+      "sampleId": "1174380987158394"
+    },
+    {
+      "pageName": "Alusolda",
+      "ads": 1,
+      "maxDays": 396,
+      "oldestStart": "5 de abr de 2025",
+      "sampleId": "28948926288086699"
+    },
+    {
+      "pageName": "Portão De Cambuí",
+      "ads": 1,
+      "maxDays": 385,
+      "oldestStart": "16 de abr de 2025",
+      "sampleId": "662417329733241"
+    },
+    {
+      "pageName": "VL Assessoria e Comércio Material Hidráulico",
+      "ads": 1,
+      "maxDays": 377,
+      "oldestStart": "24 de abr de 2025",
+      "sampleId": "1431233844710571"
+    },
+    {
+      "pageName": "Medeiros Distribuidora com Medeiros 365",
+      "ads": 2,
+      "maxDays": 377,
+      "oldestStart": "24 de abr de 2025",
+      "sampleId": "1206724844572975"
+    },
+    {
+      "pageName": "Indústria e Comércio de Charque JS",
+      "ads": 1,
+      "maxDays": 373,
+      "oldestStart": "28 de abr de 2025",
+      "sampleId": "1021684819453741"
+    },
+    {
+      "pageName": "Durlicouros",
+      "ads": 1,
+      "maxDays": 370,
+      "oldestStart": "1 de mai de 2025",
+      "sampleId": "1022596376650287"
+    },
+    {
+      "pageName": "Competec",
+      "ads": 1,
+      "maxDays": 360,
+      "oldestStart": "11 de mai de 2025",
+      "sampleId": "1032256401769497"
+    },
+    {
+      "pageName": "Aloee",
+      "ads": 1,
+      "maxDays": 352,
+      "oldestStart": "19 de mai de 2025",
+      "sampleId": "1218125093042590"
+    },
+    {
+      "pageName": "Indústria Santa Luzia",
+      "ads": 3,
+      "maxDays": 351,
+      "oldestStart": "20 de mai de 2025",
+      "sampleId": "720965500606038"
+    },
+    {
+      "pageName": "CSA Educacional",
+      "ads": 3,
+      "maxDays": 351,
+      "oldestStart": "20 de mai de 2025",
+      "sampleId": "1015697734049818"
+    },
+    {
+      "pageName": "Robustec Indústria e Comércio Ltda",
+      "ads": 1,
+      "maxDays": 351,
+      "oldestStart": "20 de mai de 2025",
+      "sampleId": "1447040292931633"
+    },
+    {
+      "pageName": "Ideal Automotive com danielsantanas_01",
+      "ads": 1,
+      "maxDays": 349,
+      "oldestStart": "22 de mai de 2025",
+      "sampleId": "716515561048972"
+    },
+    {
+      "pageName": "Atara",
+      "ads": 12,
+      "maxDays": 347,
+      "oldestStart": "24 de mai de 2025",
+      "sampleId": "997900495863018"
+    },
+    {
+      "pageName": "ilhauniformes",
+      "ads": 1,
+      "maxDays": 341,
+      "oldestStart": "30 de mai de 2025",
+      "sampleId": "695239323472880"
+    }
+  ]
+}

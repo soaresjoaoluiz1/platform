@@ -1,0 +1,163 @@
+- generic [ref=e12]:
+  - generic [ref=e15]:
+    - link "Biblioteca de Anúncios da Meta" [ref=e18] [cursor=pointer]:
+      - /url: /ads/library/?source=fb-logo
+      - generic [ref=e20]: Biblioteca de Anúncios da Meta
+    - generic [ref=e22]: Biblioteca de Anúncios
+    - menuitem "Relatório da Biblioteca de Anúncios" [ref=e24] [cursor=pointer]:
+      - generic [ref=e25]: Relatório da Biblioteca de Anúncios
+    - menuitem "API da Biblioteca de Anúncios" [ref=e27] [cursor=pointer]:
+      - generic [ref=e28]: API da Biblioteca de Anúncios
+    - menuitem "Conteúdo de marca" [ref=e30] [cursor=pointer]:
+      - generic [ref=e31]: Conteúdo de marca
+    - menuitem "Open navigation panel" [ref=e33] [cursor=pointer]
+  - dialog [ref=e37]:
+    - generic [ref=e38]:
+      - link [ref=e39] [cursor=pointer]:
+        - /url: /
+        - heading [level=4] [ref=e40]: Entrar
+      - menuitem [ref=e41] [cursor=pointer]
+    - generic [ref=e43]:
+      - generic [ref=e44]:
+        - heading [level=4] [ref=e46]: Biblioteca de Anúncios
+        - menuitem [ref=e48] [cursor=pointer]:
+          - heading [level=4] [ref=e50]: Relatório da Biblioteca de Anúncios
+        - menuitem [ref=e52] [cursor=pointer]:
+          - heading [level=4] [ref=e54]: API da Biblioteca de Anúncios
+        - menuitem [ref=e56] [cursor=pointer]:
+          - heading [level=4] [ref=e58]: Conteúdo de marca
+      - separator [ref=e59]
+      - generic [ref=e60]:
+        - menuitem [ref=e62] [cursor=pointer]:
+          - heading [level=4] [ref=e64]: Status do sistema
+        - menuitem [ref=e66] [cursor=pointer]:
+          - heading [level=4] [ref=e68]: Assinar para receber atualizações por email
+        - menuitem [ref=e70] [cursor=pointer]:
+          - heading [level=4] [ref=e72]: Perguntas frequentes
+        - menuitem [ref=e74] [cursor=pointer]:
+          - heading [level=4] [ref=e76]: Sobre anúncios e uso de dados
+        - menuitem [ref=e78] [cursor=pointer]:
+          - heading [level=4] [ref=e80]: Privacidade
+        - menuitem [ref=e82] [cursor=pointer]:
+          - heading [level=4] [ref=e84]: Termos
+        - menuitem [ref=e86] [cursor=pointer]:
+          - heading [level=4] [ref=e88]: Cookies
+  - generic [ref=e90]:
+    - generic [ref=e94]:
+      - heading "Biblioteca de Anúncios" [level=1] [ref=e96]
+      - 'heading "Pesquise todos os anúncios em veiculação no momento nas tecnologias da Meta, bem como: Anúncios sobre temas sociais, eleições ou política veiculados nos últimos 7 anos Anúncios veiculados em qualquer lugar da União Europeia no ano passado Anúncios que foram veiculados no Reino Unido no ano passado e também depois de 1º de julho de 2025" [level=3] [ref=e97]':
+        - text: "Pesquise todos os anúncios em veiculação no momento nas tecnologias da Meta, bem como:"
+        - list [ref=e98]:
+          - listitem [ref=e99]: Anúncios sobre temas sociais, eleições ou política veiculados nos últimos 7 anos
+          - listitem [ref=e100]: Anúncios veiculados em qualquer lugar da União Europeia no ano passado
+          - listitem [ref=e101]: Anúncios que foram veiculados no Reino Unido no ano passado e também depois de 1º de julho de 2025
+      - heading "Para encontrar um anúncio, pesquise por palavras-chave ou por anunciante." [level=3] [ref=e102]
+      - generic [ref=e113]: Um anúncio aparecerá na Biblioteca de Anúncios em até 24 horas a partir do momento em que receber a primeira impressão. Todas as alterações ou atualizações feitas no anúncio também serão refletidas na Biblioteca de Anúncios dentro de 24 horas.
+    - generic [ref=e125]:
+      - heading "Pesquisar anúncios" [level=1] [ref=e127]
+      - generic [ref=e128]:
+        - text: Defina sua localização e escolha uma categoria de anúncio para iniciar a pesquisa.
+        - link "Veja dicas de pesquisa." [ref=e129] [cursor=pointer]:
+          - /url: "#"
+      - generic [ref=e130]:
+        - combobox "Brasil" [ref=e134] [cursor=pointer]:
+          - generic [ref=e141]: Brasil
+        - combobox "Todos os anúncios" [active] [ref=e417] [cursor=pointer]:
+          - generic [ref=e154]: Todos os anúncios
+        - generic [ref=e425]:
+          - generic [ref=e431]: Pesquisar por palavra-chave ou anunciante
+          - searchbox "Pesquisar por palavra-chave ou anunciante" [ref=e443]
+    - generic [ref=e170]:
+      - generic [ref=e171]:
+        - heading "Explore outras ferramentas" [level=1] [ref=e172]
+        - text: Você também pode encontrar informações detalhadas sobre anúncios usando o Relatório da Biblioteca de Anúncios ou a API da Biblioteca de Anúncios.
+      - generic [ref=e173]:
+        - heading "Baixe informações e acompanhe os gastos" [level=2] [ref=e174]
+        - generic [ref=e175]:
+          - generic [ref=e176]: Para anúncios sobre temas sociais, eleições ou política, use o Relatório da Biblioteca de Anúncios para ver o total de gastos e os detalhes sobre gastos por anunciante e localização.
+          - heading "Para quem o relatório é indicado?" [level=4] [ref=e178]
+          - text: Qualquer pessoa que queira explorar, filtrar e baixar dados rapidamente de anúncios sobre temas sociais, eleições ou política.
+        - link "Ir para o relatório" [ref=e181] [cursor=pointer]:
+          - /url: /ads/library/report/?source=onboarding
+          - heading "Ir para o relatório" [level=3] [ref=e184]
+      - generic [ref=e190]:
+        - heading "Personalize sua própria pesquisa" [level=2] [ref=e191]
+        - generic [ref=e192]:
+          - text: Use a API da Biblioteca de Anúncios para criar pesquisas personalizadas. Inclua parâmetros como tamanho estimado do público, país ou idioma de um anúncio.
+          - heading "Para quem a API é indicada?" [level=4] [ref=e194]
+          - text: Pessoas que têm noções básicas de programação. Você precisará concluir algumas etapas para acessar a API.
+        - link "Ir para a API" [ref=e197] [cursor=pointer]:
+          - /url: /ads/library/api/?source=onboarding
+          - heading "Ir para a API" [level=3] [ref=e200]
+      - generic [ref=e206]:
+        - heading "Pesquisar conteúdo de marca" [level=2] [ref=e207]
+        - generic [ref=e208]:
+          - generic [ref=e209]: Use a pesquisa de conteúdo de marca para encontrar posts, stories, vídeos e reels no Facebook e no Instagram que envolvam uma parceria paga. É possível filtrar por app e por data.
+          - heading "Para quem é a pesquisa" [level=4] [ref=e211]
+          - text: Qualquer pessoa que quiser ver conteúdo de um criador de conteúdo que colaborou com uma empresa.
+        - link "Ir para o conteúdo de marca" [ref=e214] [cursor=pointer]:
+          - /url: /ads/library/branded_content/?source=onboarding
+          - heading "Ir para o conteúdo de marca" [level=3] [ref=e217]
+    - generic [ref=e228]:
+      - heading "Perguntas frequentes" [level=1] [ref=e229]
+      - list [ref=e231]:
+        - listitem [ref=e232]:
+          - button "O que é a Biblioteca de Anúncios da Meta?" [ref=e233] [cursor=pointer]:
+            - listitem [ref=e238]:
+              - generic [ref=e242]: O que é a Biblioteca de Anúncios da Meta?
+        - listitem [ref=e245]:
+          - button "Quais anúncios estão na Biblioteca de anúncios e quais informações encontrarei sobre eles?" [ref=e246] [cursor=pointer]:
+            - listitem [ref=e251]:
+              - generic [ref=e255]: Quais anúncios estão na Biblioteca de anúncios e quais informações encontrarei sobre eles?
+        - listitem [ref=e258]:
+          - button "Onde posso encontrar as seleções de direcionamento do anunciante para anúncios sobre temas sociais, eleições ou política?" [ref=e259] [cursor=pointer]:
+            - listitem [ref=e264]:
+              - generic [ref=e268]: Onde posso encontrar as seleções de direcionamento do anunciante para anúncios sobre temas sociais, eleições ou política?
+        - listitem [ref=e271]:
+          - button "Preciso de uma conta do Facebook para usar a Biblioteca de Anúncios?" [ref=e272] [cursor=pointer]:
+            - listitem [ref=e277]:
+              - generic [ref=e281]: Preciso de uma conta do Facebook para usar a Biblioteca de Anúncios?
+        - listitem [ref=e284]:
+          - button "Como os anúncios sobre temas sociais, eleições ou política são identificados?" [ref=e285] [cursor=pointer]:
+            - listitem [ref=e290]:
+              - generic [ref=e294]: Como os anúncios sobre temas sociais, eleições ou política são identificados?
+        - listitem [ref=e297]:
+          - button "Como as datas e os horários são registrados na Biblioteca de Anúncios?" [ref=e298] [cursor=pointer]:
+            - listitem [ref=e303]:
+              - generic [ref=e307]: Como as datas e os horários são registrados na Biblioteca de Anúncios?
+        - listitem [ref=e310]:
+          - button "Quando tempo leva para um anúncio aparecer na Biblioteca de Anúncios?" [ref=e311] [cursor=pointer]:
+            - listitem [ref=e316]:
+              - generic [ref=e320]: Quando tempo leva para um anúncio aparecer na Biblioteca de Anúncios?
+        - listitem [ref=e323]:
+          - button "Como a Meta decide quais anúncios mostrar para mim?" [ref=e324] [cursor=pointer]:
+            - listitem [ref=e329]:
+              - generic [ref=e333]: Como a Meta decide quais anúncios mostrar para mim?
+        - listitem [ref=e336]:
+          - button "Por que alguns anúncios na Biblioteca de Anúncios têm marca d'água?" [ref=e337] [cursor=pointer]:
+            - listitem [ref=e342]:
+              - generic [ref=e346]: Por que alguns anúncios na Biblioteca de Anúncios têm marca d'água?
+    - generic [ref=e351]:
+      - generic [ref=e359]: Status do sistema
+      - generic [ref=e363]:
+        - list [ref=e364]:
+          - listitem [ref=e365]:
+            - heading "Sobre anúncios e uso de dados" [level=3] [ref=e366]:
+              - link "Sobre anúncios e uso de dados" [ref=e367] [cursor=pointer]:
+                - /url: /ads/about/?entry_product=ad_library
+          - listitem [ref=e368]:
+            - heading "Privacidade" [level=3] [ref=e369]:
+              - link "Privacidade" [ref=e370] [cursor=pointer]:
+                - /url: /privacy/center/?entry_point=privacy_basics_redirect
+          - listitem [ref=e371]:
+            - heading "Termos" [level=3] [ref=e372]:
+              - link "Termos" [ref=e373] [cursor=pointer]:
+                - /url: /policies/
+          - listitem [ref=e374]:
+            - heading "Cookies" [level=3] [ref=e375]:
+              - link "Cookies" [ref=e376] [cursor=pointer]:
+                - /url: /policies/cookies/
+        - heading "Meta © 2026 | Português (Brasil)" [level=3] [ref=e378]:
+          - text: Meta © 2026 |
+          - link "Português (Brasil)" [ref=e379] [cursor=pointer]:
+            - /url: /language/
