@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken'
 import { requireRole } from '../middleware/auth.js'
 
 const CORE_EMBED_SECRET = process.env.CORE_EMBED_SECRET || 'dros-core-embed-2026-shared-key'
+const CORE_API_URL = process.env.CORE_API_URL || 'http://localhost:3004'
 
 const router = Router()
 
@@ -145,6 +146,20 @@ router.delete('/:id/credentials/:credId', requireRole('dono', 'gerente'), (req, 
 router.get('/:id/onboard', requireRole('dono', 'gerente'), (req, res) => {
   const entries = db.prepare('SELECT * FROM client_onboard WHERE client_id = ? ORDER BY created_at DESC').all(req.params.id)
   res.json({ entries: entries.map(e => ({ ...e, data: JSON.parse(e.data) })) })
+})
+
+// Lista contas Meta do /core (pra autocomplete no form de cliente)
+router.get('/core-accounts', requireRole('dono', 'gerente'), async (req, res) => {
+  try {
+    const token = jwt.sign({ embed: true, account: '__list__' }, CORE_EMBED_SECRET, { expiresIn: '5m' })
+    const r = await fetch(`${CORE_API_URL}/api/meta/accounts?embed_token=${token}`)
+    if (!r.ok) return res.status(502).json({ error: `Falha ao consultar /core (${r.status})` })
+    const data = await r.json()
+    const accounts = (data.accounts || []).map(a => ({ id: a.id, name: a.name }))
+    res.json({ accounts })
+  } catch (e) {
+    res.status(500).json({ error: e.message || 'Falha ao buscar contas do /core' })
+  }
 })
 
 // Gera URL embed do /core com token assinado (auto-login)

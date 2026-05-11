@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchClients, createClient, updateClient, formatNumber, type Client } from '../lib/api'
 import { Building2, Plus, Edit3, Eye, Archive, ArchiveRestore } from 'lucide-react'
+import CoreAccountSelect from '../components/CoreAccountSelect'
 
 const BLANK_FORM = {
   name: '', contact_name: '', contact_email: '', contact_phone: '',
@@ -161,10 +162,14 @@ export default function Clients() {
           <div style={{ fontSize: 11, color: '#9B96B0', textTransform: 'uppercase', fontWeight: 600, margin: '16px 0 6px' }}>Outros</div>
           <div className="form-group"><label>Pasta do Drive</label><input className="input" value={form.drive_folder} onChange={e => setForm(p => ({ ...p, drive_folder: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
           <div className="form-group">
-            <label>Nome no Painel de Performance (/core)</label>
-            <input className="input" value={form.core_client_name} onChange={e => setForm(p => ({ ...p, core_client_name: e.target.value }))} placeholder="Ex: ASK Equipamentos, Quimiprol, Door Grill" />
+            <label>Conta no Painel de Performance (/core)</label>
+            <CoreAccountSelect
+              value={form.core_client_name}
+              onChange={v => setForm(p => ({ ...p, core_client_name: v }))}
+              placeholder="Selecionar conta do /core"
+            />
             <small style={{ color: '#9B96B0', fontSize: 11, marginTop: 4, display: 'block' }}>
-              Nome (ou parte do nome) que aparece no /core. Usado pra exibir o Painel de Performance dentro da aba Performance deste cliente. Deixe em branco se ainda nao tiver.
+              Selecione a conta Meta deste cliente no /core. Deixe em branco se ainda nao tiver.
             </small>
           </div>
           <div className="form-group"><label>Observacoes</label><textarea className="input" value={form.observacoes} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={3} style={{ resize: 'vertical' }} placeholder="Anotacoes internas sobre o cliente" /></div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { fetchClient, updateClient, fetchClientCredentials, createClientCredential, updateClientCredential, deleteClientCredential, fetchClientOnboard, fetchServices, fetchClientServices, updateClientServices, apiFetch, generateApprovalToken, revokeApprovalToken, type Client, type ClientCredential, type User as UserT, type Service, type ClientService } from '../lib/api'
 import { ArrowLeft, Building2, ExternalLink, Plus, Edit3, Save, X, Trash2, Eye, EyeOff, Key, Users, Lock, ClipboardCopy, FileText, CheckCircle, Briefcase, BarChart3 } from 'lucide-react'
+import CoreAccountSelect from '../components/CoreAccountSelect'
 
 const PLATFORMS = ['Facebook', 'Instagram', 'Google Ads', 'Google Analytics', 'Google Meu Negocio', 'Meta Business', 'TikTok', 'LinkedIn', 'YouTube', 'Twitter/X', 'Pinterest', 'Kiwify', 'Hotmart', 'RD Station', 'Outro']
 
@@ -276,10 +277,14 @@ export default function ClientDetail() {
                 <div className="form-group"><label>Dia de Vencimento</label><input className="input" type="number" min="1" max="31" value={editData.payment_day} onChange={e => setEditData((p: any) => ({ ...p, payment_day: parseInt(e.target.value) || 10 }))} /></div>
               </div>
               <div className="form-group">
-                <label>Nome no Painel de Performance (/core)</label>
-                <input className="input" value={editData.core_client_name} onChange={e => setEditData((p: any) => ({ ...p, core_client_name: e.target.value }))} placeholder="Ex: ASK Equipamentos, Quimiprol, Door Grill" />
+                <label>Conta no Painel de Performance (/core)</label>
+                <CoreAccountSelect
+                  value={editData.core_client_name || ''}
+                  onChange={v => setEditData((p: any) => ({ ...p, core_client_name: v }))}
+                  placeholder="Selecionar conta do /core"
+                />
                 <small style={{ color: '#9B96B0', fontSize: 11, marginTop: 4, display: 'block' }}>
-                  Nome (ou parte) que aparece no /core. Usado pra exibir o painel deste cliente na aba Performance.
+                  Selecione a conta Meta deste cliente no /core. Usado pra puxar so os dados dela na aba Performance.
                 </small>
               </div>
               <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
