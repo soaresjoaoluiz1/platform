@@ -138,13 +138,17 @@ function getDateRanges(days, since, until) {
 // Lista contas de ad — filtra por role
 router.get('/meta/accounts', async (req, res) => {
   try {
+    if (!META_TOKEN) return res.status(500).json({ error: 'META_ACCESS_TOKEN nao configurado no .env do Hub' })
     const scope = getClientScope(req.user)
     let allAccounts = []
     let url = `${META_BASE}/me/adaccounts?fields=id,name,account_status,currency,amount_spent&limit=100&access_token=${META_TOKEN}`
     while (url) {
       const resp = await fetch(url)
       const data = await resp.json()
-      if (data.error) return res.status(400).json(data)
+      if (data.error) {
+        console.error('[Performance/Meta] /me/adaccounts error:', data.error)
+        return res.status(400).json({ error: data.error.message || 'Meta API error' })
+      }
       allAccounts = allAccounts.concat(data.data || [])
       url = data.paging?.next || null
     }
@@ -153,6 +157,7 @@ router.get('/meta/accounts', async (req, res) => {
       .sort((a, b) => a.name.localeCompare(b.name))
     res.json({ accounts: filtered })
   } catch (err) {
+    console.error('[Performance/Meta] /meta/accounts:', err.message)
     res.status(500).json({ error: err.message })
   }
 })
@@ -209,13 +214,17 @@ router.get('/meta/accounts/:accountId/campaigns', async (req, res) => {
 
 router.get('/instagram/accounts', async (req, res) => {
   try {
+    if (!META_TOKEN) return res.status(500).json({ error: 'META_ACCESS_TOKEN nao configurado no .env do Hub' })
     const scope = getClientScope(req.user)
     let allPages = []
     let url = `${META_BASE}/me/accounts?fields=id,name,instagram_business_account{id,name,username,followers_count,follows_count,media_count,profile_picture_url}&limit=100&access_token=${META_TOKEN}`
     while (url) {
       const resp = await fetch(url)
       const data = await resp.json()
-      if (data.error) return res.status(400).json(data)
+      if (data.error) {
+        console.error('[Performance/IG] /me/accounts error:', data.error)
+        return res.status(400).json({ error: data.error.message || 'Meta API error' })
+      }
       allPages = allPages.concat(data.data || [])
       url = data.paging?.next || null
     }

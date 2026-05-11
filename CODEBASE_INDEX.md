@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-11 · 3903 files · ~11.7M tokens total
+> 2026-05-11 · 3918 files · ~11.8M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -57,6 +57,23 @@
 - `Sidebar.tsx` — default:Sidebar
 - `TimerCheck.tsx` — default:TimerCheck
 - `Toast.tsx` — useToast, ToastProvider
+
+**agency-hub\src\components\performance/**
+- `AnalyticsView.tsx` — default:AnalyticsView
+- `CampaignTable.tsx` — default:CampaignTable
+- `CRMView.tsx`
+- `FunnelChart.tsx` — default:FunnelChart
+- `GoogleAdsView.tsx` — default:GoogleAdsView
+- `IGChart.tsx` — default:IGChart
+- `IGMediaGrid.tsx` — default:IGMediaGrid
+- `IGMetrics.tsx` — default:IGMetrics
+- `InstagramView.tsx` — default:InstagramView
+- `KiwifyView.tsx` — default:KiwifyView
+- `MetricCards.tsx` — default:MetricCards
+- `MetricGroups.tsx` — default:MetricGroups
+- `OverviewView.tsx` — default:OverviewView
+- `PerformanceArea.tsx` — ===================================================================== · default:PerformanceArea
+- `SpendChart.tsx` — default:SpendChart
 
 **agency-hub\src\context/**
 - `AuthContext.tsx` — AuthProvider, useAuth, User
@@ -732,4 +749,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~7.2k tokens · Full codebase: ~11.7M tokens · Saves ~100%*
+*Index: ~7.4k tokens · Full codebase: ~11.8M tokens · Saves ~100%*
