@@ -22,10 +22,13 @@ if (!globalThis.fetch) {
 const router = express.Router()
 const publicRouter = express.Router()
 
-const META_TOKEN = process.env.META_ACCESS_TOKEN
-const KIWIFY_CLIENT_ID = process.env.KIWIFY_CLIENT_ID
-const KIWIFY_CLIENT_SECRET = process.env.KIWIFY_CLIENT_SECRET
-const KIWIFY_ACCOUNT_ID = process.env.KIWIFY_ACCOUNT_ID
+// IMPORTANTE: process.env e lido lazy via getters porque o dotenv.config()
+// do parent (server/index.js) so roda DEPOIS dos imports ESM serem hoisted.
+// Se ler no top-level, as vars ficam undefined.
+const getMetaToken = () => process.env.META_ACCESS_TOKEN
+const getKiwifyClientId = () => process.env.getKiwifyClientId()
+const getKiwifyClientSecret = () => process.env.getKiwifyClientSecret()
+const getKiwifyAccountId = () => process.env.getKiwifyAccountId()
 const META_BASE = 'https://graph.facebook.com/v21.0'
 const GADS_API = 'https://googleads.googleapis.com/v20'
 const GA4_API = 'https://analyticsdata.googleapis.com/v1beta'
@@ -88,7 +91,7 @@ function resolveAccountName(req) {
 // =====================================================================
 async function metaFetch(path, params = {}) {
   const url = new URL(`${META_BASE}${path}`)
-  url.searchParams.set('access_token', META_TOKEN)
+  url.searchParams.set('access_token', getMetaToken())
   for (const [k, v] of Object.entries(params)) {
     url.searchParams.set(k, v)
   }
@@ -138,10 +141,10 @@ function getDateRanges(days, since, until) {
 // Lista contas de ad — filtra por role
 router.get('/meta/accounts', async (req, res) => {
   try {
-    if (!META_TOKEN) return res.status(500).json({ error: 'META_ACCESS_TOKEN nao configurado no .env do Hub' })
+    if (!getMetaToken()) return res.status(500).json({ error: 'META_ACCESS_TOKEN nao configurado no .env do Hub' })
     const scope = getClientScope(req.user)
     let allAccounts = []
-    let url = `${META_BASE}/me/adaccounts?fields=id,name,account_status,currency,amount_spent&limit=100&access_token=${META_TOKEN}`
+    let url = `${META_BASE}/me/adaccounts?fields=id,name,account_status,currency,amount_spent&limit=100&access_token=${getMetaToken()}`
     while (url) {
       const resp = await fetch(url)
       const data = await resp.json()
@@ -214,10 +217,10 @@ router.get('/meta/accounts/:accountId/campaigns', async (req, res) => {
 
 router.get('/instagram/accounts', async (req, res) => {
   try {
-    if (!META_TOKEN) return res.status(500).json({ error: 'META_ACCESS_TOKEN nao configurado no .env do Hub' })
+    if (!getMetaToken()) return res.status(500).json({ error: 'META_ACCESS_TOKEN nao configurado no .env do Hub' })
     const scope = getClientScope(req.user)
     let allPages = []
-    let url = `${META_BASE}/me/accounts?fields=id,name,instagram_business_account{id,name,username,followers_count,follows_count,media_count,profile_picture_url}&limit=100&access_token=${META_TOKEN}`
+    let url = `${META_BASE}/me/accounts?fields=id,name,instagram_business_account{id,name,username,followers_count,follows_count,media_count,profile_picture_url}&limit=100&access_token=${getMetaToken()}`
     while (url) {
       const resp = await fetch(url)
       const data = await resp.json()
@@ -948,27 +951,28 @@ router.get('/crm/:accountId/forms', async (req, res) => {
 // =====================================================================
 // GOOGLE ADS ROUTES
 // =====================================================================
-const GADS = {
+// Lazy getter — process.env so disponivel apos dotenv.config() rodar
+const getGADS = () => ({
   devToken: process.env.GOOGLE_ADS_DEVELOPER_TOKEN,
   clientId: process.env.GOOGLE_ADS_CLIENT_ID,
   clientSecret: process.env.GOOGLE_ADS_CLIENT_SECRET,
   refreshToken: process.env.GOOGLE_ADS_REFRESH_TOKEN,
   loginCustomerId: (process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID || '').replace(/-/g, ''),
   redirectUri: process.env.GADS_REDIRECT_URI || `http://localhost:3003/api/performance/google-ads/callback`,
-}
+})
 
 let gadsTokenCache = { token: null, expiresAt: 0 }
 
 async function getGadsAccessToken() {
   if (gadsTokenCache.token && Date.now() < gadsTokenCache.expiresAt) return gadsTokenCache.token
-  if (!GADS.refreshToken) return null
+  if (!getGADS().refreshToken) return null
   const r = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      refresh_token: GADS.refreshToken,
-      client_id: GADS.clientId,
-      client_secret: GADS.clientSecret,
+      refresh_token: getGADS().refreshToken,
+      client_id: getGADS().clientId,
+      client_secret: getGADS().clientSecret,
       grant_type: 'refresh_token',
     }),
   })
@@ -984,8 +988,8 @@ async function gaqlQuery(customerId, query) {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
-      'developer-token': GADS.devToken,
-      'login-customer-id': GADS.loginCustomerId,
+      'developer-token': getGADS().devToken,
+      'login-customer-id': getGADS().loginCustomerId,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ query }),
@@ -1001,8 +1005,8 @@ async function gaqlQuery(customerId, query) {
 // OAuth setup — publicas (sem auth). Callback do Google nao carrega JWT.
 publicRouter.get('/google-ads/auth', (req, res) => {
   const url = new URL('https://accounts.google.com/o/oauth2/v2/auth')
-  url.searchParams.set('client_id', GADS.clientId)
-  url.searchParams.set('redirect_uri', GADS.redirectUri)
+  url.searchParams.set('client_id', getGADS().clientId)
+  url.searchParams.set('redirect_uri', getGADS().redirectUri)
   url.searchParams.set('response_type', 'code')
   url.searchParams.set('scope', 'https://www.googleapis.com/auth/adwords https://www.googleapis.com/auth/analytics.readonly')
   url.searchParams.set('access_type', 'offline')
@@ -1017,8 +1021,8 @@ publicRouter.get('/google-ads/callback', async (req, res) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        code, client_id: GADS.clientId, client_secret: GADS.clientSecret,
-        redirect_uri: GADS.redirectUri, grant_type: 'authorization_code',
+        code, client_id: getGADS().clientId, client_secret: getGADS().clientSecret,
+        redirect_uri: getGADS().redirectUri, grant_type: 'authorization_code',
       }),
     })
     const tokens = await tokenRes.json()
@@ -1038,7 +1042,7 @@ router.get('/google-ads/accounts', async (req, res) => {
   try {
     const token = await getGadsAccessToken()
     if (!token) return res.json({ accounts: [], error: 'No refresh token. Visit /api/performance/google-ads/auth first.' })
-    const results = await gaqlQuery(GADS.loginCustomerId, `
+    const results = await gaqlQuery(getGADS().loginCustomerId, `
       SELECT customer_client.id, customer_client.descriptive_name, customer_client.currency_code,
              customer_client.manager, customer_client.status
       FROM customer_client
@@ -1583,11 +1587,11 @@ let kiwifyTokenCache = { token: null, expiresAt: 0 }
 
 async function getKiwifyToken() {
   if (kiwifyTokenCache.token && Date.now() < kiwifyTokenCache.expiresAt) return kiwifyTokenCache.token
-  if (!KIWIFY_CLIENT_ID || !KIWIFY_CLIENT_SECRET) return null
+  if (!getKiwifyClientId() || !getKiwifyClientSecret()) return null
   const r = await fetch(`${KIWIFY_API}/v1/oauth/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ client_id: KIWIFY_CLIENT_ID, client_secret: KIWIFY_CLIENT_SECRET }),
+    body: new URLSearchParams({ client_id: getKiwifyClientId(), client_secret: getKiwifyClientSecret() }),
   })
   const data = await r.json()
   if (!data.access_token) throw new Error('Kiwify OAuth error: ' + JSON.stringify(data))
@@ -1601,7 +1605,7 @@ async function kiwifyFetch(path, params = {}) {
   const url = new URL(`${KIWIFY_API}${path}`)
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v)
   const r = await fetch(url.toString(), {
-    headers: { 'Authorization': `Bearer ${token}`, 'x-kiwify-account-id': KIWIFY_ACCOUNT_ID },
+    headers: { 'Authorization': `Bearer ${token}`, 'x-kiwify-account-id': getKiwifyAccountId() },
   })
   if (!r.ok) {
     const err = await r.text()
@@ -1637,7 +1641,7 @@ async function fetchAllKiwifySales(startDate, endDate) {
 
 router.get('/kiwify/sales', async (req, res) => {
   try {
-    if (!KIWIFY_CLIENT_ID) return res.json({ available: false })
+    if (!getKiwifyClientId()) return res.json({ available: false })
     const { days = '30', since, until } = req.query
     const ranges = getDateRanges(parseInt(days), since, until)
     const [currentSales, previousSales, balanceData] = await Promise.all([
@@ -1701,7 +1705,7 @@ router.get('/kiwify/sales', async (req, res) => {
 
 router.get('/kiwify/products', async (req, res) => {
   try {
-    if (!KIWIFY_CLIENT_ID) return res.json({ available: false, products: [] })
+    if (!getKiwifyClientId()) return res.json({ available: false, products: [] })
     const data = await kiwifyFetch('/v1/products', { page_size: '50', page_number: '1' })
     res.json({ available: true, products: data.data || data || [] })
   } catch (err) {
@@ -1764,7 +1768,7 @@ router.get('/overview/:accountId', async (req, res) => {
       try {
         const token = await getGadsAccessToken()
         if (!token) return { available: false }
-        const accounts = await gaqlQuery(GADS.loginCustomerId, `
+        const accounts = await gaqlQuery(getGADS().loginCustomerId, `
           SELECT customer_client.id, customer_client.descriptive_name, customer_client.manager, customer_client.status
           FROM customer_client WHERE customer_client.manager = false AND customer_client.status = 'ENABLED'
         `)
@@ -1888,7 +1892,7 @@ router.get('/overview/:accountId', async (req, res) => {
     promises.instagram = (async () => {
       try {
         let allPages = []
-        let url = `${META_BASE}/me/accounts?fields=id,name,instagram_business_account{id,name,username,followers_count}&limit=100&access_token=${META_TOKEN}`
+        let url = `${META_BASE}/me/accounts?fields=id,name,instagram_business_account{id,name,username,followers_count}&limit=100&access_token=${getMetaToken()}`
         while (url) {
           const resp = await fetch(url)
           const data = await resp.json()
@@ -1927,7 +1931,7 @@ router.get('/overview/:accountId', async (req, res) => {
 
     promises.kiwify = (async () => {
       try {
-        if (!KIWIFY_CLIENT_ID) return { available: false }
+        if (!getKiwifyClientId()) return { available: false }
         const isJosi = accountName.toLowerCase().includes('josi') || accountName.toLowerCase().includes('josiane')
         if (!isJosi) return { available: false }
         const [curSales, prevSales] = await Promise.all([
