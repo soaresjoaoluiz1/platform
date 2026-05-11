@@ -318,6 +318,11 @@ try { db.exec("ALTER TABLE clients ADD COLUMN observacoes TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN contrato_inicio TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN inactivated_at TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN core_client_name TEXT") } catch {}
+// IDs explicitos por plataforma — usados pra filtrar precisamente em /api/performance/*.
+// core_client_name continua sendo o "hint" textual (CRM lookup, GA4 properties, Kiwify check).
+try { db.exec("ALTER TABLE clients ADD COLUMN core_meta_account_id TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN core_ig_page_id TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN core_gads_customer_id TEXT") } catch {}
 try { db.exec("ALTER TABLE payments ADD COLUMN bank TEXT") } catch {}
 try { db.exec("ALTER TABLE expenses ADD COLUMN bank TEXT") } catch {}
 try { db.exec("ALTER TABLE extra_revenue ADD COLUMN bank TEXT") } catch {}

@@ -26,7 +26,10 @@ function PerformanceTab({ client, onGoToInfo }: { client: any; onGoToInfo: () =>
       <div style={{ fontSize: 12, color: '#9B96B0', marginBottom: 12 }}>
         Painel de <strong style={{ color: '#FFB300' }}>{client.core_client_name}</strong>
       </div>
-      <PerformanceArea accountNameHint={client.core_client_name} />
+      <PerformanceArea
+        accountIdHint={client.core_meta_account_id || undefined}
+        accountNameHint={client.core_client_name}
+      />
     </div>
   )
 }
@@ -63,7 +66,19 @@ export default function ClientDetail() {
     try {
       const data = await fetchClient(+id)
       setClient(data.client); setCredentials((data as any).credentials || []); setClientUsers((data as any).users || [])
-      setEditData({ name: data.client.name, contact_name: data.client.contact_name || '', contact_email: data.client.contact_email || '', contact_phone: (data.client as any).contact_phone || '', drive_folder: (data.client as any).drive_folder || '', monthly_fee: (data.client as any).monthly_fee || 0, payment_day: (data.client as any).payment_day || 10, core_client_name: (data.client as any).core_client_name || '' })
+      setEditData({
+        name: data.client.name,
+        contact_name: data.client.contact_name || '',
+        contact_email: data.client.contact_email || '',
+        contact_phone: (data.client as any).contact_phone || '',
+        drive_folder: (data.client as any).drive_folder || '',
+        monthly_fee: (data.client as any).monthly_fee || 0,
+        payment_day: (data.client as any).payment_day || 10,
+        core_client_name: (data.client as any).core_client_name || '',
+        core_meta_account_id: (data.client as any).core_meta_account_id || '',
+        core_ig_page_id: (data.client as any).core_ig_page_id || '',
+        core_gads_customer_id: (data.client as any).core_gads_customer_id || '',
+      })
     } catch {} finally { setLoading(false) }
   }
   useEffect(() => { load() }, [id])
@@ -234,16 +249,45 @@ export default function ClientDetail() {
                 <div className="form-group"><label>Mensalidade (R$)</label><input className="input" type="number" step="0.01" value={editData.monthly_fee} onChange={e => setEditData((p: any) => ({ ...p, monthly_fee: parseFloat(e.target.value) || 0 }))} placeholder="0.00" /></div>
                 <div className="form-group"><label>Dia de Vencimento</label><input className="input" type="number" min="1" max="31" value={editData.payment_day} onChange={e => setEditData((p: any) => ({ ...p, payment_day: parseInt(e.target.value) || 10 }))} /></div>
               </div>
-              <div className="form-group">
-                <label>Conta no Painel de Performance (/core)</label>
-                <CoreAccountSelect
-                  value={editData.core_client_name || ''}
-                  onChange={v => setEditData((p: any) => ({ ...p, core_client_name: v }))}
-                  placeholder="Selecionar conta do /core"
-                />
-                <small style={{ color: '#9B96B0', fontSize: 11, marginTop: 4, display: 'block' }}>
-                  Selecione a conta Meta deste cliente no /core. Usado pra puxar so os dados dela na aba Performance.
+              <div className="form-group" style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 16, marginTop: 8 }}>
+                <label style={{ fontSize: 12, fontWeight: 600, color: '#FFB300', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12, display: 'block' }}>Vinculos do Painel de Performance</label>
+                <small style={{ color: '#9B96B0', fontSize: 11, marginBottom: 14, display: 'block' }}>
+                  Selecione as contas deste cliente em cada plataforma. So aparecera no painel dele.
                 </small>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div>
+                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>Conta Meta Ads</label>
+                    <CoreAccountSelect
+                      source="meta" mode="id"
+                      value={editData.core_meta_account_id || ''}
+                      onChange={v => setEditData((p: any) => ({ ...p, core_meta_account_id: v }))}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>Pagina Facebook / Instagram</label>
+                    <CoreAccountSelect
+                      source="ig" mode="id"
+                      value={editData.core_ig_page_id || ''}
+                      onChange={v => setEditData((p: any) => ({ ...p, core_ig_page_id: v }))}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>Conta Google Ads</label>
+                    <CoreAccountSelect
+                      source="gads" mode="id"
+                      value={editData.core_gads_customer_id || ''}
+                      onChange={v => setEditData((p: any) => ({ ...p, core_gads_customer_id: v }))}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>Nome textual (CRM / GA4 / Kiwify)</label>
+                    <CoreAccountSelect
+                      value={editData.core_client_name || ''}
+                      onChange={v => setEditData((p: any) => ({ ...p, core_client_name: v }))}
+                      placeholder="Ex: ASK Equipamentos, Sameco..."
+                    />
+                  </div>
+                </div>
               </div>
               <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
                 <button className="btn btn-primary btn-sm" onClick={handleSave}><Save size={12} /> Salvar</button>

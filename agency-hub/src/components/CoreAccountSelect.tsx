@@ -4,7 +4,40 @@ import { apiFetch } from '../lib/api'
 
 interface CoreAccount { id: string; name: string }
 
-export default function CoreAccountSelect({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
+// Source mappings — qual endpoint chamar e como extrair ID/nome
+type Source = 'meta' | 'ig' | 'gads'
+const SOURCE_CONFIG: Record<Source, { endpoint: string; mapItem: (a: any) => CoreAccount; placeholder: string }> = {
+  meta: {
+    endpoint: '/api/performance/meta/accounts',
+    mapItem: (a) => ({ id: a.id, name: a.name }),
+    placeholder: 'Selecione a conta Meta Ads...',
+  },
+  ig: {
+    endpoint: '/api/performance/instagram/accounts',
+    // /instagram/accounts retorna {pageId, pageName, id (IG id), name, username, ...}
+    // Guardamos pageId (FB Page ID) porque e o que /me/accounts retorna no filtro.
+    mapItem: (a) => ({ id: a.pageId, name: `${a.pageName} (@${a.username || a.name})` }),
+    placeholder: 'Selecione a pagina/IG vinculada...',
+  },
+  gads: {
+    endpoint: '/api/performance/google-ads/accounts',
+    mapItem: (a) => ({ id: a.id, name: a.name || `Conta ${a.id}` }),
+    placeholder: 'Selecione a conta Google Ads...',
+  },
+}
+
+interface Props {
+  // Modo "name" (compat com uso antigo): onChange recebe o nome. value e o nome guardado.
+  // Modo "id": onChange recebe o ID. value e o ID guardado. Mostra o nome na input quando fechada.
+  mode?: 'name' | 'id'
+  source?: Source
+  value: string
+  onChange: (v: string) => void
+  placeholder?: string
+}
+
+export default function CoreAccountSelect({ value, onChange, placeholder, source = 'meta', mode = 'name' }: Props) {
+  const cfg = SOURCE_CONFIG[source]
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [accounts, setAccounts] = useState<CoreAccount[]>([])
@@ -16,8 +49,8 @@ export default function CoreAccountSelect({ value, onChange, placeholder }: { va
   const loadAccounts = () => {
     if (loaded || loading) return
     setLoading(true); setError(null)
-    apiFetch('/api/clients/core-accounts')
-      .then((d: any) => { setAccounts(d.accounts || []); setLoaded(true) })
+    apiFetch(cfg.endpoint)
+      .then((d: any) => { setAccounts((d.accounts || []).map(cfg.mapItem)); setLoaded(true) })
       .catch((e: any) => setError(e?.message || 'Falha ao carregar'))
       .finally(() => setLoading(false))
   }
@@ -33,24 +66,36 @@ export default function CoreAccountSelect({ value, onChange, placeholder }: { va
 
   const filterText = query.trim().toLowerCase()
   const filtered = filterText
-    ? accounts.filter(a => a.name.toLowerCase().includes(filterText))
+    ? accounts.filter(a => a.name.toLowerCase().includes(filterText) || a.id.toLowerCase().includes(filterText))
     : accounts
 
   const handleSelect = (a: CoreAccount) => {
-    onChange(a.name)
+    onChange(mode === 'id' ? a.id : a.name)
     setQuery('')
     setOpen(false)
   }
+
+  // Pra exibir nome quando mode='id' e value e o ID
+  const displayValue = (() => {
+    if (mode !== 'id') return value
+    const match = accounts.find(a => a.id === value)
+    return match ? match.name : value
+  })()
 
   return (
     <div ref={ref} style={{ position: 'relative' }}>
       <div style={{ position: 'relative' }}>
         <input
           className="input"
-          value={open ? query : value}
-          onChange={e => { setQuery(e.target.value); onChange(e.target.value); if (!open) { setOpen(true); loadAccounts() } }}
-          onFocus={() => { setQuery(value); setOpen(true); loadAccounts() }}
-          placeholder={placeholder || 'Buscar conta no /core...'}
+          value={open ? query : displayValue}
+          onChange={e => {
+            setQuery(e.target.value)
+            // Em mode 'id', so atualiza onChange ao selecionar item do dropdown (texto livre nao vira ID)
+            if (mode === 'name') onChange(e.target.value)
+            if (!open) { setOpen(true); loadAccounts() }
+          }}
+          onFocus={() => { setQuery(mode === 'id' ? displayValue : value); setOpen(true); loadAccounts() }}
+          placeholder={placeholder || cfg.placeholder}
           autoComplete="off"
           style={{ paddingRight: 32, width: '100%' }}
         />
@@ -74,13 +119,13 @@ export default function CoreAccountSelect({ value, onChange, placeholder }: { va
         >
           {loading && (
             <div style={{ padding: '14px 14px', fontSize: 12, color: '#9B96B0', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Loader size={14} className="spinning" /> Carregando contas do /core...
+              <Loader size={14} className="spinning" /> Carregando contas...
             </div>
           )}
           {error && !loading && (
             <div style={{ padding: '12px 14px', fontSize: 12, color: '#FF6B6B' }}>{error}</div>
           )}
-          {!loading && !error && filtered.length === 0 && filterText && (
+          {!loading && !error && filtered.length === 0 && filterText && mode === 'name' && (
             <div
               onClick={() => handleSelect({ id: '__custom__', name: query.trim() })}
               style={{ padding: '10px 14px', fontSize: 13, color: '#FFB300', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
@@ -88,8 +133,11 @@ export default function CoreAccountSelect({ value, onChange, placeholder }: { va
               Usar "<strong>{query.trim()}</strong>" (busca por substring)
             </div>
           )}
+          {!loading && !error && filtered.length === 0 && !filterText && (
+            <div style={{ padding: '14px', fontSize: 12, color: '#6B6580', textAlign: 'center' }}>Nenhuma conta encontrada</div>
+          )}
           {!loading && !error && filtered.map(a => {
-            const isSelected = a.name === value
+            const isSelected = mode === 'id' ? a.id === value : a.name === value
             return (
               <div
                 key={a.id}
@@ -108,9 +156,6 @@ export default function CoreAccountSelect({ value, onChange, placeholder }: { va
               </div>
             )
           })}
-          {!loading && !error && loaded && accounts.length === 0 && (
-            <div style={{ padding: '14px', fontSize: 12, color: '#6B6580', textAlign: 'center' }}>Nenhuma conta encontrada no /core</div>
-          )}
         </div>
       )}
     </div>

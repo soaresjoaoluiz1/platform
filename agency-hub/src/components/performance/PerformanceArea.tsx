@@ -41,9 +41,11 @@ interface Props {
   // - Cliente: nao precisa passar (backend filtra so a propria conta)
   // - Admin: passa client.core_client_name pra ancorar na conta do cliente
   accountNameHint?: string
+  // ID exato da conta Meta — tem prioridade sobre nameHint (mais preciso)
+  accountIdHint?: string
 }
 
-export default function PerformanceArea({ accountNameHint }: Props) {
+export default function PerformanceArea({ accountNameHint, accountIdHint }: Props) {
   const [accounts, setAccounts] = useState<MetaAccount[]>([])
   const [selectedAccount, setSelectedAccount] = useState<MetaAccount | null>(null)
   const [clientTab, setClientTab] = useState<ClientTab>('overview')
@@ -66,6 +68,9 @@ export default function PerformanceArea({ accountNameHint }: Props) {
         setAccounts(accs)
         if (accs.length === 0) {
           setError('Nenhuma conta vinculada. Contate o administrador para configurar o vinculo Performance deste cliente.')
+        } else if (accountIdHint) {
+          const match = accs.find(a => a.id === accountIdHint)
+          setSelectedAccount(match || accs[0])
         } else if (accountNameHint) {
           const q = accountNameHint.toLowerCase()
           const match = accs.find(a => (a.name || '').toLowerCase().includes(q))
@@ -76,7 +81,7 @@ export default function PerformanceArea({ accountNameHint }: Props) {
       })
       .catch((e) => setError(e?.message || 'Falha ao carregar contas'))
       .finally(() => setLoadingAccounts(false))
-  }, [accountNameHint])
+  }, [accountNameHint, accountIdHint])
 
   const getEffectiveDays = (): number => {
     if (datePeriod === 'custom' && customDateFrom && customDateTo) {

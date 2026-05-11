@@ -67,22 +67,35 @@ function isAllowedAccount(name) {
 // Cliente: so pode ver a conta cujo nome match com clients.core_client_name dele.
 // Admin: ve tudo que passa em ALLOWED_CLIENTS.
 // =====================================================================
+// Retorna o "escopo" do cliente logado pra filtragem:
+//   - admin (dono/gerente/funcionario): null  → ve todas as contas em ALLOWED_CLIENTS
+//   - cliente: { name, metaId, igId, gadsId } → ve so as contas dele
 function getClientScope(user) {
   if (!user || user.role !== 'cliente') return null
-  const row = db.prepare('SELECT core_client_name FROM clients WHERE id = ?').get(user.client_id)
-  return (row?.core_client_name || '').trim()
+  const row = db.prepare(`
+    SELECT core_client_name, core_meta_account_id, core_ig_page_id, core_gads_customer_id
+    FROM clients WHERE id = ?
+  `).get(user.client_id)
+  return {
+    name: (row?.core_client_name || '').trim(),
+    metaId: row?.core_meta_account_id || null,
+    igId: row?.core_ig_page_id || null,
+    gadsId: row?.core_gads_customer_id || null,
+  }
 }
 
-function accountMatchesScope(accountName, scope) {
+// Match por NOME (uso historico — substring case-insensitive).
+// Mantido pra rotas que dependem do nome (CRM lookup, GA4 properties, Kiwify check).
+function accountMatchesScopeName(accountName, scope) {
   if (scope === null) return isAllowedAccount(accountName)
-  if (!scope) return false
-  return (accountName || '').toLowerCase().includes(scope.toLowerCase())
+  if (!scope.name) return false
+  return (accountName || '').toLowerCase().includes(scope.name.toLowerCase())
 }
 
 // Para rotas com ?name=X: cliente nao pode escolher — forca o name dele.
 function resolveAccountName(req) {
   const scope = getClientScope(req.user)
-  if (scope !== null) return scope
+  if (scope !== null) return scope.name
   return req.query.name || ''
 }
 
@@ -155,8 +168,17 @@ router.get('/meta/accounts', async (req, res) => {
       allAccounts = allAccounts.concat(data.data || [])
       url = data.paging?.next || null
     }
+    // Filtragem:
+    //   - admin (scope=null): mostra todas as contas em ALLOWED_CLIENTS
+    //   - cliente com metaId: mostra so a conta com aquele ID exato
+    //   - cliente sem metaId: fallback por nome (compat com clientes ainda nao migrados)
     const filtered = allAccounts
-      .filter((a) => [1, 2, 3].includes(a.account_status) && accountMatchesScope(a.name, scope))
+      .filter((a) => {
+        if (![1, 2, 3].includes(a.account_status)) return false
+        if (scope === null) return isAllowedAccount(a.name)
+        if (scope.metaId) return a.id === scope.metaId
+        return accountMatchesScopeName(a.name, scope)
+      })
       .sort((a, b) => a.name.localeCompare(b.name))
     res.json({ accounts: filtered })
   } catch (err) {
@@ -231,8 +253,17 @@ router.get('/instagram/accounts', async (req, res) => {
       allPages = allPages.concat(data.data || [])
       url = data.paging?.next || null
     }
+    // Filtragem:
+    //   - admin: usa ALLOWED_CLIENTS (substring no nome da page)
+    //   - cliente com igPageId: so a page com aquele ID
+    //   - cliente sem igPageId: fallback por nome
     const igAccounts = allPages
-      .filter((p) => p.instagram_business_account && accountMatchesScope(p.name, scope))
+      .filter((p) => {
+        if (!p.instagram_business_account) return false
+        if (scope === null) return isAllowedAccount(p.name)
+        if (scope.igId) return p.id === scope.igId
+        return accountMatchesScopeName(p.name, scope)
+      })
       .map((p) => ({ pageId: p.id, pageName: p.name, ...p.instagram_business_account }))
       .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
     res.json({ accounts: igAccounts })
@@ -1054,10 +1085,14 @@ router.get('/google-ads/accounts', async (req, res) => {
       currency: r.customerClient.currencyCode || 'BRL',
       status: r.customerClient.status,
     }))
-    // Filtro por scope (cliente so ve a propria conta)
+    // Filtragem:
+    //   - admin (scope=null): retorna todas (GAds nao usa ALLOWED_CLIENTS — todas estao no MCC)
+    //   - cliente com gadsId: so o customer com aquele ID
+    //   - cliente sem gadsId: fallback por nome
     const scope = getClientScope(req.user)
     if (scope !== null) {
-      accounts = accounts.filter(a => accountMatchesScope(a.name, scope))
+      if (scope.gadsId) accounts = accounts.filter(a => a.id === scope.gadsId)
+      else accounts = accounts.filter(a => accountMatchesScopeName(a.name, scope))
     }
     res.json({ accounts })
   } catch (err) {
