@@ -90,6 +90,7 @@ router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
   if (req.body.core_meta_account_id !== undefined) { sets.push('core_meta_account_id = ?'); params.push(req.body.core_meta_account_id || null) }
   if (req.body.core_ig_page_id !== undefined) { sets.push('core_ig_page_id = ?'); params.push(req.body.core_ig_page_id || null) }
   if (req.body.core_gads_customer_id !== undefined) { sets.push('core_gads_customer_id = ?'); params.push(req.body.core_gads_customer_id || null) }
+  if (req.body.core_ga4_property_id !== undefined) { sets.push('core_ga4_property_id = ?'); params.push(req.body.core_ga4_property_id || null) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
   sets.push("updated_at = datetime('now', '-3 hours')"); params.push(req.params.id)
   db.prepare(`UPDATE clients SET ${sets.join(', ')} WHERE id = ?`).run(...params)

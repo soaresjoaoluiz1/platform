@@ -323,6 +323,7 @@ try { db.exec("ALTER TABLE clients ADD COLUMN core_client_name TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN core_meta_account_id TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN core_ig_page_id TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN core_gads_customer_id TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN core_ga4_property_id TEXT") } catch {}
 try { db.exec("ALTER TABLE payments ADD COLUMN bank TEXT") } catch {}
 try { db.exec("ALTER TABLE expenses ADD COLUMN bank TEXT") } catch {}
 try { db.exec("ALTER TABLE extra_revenue ADD COLUMN bank TEXT") } catch {}

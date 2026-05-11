@@ -2,13 +2,17 @@
 // PerformanceArea — UI principal de Performance (tabs + dados)
 //
 // Usado por:
-//  - Performance.tsx (cliente) — pega a propria conta
-//  - ClientDetail.tsx (admin)  — passa accountName via prop
+//  - Performance.tsx (cliente) — fetcha /my-scope pra saber quais tabs mostrar
+//  - ClientDetail.tsx (admin)  — passa availablePlatforms + accountIdHint via prop
 //
-// Equivale ao corpo de /core/src/pages/Dashboard.tsx, sem o sidebar de selecao
-// (cliente so tem 1 conta; admin ve no contexto de um cliente especifico).
+// Cada tab so aparece se o cliente tiver vinculo na plataforma correspondente:
+//   Geral, Meta Ads → core_meta_account_id
+//   Instagram       → core_ig_page_id
+//   Google Ads      → core_gads_customer_id
+//   Analytics       → core_ga4_property_id
 // =====================================================================
 import { useState, useEffect } from 'react'
+import { apiFetch } from '../../lib/api'
 import {
   fetchAccounts, fetchCompare, fetchDailyCompare,
   type MetaAccount, type CompareResponse, type DailyCompareResponse,
@@ -36,19 +40,27 @@ const DATE_OPTIONS = [
 
 type ClientTab = 'overview' | 'ads' | 'instagram' | 'googleads' | 'analytics'
 
-interface Props {
-  // Substring (case-insensitive) usado pra pre-selecionar a conta Meta.
-  // - Cliente: nao precisa passar (backend filtra so a propria conta)
-  // - Admin: passa client.core_client_name pra ancorar na conta do cliente
-  accountNameHint?: string
-  // ID exato da conta Meta — tem prioridade sobre nameHint (mais preciso)
-  accountIdHint?: string
+export interface AvailablePlatforms {
+  meta?: boolean
+  ig?: boolean
+  gads?: boolean
+  ga4?: boolean
 }
 
-export default function PerformanceArea({ accountNameHint, accountIdHint }: Props) {
+interface Props {
+  accountNameHint?: string
+  accountIdHint?: string
+  // Se definido (admin via ClientDetail): so mostra as tabs onde a flag for true.
+  // Se undefined (cliente em /performance): fetcha /my-scope pra descobrir.
+  availablePlatforms?: AvailablePlatforms
+}
+
+export default function PerformanceArea({ accountNameHint, accountIdHint, availablePlatforms }: Props) {
+  const [scope, setScope] = useState<(AvailablePlatforms & { name?: string }) | null>(availablePlatforms || null)
+  const [scopeLoading, setScopeLoading] = useState(!availablePlatforms)
   const [accounts, setAccounts] = useState<MetaAccount[]>([])
   const [selectedAccount, setSelectedAccount] = useState<MetaAccount | null>(null)
-  const [clientTab, setClientTab] = useState<ClientTab>('overview')
+  const [clientTab, setClientTab] = useState<ClientTab | null>(null)
   const [datePeriod, setDatePeriod] = useState('7d')
   const [customDateFrom, setCustomDateFrom] = useState('')
   const [customDateTo, setCustomDateTo] = useState('')
@@ -56,19 +68,34 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
   const [compareData, setCompareData] = useState<CompareResponse | null>(null)
   const [campaignCompare, setCampaignCompare] = useState<CompareResponse | null>(null)
   const [dailyCompare, setDailyCompare] = useState<DailyCompareResponse | null>(null)
-  const [loadingAccounts, setLoadingAccounts] = useState(true)
+  const [loadingAccounts, setLoadingAccounts] = useState(false)
   const [loadingData, setLoadingData] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null)
 
+  // 1) Resolve scope (quais plataformas disponiveis + nome textual de fallback)
   useEffect(() => {
-    setLoadingAccounts(true); setError(null)
+    if (availablePlatforms) {
+      setScope({ ...availablePlatforms, name: accountNameHint })
+      setScopeLoading(false)
+      return
+    }
+    setScopeLoading(true)
+    apiFetch('/api/performance/my-scope')
+      .then((d: any) => setScope({ meta: !!d.meta, ig: !!d.ig, gads: !!d.gads, ga4: !!d.ga4, name: d.name || '' }))
+      .catch(() => setScope({ meta: true, ig: true, gads: true, ga4: true, name: '' }))
+      .finally(() => setScopeLoading(false))
+  }, [availablePlatforms, accountNameHint])
+
+  // 2) Se tem Meta vinculo, fetcha contas Meta. Senao, pula.
+  useEffect(() => {
+    if (!scope) return
+    if (!scope.meta) { setAccounts([]); setSelectedAccount(null); return }
+    setLoadingAccounts(true)
     fetchAccounts()
       .then((accs) => {
         setAccounts(accs)
-        if (accs.length === 0) {
-          setError('Nenhuma conta vinculada. Contate o administrador para configurar o vinculo Performance deste cliente.')
-        } else if (accountIdHint) {
+        if (accs.length === 0) { setSelectedAccount(null); return }
+        if (accountIdHint) {
           const match = accs.find(a => a.id === accountIdHint)
           setSelectedAccount(match || accs[0])
         } else if (accountNameHint) {
@@ -79,9 +106,18 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
           setSelectedAccount(accs[0])
         }
       })
-      .catch((e) => setError(e?.message || 'Falha ao carregar contas'))
+      .catch(() => { setAccounts([]); setSelectedAccount(null) })
       .finally(() => setLoadingAccounts(false))
-  }, [accountNameHint, accountIdHint])
+  }, [scope, accountNameHint, accountIdHint])
+
+  // 3) Define tab inicial baseado no que ta disponivel
+  useEffect(() => {
+    if (!scope || clientTab !== null) return
+    if (scope.meta) setClientTab('overview')
+    else if (scope.ig) setClientTab('instagram')
+    else if (scope.gads) setClientTab('googleads')
+    else if (scope.ga4) setClientTab('analytics')
+  }, [scope, clientTab])
 
   const getEffectiveDays = (): number => {
     if (datePeriod === 'custom' && customDateFrom && customDateTo) {
@@ -91,9 +127,9 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
     return DAYS_MAP[datePeriod] || 7
   }
 
+  // 4) Fetch Meta Ads data quando entra na tab 'ads'
   useEffect(() => {
-    if (!selectedAccount || (clientTab !== 'ads' && clientTab !== 'overview')) return
-    if (clientTab === 'overview') return
+    if (!selectedAccount || clientTab !== 'ads') return
     if (datePeriod === 'custom' && (!customDateFrom || !customDateTo)) return
     setLoadingData(true)
     const days = getEffectiveDays()
@@ -111,22 +147,22 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
       .finally(() => setLoadingData(false))
   }, [selectedAccount, datePeriod, clientTab, customDateFrom, customDateTo])
 
-  useEffect(() => { setClientTab('overview') }, [selectedAccount])
-
-  if (loadingAccounts) {
+  if (scopeLoading || loadingAccounts) {
     return (
       <div className="loading-container" style={{ minHeight: 400 }}>
-        <div className="spinner" /><span>Carregando contas...</span>
+        <div className="spinner" /><span>Carregando...</span>
       </div>
     )
   }
 
-  if (error || !selectedAccount) {
+  // Nenhuma plataforma vinculada
+  const hasAnyPlatform = scope && (scope.meta || scope.ig || scope.gads || scope.ga4)
+  if (!hasAnyPlatform) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: 40, color: '#9B96B0', maxWidth: 600, margin: '60px auto' }}>
         <BarChart3 size={36} style={{ marginBottom: 12, opacity: 0.4 }} />
         <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 6, color: '#F2F0F7' }}>Painel de Performance</h3>
-        <p style={{ fontSize: 13 }}>{error || 'Conta nao disponivel.'}</p>
+        <p style={{ fontSize: 13 }}>Nenhuma plataforma vinculada ainda. Fale com a agencia pra configurar.</p>
       </div>
     )
   }
@@ -134,13 +170,17 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
   const current = compareData?.current?.[0] || null
   const previous = compareData?.previous?.[0] || null
   const showAccountPicker = accounts.length > 1
+  // accountName usado pelos sub-views (IG/GAds/Analytics) — vem da conta Meta selecionada
+  // ou do nome textual (core_client_name) como fallback quando nao tem Meta
+  const contextName = selectedAccount?.name || scope?.name || ''
+  const titleName = selectedAccount?.name || scope?.name || 'Painel de Performance'
 
   return (
     <div className="performance-area">
       {/* Header */}
       <div className="performance-header" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>
-        <h2 style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{selectedAccount.name}</h2>
-        {showAccountPicker && (
+        <h2 style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{titleName}</h2>
+        {showAccountPicker && selectedAccount && (
           <select
             className="input"
             value={selectedAccount.id}
@@ -154,21 +194,31 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
           </select>
         )}
         <div className="client-tabs" style={{ display: 'flex', gap: 4, marginLeft: 'auto', flexWrap: 'wrap' }}>
-          <button className={`client-tab ${clientTab === 'overview' ? 'active' : ''}`} onClick={() => setClientTab('overview')}>
-            <LayoutDashboard size={14} /><span>Geral</span>
-          </button>
-          <button className={`client-tab ${clientTab === 'ads' ? 'active' : ''}`} onClick={() => setClientTab('ads')}>
-            <BarChart3 size={14} /><span>Meta Ads</span>
-          </button>
-          <button className={`client-tab ${clientTab === 'instagram' ? 'active' : ''}`} onClick={() => setClientTab('instagram')}>
-            <Instagram size={14} /><span>Instagram</span>
-          </button>
-          <button className={`client-tab ${clientTab === 'googleads' ? 'active' : ''}`} onClick={() => setClientTab('googleads')}>
-            <BarChart3 size={14} /><span>Google Ads</span>
-          </button>
-          <button className={`client-tab ${clientTab === 'analytics' ? 'active' : ''}`} onClick={() => setClientTab('analytics')}>
-            <LineChart size={14} /><span>Analytics</span>
-          </button>
+          {scope?.meta && (
+            <button className={`client-tab ${clientTab === 'overview' ? 'active' : ''}`} onClick={() => setClientTab('overview')}>
+              <LayoutDashboard size={14} /><span>Geral</span>
+            </button>
+          )}
+          {scope?.meta && (
+            <button className={`client-tab ${clientTab === 'ads' ? 'active' : ''}`} onClick={() => setClientTab('ads')}>
+              <BarChart3 size={14} /><span>Meta Ads</span>
+            </button>
+          )}
+          {scope?.ig && (
+            <button className={`client-tab ${clientTab === 'instagram' ? 'active' : ''}`} onClick={() => setClientTab('instagram')}>
+              <Instagram size={14} /><span>Instagram</span>
+            </button>
+          )}
+          {scope?.gads && (
+            <button className={`client-tab ${clientTab === 'googleads' ? 'active' : ''}`} onClick={() => setClientTab('googleads')}>
+              <BarChart3 size={14} /><span>Google Ads</span>
+            </button>
+          )}
+          {scope?.ga4 && (
+            <button className={`client-tab ${clientTab === 'analytics' ? 'active' : ''}`} onClick={() => setClientTab('analytics')}>
+              <LineChart size={14} /><span>Analytics</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -193,8 +243,8 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
         )}
       </div>
 
-      {/* Overview */}
-      {clientTab === 'overview' && (
+      {/* Overview — requer Meta vinculo */}
+      {clientTab === 'overview' && selectedAccount && (
         <OverviewView
           accountId={selectedAccount.id}
           accountName={selectedAccount.name}
@@ -205,7 +255,7 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
       )}
 
       {/* Meta Ads */}
-      {clientTab === 'ads' && (
+      {clientTab === 'ads' && selectedAccount && (
         <>
           {loadingData ? (
             <div className="loading-container"><div className="spinner" /><span>Carregando dados...</span></div>
@@ -257,9 +307,9 @@ export default function PerformanceArea({ accountNameHint, accountIdHint }: Prop
         </>
       )}
 
-      {clientTab === 'instagram' && <InstagramView accountName={selectedAccount.name} />}
-      {clientTab === 'googleads' && <GoogleAdsView accountName={selectedAccount.name} days={getEffectiveDays()} since={datePeriod === 'custom' ? customDateFrom : undefined} until={datePeriod === 'custom' ? customDateTo : undefined} />}
-      {clientTab === 'analytics' && <AnalyticsView accountName={selectedAccount.name} days={getEffectiveDays()} since={datePeriod === 'custom' ? customDateFrom : undefined} until={datePeriod === 'custom' ? customDateTo : undefined} />}
+      {clientTab === 'instagram' && <InstagramView accountName={contextName} />}
+      {clientTab === 'googleads' && <GoogleAdsView accountName={contextName} days={getEffectiveDays()} since={datePeriod === 'custom' ? customDateFrom : undefined} until={datePeriod === 'custom' ? customDateTo : undefined} />}
+      {clientTab === 'analytics' && <AnalyticsView accountName={contextName} days={getEffectiveDays()} since={datePeriod === 'custom' ? customDateFrom : undefined} until={datePeriod === 'custom' ? customDateTo : undefined} />}
 
       {lastUpdate && (
         <div style={{ marginTop: 24, textAlign: 'right', fontSize: 11, color: '#6E6887' }}>

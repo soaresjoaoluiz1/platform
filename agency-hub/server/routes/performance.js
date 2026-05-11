@@ -73,7 +73,7 @@ function isAllowedAccount(name) {
 function getClientScope(user) {
   if (!user || user.role !== 'cliente') return null
   const row = db.prepare(`
-    SELECT core_client_name, core_meta_account_id, core_ig_page_id, core_gads_customer_id
+    SELECT core_client_name, core_meta_account_id, core_ig_page_id, core_gads_customer_id, core_ga4_property_id
     FROM clients WHERE id = ?
   `).get(user.client_id)
   return {
@@ -81,6 +81,7 @@ function getClientScope(user) {
     metaId: row?.core_meta_account_id || null,
     igId: row?.core_ig_page_id || null,
     gadsId: row?.core_gads_customer_id || null,
+    ga4PropertyId: row?.core_ga4_property_id || null,
   }
 }
 
@@ -146,6 +147,25 @@ function getDateRanges(days, since, until) {
     previous: { since: fmtDate(prevStart), until: fmtDate(prevEnd) },
   }
 }
+
+// =====================================================================
+// Quais plataformas estao disponiveis pra este usuario
+// Frontend usa pra esconder abas que nao foram vinculadas
+// =====================================================================
+router.get('/my-scope', (req, res) => {
+  const scope = getClientScope(req.user)
+  if (scope === null) {
+    return res.json({ meta: true, ig: true, gads: true, ga4: true, isAdmin: true, name: '' })
+  }
+  res.json({
+    meta: !!scope.metaId,
+    ig: !!scope.igId,
+    gads: !!scope.gadsId,
+    ga4: !!scope.ga4PropertyId,
+    isAdmin: false,
+    name: scope.name || '',
+  })
+})
 
 // =====================================================================
 // META ADS ROUTES
@@ -1406,11 +1426,67 @@ async function ga4Report(propertyId, body, accessToken) {
   return r.json()
 }
 
-router.get('/analytics/properties', (req, res) => {
+router.get('/analytics/properties', async (req, res) => {
+  // Se cliente tem property_id vinculado, retorna so essa (com nome buscado via Admin API)
+  const scope = getClientScope(req.user)
+  if (scope?.ga4PropertyId) {
+    let name = `Property ${scope.ga4PropertyId}`
+    try {
+      const token = await getGadsAccessToken()
+      if (token) {
+        const r = await fetch(`https://analyticsadmin.googleapis.com/v1beta/properties/${scope.ga4PropertyId}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        })
+        if (r.ok) {
+          const data = await r.json()
+          name = data.displayName || name
+        }
+      }
+    } catch {}
+    return res.json({ available: true, properties: [{ id: scope.ga4PropertyId, name }] })
+  }
+  // Fallback: lookup pelo nome textual (GA4_PROPERTIES hardcoded)
   const name = resolveAccountName(req)
   const props = getGA4Properties(name)
   if (!props) return res.json({ available: false, properties: [] })
   res.json({ available: true, properties: props })
+})
+
+// Lista TODAS as GA4 properties acessiveis pelo OAuth — usado no dropdown do
+// cadastro do cliente (admin). Cliente nunca chama isso.
+router.get('/analytics/admin-properties', async (req, res) => {
+  try {
+    const token = await getGadsAccessToken()
+    if (!token) return res.json({ accounts: [], error: 'Sem refresh token Google configurado.' })
+    // accountSummaries traz todas as contas GA4 + suas properties em uma chamada
+    const r = await fetch('https://analyticsadmin.googleapis.com/v1beta/accountSummaries?pageSize=200', {
+      headers: { 'Authorization': `Bearer ${token}` },
+    })
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}))
+      console.error('[Performance/GA4 admin]', err)
+      return res.status(400).json({ error: err.error?.message || 'GA4 Admin API error' })
+    }
+    const data = await r.json()
+    // Achata: cada property vira um item com nome da conta + propriedade
+    const properties = []
+    for (const account of (data.accountSummaries || [])) {
+      for (const prop of (account.propertySummaries || [])) {
+        // prop.property = 'properties/123456789' — extrai so o ID
+        const id = (prop.property || '').replace(/^properties\//, '')
+        if (!id) continue
+        properties.push({
+          id,
+          name: `${prop.displayName || id} (${account.displayName || 'conta'})`,
+        })
+      }
+    }
+    properties.sort((a, b) => a.name.localeCompare(b.name))
+    res.json({ accounts: properties })
+  } catch (err) {
+    console.error('[Performance/GA4 admin]', err.message)
+    res.status(500).json({ error: err.message })
+  }
 })
 
 router.get('/analytics/:propertyId/report', async (req, res) => {

@@ -72,7 +72,7 @@
 - `MetricCards.tsx` — default:MetricCards
 - `MetricGroups.tsx` — default:MetricGroups
 - `OverviewView.tsx` — default:OverviewView
-- `PerformanceArea.tsx` — ===================================================================== · default:PerformanceArea
+- `PerformanceArea.tsx` — ===================================================================== · AvailablePlatforms, default:PerformanceArea
 - `SpendChart.tsx` — default:SpendChart
 
 **agency-hub\src\context/**

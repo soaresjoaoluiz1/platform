@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-11T15:52:28.515Z",
+  "generatedAt": "2026-05-11T16:05:23.075Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -658,8 +658,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\db.js": {
-      "mtime": 1778511392564.864,
-      "size": 24954,
+      "mtime": 1778515217268.7168,
+      "size": 25040,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2564,8 +2564,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\performance.js": {
-      "mtime": 1778514746762.4465,
-      "size": 101982,
+      "mtime": 1778515439762.0393,
+      "size": 105085,
       "symbols": {
         "purpose": "=====================================================================",
         "exports": [],
@@ -2609,8 +2609,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\clients.js": {
-      "mtime": 1778514731776.229,
-      "size": 9724,
+      "mtime": 1778515228647.054,
+      "size": 9870,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2834,8 +2834,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\ClientDetail.tsx": {
-      "mtime": 1778511640573.9429,
-      "size": 36088,
+      "mtime": 1778515521109.0122,
+      "size": 37081,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2937,8 +2937,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\CoreAccountSelect.tsx": {
-      "mtime": 1778511524435.511,
-      "size": 7009,
+      "mtime": 1778515294971.0015,
+      "size": 7212,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2980,8 +2980,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\api.ts": {
-      "mtime": 1778511594492.54,
-      "size": 20920,
+      "mtime": 1778515317375.371,
+      "size": 20958,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -3664,11 +3664,12 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\performance\\PerformanceArea.tsx": {
-      "mtime": 1778511631714.9932,
-      "size": 13078,
+      "mtime": 1778515505335.116,
+      "size": 15093,
       "symbols": {
         "purpose": "=====================================================================",
         "exports": [
+          "AvailablePlatforms",
           "default:PerformanceArea"
         ],
         "language": "typescript"

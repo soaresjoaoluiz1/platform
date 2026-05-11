@@ -5,7 +5,7 @@ import { apiFetch } from '../lib/api'
 interface CoreAccount { id: string; name: string }
 
 // Source mappings — qual endpoint chamar e como extrair ID/nome
-type Source = 'meta' | 'ig' | 'gads'
+type Source = 'meta' | 'ig' | 'gads' | 'ga4'
 const SOURCE_CONFIG: Record<Source, { endpoint: string; mapItem: (a: any) => CoreAccount; placeholder: string }> = {
   meta: {
     endpoint: '/api/performance/meta/accounts',
@@ -23,6 +23,11 @@ const SOURCE_CONFIG: Record<Source, { endpoint: string; mapItem: (a: any) => Cor
     endpoint: '/api/performance/google-ads/accounts',
     mapItem: (a) => ({ id: a.id, name: a.name || `Conta ${a.id}` }),
     placeholder: 'Selecione a conta Google Ads...',
+  },
+  ga4: {
+    endpoint: '/api/performance/analytics/admin-properties',
+    mapItem: (a) => ({ id: a.id, name: a.name || `Property ${a.id}` }),
+    placeholder: 'Selecione a property GA4...',
   },
 }
 

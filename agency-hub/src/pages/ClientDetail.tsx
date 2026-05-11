@@ -8,14 +8,15 @@ import PerformanceArea from '../components/performance/PerformanceArea'
 const PLATFORMS = ['Facebook', 'Instagram', 'Google Ads', 'Google Analytics', 'Google Meu Negocio', 'Meta Business', 'TikTok', 'LinkedIn', 'YouTube', 'Twitter/X', 'Pinterest', 'Kiwify', 'Hotmart', 'RD Station', 'Outro']
 
 function PerformanceTab({ client, onGoToInfo }: { client: any; onGoToInfo: () => void }) {
-  if (!client?.core_client_name) {
+  const hasAny = client?.core_meta_account_id || client?.core_ig_page_id || client?.core_gads_customer_id || client?.core_ga4_property_id
+  if (!hasAny) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: 40, color: '#9B96B0' }}>
         <BarChart3 size={36} style={{ marginBottom: 12, opacity: 0.4 }} />
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 6, color: '#F2F0F7' }}>Painel de Performance nao vinculado</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 6, color: '#F2F0F7' }}>Nenhuma plataforma vinculada</h3>
         <p style={{ fontSize: 13, marginBottom: 14 }}>
-          Pra exibir aqui as metricas, preencha o campo<br />
-          <strong>"Nome no Painel de Performance"</strong> nos dados do cliente.
+          Vincule pelo menos uma conta (Meta, Instagram, Google Ads ou GA4) na<br />
+          secao <strong>"Vinculos do Painel de Performance"</strong> dos dados do cliente.
         </p>
         <button className="btn btn-secondary btn-sm" onClick={onGoToInfo}>Ir pra Dados</button>
       </div>
@@ -24,11 +25,17 @@ function PerformanceTab({ client, onGoToInfo }: { client: any; onGoToInfo: () =>
   return (
     <div>
       <div style={{ fontSize: 12, color: '#9B96B0', marginBottom: 12 }}>
-        Painel de <strong style={{ color: '#FFB300' }}>{client.core_client_name}</strong>
+        Painel de <strong style={{ color: '#FFB300' }}>{client.core_client_name || client.name}</strong>
       </div>
       <PerformanceArea
         accountIdHint={client.core_meta_account_id || undefined}
         accountNameHint={client.core_client_name}
+        availablePlatforms={{
+          meta: !!client.core_meta_account_id,
+          ig: !!client.core_ig_page_id,
+          gads: !!client.core_gads_customer_id,
+          ga4: !!client.core_ga4_property_id,
+        }}
       />
     </div>
   )
@@ -78,6 +85,7 @@ export default function ClientDetail() {
         core_meta_account_id: (data.client as any).core_meta_account_id || '',
         core_ig_page_id: (data.client as any).core_ig_page_id || '',
         core_gads_customer_id: (data.client as any).core_gads_customer_id || '',
+        core_ga4_property_id: (data.client as any).core_ga4_property_id || '',
       })
     } catch {} finally { setLoading(false) }
   }
@@ -280,11 +288,19 @@ export default function ClientDetail() {
                     />
                   </div>
                   <div>
-                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>Nome textual (CRM / GA4 / Kiwify)</label>
+                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>Property Google Analytics 4</label>
+                    <CoreAccountSelect
+                      source="ga4" mode="id"
+                      value={editData.core_ga4_property_id || ''}
+                      onChange={v => setEditData((p: any) => ({ ...p, core_ga4_property_id: v }))}
+                    />
+                  </div>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <label style={{ fontSize: 11, color: '#9B96B0', display: 'block', marginBottom: 4 }}>Nome textual (apelido — usado pra CRM Google Sheets e Kiwify)</label>
                     <CoreAccountSelect
                       value={editData.core_client_name || ''}
                       onChange={v => setEditData((p: any) => ({ ...p, core_client_name: v }))}
-                      placeholder="Ex: ASK Equipamentos, Sameco..."
+                      placeholder="Ex: ASK Equipamentos, Sameco, Josi..."
                     />
                   </div>
                 </div>
