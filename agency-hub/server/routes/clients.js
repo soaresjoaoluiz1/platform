@@ -3,10 +3,37 @@ import bcrypt from 'bcryptjs'
 import { randomBytes } from 'crypto'
 import db from '../db.js'
 import jwt from 'jsonwebtoken'
+import http from 'http'
+import https from 'https'
+import { URL } from 'url'
 import { requireRole } from '../middleware/auth.js'
 
 const CORE_EMBED_SECRET = process.env.CORE_EMBED_SECRET || 'dros-core-embed-2026-shared-key'
 const CORE_API_URL = process.env.CORE_API_URL || 'http://localhost:3004'
+
+// Mini wrapper de http.request com JSON — evita dependencia nova
+function httpJsonGet(url) {
+  return new Promise((resolve, reject) => {
+    try {
+      const u = new URL(url)
+      const lib = u.protocol === 'https:' ? https : http
+      const req = lib.get(u, (res) => {
+        let body = ''
+        res.on('data', (chunk) => { body += chunk })
+        res.on('end', () => {
+          try {
+            const parsed = body ? JSON.parse(body) : {}
+            resolve({ status: res.statusCode || 0, data: parsed })
+          } catch (e) {
+            resolve({ status: res.statusCode || 0, data: { error: 'Invalid JSON from upstream' } })
+          }
+        })
+      })
+      req.on('error', reject)
+      req.setTimeout(8000, () => { req.destroy(new Error('Request timeout')) })
+    } catch (e) { reject(e) }
+  })
+}
 
 const router = Router()
 
@@ -59,9 +86,8 @@ router.post('/', requireRole('dono', 'gerente'), (req, res) => {
 router.get('/core-accounts', requireRole('dono', 'gerente'), async (req, res) => {
   try {
     const token = jwt.sign({ embed: true, account: '__list__' }, CORE_EMBED_SECRET, { expiresIn: '5m' })
-    const r = await fetch(`${CORE_API_URL}/api/meta/accounts?embed_token=${token}`)
-    if (!r.ok) return res.status(502).json({ error: `Falha ao consultar /core (${r.status})` })
-    const data = await r.json()
+    const { status, data } = await httpJsonGet(`${CORE_API_URL}/api/meta/accounts?embed_token=${token}`)
+    if (status !== 200) return res.status(502).json({ error: `Falha ao consultar /core (${status}): ${data?.error || ''}` })
     const accounts = (data.accounts || []).map(a => ({ id: a.id, name: a.name }))
     res.json({ accounts })
   } catch (e) {
