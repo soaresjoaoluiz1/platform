@@ -9,6 +9,7 @@ const BLANK_FORM = {
   cnpj: '', razao_social: '', segmento: '', website: '', instagram: '',
   cidade: '', estado: '', observacoes: '',
   monthly_fee: '', payment_day: '10', contrato_inicio: '',
+  core_client_name: '',
 }
 
 export default function Clients() {
@@ -53,6 +54,7 @@ export default function Clients() {
       monthly_fee: (c as any).monthly_fee != null ? String((c as any).monthly_fee) : '',
       payment_day: (c as any).payment_day != null ? String((c as any).payment_day) : '10',
       contrato_inicio: (c as any).contrato_inicio || '',
+      core_client_name: (c as any).core_client_name || '',
     })
     setModalMode(c.id)
   }
@@ -158,6 +160,13 @@ export default function Clients() {
 
           <div style={{ fontSize: 11, color: '#9B96B0', textTransform: 'uppercase', fontWeight: 600, margin: '16px 0 6px' }}>Outros</div>
           <div className="form-group"><label>Pasta do Drive</label><input className="input" value={form.drive_folder} onChange={e => setForm(p => ({ ...p, drive_folder: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
+          <div className="form-group">
+            <label>Nome no Painel de Performance (/core)</label>
+            <input className="input" value={form.core_client_name} onChange={e => setForm(p => ({ ...p, core_client_name: e.target.value }))} placeholder="Ex: ASK Equipamentos, Quimiprol, Door Grill" />
+            <small style={{ color: '#9B96B0', fontSize: 11, marginTop: 4, display: 'block' }}>
+              Nome (ou parte do nome) que aparece no /core. Usado pra exibir o Painel de Performance dentro da aba Performance deste cliente. Deixe em branco se ainda nao tiver.
+            </small>
+          </div>
           <div className="form-group"><label>Observacoes</label><textarea className="input" value={form.observacoes} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={3} style={{ resize: 'vertical' }} placeholder="Anotacoes internas sobre o cliente" /></div>
 
           {!isEditing && (

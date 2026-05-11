@@ -317,6 +317,7 @@ try { db.exec("ALTER TABLE clients ADD COLUMN estado TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN observacoes TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN contrato_inicio TEXT") } catch {}
 try { db.exec("ALTER TABLE clients ADD COLUMN inactivated_at TEXT") } catch {}
+try { db.exec("ALTER TABLE clients ADD COLUMN core_client_name TEXT") } catch {}
 try { db.exec("ALTER TABLE payments ADD COLUMN bank TEXT") } catch {}
 try { db.exec("ALTER TABLE expenses ADD COLUMN bank TEXT") } catch {}
 try { db.exec("ALTER TABLE extra_revenue ADD COLUMN bank TEXT") } catch {}

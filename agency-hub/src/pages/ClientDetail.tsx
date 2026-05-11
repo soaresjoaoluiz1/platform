@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { fetchClient, updateClient, fetchClientCredentials, createClientCredential, updateClientCredential, deleteClientCredential, fetchClientOnboard, fetchServices, fetchClientServices, updateClientServices, apiFetch, generateApprovalToken, revokeApprovalToken, type Client, type ClientCredential, type User as UserT, type Service, type ClientService } from '../lib/api'
-import { ArrowLeft, Building2, ExternalLink, Plus, Edit3, Save, X, Trash2, Eye, EyeOff, Key, Users, Lock, ClipboardCopy, FileText, CheckCircle, Briefcase } from 'lucide-react'
+import { ArrowLeft, Building2, ExternalLink, Plus, Edit3, Save, X, Trash2, Eye, EyeOff, Key, Users, Lock, ClipboardCopy, FileText, CheckCircle, Briefcase, BarChart3 } from 'lucide-react'
 
 const PLATFORMS = ['Facebook', 'Instagram', 'Google Ads', 'Google Analytics', 'Google Meu Negocio', 'Meta Business', 'TikTok', 'LinkedIn', 'YouTube', 'Twitter/X', 'Pinterest', 'Kiwify', 'Hotmart', 'RD Station', 'Outro']
 
@@ -13,7 +13,7 @@ export default function ClientDetail() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
   const [editData, setEditData] = useState<any>({})
-  const [activeTab, setActiveTab] = useState<'info' | 'credentials' | 'users' | 'services' | 'onboard'>('info')
+  const [activeTab, setActiveTab] = useState<'info' | 'credentials' | 'users' | 'services' | 'onboard' | 'performance'>('info')
   const [clientUsers, setClientUsers] = useState<any[]>([])
   const [resetPassId, setResetPassId] = useState<number | null>(null)
   const [newPassword, setNewPassword] = useState('')
@@ -136,6 +136,7 @@ export default function ClientDetail() {
           <button className={`btn btn-sm ${activeTab === 'users' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setActiveTab('users')}><Users size={12} /> Usuarios ({clientUsers.length})</button>
           <button className={`btn btn-sm ${activeTab === 'services' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => { setActiveTab('services'); loadServices() }}><Briefcase size={12} /> Servicos</button>
           <button className={`btn btn-sm ${activeTab === 'onboard' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => { setActiveTab('onboard'); loadOnboard() }}><FileText size={12} /> Onboard</button>
+          <button className={`btn btn-sm ${activeTab === 'performance' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setActiveTab('performance')}><BarChart3 size={12} /> Performance</button>
         </div>
       </div>
 
@@ -470,6 +471,47 @@ export default function ClientDetail() {
               <FileText size={32} style={{ marginBottom: 8, opacity: 0.4 }} />
               <p>Formulario ainda nao respondido pelo cliente.</p>
             </div>
+          )}
+        </div>
+      )}
+
+      {/* Performance tab — embeda /core via iframe */}
+      {activeTab === 'performance' && (
+        <div>
+          {!(client as any).core_client_name ? (
+            <div className="card" style={{ textAlign: 'center', padding: 40, color: '#9B96B0' }}>
+              <BarChart3 size={36} style={{ marginBottom: 12, opacity: 0.4 }} />
+              <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 6, color: '#F2F0F7' }}>Painel de Performance não vinculado</h3>
+              <p style={{ fontSize: 13, marginBottom: 14 }}>
+                Pra exibir aqui as métricas do /core, preencha o campo<br />
+                <strong>"Nome no Painel de Performance"</strong> nos dados do cliente.
+              </p>
+              <button className="btn btn-secondary btn-sm" onClick={() => setActiveTab('info')}>Ir pra Dados</button>
+            </div>
+          ) : (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ fontSize: 12, color: '#9B96B0' }}>
+                  Mostrando dados de <strong style={{ color: '#FFB300' }}>{(client as any).core_client_name}</strong> no /core.
+                  Se não carregar, talvez você precise <a href={`/core/`} target="_blank" rel="noopener noreferrer" style={{ color: '#FFB300' }}>fazer login no /core</a> primeiro.
+                </div>
+                <a
+                  href={`/core/?account=${encodeURIComponent((client as any).core_client_name)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="btn btn-secondary btn-sm"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                >
+                  <ExternalLink size={12} /> Abrir em nova aba
+                </a>
+              </div>
+              <div style={{ width: '100%', height: 'calc(100vh - 240px)', minHeight: 600, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', background: '#0A0118' }}>
+                <iframe
+                  src={`/core/?account=${encodeURIComponent((client as any).core_client_name)}&embed=1`}
+                  style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+                  title={`Painel de Performance — ${(client as any).core_client_name}`}
+                />
+              </div>
+            </>
           )}
         </div>
       )}

@@ -86,6 +86,7 @@ router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
   if (estado !== undefined) { sets.push('estado = ?'); params.push(estado || null) }
   if (observacoes !== undefined) { sets.push('observacoes = ?'); params.push(observacoes || null) }
   if (contrato_inicio !== undefined) { sets.push('contrato_inicio = ?'); params.push(contrato_inicio || null) }
+  if (req.body.core_client_name !== undefined) { sets.push('core_client_name = ?'); params.push(req.body.core_client_name || null) }
   if (!sets.length) return res.status(400).json({ error: 'Nada pra atualizar' })
   sets.push("updated_at = datetime('now', '-3 hours')"); params.push(req.params.id)
   db.prepare(`UPDATE clients SET ${sets.join(', ')} WHERE id = ?`).run(...params)
