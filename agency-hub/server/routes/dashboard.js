@@ -97,15 +97,77 @@ router.get('/stats', (req, res) => {
 
     res.json({ totalTasks, byStage, byDepartment, byCategory, byAssignee, throughputByAssignee, clientWaitTime, reworkRate, reworkedCount: reworkData.reworked, overdue, pendingInternal, pendingClient, completedPeriod, daily, toPublish })
   } else if (req.user.role === 'funcionario') {
-    const myTasks = db.prepare('SELECT COUNT(*) as c FROM tasks WHERE id IN (SELECT task_id FROM task_assignees WHERE user_id = ?) AND is_active = 1').get(req.user.id).c
+    const uid = req.user.id
+    const myTasks = db.prepare('SELECT COUNT(*) as c FROM tasks WHERE id IN (SELECT task_id FROM task_assignees WHERE user_id = ?) AND is_active = 1').get(uid).c
     const byStage = db.prepare(`
       SELECT ps.name, ps.slug, ps.color, ps.position, COUNT(t.id) as count
       FROM pipeline_stages ps LEFT JOIN tasks t ON t.stage = ps.slug AND t.id IN (SELECT task_id FROM task_assignees WHERE user_id = ?) AND t.is_active = 1
       GROUP BY ps.id ORDER BY ps.position
-    `).all(req.user.id)
-    const overdue = db.prepare("SELECT COUNT(*) as c FROM tasks WHERE id IN (SELECT task_id FROM task_assignees WHERE user_id = ?) AND is_active = 1 AND due_date IS NOT NULL AND due_date != '' AND due_date < date('now', '-3 hours') AND stage NOT IN ('concluido', 'rejeitado')").get(req.user.id).c
+    `).all(uid)
+    const overdue = db.prepare("SELECT COUNT(*) as c FROM tasks WHERE id IN (SELECT task_id FROM task_assignees WHERE user_id = ?) AND is_active = 1 AND due_date IS NOT NULL AND due_date != '' AND due_date < date('now', '-3 hours') AND stage NOT IN ('concluido', 'rejeitado')").get(uid).c
 
-    res.json({ myTasks, byStage, overdue })
+    // Conclusoes pelo task_history (preciso porque updated_at de uma tarefa pode mudar por outras razoes)
+    const completedSql = `
+      SELECT date(th.created_at, '-3 hours') as date, COUNT(DISTINCT th.task_id) as count
+      FROM task_history th
+      JOIN task_assignees ta ON ta.task_id = th.task_id AND ta.user_id = ?
+      WHERE th.to_stage = 'concluido' AND th.created_at >= ?
+      GROUP BY date(th.created_at, '-3 hours')
+      ORDER BY date
+    `
+
+    // Hoje, semana (ultimos 7d), mes (ultimos 30d)
+    const concludedToday = db.prepare(`
+      SELECT COUNT(DISTINCT th.task_id) as c FROM task_history th
+      JOIN task_assignees ta ON ta.task_id = th.task_id AND ta.user_id = ?
+      WHERE th.to_stage = 'concluido' AND date(th.created_at, '-3 hours') = date('now', '-3 hours')
+    `).get(uid).c
+    const concludedWeek = db.prepare(`
+      SELECT COUNT(DISTINCT th.task_id) as c FROM task_history th
+      JOIN task_assignees ta ON ta.task_id = th.task_id AND ta.user_id = ?
+      WHERE th.to_stage = 'concluido' AND th.created_at >= datetime('now', '-7 days')
+    `).get(uid).c
+    const concludedMonth = db.prepare(`
+      SELECT COUNT(DISTINCT th.task_id) as c FROM task_history th
+      JOIN task_assignees ta ON ta.task_id = th.task_id AND ta.user_id = ?
+      WHERE th.to_stage = 'concluido' AND th.created_at >= datetime('now', '-30 days')
+    `).get(uid).c
+
+    // Heatmap dos ultimos 90 dias (preenche array completo)
+    const since90 = new Date(); since90.setDate(since90.getDate() - 90)
+    const since90Str = since90.toISOString().slice(0, 19).replace('T', ' ')
+    const completionRows = db.prepare(completedSql).all(uid, since90Str)
+    const completionMap = new Map(completionRows.map(r => [r.date, r.count]))
+    const heatmap = []
+    for (let i = 89; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i)
+      const key = d.toISOString().slice(0, 10)
+      heatmap.push({ date: key, count: completionMap.get(key) || 0 })
+    }
+
+    // Streak: dias consecutivos com pelo menos 1 conclusao terminando em hoje (ou ontem se zero hoje)
+    let streak = 0
+    for (let i = heatmap.length - 1; i >= 0; i--) {
+      if (heatmap[i].count > 0) streak++
+      else if (i === heatmap.length - 1) continue // tolera zero hoje, comeca a contar de ontem
+      else break
+    }
+
+    // Evolucao semanal (8 semanas)
+    const weeklyHistory = []
+    for (let w = 7; w >= 0; w--) {
+      const start = new Date(); start.setDate(start.getDate() - (w + 1) * 7 + 1); start.setHours(0, 0, 0, 0)
+      const end = new Date(); end.setDate(end.getDate() - w * 7); end.setHours(23, 59, 59, 999)
+      const cnt = db.prepare(`
+        SELECT COUNT(DISTINCT th.task_id) as c FROM task_history th
+        JOIN task_assignees ta ON ta.task_id = th.task_id AND ta.user_id = ?
+        WHERE th.to_stage = 'concluido' AND th.created_at >= ? AND th.created_at <= ?
+      `).get(uid, start.toISOString().slice(0, 19).replace('T', ' '), end.toISOString().slice(0, 19).replace('T', ' ')).c
+      const label = w === 0 ? 'Esta sem.' : w === 1 ? 'Sem. passada' : `${w} sem. atras`
+      weeklyHistory.push({ label, count: cnt })
+    }
+
+    res.json({ myTasks, byStage, overdue, concludedToday, concludedWeek, concludedMonth, heatmap, streak, weeklyHistory })
   } else { // cliente
     const totalTasks = db.prepare('SELECT COUNT(*) as c FROM tasks WHERE client_id = ? AND is_active = 1').get(req.user.client_id).c
     const pendingApproval = db.prepare("SELECT COUNT(*) as c FROM tasks WHERE client_id = ? AND stage = 'aguardando_cliente' AND is_active = 1").get(req.user.client_id).c

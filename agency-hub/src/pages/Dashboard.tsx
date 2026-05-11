@@ -98,6 +98,18 @@ export default function Dashboard() {
               <div className="metric-value">{stats.myTasks || 0}</div>
             </div>
             <div className="metric-card">
+              <div className="metric-header"><span className="metric-label">Concluidas Hoje</span><div className="metric-icon" style={{ background: '#34C75920', color: '#34C759' }}><CheckCircle size={16} /></div></div>
+              <div className="metric-value" style={{ color: '#34C759' }}>{stats.concludedToday || 0}</div>
+            </div>
+            <div className="metric-card">
+              <div className="metric-header"><span className="metric-label">Esta Semana</span><div className="metric-icon" style={{ background: '#34C75920', color: '#34C759' }}><CheckCircle size={16} /></div></div>
+              <div className="metric-value" style={{ color: '#34C759' }}>{stats.concludedWeek || 0}</div>
+            </div>
+            <div className="metric-card">
+              <div className="metric-header"><span className="metric-label">Este Mes</span><div className="metric-icon" style={{ background: '#34C75920', color: '#34C759' }}><CheckCircle size={16} /></div></div>
+              <div className="metric-value" style={{ color: '#34C759' }}>{stats.concludedMonth || 0}</div>
+            </div>
+            <div className="metric-card">
               <div className="metric-header"><span className="metric-label">Atrasadas</span><div className="metric-icon" style={{ background: '#FF6B6B20', color: '#FF6B6B' }}><AlertTriangle size={16} /></div></div>
               <div className="metric-value">{stats.overdue || 0}</div>
             </div>
@@ -111,6 +123,112 @@ export default function Dashboard() {
           </>}
         </div>
       </section>
+
+      {/* Funcionario: heatmap + streak + evolucao semanal */}
+      {user?.role === 'funcionario' && stats.heatmap && (
+        <section className="dash-section">
+          <div className="charts-grid">
+            <div className="chart-card" style={{ background: 'linear-gradient(135deg, rgba(255,179,0,0.06), rgba(255,107,107,0.04))', border: '1px solid rgba(255,179,0,0.20)' }}>
+              <h3>Sequencia atual</h3>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 12 }}>
+                <div style={{ fontSize: 56, fontWeight: 800, fontFamily: 'var(--font-heading)', lineHeight: 1, color: stats.streak >= 7 ? '#FF6B6B' : stats.streak >= 3 ? '#FFB300' : '#A8A3B8' }}>
+                  {stats.streak || 0}
+                </div>
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>{stats.streak === 1 ? 'dia' : 'dias'} 🔥</div>
+                  <div style={{ fontSize: 11, color: '#A8A3B8', marginTop: 4 }}>
+                    {stats.streak === 0 ? 'Conclua uma tarefa hoje pra começar' :
+                     stats.streak >= 14 ? 'Você está em chamas! 🚀' :
+                     stats.streak >= 7 ? 'Excelente! Mantém o ritmo!' :
+                     stats.streak >= 3 ? 'Continua assim!' : 'Cada dia conta!'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="chart-card">
+              <h3>Evolucao Semanal</h3>
+              <p style={{ fontSize: 11, color: '#6B6580', marginTop: -4, marginBottom: 8 }}>Tarefas concluidas nas ultimas 8 semanas</p>
+              {stats.weeklyHistory?.length > 0 && (
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={stats.weeklyHistory}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
+                    <XAxis dataKey="label" tick={{ fill: '#A8A3B8', fontSize: 10 }} interval={0} angle={-25} textAnchor="end" height={50} />
+                    <YAxis tick={{ fill: '#A8A3B8', fontSize: 10 }} allowDecimals={false} />
+                    <Tooltip content={<Tip />} />
+                    <Bar dataKey="count" name="Concluidas" radius={[4, 4, 0, 0]}>
+                      {stats.weeklyHistory.map((w: any, i: number) => {
+                        const isLast = i === stats.weeklyHistory.length - 1
+                        return <Cell key={i} fill={isLast ? '#FFB300' : '#34C759'} />
+                      })}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
+
+          <div className="chart-card" style={{ marginTop: 16 }}>
+            <h3>Atividade nos Ultimos 90 Dias</h3>
+            <p style={{ fontSize: 11, color: '#6B6580', marginTop: -4, marginBottom: 12 }}>Cada quadrado e um dia — mais escuro = mais tarefas concluidas</p>
+            {(() => {
+              const max = Math.max(...stats.heatmap.map((d: any) => d.count), 1)
+              const cellSize = 12
+              const cellGap = 3
+              // Agrupa por semana (col) — 13 semanas x 7 dias
+              const cols: any[][] = []
+              let currentWeek: any[] = []
+              const firstDay = new Date(stats.heatmap[0].date + 'T12:00:00')
+              const startDayOfWeek = firstDay.getDay() // 0=Dom
+              // Padding pra alinhar com domingo no topo
+              for (let p = 0; p < startDayOfWeek; p++) currentWeek.push(null)
+              stats.heatmap.forEach((d: any) => {
+                currentWeek.push(d)
+                if (currentWeek.length === 7) { cols.push(currentWeek); currentWeek = [] }
+              })
+              if (currentWeek.length > 0) {
+                while (currentWeek.length < 7) currentWeek.push(null)
+                cols.push(currentWeek)
+              }
+              const colorFor = (count: number) => {
+                if (!count) return 'rgba(255,255,255,0.04)'
+                if (count >= max * 0.75) return '#0E8A3F'
+                if (count >= max * 0.5) return '#1FAA50'
+                if (count >= max * 0.25) return '#34C759'
+                return '#34C75966'
+              }
+              return (
+                <div style={{ overflowX: 'auto', paddingBottom: 8 }}>
+                  <div style={{ display: 'flex', gap: cellGap, minWidth: 'fit-content' }}>
+                    {cols.map((week, wi) => (
+                      <div key={wi} style={{ display: 'flex', flexDirection: 'column', gap: cellGap }}>
+                        {week.map((d, di) => d ? (
+                          <div
+                            key={di}
+                            title={`${d.date}: ${d.count} tarefa${d.count !== 1 ? 's' : ''}`}
+                            style={{ width: cellSize, height: cellSize, borderRadius: 2, background: colorFor(d.count) }}
+                          />
+                        ) : (
+                          <div key={di} style={{ width: cellSize, height: cellSize }} />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 12, fontSize: 10, color: '#6B6580' }}>
+                    <span>Menos</span>
+                    <div style={{ width: 12, height: 12, borderRadius: 2, background: 'rgba(255,255,255,0.04)' }} />
+                    <div style={{ width: 12, height: 12, borderRadius: 2, background: '#34C75966' }} />
+                    <div style={{ width: 12, height: 12, borderRadius: 2, background: '#34C759' }} />
+                    <div style={{ width: 12, height: 12, borderRadius: 2, background: '#1FAA50' }} />
+                    <div style={{ width: 12, height: 12, borderRadius: 2, background: '#0E8A3F' }} />
+                    <span>Mais</span>
+                  </div>
+                </div>
+              )
+            })()}
+          </div>
+        </section>
+      )}
 
       {/* Trends chart + Department/Category */}
       {isDono && (
