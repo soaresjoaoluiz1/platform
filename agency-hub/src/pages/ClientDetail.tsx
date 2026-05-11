@@ -104,7 +104,7 @@ export default function ClientDetail() {
     try {
       const data = await fetchClient(+id)
       setClient(data.client); setCredentials((data as any).credentials || []); setClientUsers((data as any).users || [])
-      setEditData({ name: data.client.name, contact_name: data.client.contact_name || '', contact_email: data.client.contact_email || '', contact_phone: (data.client as any).contact_phone || '', drive_folder: (data.client as any).drive_folder || '', monthly_fee: (data.client as any).monthly_fee || 0, payment_day: (data.client as any).payment_day || 10 })
+      setEditData({ name: data.client.name, contact_name: data.client.contact_name || '', contact_email: data.client.contact_email || '', contact_phone: (data.client as any).contact_phone || '', drive_folder: (data.client as any).drive_folder || '', monthly_fee: (data.client as any).monthly_fee || 0, payment_day: (data.client as any).payment_day || 10, core_client_name: (data.client as any).core_client_name || '' })
     } catch {} finally { setLoading(false) }
   }
   useEffect(() => { load() }, [id])
@@ -274,6 +274,13 @@ export default function ClientDetail() {
               <div className="form-row">
                 <div className="form-group"><label>Mensalidade (R$)</label><input className="input" type="number" step="0.01" value={editData.monthly_fee} onChange={e => setEditData((p: any) => ({ ...p, monthly_fee: parseFloat(e.target.value) || 0 }))} placeholder="0.00" /></div>
                 <div className="form-group"><label>Dia de Vencimento</label><input className="input" type="number" min="1" max="31" value={editData.payment_day} onChange={e => setEditData((p: any) => ({ ...p, payment_day: parseInt(e.target.value) || 10 }))} /></div>
+              </div>
+              <div className="form-group">
+                <label>Nome no Painel de Performance (/core)</label>
+                <input className="input" value={editData.core_client_name} onChange={e => setEditData((p: any) => ({ ...p, core_client_name: e.target.value }))} placeholder="Ex: ASK Equipamentos, Quimiprol, Door Grill" />
+                <small style={{ color: '#9B96B0', fontSize: 11, marginTop: 4, display: 'block' }}>
+                  Nome (ou parte) que aparece no /core. Usado pra exibir o painel deste cliente na aba Performance.
+                </small>
               </div>
               <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
                 <button className="btn btn-primary btn-sm" onClick={handleSave}><Save size={12} /> Salvar</button>
