@@ -2,7 +2,10 @@ import { Router } from 'express'
 import bcrypt from 'bcryptjs'
 import { randomBytes } from 'crypto'
 import db from '../db.js'
+import jwt from 'jsonwebtoken'
 import { requireRole } from '../middleware/auth.js'
+
+const CORE_EMBED_SECRET = process.env.CORE_EMBED_SECRET || 'dros-core-embed-2026-shared-key'
 
 const router = Router()
 
@@ -142,6 +145,22 @@ router.delete('/:id/credentials/:credId', requireRole('dono', 'gerente'), (req, 
 router.get('/:id/onboard', requireRole('dono', 'gerente'), (req, res) => {
   const entries = db.prepare('SELECT * FROM client_onboard WHERE client_id = ? ORDER BY created_at DESC').all(req.params.id)
   res.json({ entries: entries.map(e => ({ ...e, data: JSON.parse(e.data) })) })
+})
+
+// Gera URL embed do /core com token assinado (auto-login)
+router.get('/:id/core-embed-url', requireRole('dono', 'gerente'), (req, res) => {
+  const client = db.prepare('SELECT id, name, core_client_name FROM clients WHERE id = ?').get(req.params.id)
+  if (!client) return res.status(404).json({ error: 'Cliente nao encontrado' })
+  if (!client.core_client_name) return res.status(400).json({ error: 'Cliente sem vinculo no /core. Preencha o campo "Nome no Painel de Performance".' })
+
+  // Token JWT (1h), assinado com chave compartilhada entre Hub e Core
+  const embedToken = jwt.sign(
+    { embed: true, account: client.core_client_name, hub_user_id: req.user.id },
+    CORE_EMBED_SECRET,
+    { expiresIn: '1h' }
+  )
+  const url = `/core/?account=${encodeURIComponent(client.core_client_name)}&embed=1&embed_token=${embedToken}`
+  res.json({ url, expires_in: 3600 })
 })
 
 export default router

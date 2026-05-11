@@ -5,6 +5,73 @@ import { ArrowLeft, Building2, ExternalLink, Plus, Edit3, Save, X, Trash2, Eye, 
 
 const PLATFORMS = ['Facebook', 'Instagram', 'Google Ads', 'Google Analytics', 'Google Meu Negocio', 'Meta Business', 'TikTok', 'LinkedIn', 'YouTube', 'Twitter/X', 'Pinterest', 'Kiwify', 'Hotmart', 'RD Station', 'Outro']
 
+function PerformanceTab({ client, onGoToInfo }: { client: any; onGoToInfo: () => void }) {
+  const [embedUrl, setEmbedUrl] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [loadingUrl, setLoadingUrl] = useState(false)
+
+  useEffect(() => {
+    if (!client?.core_client_name) return
+    setLoadingUrl(true); setError(null)
+    apiFetch(`/api/clients/${client.id}/core-embed-url`)
+      .then((d: any) => setEmbedUrl(d.url))
+      .catch((e: any) => setError(e?.message || 'Falha ao gerar link'))
+      .finally(() => setLoadingUrl(false))
+  }, [client?.id, client?.core_client_name])
+
+  if (!client?.core_client_name) {
+    return (
+      <div className="card" style={{ textAlign: 'center', padding: 40, color: '#9B96B0' }}>
+        <BarChart3 size={36} style={{ marginBottom: 12, opacity: 0.4 }} />
+        <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 6, color: '#F2F0F7' }}>Painel de Performance nao vinculado</h3>
+        <p style={{ fontSize: 13, marginBottom: 14 }}>
+          Pra exibir aqui as metricas do /core, preencha o campo<br />
+          <strong>"Nome no Painel de Performance"</strong> nos dados do cliente.
+        </p>
+        <button className="btn btn-secondary btn-sm" onClick={onGoToInfo}>Ir pra Dados</button>
+      </div>
+    )
+  }
+
+  if (loadingUrl) {
+    return <div className="loading-container" style={{ minHeight: 400 }}><div className="spinner" /><span>Carregando painel...</span></div>
+  }
+
+  if (error || !embedUrl) {
+    return (
+      <div className="card" style={{ textAlign: 'center', padding: 40, color: '#FF6B6B' }}>
+        <BarChart3 size={36} style={{ marginBottom: 12, opacity: 0.4 }} />
+        <p style={{ fontSize: 13 }}>{error || 'Nao foi possivel gerar o link de embed.'}</p>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ fontSize: 12, color: '#9B96B0' }}>
+          Painel de <strong style={{ color: '#FFB300' }}>{client.core_client_name}</strong>
+        </div>
+        <a
+          href={embedUrl}
+          target="_blank" rel="noopener noreferrer"
+          className="btn btn-secondary btn-sm"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+        >
+          <ExternalLink size={12} /> Abrir em nova aba
+        </a>
+      </div>
+      <div style={{ width: '100%', height: 'calc(100vh - 240px)', minHeight: 600, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', background: '#0A0118' }}>
+        <iframe
+          src={embedUrl}
+          style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+          title={`Painel de Performance — ${client.core_client_name}`}
+        />
+      </div>
+    </>
+  )
+}
+
 export default function ClientDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -475,46 +542,8 @@ export default function ClientDetail() {
         </div>
       )}
 
-      {/* Performance tab — embeda /core via iframe */}
-      {activeTab === 'performance' && (
-        <div>
-          {!(client as any).core_client_name ? (
-            <div className="card" style={{ textAlign: 'center', padding: 40, color: '#9B96B0' }}>
-              <BarChart3 size={36} style={{ marginBottom: 12, opacity: 0.4 }} />
-              <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 6, color: '#F2F0F7' }}>Painel de Performance não vinculado</h3>
-              <p style={{ fontSize: 13, marginBottom: 14 }}>
-                Pra exibir aqui as métricas do /core, preencha o campo<br />
-                <strong>"Nome no Painel de Performance"</strong> nos dados do cliente.
-              </p>
-              <button className="btn btn-secondary btn-sm" onClick={() => setActiveTab('info')}>Ir pra Dados</button>
-            </div>
-          ) : (
-            <>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
-                <div style={{ fontSize: 12, color: '#9B96B0' }}>
-                  Mostrando dados de <strong style={{ color: '#FFB300' }}>{(client as any).core_client_name}</strong> no /core.
-                  Se não carregar, talvez você precise <a href={`/core/`} target="_blank" rel="noopener noreferrer" style={{ color: '#FFB300' }}>fazer login no /core</a> primeiro.
-                </div>
-                <a
-                  href={`/core/?account=${encodeURIComponent((client as any).core_client_name)}`}
-                  target="_blank" rel="noopener noreferrer"
-                  className="btn btn-secondary btn-sm"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                >
-                  <ExternalLink size={12} /> Abrir em nova aba
-                </a>
-              </div>
-              <div style={{ width: '100%', height: 'calc(100vh - 240px)', minHeight: 600, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', background: '#0A0118' }}>
-                <iframe
-                  src={`/core/?account=${encodeURIComponent((client as any).core_client_name)}&embed=1`}
-                  style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-                  title={`Painel de Performance — ${(client as any).core_client_name}`}
-                />
-              </div>
-            </>
-          )}
-        </div>
-      )}
+      {/* Performance tab — embeda /core via iframe com auto-login */}
+      {activeTab === 'performance' && <PerformanceTab client={client} onGoToInfo={() => setActiveTab('info')} />}
     </div>
   )
 }
