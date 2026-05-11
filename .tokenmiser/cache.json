@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-11T16:05:23.075Z",
+  "generatedAt": "2026-05-11T17:15:10.913Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -2564,8 +2564,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\performance.js": {
-      "mtime": 1778515439762.0393,
-      "size": 105085,
+      "mtime": 1778519709143.6704,
+      "size": 103320,
       "symbols": {
         "purpose": "=====================================================================",
         "exports": [],

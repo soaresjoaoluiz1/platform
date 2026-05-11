@@ -1,10 +1,10 @@
 // =====================================================================
 // Performance routes — migracao do /core (Painel Performance) pra dentro do Hub
 //
-// Mesma logica do client-dashboard/server/index.js, adaptada como Router:
-//  - Sem rotas de auth (usa middleware authenticate do Hub no parent)
-//  - Filtro por role: cliente so ve a conta vinculada em clients.core_client_name
-//  - Admins (dono/gerente/funcionario) veem todas as contas em ALLOWED_CLIENTS
+// Filtro por role:
+//  - Admin (dono/gerente/funcionario): ve TODAS as contas Meta/IG/GAds/GA4
+//    (vinculo por cliente e feito por ID no cadastro do cliente)
+//  - Cliente: so ve a conta com ID exato vinculado em clients.core_*_id
 //
 // O /core continua rodando paralelo (porta 3004) — esta migracao duplica a logica.
 // Quando ajustar uma das duas, lembrar de espelhar a outra.
@@ -26,50 +26,19 @@ const publicRouter = express.Router()
 // do parent (server/index.js) so roda DEPOIS dos imports ESM serem hoisted.
 // Se ler no top-level, as vars ficam undefined.
 const getMetaToken = () => process.env.META_ACCESS_TOKEN
-const getKiwifyClientId = () => process.env.getKiwifyClientId()
-const getKiwifyClientSecret = () => process.env.getKiwifyClientSecret()
-const getKiwifyAccountId = () => process.env.getKiwifyAccountId()
+const getKiwifyClientId = () => process.env.KIWIFY_CLIENT_ID
+const getKiwifyClientSecret = () => process.env.KIWIFY_CLIENT_SECRET
+const getKiwifyAccountId = () => process.env.KIWIFY_ACCOUNT_ID
 const META_BASE = 'https://graph.facebook.com/v21.0'
 const GADS_API = 'https://googleads.googleapis.com/v20'
 const GA4_API = 'https://analyticsdata.googleapis.com/v1beta'
 
-// --- Allowed clients (mesmo conjunto do /core) ---
-const ALLOWED_CLIENTS = [
-  'quimiprol',
-  'ask equipamentos', 'ask ',
-  "d'avila", 'davila',
-  'door grill - conta 02', 'door grill - conta 03', 'doorgrill', 'door grill churrasqueira', 'door grill portas', 'doorgrill fechamento',
-  'daiana',
-  'renove',
-  'sameco',
-  'josi terapeuta', 'josiane', 'josianevargasdelfino',
-  'bg imob', 'bg im',
-  'autocar', 'gui autocar', 'gui auto car', 'bm mec',
-  'fernando correa', 'fernandomoc', 'deividjrs', 'dros.sales', 'dros sales', 'tainacristina', 'taina cristina',
-  'kellermann',
-  'ludus',
-  'invista',
-  'essenza',
-  'mb vidros', 'mbvidros',
-  'agrozacca',
-  'emdi',
-  'oxi dpr', 'dpr',
-]
-
-function isAllowedAccount(name) {
-  const lower = (name || '').toLowerCase()
-  return ALLOWED_CLIENTS.some((pattern) => lower.includes(pattern))
-}
-
 // =====================================================================
 // Role/scope helpers
-//
-// Cliente: so pode ver a conta cujo nome match com clients.core_client_name dele.
-// Admin: ve tudo que passa em ALLOWED_CLIENTS.
 // =====================================================================
-// Retorna o "escopo" do cliente logado pra filtragem:
-//   - admin (dono/gerente/funcionario): null  → ve todas as contas em ALLOWED_CLIENTS
-//   - cliente: { name, metaId, igId, gadsId } → ve so as contas dele
+// Retorna o "escopo" do cliente logado:
+//   - admin (dono/gerente/funcionario): null  → ve tudo
+//   - cliente: { name, metaId, igId, gadsId, ga4PropertyId } → ve so o vinculo
 function getClientScope(user) {
   if (!user || user.role !== 'cliente') return null
   const row = db.prepare(`
@@ -83,14 +52,6 @@ function getClientScope(user) {
     gadsId: row?.core_gads_customer_id || null,
     ga4PropertyId: row?.core_ga4_property_id || null,
   }
-}
-
-// Match por NOME (uso historico — substring case-insensitive).
-// Mantido pra rotas que dependem do nome (CRM lookup, GA4 properties, Kiwify check).
-function accountMatchesScopeName(accountName, scope) {
-  if (scope === null) return isAllowedAccount(accountName)
-  if (!scope.name) return false
-  return (accountName || '').toLowerCase().includes(scope.name.toLowerCase())
 }
 
 // Para rotas com ?name=X: cliente nao pode escolher — forca o name dele.
@@ -189,15 +150,14 @@ router.get('/meta/accounts', async (req, res) => {
       url = data.paging?.next || null
     }
     // Filtragem:
-    //   - admin (scope=null): mostra todas as contas em ALLOWED_CLIENTS
-    //   - cliente com metaId: mostra so a conta com aquele ID exato
-    //   - cliente sem metaId: fallback por nome (compat com clientes ainda nao migrados)
+    //   - admin (scope=null): TODAS as contas ativas (vinculo agora e por ID no cadastro)
+    //   - cliente com metaId: so a conta com aquele ID exato
+    //   - cliente sem metaId: nenhuma (cliente nao vinculado nao ve dados de Meta)
     const filtered = allAccounts
       .filter((a) => {
         if (![1, 2, 3].includes(a.account_status)) return false
-        if (scope === null) return isAllowedAccount(a.name)
-        if (scope.metaId) return a.id === scope.metaId
-        return accountMatchesScopeName(a.name, scope)
+        if (scope === null) return true
+        return scope.metaId ? a.id === scope.metaId : false
       })
       .sort((a, b) => a.name.localeCompare(b.name))
     res.json({ accounts: filtered })
@@ -274,15 +234,14 @@ router.get('/instagram/accounts', async (req, res) => {
       url = data.paging?.next || null
     }
     // Filtragem:
-    //   - admin: usa ALLOWED_CLIENTS (substring no nome da page)
+    //   - admin: TODAS as pages com IG vinculado
     //   - cliente com igPageId: so a page com aquele ID
-    //   - cliente sem igPageId: fallback por nome
+    //   - cliente sem igPageId: nenhuma
     const igAccounts = allPages
       .filter((p) => {
         if (!p.instagram_business_account) return false
-        if (scope === null) return isAllowedAccount(p.name)
-        if (scope.igId) return p.id === scope.igId
-        return accountMatchesScopeName(p.name, scope)
+        if (scope === null) return true
+        return scope.igId ? p.id === scope.igId : false
       })
       .map((p) => ({ pageId: p.id, pageName: p.name, ...p.instagram_business_account }))
       .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
@@ -1110,13 +1069,12 @@ router.get('/google-ads/accounts', async (req, res) => {
       status: r.customerClient.status,
     }))
     // Filtragem:
-    //   - admin (scope=null): retorna todas (GAds nao usa ALLOWED_CLIENTS — todas estao no MCC)
+    //   - admin (scope=null): todas as contas do MCC
     //   - cliente com gadsId: so o customer com aquele ID
-    //   - cliente sem gadsId: fallback por nome
+    //   - cliente sem gadsId: nenhuma
     const scope = getClientScope(req.user)
     if (scope !== null) {
-      if (scope.gadsId) accounts = accounts.filter(a => a.id === scope.gadsId)
-      else accounts = accounts.filter(a => accountMatchesScopeName(a.name, scope))
+      accounts = scope.gadsId ? accounts.filter(a => a.id === scope.gadsId) : []
     }
     res.json({ accounts })
   } catch (err) {

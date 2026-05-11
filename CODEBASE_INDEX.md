@@ -733,10 +733,10 @@
 
 ## Docs
 - `CLAUDE.md`
+- `client-dashboard\DEPLOY.md`
+- `client-dashboard\README.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
-- `crm-dashboard\CLAUDE.md`
-- `crm-dashboard\CODEBASE_INDEX.md`
 - `crm-dashboard\DEPLOY.md`
 - `crm-dashboard\PLANO_PERFORMANCE.md`
 - `crm-dashboard\README.md`
