@@ -1,4 +1,12 @@
-const getToken = () => localStorage.getItem('dros_token')
+// Em embed mode (iframe vindo do /hub) o token vem na URL como ?embed_token=XXX
+function getEmbedTokenFromUrl(): string | null {
+  if (typeof window === 'undefined') return null
+  return new URLSearchParams(window.location.search).get('embed_token')
+}
+function getToken(): string | null {
+  return getEmbedTokenFromUrl() || localStorage.getItem('dros_token')
+}
+const isEmbed = () => !!getEmbedTokenFromUrl()
 const API_BASE = import.meta.env.DEV ? '' : '/core'
 
 async function apiFetch<T = any>(path: string): Promise<T> {
@@ -6,8 +14,11 @@ async function apiFetch<T = any>(path: string): Promise<T> {
     headers: { Authorization: `Bearer ${getToken()}` },
   })
   if (res.status === 401) {
-    localStorage.removeItem('dros_token')
-    window.location.href = '/core/login'
+    // Em embed mode nao redireciona pra /login (quebraria o iframe — fica preso em loop)
+    if (!isEmbed()) {
+      localStorage.removeItem('dros_token')
+      window.location.href = '/core/login'
+    }
     throw new Error('Unauthorized')
   }
   if (!res.ok) throw new Error(`API error: ${res.status}`)

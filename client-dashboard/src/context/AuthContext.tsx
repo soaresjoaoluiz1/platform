@@ -19,9 +19,18 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>(null!)
 
+// Em embed mode (iframe vindo do /hub), o token de auto-login vem na URL como ?embed_token=XXX
+function getEmbedToken(): string | null {
+  if (typeof window === 'undefined') return null
+  const params = new URLSearchParams(window.location.search)
+  return params.get('embed_token')
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const embedToken = getEmbedToken()
   const [user, setUser] = useState<User | null>(null)
-  const [token, setToken] = useState<string | null>(localStorage.getItem('dros_token'))
+  // Embed token tem prioridade sobre o que esta salvo (sessao isolada no iframe)
+  const [token, setToken] = useState<string | null>(embedToken || localStorage.getItem('dros_token'))
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -29,7 +38,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       fetch(`${API_BASE}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
         .then((r) => r.ok ? r.json() : Promise.reject())
         .then((d) => setUser(d.user))
-        .catch(() => { setToken(null); localStorage.removeItem('dros_token') })
+        .catch(() => {
+          // Se o token veio do embed mas falhou, nao limpa o localStorage (preserva sessao normal do usuario)
+          if (!embedToken) localStorage.removeItem('dros_token')
+          setToken(null)
+        })
         .finally(() => setLoading(false))
     } else {
       setLoading(false)

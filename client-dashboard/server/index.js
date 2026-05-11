@@ -74,16 +74,39 @@ const USERS = [
   },
 ]
 
+// Chave compartilhada com o /hub pra validar tokens de embed (auto-login no iframe)
+const CORE_EMBED_SECRET = process.env.CORE_EMBED_SECRET || 'dros-core-embed-2026-shared-key'
+
 // --- Auth middleware ---
 function auth(req, res, next) {
-  const header = req.headers.authorization
-  if (!header?.startsWith('Bearer ')) return res.status(401).json({ error: 'No token' })
-  try {
-    req.user = jwt.verify(header.slice(7), JWT_SECRET)
-    next()
-  } catch {
-    res.status(401).json({ error: 'Invalid token' })
+  // 1) Embed token via query (?embed_token=XXX) ou header — auto-login do /hub
+  const embedToken = req.query.embed_token || (req.headers['x-embed-token'])
+  if (embedToken) {
+    try {
+      const payload = jwt.verify(embedToken, CORE_EMBED_SECRET)
+      if (payload.embed === true) {
+        req.user = { id: 'embed', email: 'embed@dros', name: 'Dros Embed', role: 'admin', embed: true, embed_account: payload.account }
+        return next()
+      }
+    } catch { /* invalid — cai pro fluxo normal */ }
   }
+  // 2) Header normal (Authorization: Bearer JWT)
+  const header = req.headers.authorization
+  if (header?.startsWith('Bearer ')) {
+    const t = header.slice(7)
+    // Tenta como token normal (usuarios reais)
+    try { req.user = jwt.verify(t, JWT_SECRET); return next() } catch {}
+    // Tenta como embed token (frontend que recebeu o token via URL e agora chama API com ele no header)
+    try {
+      const payload = jwt.verify(t, CORE_EMBED_SECRET)
+      if (payload.embed === true) {
+        req.user = { id: 'embed', email: 'embed@dros', name: 'Dros Embed', role: 'admin', embed: true, embed_account: payload.account }
+        return next()
+      }
+    } catch {}
+    return res.status(401).json({ error: 'Invalid token' })
+  }
+  return res.status(401).json({ error: 'No token' })
 }
 
 // --- Auth routes ---
