@@ -189,6 +189,22 @@ router.get('/:id/onboard', requireRole('dono', 'gerente'), (req, res) => {
   res.json({ entries: entries.map(e => ({ ...e, data: JSON.parse(e.data) })) })
 })
 
+// Cliente final pega URL embed do proprio painel (usa client_id do user logado)
+router.get('/me/core-embed-url', requireRole('cliente'), (req, res) => {
+  if (!req.user.client_id) return res.status(400).json({ error: 'Usuario sem client_id' })
+  const client = db.prepare('SELECT id, name, core_client_name FROM clients WHERE id = ?').get(req.user.client_id)
+  if (!client) return res.status(404).json({ error: 'Cliente nao encontrado' })
+  if (!client.core_client_name) return res.status(400).json({ error: 'Painel de Performance ainda nao foi configurado pra este cliente. Fale com a agencia.' })
+
+  const embedToken = jwt.sign(
+    { embed: true, account: client.core_client_name, hub_user_id: req.user.id, client_id: client.id },
+    CORE_EMBED_SECRET,
+    { expiresIn: '1h' }
+  )
+  const url = `/core/?account=${encodeURIComponent(client.core_client_name)}&embed=1&embed_token=${embedToken}`
+  res.json({ url, expires_in: 3600 })
+})
+
 // Gera URL embed do /core com token assinado (auto-login)
 router.get('/:id/core-embed-url', requireRole('dono', 'gerente'), (req, res) => {
   const client = db.prepare('SELECT id, name, core_client_name FROM clients WHERE id = ?').get(req.params.id)

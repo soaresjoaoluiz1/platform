@@ -5,7 +5,7 @@ import { useSSE } from '../context/SSEContext'
 import { apiFetch } from '../lib/api'
 import {
   LayoutDashboard, Kanban, ListTodo, CheckCircle, Building2, UsersRound,
-  Layers, Tag, Briefcase, DollarSign, Settings, LogOut, Menu, X, ChevronsLeft, ChevronsRight, Video, ExternalLink,
+  Layers, Tag, Briefcase, DollarSign, Settings, LogOut, Menu, X, ChevronsLeft, ChevronsRight, Video, ExternalLink, BarChart3,
 } from 'lucide-react'
 import NotificationBell from './NotificationBell'
 
@@ -74,6 +74,11 @@ export default function Sidebar() {
             <NavLink to="/approvals" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}>
               <CheckCircle size={16} /> {isCliente ? 'Aprovações' : 'Aprovacoes'}
               {approvalCount > 0 && <span className="nav-badge">{approvalCount}</span>}
+            </NavLink>
+          )}
+          {isCliente && (
+            <NavLink to="/performance" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}>
+              <BarChart3 size={16} /> Performance
             </NavLink>
           )}
           {(isDono || isGerente) && (
