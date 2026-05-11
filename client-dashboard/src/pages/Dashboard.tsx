@@ -48,14 +48,27 @@ export default function Dashboard() {
   const [loadingData, setLoadingData] = useState(false)
   const [search, setSearch] = useState('')
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null)
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem('core_sidebar_collapsed') === '1')
+  // Embed mode: query params ?account=NOME&embed=1 (usado quando este painel e carregado dentro de um iframe do /hub)
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams()
+  const embedMode = urlParams.get('embed') === '1'
+  const requestedAccount = urlParams.get('account') || ''
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => embedMode ? true : localStorage.getItem('core_sidebar_collapsed') === '1')
   const toggleSidebar = () => setSidebarCollapsed(p => { const v = !p; localStorage.setItem('core_sidebar_collapsed', v ? '1' : '0'); return v })
 
   useEffect(() => {
     fetchAccounts()
       .then((accs) => {
         setAccounts(accs)
-        if (accs.length > 0) setSelectedAccount(accs[0])
+        if (accs.length > 0) {
+          // Se veio com ?account=NOME, pre-seleciona o que bate (substring case-insensitive)
+          if (requestedAccount) {
+            const q = requestedAccount.toLowerCase()
+            const match = accs.find(a => (a.name || '').toLowerCase().includes(q))
+            setSelectedAccount(match || accs[0])
+          } else {
+            setSelectedAccount(accs[0])
+          }
+        }
       })
       .finally(() => setLoadingAccounts(false))
   }, [])
