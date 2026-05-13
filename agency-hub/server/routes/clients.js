@@ -71,9 +71,16 @@ router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
   if (drive_folder !== undefined) { sets.push('drive_folder = ?'); params.push(drive_folder) }
   if (is_active !== undefined) {
     sets.push('is_active = ?'); params.push(is_active ? 1 : 0)
-    // Quando inativa: registra data; quando reativa: limpa
-    if (is_active) { sets.push('inactivated_at = NULL') }
-    else { sets.push("inactivated_at = COALESCE(inactivated_at, datetime('now', '-3 hours'))") }
+    // Reativar: limpa inactivated_at
+    // Desativar: usa data explicita do body se enviada (mes de saida customizado),
+    //   senao mantem a atual ou usa "agora"
+    if (is_active) {
+      sets.push('inactivated_at = NULL')
+    } else if (req.body.inactivated_at) {
+      sets.push('inactivated_at = ?'); params.push(req.body.inactivated_at)
+    } else {
+      sets.push("inactivated_at = COALESCE(inactivated_at, datetime('now', '-3 hours'))")
+    }
   }
   if (monthly_fee !== undefined) { sets.push('monthly_fee = ?'); params.push(monthly_fee) }
   if (payment_day !== undefined) { sets.push('payment_day = ?'); params.push(payment_day) }

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Os melhores estão aqui</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(56, 30, 90, 0.40), transparent 55%),
+        radial-gradient(circle at 80% 70%, rgba(20, 40, 90, 0.40), transparent 55%),
+        #0d0d18;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: clamp(56px, 10vw, 96px) clamp(16px, 4vw, 24px);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: clamp(32px, 7vw, 56px);
+      padding: 0 8px;
+    }
+    .section-eyebrow {
+      display: inline-block;
+      color: #fa6d26;
+      font-size: clamp(11px, 2.2vw, 13px);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(24px, 6.5vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.1;
+      text-transform: none !important;
+    }
+    .section-subtitle {
+      margin: 12px auto 0;
+      color: rgba(255,255,255,0.55);
+      font-size: clamp(14px, 3.6vw, 16px);
+      max-width: 560px;
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(10px, 2vw, 14px);
+    }
+    @media (min-width: 560px) { .logo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 820px) { .logo-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    @media (min-width: 1080px) { .logo-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+    .logo-cell {
+      position: relative;
+      aspect-ratio: 5 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(14px, 3.5vw, 22px);
+      background: #ffffff;
+      border-radius: 12px;
+      transition: transform .25s ease, box-shadow .25s ease;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    @media (min-width: 640px) {
+      .logo-cell { border-radius: 14px; aspect-ratio: 3 / 2; }
+    }
+    .logo-cell:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(250, 109, 38, 0.3);
+    }
+
+    .logo-cell img {
+      max-width: 88%;
+      max-height: 76%;
+      object-fit: contain;
+      transition: transform .25s ease;
+    }
+    .logo-cell:hover img {
+      transform: scale(1.06);
+    }
+  </style>
+</head>
+<body>
+
+  <section class="section">
+    <header class="section-header">
+      <span class="section-eyebrow">Clientes</span>
+      <h2 class="section-title">Os melhores estão aqui</h2>
+      <p class="section-subtitle">Empresas e instituições que confiam na Duoware para suas soluções de software.</p>
+    </header>
+
+    <div class="logo-grid">
+
+      <!-- 1. B3 -->
+      <div class="logo-cell" title="B3 — Brasil Bolsa Balcão">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/B3-qedytkzr838hmg7qqw5n0cyq72vst8uyfgy1i02g74.png"
+             alt="B3"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 2. SuperVia -->
+      <div class="logo-cell" title="SuperVia — Trens Urbanos">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/SuperVias-Trens-Urbanos-qedyw8val6vqioch71ll2orqsdr8mdfksnhkg849v6.png"
+             alt="SuperVia"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 3. CertSign -->
+      <div class="logo-cell" title="CertSign">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/CertSign-qedytmvflrb29o50fwyw5chndumj8n2f3q90gjznp4.png"
+             alt="CertSign"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 4. Cassi -->
+      <div class="logo-cell" title="Cassi">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/Cassi-qedytlxlex9ry26dlek9kuq6sgr60xyorlliza11lw.png"
+             alt="Cassi"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 5. Banco do Brasil -->
+      <div class="logo-cell" title="Banco do Brasil">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/Banco-do-Brasil-Logo-qedytlxlex9ry26dlek9kuq6sgr60xyorlliza11ee.png"
+             alt="Banco do Brasil"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 6. Loggi -->
+      <div class="logo-cell" title="Loggi">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/image-11-qedyulngmmmo78qhsu037lppd3v45fwhkidz7sk2xu.png"
+             alt="Loggi"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 7. ENAP -->
+      <div class="logo-cell" title="ENAP">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/ENAP-qedytrkmjxhhvpy6oh00ztaycrzdb4l2sdifuxsopa.png"
+             alt="ENAP"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 8. Exército Brasileiro -->
+      <div class="logo-cell" title="Exército Brasileiro">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/EB-qedytrkmjxhhvpy6oh00ztaycrzdb4l2sdifuxspqs.png"
+             alt="Exército Brasileiro"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 9. Neoway -->
+      <div class="logo-cell" title="Neoway">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/Neoway-qedyw0eqvok5m6orkfxxy8wlfwwxp3hzrhm74qgtyw.png"
+             alt="Neoway"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 10. UFRPE -->
+      <div class="logo-cell" title="UFRPE">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/Marcas-UFRPE-02-qedyvvpjxidq04vlbvwt3s3agzk3mlzc2ucrqcntmc.png"
+             alt="UFRPE"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 11. Supremo Tribunal Federal -->
+      <div class="logo-cell" title="Supremo Tribunal Federal">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/Logotipo_do_Supremo_Tribunal_Federal_P_B-qedyvurpqocfoiwyhdi6jabtvloqewvlqppa92p6li.png"
+             alt="STF"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 12. Poder Judiciário -->
+      <div class="logo-cell" title="Poder Judiciário">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/Poder-Judiciario-qedyw2af9cmq9em19gr738fimono4hpgfqx63ae1jy.png"
+             alt="Poder Judiciário"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 13. 8ª Região Militar -->
+      <div class="logo-cell" title="8ª Região Militar">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/OITAVA-REGIAO-MILITA-qedyw1cl2ilfxsneeyckiqo21asawslq3m9om0fg7o.png"
+             alt="8ª Região Militar"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 14. Saque e Pague -->
+      <div class="logo-cell" title="Saque e Pague">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/saque-e-pague-logo-qedyw7xgecug72ducj6yi70a6zvveobugiu2yy5o3c.png"
+             alt="Saque e Pague"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+      <!-- 15. Sada -->
+      <div class="logo-cell" title="Sada">
+        <img src="https://duoware.com.br/wp-content/uploads/elementor/thumbs/Sada-qedyw6zm7it5vgf7i0sbxp8tlm0i6z844e6lho72cc.png"
+             alt="Sada"
+             onerror="this.parentNode.style.display='none'" />
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

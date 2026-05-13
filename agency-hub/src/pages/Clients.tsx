@@ -28,9 +28,21 @@ export default function Clients() {
   useEffect(load, [view])
 
   const handleToggleActive = async (c: Client) => {
-    const action = c.is_active ? 'inativar' : 'reativar'
-    if (!confirm(`Tem certeza que quer ${action} "${c.name}"?`)) return
-    await updateClient(c.id, { is_active: c.is_active ? 0 : 1 } as any)
+    if (c.is_active) {
+      // Desativar — pergunta mes de saida pra calcular ate quando aparece no financeiro
+      const today = new Date()
+      const defaultMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`
+      const month = prompt(
+        `Mes de saida de "${c.name}" (YYYY-MM).\n\nO cliente aparece no financeiro ate esse mes (inclusive). Apos isso, some.\n\nDefault: mes atual.`,
+        defaultMonth
+      )
+      if (month === null) return
+      if (!/^\d{4}-\d{2}$/.test(month)) return alert('Formato invalido. Use YYYY-MM (ex: 2026-04)')
+      await updateClient(c.id, { is_active: 0, inactivated_at: `${month}-01 00:00:00` } as any)
+    } else {
+      if (!confirm(`Reativar "${c.name}"?`)) return
+      await updateClient(c.id, { is_active: 1 } as any)
+    }
     load()
   }
 

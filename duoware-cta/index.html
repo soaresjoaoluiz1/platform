@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conheça a Duoware</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(56, 30, 90, 0.45), transparent 55%),
+        radial-gradient(circle at 80% 70%, rgba(20, 40, 90, 0.45), transparent 55%),
+        radial-gradient(circle at 50% 50%, #0d0d18, #050510 80%);
+      padding: 24px;
+    }
+
+    .btn-orange {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 28px 56px;
+      font-size: clamp(20px, 3.2vw, 32px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(180deg, #ff8447, #fa6d26);
+      border-radius: 14px;
+      box-shadow:
+        0 18px 50px -10px rgba(250, 109, 38, 0.55),
+        0 6px 18px -4px rgba(250, 109, 38, 0.45),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+      transition: transform .15s ease, box-shadow .25s ease, filter .25s ease;
+      cursor: pointer;
+    }
+    .btn-orange:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow:
+        0 24px 60px -10px rgba(250, 109, 38, 0.75),
+        0 10px 26px -4px rgba(250, 109, 38, 0.6),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    .btn-orange:active { transform: translateY(0); }
+
+    .btn-orange svg { width: 1em; height: 1em; }
+  </style>
+</head>
+<body>
+
+  <a href="https://duoware.com.br/empresa/" class="btn-orange">
+    CONHEÇA A DUOWARE
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M13 5l7 7-7 7"/>
+    </svg>
+  </a>
+
+</body>
+</html>

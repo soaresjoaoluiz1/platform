@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nossas Soluções</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Background: dark navy + radial glow + dot grid */
+    .stage {
+      background:
+        radial-gradient(circle at 20% 30%, rgba(56, 30, 90, 0.45), transparent 55%),
+        radial-gradient(circle at 80% 70%, rgba(20, 40, 90, 0.45), transparent 55%),
+        radial-gradient(circle at 50% 50%, #0d0d18, #050510 80%);
+      position: relative;
+      overflow: hidden;
+    }
+    .stage::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+      pointer-events: none;
+    }
+    .stage::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 10% 80%, rgba(180,80,220,0.12), transparent 35%),
+        radial-gradient(circle at 90% 10%, rgba(80,180,255,0.08), transparent 40%);
+      pointer-events: none;
+    }
+
+    /* Card base — dark glass */
+    .card {
+      position: relative;
+      border-radius: 18px;
+      background: linear-gradient(160deg, rgba(28,28,45,0.95), rgba(15,15,28,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+      isolation: isolate;
+    }
+    .card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 16px 16px;
+      opacity: .4;
+      z-index: 0;
+    }
+    .card::after {
+      content: '';
+      position: absolute; inset: -2px;
+      background: var(--glow, radial-gradient(circle at 50% 0%, rgba(120,80,200,0.25), transparent 60%));
+      z-index: 0;
+      pointer-events: none;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.15);
+      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 50px var(--glow-color, rgba(120,80,200,0.25));
+    }
+    .card > .content { position: relative; z-index: 1; }
+
+    /* Brand-specific glows */
+    .card-jfrog {
+      --glow-color: rgba(40, 180, 200, 0.35);
+      --glow: radial-gradient(circle at 50% 30%, rgba(40, 180, 200, 0.35), transparent 60%);
+    }
+    .card-figma {
+      --glow-color: rgba(50, 120, 220, 0.35);
+      --glow: radial-gradient(circle at 50% 30%, rgba(50, 120, 220, 0.35), transparent 60%);
+    }
+    .card-jetbrains {
+      --glow-color: rgba(230, 70, 60, 0.40);
+      --glow: radial-gradient(circle at 50% 30%, rgba(230, 70, 60, 0.40), transparent 60%);
+    }
+    .card-sonar {
+      --glow-color: rgba(160, 60, 220, 0.45);
+      --glow: radial-gradient(circle at 50% 30%, rgba(160, 60, 220, 0.45), transparent 60%);
+    }
+
+    /* Orange CTA */
+    .btn-orange {
+      background: linear-gradient(180deg, #FF8A1F, #FF6A00);
+      box-shadow: 0 6px 18px -4px rgba(255, 106, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: transform .15s ease, box-shadow .25s ease;
+    }
+    .btn-orange:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px -4px rgba(255, 106, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+    .btn-orange:active { transform: translateY(0); }
+
+    /* Subtle scan line over the card to mimic the original look */
+    .card .scan {
+      position: absolute; inset: 0;
+      background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%);
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-[#050510] text-white">
+
+  <section class="stage py-14 sm:py-20 lg:py-28">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
+
+      <!-- Title -->
+      <h2 class="text-center font-semibold text-white text-[1.65rem] leading-tight sm:text-4xl lg:text-5xl tracking-tight mb-8 sm:mb-12 lg:mb-14">
+        Nossas Soluções
+      </h2>
+
+      <!-- Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
+
+        <!-- JFROG -->
+        <article class="card card-jfrog">
+          <span class="scan"></span>
+          <div class="content p-5 sm:p-6 lg:p-7 flex flex-col items-center text-center gap-3 sm:gap-4 min-h-[280px] sm:min-h-[340px] lg:min-h-[380px]">
+            <!-- Logo (oficial) -->
+            <div class="h-16 sm:h-20 lg:h-24 flex items-center justify-center">
+              <img src="https://duoware.com.br/wp-content/uploads/2026/05/LOGOS-DUOWARE-SITE-4.png"
+                   alt="JFrog"
+                   class="h-14 max-h-full w-auto max-w-full object-contain"
+                   onerror="this.onerror=null;this.src='https://www.vectorlogo.zone/logos/jfrog/jfrog-ar21.svg'" />
+            </div>
+            <h3 class="font-semibold text-lg sm:text-xl text-white">JFrog</h3>
+            <p class="text-sm text-slate-400 leading-relaxed max-w-[220px]">DevOps &amp; Gerenciamento de Binários</p>
+            <a href="https://duoware.com.br/jfrog-artifactory/" class="btn-orange mt-auto inline-flex items-center justify-center text-white font-semibold text-sm px-6 py-3 rounded-lg">
+              Conhecer solução
+            </a>
+          </div>
+        </article>
+
+        <!-- FIGMA -->
+        <article class="card card-figma">
+          <span class="scan"></span>
+          <div class="content p-5 sm:p-6 lg:p-7 flex flex-col items-center text-center gap-3 sm:gap-4 min-h-[280px] sm:min-h-[340px] lg:min-h-[380px]">
+            <!-- Logo Figma oficial: icone multicolor + wordmark branco -->
+            <div class="h-16 sm:h-20 lg:h-24 flex items-center justify-center">
+              <img src="https://duoware.com.br/wp-content/uploads/2026/05/LOGOS-DUOWARE-SITE-150x115.png"
+                   alt="Figma"
+                   class="h-14 max-h-full w-auto max-w-full object-contain"
+                   onerror="this.onerror=null;this.src='https://www.vectorlogo.zone/logos/figma/figma-icon.svg'" />
+            </div>
+            <h3 class="font-semibold text-lg sm:text-xl text-white">Figma</h3>
+            <p class="text-sm text-slate-400 leading-relaxed max-w-[220px]">Design e Prototipagem Colaborativa</p>
+            <a href="https://duoware.com.br/figma/" class="btn-orange mt-auto inline-flex items-center justify-center text-white font-semibold text-sm px-6 py-3 rounded-lg">
+              Conhecer solução
+            </a>
+          </div>
+        </article>
+
+        <!-- JETBRAINS -->
+        <article class="card card-jetbrains">
+          <span class="scan"></span>
+          <div class="content p-5 sm:p-6 lg:p-7 flex flex-col items-center text-center gap-3 sm:gap-4 min-h-[280px] sm:min-h-[340px] lg:min-h-[380px]">
+            <!-- Logo JetBrains oficial -->
+            <div class="h-16 sm:h-20 lg:h-24 flex items-center justify-center">
+              <img src="https://duoware.com.br/wp-content/uploads/2026/05/LOGOS-DUOWARE-SITE-1-150x115.png"
+                   alt="JetBrains"
+                   class="h-14 max-h-full w-auto max-w-full object-contain"
+                   onerror="this.onerror=null;this.src='https://www.vectorlogo.zone/logos/jetbrains/jetbrains-ar21.svg'" />
+            </div>
+            <h3 class="font-semibold text-lg sm:text-xl text-white">JetBrains</h3>
+            <p class="text-sm text-slate-400 leading-relaxed max-w-[220px]">Ferramentas de Desenvolvimento Avançadas</p>
+            <a href="https://duoware.com.br/jetbrains-space/" class="btn-orange mt-auto inline-flex items-center justify-center text-white font-semibold text-sm px-6 py-3 rounded-lg">
+              Conhecer solução
+            </a>
+          </div>
+        </article>
+
+        <!-- SONAR -->
+        <article class="card card-sonar">
+          <span class="scan"></span>
+          <div class="content p-5 sm:p-6 lg:p-7 flex flex-col items-center text-center gap-3 sm:gap-4 min-h-[280px] sm:min-h-[340px] lg:min-h-[380px]">
+            <!-- Logo SonarQube/Sonar oficial -->
+            <div class="h-16 sm:h-20 lg:h-24 flex items-center justify-center">
+              <img src="https://duoware.com.br/wp-content/uploads/2026/05/LOGOS-DUOWARE-SITE-5.png"
+                   alt="Sonar"
+                   class="h-14 max-h-full w-auto max-w-full object-contain"
+                   onerror="this.onerror=null;this.src='https://www.vectorlogo.zone/logos/sonarqube/sonarqube-ar21.svg'" />
+            </div>
+            <h3 class="font-semibold text-lg sm:text-xl text-white">Sonar</h3>
+            <p class="text-sm text-slate-400 leading-relaxed max-w-[220px]">Qualidade e Segurança de Código</p>
+            <a href="https://duoware.com.br/sonarsource-sonarcloud/" class="btn-orange mt-auto inline-flex items-center justify-center text-white font-semibold text-sm px-6 py-3 rounded-lg">
+              Conhecer solução
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

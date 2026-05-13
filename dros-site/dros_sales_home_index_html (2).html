@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DROS Sales | Canal de vendas para indústria vender mais</title>
+  <meta name="description" content="A DROS Sales ajuda indústrias e distribuidoras a criarem um canal de vendas com anúncios, atendimento comercial e acompanhamento de dados." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0a1018;
+      --bg-2: #0a1018;
+      --card: rgba(10, 16, 24, 0.88);
+      --card-2: rgba(10, 16, 24, 0.94);
+      --line: rgba(255, 179, 0, 0.30);
+      --line-soft: rgba(255, 255, 255, 0.10);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.74);
+      --muted-2: rgba(255, 255, 255, 0.54);
+      --yellow: #ffb300;
+      --yellow-2: #ffb300;
+      --dark-yellow: rgba(255, 179, 0, 0.12);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1180px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(255, 179, 0, 0.10), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(255, 179, 0, 0.08), transparent 30%),
+        linear-gradient(180deg, #0a1018 0%, #0a1018 45%, #0a1018 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.05));
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 16, 24, 0.90);
+      border-bottom: 1px solid var(--line-soft);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 150px;
+    }
+
+    .logo-mark {
+      line-height: 0.82;
+      letter-spacing: 1.5px;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 900;
+      font-size: 38px;
+      color: #ffffff;
+    }
+
+    .logo-mark span {
+      display: block;
+      font-size: 15px;
+      color: var(--yellow);
+      letter-spacing: 6px;
+      margin-left: 2px;
+      margin-top: 8px;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      list-style: none;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .nav-menu a {
+      position: relative;
+      padding: 10px 0;
+      opacity: 0.88;
+      transition: 0.2s ease;
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: var(--yellow);
+      opacity: 1;
+    }
+
+    .nav-menu a.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2px;
+      height: 2px;
+      background: var(--yellow);
+      border-radius: 99px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 25px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 900;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: #0a1018;
+      background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+      box-shadow: 0 16px 40px rgba(255, 179, 0, 0.18);
+    }
+
+    .btn-dark {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.34);
+      background: rgba(10, 16, 24, 0.58);
+    }
+
+    .btn-dark:hover {
+      border-color: var(--yellow);
+    }
+
+    .arrow {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .mobile-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: transparent;
+      border: 1px solid var(--line-soft);
+      color: var(--yellow);
+      font-size: 24px;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 750px;
+      padding: 72px 0 40px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(10, 16, 24, 0.97) 0%, rgba(10, 16, 24, 0.78) 35%, rgba(10, 16, 24, 0.25) 62%, rgba(10, 16, 24, 0.86) 100%),
+        linear-gradient(180deg, rgba(10, 16, 24, 0.08) 0%, rgba(10, 16, 24, 0.86) 92%),
+        url("img/chemical-industry-automated-production-detergent-fabric-softener-domestic-use.jpg") center/cover no-repeat;
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 64px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--yellow);
+      border: 1px solid var(--line);
+      background: rgba(255, 179, 0, 0.08);
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 20px;
+    }
+
+    h1,
+    h2,
+    h3,
+    .heading {
+      font-family: "Montserrat", sans-serif;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      font-size: clamp(46px, 6vw, 82px);
+      line-height: 0.98;
+      max-width: 700px;
+      margin-bottom: 24px;
+      font-weight: 900;
+    }
+
+    .yellow {
+      color: var(--yellow);
+    }
+
+    .hero-copy {
+      max-width: 560px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 17px;
+      line-height: 1.75;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 34px;
+    }
+
+    .trust-row {
+      display: grid;
+      grid-template-columns: repeat(3, max-content);
+      gap: 28px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .icon-dot {
+      width: 25px;
+      height: 25px;
+      border: 1px solid var(--yellow);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--yellow);
+      font-size: 12px;
+      flex: 0 0 auto;
+    }
+
+    .hero-panel {
+      justify-self: end;
+      width: min(100%, 355px);
+      background: rgba(10, 16, 24, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.17);
+      border-radius: var(--radius);
+      padding: 26px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-panel h3 {
+      font-size: 22px;
+      line-height: 1.25;
+      margin-bottom: 24px;
+    }
+
+    .metric-list {
+      display: grid;
+      gap: 22px;
+    }
+
+    .metric-item {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .metric-icon {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      background: rgba(255, 179, 0, 0.06);
+    }
+
+    .metric-number {
+      font-family: "Montserrat", sans-serif;
+      color: var(--yellow);
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .metric-label {
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 13px;
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .logos-band {
+      padding: 22px 0 24px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(10, 16, 24, 0.50);
+    }
+
+    .logos-title {
+      text-align: center;
+      color: var(--yellow);
+      text-transform: uppercase;
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.4px;
+      margin-bottom: 25px;
+    }
+
+    .logos-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 32px;
+      align-items: center;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .logo-placeholder {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.72;
+      filter: grayscale(1);
+      font-family: "Montserrat", sans-serif;
+      font-weight: 900;
+      font-size: 18px;
+      text-align: center;
+      line-height: 1.05;
+    }
+
+    .logo-placeholder small {
+      font-family: "Inter", sans-serif;
+      font-size: 12px;
+      color: var(--muted-2);
+      font-weight: 700;
+    }
+
+    section {
+      padding: 62px 0;
+    }
+
+    .section-kicker {
+      color: var(--yellow);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1.08;
+      margin-bottom: 20px;
+      font-weight: 900;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+      max-width: 620px;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 72px;
+      align-items: start;
+      border-bottom: 1px solid var(--line-soft);
+      padding-bottom: 56px;
+    }
+
+    .problem-copy .lead {
+      margin-top: 24px;
+    }
+
+    .highlight-line {
+      margin-top: 28px;
+      color: var(--yellow);
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .problem-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 40px;
+      row-gap: 28px;
+    }
+
+    .problem-card {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 17px;
+      align-items: start;
+    }
+
+    .square-icon {
+      width: 58px;
+      height: 58px;
+      border: 1px solid var(--yellow);
+      border-radius: 14px;
+      color: var(--yellow);
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      background: rgba(255, 179, 0, 0.05);
+    }
+
+    .problem-card h3 {
+      font-size: 18px;
+      line-height: 1.22;
+      margin-bottom: 7px;
+      font-weight: 900;
+    }
+
+    .problem-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .method {
+      padding-top: 28px;
+    }
+
+    .method-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 34px 1fr 34px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .method-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 26px 24px;
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 20px;
+      min-height: 160px;
+    }
+
+    .method-number {
+      width: 76px;
+      height: 76px;
+      border: 1px solid rgba(255, 179, 0, 0.32);
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: var(--yellow);
+      font-family: "Montserrat", sans-serif;
+      font-size: 42px;
+      line-height: 1;
+      font-weight: 900;
+      background: rgba(255, 179, 0, 0.05);
+    }
+
+    .method-card h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .method-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .method-arrow {
+      color: var(--yellow);
+      font-size: 32px;
+      text-align: center;
+      font-weight: 300;
+    }
+
+    .method-phrase {
+      margin-top: 20px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .stats-bar {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: rgba(10, 16, 24, 0.86);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .stat {
+      padding: 26px 20px;
+      text-align: center;
+      border-right: 1px solid var(--line-soft);
+    }
+
+    .stat:last-child {
+      border-right: 0;
+    }
+
+    .stat strong {
+      color: var(--yellow);
+      display: block;
+      font-family: "Montserrat", sans-serif;
+      font-size: 33px;
+      line-height: 1;
+      font-weight: 900;
+      margin-bottom: 9px;
+    }
+
+    .stat span {
+      display: block;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .case-section {
+      padding-top: 18px;
+    }
+
+    .case-header {
+      margin-bottom: 18px;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 34px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .case-main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .case-image {
+      min-height: 310px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line-soft);
+      background:
+        linear-gradient(180deg, rgba(10,16,24,0.08), rgba(10,16,24,0.64)),
+        url("img/case-quimiprol.jpg") center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .case-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 16px;
+      margin-bottom: 14px;
+    }
+
+    .case-panel {
+      background: var(--card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .testimonial {
+      display: grid;
+      grid-template-columns: 72px 1fr 220px;
+      gap: 24px;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius);
+      padding: 26px 30px;
+      margin-bottom: 44px;
+    }
+
+    .quote-mark {
+      font-family: Georgia, serif;
+      color: var(--yellow);
+      font-size: 86px;
+      line-height: 0.8;
+    }
+
+    .testimonial p {
+      font-size: 18px;
+      line-height: 1.55;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .person {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-left: 1px solid var(--line-soft);
+      padding-left: 24px;
+    }
+
+    .avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: url("img/depoimento-rodrigo.jpg") center/cover no-repeat, #0a1018;
+      border: 1px solid rgba(255,255,255,0.12);
+      flex: 0 0 auto;
+    }
+
+    .person strong {
+      display: block;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .person span {
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .choose-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .choose-card {
+      min-height: 210px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 24px 21px;
+    }
+
+    .choose-card .square-icon {
+      width: 42px;
+      height: 42px;
+      font-size: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .choose-card h3 {
+      font-size: 17px;
+      line-height: 1.25;
+      margin-bottom: 9px;
+      font-weight: 900;
+    }
+
+    .choose-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .about-cta {
+      padding-top: 22px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.72fr 1.28fr;
+      gap: 44px;
+      align-items: end;
+      border-bottom: 1px solid var(--line-soft);
+      padding-bottom: 36px;
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .socials a {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      border: 1px solid var(--line-soft);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .cta-box {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 22px;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      min-height: 210px;
+    }
+
+    .cta-content {
+      padding: 34px 38px;
+    }
+
+    .cta-content h2 {
+      font-size: clamp(28px, 3vw, 42px);
+      margin-bottom: 10px;
+    }
+
+    .cta-content p {
+      color: var(--muted);
+      margin-bottom: 22px;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .cta-image {
+      height: 100%;
+      min-height: 210px;
+      background:
+        linear-gradient(90deg, rgba(10,16,24,0.20), rgba(10,16,24,0.74)),
+        url("img/diagnostico-industria.jpg") center/cover no-repeat;
+    }
+
+    .footer {
+      padding: 34px 0 30px;
+      background: rgba(10, 16, 24, 0.94);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr 0.8fr 0.95fr;
+      gap: 42px;
+      align-items: start;
+    }
+
+    .footer-brand {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .footer-brand p {
+      max-width: 175px;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.45;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .footer h4 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 14px;
+      font-weight: 900;
+    }
+
+    .footer ul {
+      list-style: none;
+      display: grid;
+      gap: 7px;
+    }
+
+    .footer a,
+    .footer li,
+    .footer p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .footer .btn {
+      margin-top: 16px;
+      min-height: 42px;
+      padding-inline: 20px;
+    }
+
+    .copyright {
+      color: var(--muted-2);
+      font-size: 12px;
+      margin-top: 34px;
+    }
+
+    @media (max-width: 1080px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .mobile-toggle {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .hero-grid,
+      .problem-grid,
+      .case-grid,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        justify-self: start;
+      }
+
+      .logos-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .method-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .method-arrow {
+        transform: rotate(90deg);
+      }
+
+      .choose-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .container {
+        width: min(100% - 32px, var(--max));
+      }
+
+      .nav {
+        height: 76px;
+      }
+
+      .logo-mark {
+        font-size: 29px;
+      }
+
+      .topbar .btn {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 48px 0 34px;
+      }
+
+      .hero::before {
+        background:
+          linear-gradient(180deg, rgba(10, 16, 24, 0.95) 0%, rgba(10, 16, 24, 0.86) 54%, rgba(10, 16, 24, 0.97) 100%),
+          url("img/chemical-industry-automated-production-detergent-fabric-softener-domestic-use.jpg") center/cover no-repeat;
+      }
+
+      .trust-row {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .problem-list,
+      .case-main,
+      .stats-bar,
+      .cta-box,
+      .testimonial,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .logos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px;
+      }
+
+      .stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .stat:last-child {
+        border-bottom: 0;
+      }
+
+      .method-card {
+        grid-template-columns: 1fr;
+      }
+
+      .choose-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .person {
+        border-left: 0;
+        border-top: 1px solid var(--line-soft);
+        padding-left: 0;
+        padding-top: 20px;
+      }
+
+      .cta-image {
+        min-height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="logo" href="#inicio" aria-label="DROS Sales">
+        <div class="logo-mark">DROS<span>SALES</span></div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a class="active" href="#inicio">Início</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#metodo">Método</a></li>
+        <li><a href="#cases">Cases</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+
+      <a class="btn btn-primary" href="#contato">Quero um diagnóstico <span class="arrow">›</span></a>
+      <button class="mobile-toggle" aria-label="Abrir menu">☰</button>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Método DROS Sales</div>
+          <h1>Canal de vendas para indústria <span class="yellow">vender mais.</span></h1>
+          <p class="hero-copy">
+            Ajudamos indústrias e distribuidoras a atrair os compradores certos, estruturar o atendimento e transformar oportunidades em pedidos, todos os meses.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contato">Quero um diagnóstico <span class="arrow">›</span></a>
+            <a class="btn btn-dark" href="#metodo">Ver como funciona <span class="arrow">▷</span></a>
+          </div>
+
+          <div class="trust-row">
+            <div class="trust-item"><span class="icon-dot">msg</span> Conversa inicial<br />sem compromisso</div>
+            <div class="trust-item"><span class="icon-dot">✓</span> Foco em resultado<br />e previsibilidade</div>
+            <div class="trust-item"><span class="icon-dot">▣</span> Especialistas em<br />indústria</div>
+          </div>
+        </div>
+
+        <aside class="hero-panel">
+          <h3>Resultados que nossos clientes estão conquistando</h3>
+          <div class="metric-list">
+            <div class="metric-item">
+              <div class="metric-icon">♙</div>
+              <div><div class="metric-number">+750</div><div class="metric-label">revendedores ativos</div></div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-icon">⌂</div>
+              <div><div class="metric-number">2.600 m²</div><div class="metric-label">de estrutura operacional</div></div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-icon">$</div>
+              <div><div class="metric-number">+R$ 1,5 milhão/mês</div><div class="metric-label">em faturamento</div></div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-icon">▦</div>
+              <div><div class="metric-number">Quase 6 anos</div><div class="metric-label">de parceria contínua</div></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="logos-band">
+      <div class="container">
+        <div class="logos-title">Empresas que já confiaram na DROS para crescer</div>
+        <div class="logos-grid">
+          <div class="logo-placeholder">ASK<br /><small>Equipamentos</small></div>
+          <div class="logo-placeholder">inVista<br /><small>Sistemas</small></div>
+          <div class="logo-placeholder">RENOVE<br /><small>Lançamentos</small></div>
+          <div class="logo-placeholder">Suprema<br /><small>Agropecuária</small></div>
+          <div class="logo-placeholder">QUIMIPROL<br /><small>Química</small></div>
+          <div class="logo-placeholder">DOORGRILL</div>
+          <div class="logo-placeholder"><small>e outras<br />empresas</small></div>
+        </div>
+      </div>
+    </div>
+
+    <section id="sobre">
+      <div class="container problem-grid">
+        <div class="problem-copy">
+          <div class="section-kicker">A indústria move o Brasil</div>
+          <h2>O produto é bom. O problema pode estar no <span class="yellow">caminho até o cliente.</span></h2>
+          <p class="lead">
+            A indústria representa 23,4% do PIB brasileiro e 35,2% da arrecadação de tributos federais, segundo a CNI.
+          </p>
+          <p class="lead">
+            Mesmo assim, muitas indústrias ainda enfrentam os mesmos desafios: demanda instável, alta carga tributária, concorrência acirrada e canais de venda desorganizados.
+          </p>
+          <div class="highlight-line">Canal não é sorte. É estratégia.</div>
+        </div>
+
+        <div>
+          <div class="section-kicker">Os principais problemas</div>
+          <div class="problem-list">
+            <article class="problem-card">
+              <div class="square-icon">♙</div>
+              <div>
+                <h3>Cliente antigo esquecido</h3>
+                <p>Dinheiro parado na base porque ninguém lembra de chamar.</p>
+              </div>
+            </article>
+
+            <article class="problem-card">
+              <div class="square-icon">⌖</div>
+              <div>
+                <h3>Regiões vazias</h3>
+                <p>Tem cidades e revendedores que poderiam comprar, mas ninguém está indo atrás.</p>
+              </div>
+            </article>
+
+            <article class="problem-card">
+              <div class="square-icon">☏</div>
+              <div>
+                <h3>WhatsApp sem processo</h3>
+                <p>Mensagens sem resposta são vendas indo embora.</p>
+              </div>
+            </article>
+
+            <article class="problem-card">
+              <div class="square-icon">▥</div>
+              <div>
+                <h3>Representante sem acompanhamento</h3>
+                <p>Sem números, vira opinião e oportunidade perdida.</p>
+              </div>
+            </article>
+
+            <article class="problem-card">
+              <div class="square-icon">◎</div>
+              <div>
+                <h3>Venda dependendo de indicação</h3>
+                <p>Boca a boca trouxe até aqui, mas tem teto.</p>
+              </div>
+            </article>
+
+            <article class="problem-card">
+              <div class="square-icon">▰</div>
+              <div>
+                <h3>Venda oscilando todo mês</h3>
+                <p>Sem canal organizado, tudo parece chute.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="metodo" class="method">
+      <div class="container">
+        <div class="method-title">
+          <div class="section-kicker">Como funciona o método DROS Sales</div>
+        </div>
+
+        <div class="method-grid">
+          <article class="method-card">
+            <div class="method-number">01</div>
+            <div>
+              <h3>Análise</h3>
+              <p>Entendemos como sua indústria vende hoje, onde estão os gargalos e as oportunidades escondidas no canal.</p>
+            </div>
+          </article>
+
+          <div class="method-arrow">→</div>
+
+          <article class="method-card">
+            <div class="method-number">02</div>
+            <div>
+              <h3>Anúncios</h3>
+              <p>Fazemos sua indústria aparecer para quem realmente pode comprar, na região certa.</p>
+            </div>
+          </article>
+
+          <div class="method-arrow">→</div>
+
+          <article class="method-card">
+            <div class="method-number">03</div>
+            <div>
+              <h3>Comercial</h3>
+              <p>Organizamos o atendimento e o acompanhamento para transformar interessados em pedidos.</p>
+            </div>
+          </article>
+        </div>
+
+        <p class="method-phrase">Análise mostra o <span class="yellow">gargalo.</span> Anúncio traz <span class="yellow">oportunidade.</span> Comercial transforma em <span class="yellow">pedido.</span></p>
+
+        <div class="stats-bar">
+          <div class="stat"><strong>199+</strong><span>Projetos concluídos</span></div>
+          <div class="stat"><strong>16+</strong><span>Clientes ativos</span></div>
+          <div class="stat"><strong>6+</strong><span>Anos de experiência</span></div>
+          <div class="stat"><strong>0%</strong><span>Achismo, 100% dados</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cases" class="case-section">
+      <div class="container">
+        <div class="case-header">
+          <div class="section-kicker">Case real</div>
+          <h2>Resultados construídos com processo e consistência.</h2>
+        </div>
+
+        <div class="case-grid">
+          <div class="case-main">
+            <div class="case-image" role="img" aria-label="Fachada industrial da Quimiprol"></div>
+            <div class="case-text">
+              <p>Um dos nossos clientes começou com 500 m² de operação.</p>
+              <p>Hoje são 2.600 m² de estrutura, mais de 750 revendedores ativos, fábrica própria de embalagem e faturamento acima de R$ 1,5 milhão por mês.</p>
+              <p>Quase 6 anos de parceria, construção de canal e crescimento contínuo.</p>
+            </div>
+          </div>
+
+          <aside class="case-panel">
+            <div class="metric-list">
+              <div class="metric-item">
+                <div class="metric-icon">♙</div>
+                <div><div class="metric-number">+750</div><div class="metric-label">revendedores ativos</div></div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-icon">⌂</div>
+                <div><div class="metric-number">2.600 m²</div><div class="metric-label">de estrutura operacional</div></div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-icon">$</div>
+                <div><div class="metric-number">+R$ 1,5 milhão/mês</div><div class="metric-label">em faturamento</div></div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-icon">▦</div>
+                <div><div class="metric-number">Quase 6 anos</div><div class="metric-label">de parceria contínua</div></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div id="depoimentos" class="testimonial">
+          <div class="quote-mark">“</div>
+          <p>A DROS estruturou nossa operação de marketing do ponto a ponta. Hoje investimos acima de R$ 20 mil/mês com consistência e vendemos para todo o Brasil.</p>
+          <div class="person">
+            <div>
+              <strong>Rodri</strong>
+              <span>CEO, DoorGrill Churrasqueiras</span>
+            </div>
+            <div class="avatar" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-kicker" style="text-align:center;">Por que indústrias escolhem a DROS Sales</div>
+          <div class="choose-grid">
+            <article class="choose-card">
+              <div class="square-icon">☊</div>
+              <h3>Falamos a língua do dono de fábrica</h3>
+              <p>Sem termos difíceis. Focamos no que importa: venda, comprador, pedido e resultado.</p>
+            </article>
+
+            <article class="choose-card">
+              <div class="square-icon">◉</div>
+              <h3>Olhamos o processo inteiro</h3>
+              <p>Não é só anúncio. É o caminho completo até o pedido.</p>
+            </article>
+
+            <article class="choose-card">
+              <div class="square-icon">▥</div>
+              <h3>Trabalhamos com números</h3>
+              <p>O que não é medido, não é gerenciado.</p>
+            </article>
+
+            <article class="choose-card">
+              <div class="square-icon">⚙</div>
+              <h3>Construímos com consistência</h3>
+              <p>Sem milagres em 7 dias. Com método, rotina e ajuste contínuo.</p>
+            </article>
+
+            <article class="choose-card">
+              <div class="square-icon">▧</div>
+              <h3>Foco em indústria</h3>
+              <p>Entendemos o mercado industrial, seus ciclos, compradores e desafios.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="about-cta">
+      <div class="container about-grid">
+        <div>
+          <div class="section-kicker">Sobre a DROS Sales</div>
+          <p class="lead">
+            A DROS Sales é especializada em estruturar canais de vendas para indústrias e distribuidoras.
+          </p>
+          <p class="lead" style="margin-top:14px;">
+            Unimos análise, anúncios e comercial para gerar resultado previsível e crescimento sustentável.
+          </p>
+          <div class="socials">
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="LinkedIn">in</a>
+            <a href="#" aria-label="YouTube">YT</a>
+          </div>
+        </div>
+
+        <div class="cta-box">
+          <div class="cta-content">
+            <h2>Quer entender onde sua indústria está perdendo venda?</h2>
+            <p>Conversa inicial de 15 minutos. Sem compromisso.</p>
+            <a class="btn btn-primary" href="https://wa.me/5541995211546" target="_blank" rel="noopener">Quero um diagnóstico <span class="arrow">›</span></a>
+          </div>
+          <div class="cta-image" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <div class="logo-mark">DROS<span>SALES</span></div>
+            <p>Canal de vendas para indústria vender mais.</p>
+          </div>
+          <div class="copyright">© 2026 DROS Sales. Todos os direitos reservados.</div>
+        </div>
+
+        <div>
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#metodo">Método</a></li>
+            <li><a href="#cases">Cases</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#contato">Contato</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Segmentos</h4>
+          <ul>
+            <li>Produto de limpeza</li>
+            <li>Indústria química</li>
+            <li>Cosméticos</li>
+            <li>Embalagens</li>
+            <li>Automotivo</li>
+            <li>Ração animal</li>
+            <li>ARLA</li>
+            <li>Metalúrgica</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Fale com a gente</h4>
+          <ul>
+            <li><a href="tel:+5541995211546">(41) 99521-1546</a></li>
+            <li><a href="mailto:contato@drossales.com.br">contato@drossales.com.br</a></li>
+          </ul>
+          <a class="btn btn-primary" href="https://wa.me/5541995211546" target="_blank" rel="noopener">Quero um diagnóstico <span class="arrow">›</span></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.mobile-toggle');
+    const menu = document.querySelector('.nav-menu');
+
+    toggle?.addEventListener('click', () => {
+      const isOpen = menu.style.display === 'flex';
+      menu.style.display = isOpen ? 'none' : 'flex';
+      menu.style.position = 'absolute';
+      menu.style.top = '76px';
+      menu.style.left = '16px';
+      menu.style.right = '16px';
+      menu.style.flexDirection = 'column';
+      menu.style.alignItems = 'flex-start';
+      menu.style.padding = '20px';
+      menu.style.border = '1px solid rgba(255,255,255,0.10)';
+      menu.style.borderRadius = '16px';
+      menu.style.background = 'rgba(10,16,24,0.96)';
+      menu.style.backdropFilter = 'blur(18px)';
+    });
+  </script>
+</body>
+</html>

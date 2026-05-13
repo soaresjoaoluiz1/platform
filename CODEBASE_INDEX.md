@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-11 · 3926 files · ~11.8M tokens total
+> 2026-05-13 · 3948 files · ~12.0M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -704,13 +704,13 @@
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-04T15-12-17-812Z.yml`
-- `.playwright-mcp\page-2026-05-04T15-12-24-204Z.yml`
-- `.playwright-mcp\page-2026-05-04T15-36-31-575Z.yml`
-- `.playwright-mcp\page-2026-05-07T17-46-31-367Z.yml`
-- `.playwright-mcp\page-2026-05-07T17-46-43-367Z.yml`
-- `.playwright-mcp\page-2026-05-07T17-46-48-979Z.yml`
 - `.playwright-mcp\page-2026-05-07T17-46-59-901Z.yml`
+- `.playwright-mcp\page-2026-05-12T16-58-11-634Z.yml`
+- `.playwright-mcp\page-2026-05-12T17-12-13-366Z.yml`
+- `.playwright-mcp\page-2026-05-12T17-13-15-164Z.yml`
+- `.playwright-mcp\page-2026-05-12T17-13-32-925Z.yml`
+- `.playwright-mcp\page-2026-05-12T17-14-46-429Z.yml`
+- `.playwright-mcp\page-2026-05-12T17-23-52-655Z.yml`
 - `.vscode\mcp.json`
 - `.vscode\tasks.json`
 - `agency-hub\package.json`
@@ -737,11 +737,11 @@
 - `client-dashboard\README.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
-- `crm-dashboard\DEPLOY.md`
-- `crm-dashboard\PLANO_PERFORMANCE.md`
 - `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
+- `dros-sales-site-v2\README.md`
+- `dros-sales-site\README.md`
 - `oxi-pedidos\DEPLOY.md`
 - `oxi-pedidos\README.md`
 - `oxiquimica-lp\README.md`
@@ -749,4 +749,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~7.4k tokens · Full codebase: ~11.8M tokens · Saves ~100%*
+*Index: ~7.4k tokens · Full codebase: ~12.0M tokens · Saves ~100%*

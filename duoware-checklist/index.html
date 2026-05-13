@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checklist de Ajustes — Duoware</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(56, 30, 90, 0.35), transparent 50%),
+        radial-gradient(circle at 80% 100%, rgba(20, 40, 90, 0.35), transparent 50%),
+        #0d0d18;
+      color: #fff;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .wrap { max-width: 920px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) clamp(20px, 4vw, 40px); }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      margin-bottom: clamp(40px, 6vw, 64px);
+      padding-bottom: clamp(32px, 5vw, 48px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .eyebrow {
+      display: inline-block;
+      color: #fa6d26;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+    h1 .accent { color: #fa6d26; }
+    .lead {
+      color: rgba(255,255,255,0.6);
+      font-size: clamp(15px, 2.2vw, 17px);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: clamp(28px, 4vw, 36px);
+    }
+    .stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 18px 14px;
+      text-align: center;
+    }
+    .stat-num {
+      font-size: clamp(26px, 4vw, 34px);
+      font-weight: 800;
+      color: #fa6d26;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* ITEMS */
+    .items { display: flex; flex-direction: column; gap: 14px; }
+
+    .item {
+      position: relative;
+      background: linear-gradient(160deg, rgba(28,28,45,0.85), rgba(15,15,28,0.85));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: clamp(18px, 3.5vw, 26px);
+      transition: border-color .25s ease, transform .25s ease;
+    }
+    .item:hover {
+      border-color: rgba(250, 109, 38, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .item-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .item-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(250,109,38,0.12);
+      color: #fa6d26;
+      font-weight: 800;
+      font-size: 14px;
+      display: grid;
+      place-items: center;
+      letter-spacing: -0.02em;
+    }
+    .item-title {
+      flex: 1 1 auto;
+      font-size: clamp(16px, 2.4vw, 18px);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      min-width: 200px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+    }
+
+    .item-body { display: grid; gap: 10px; padding-left: 50px; }
+    .row {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 12px;
+      font-size: 14px;
+      align-items: start;
+    }
+    @media (max-width: 560px) {
+      .item-body { padding-left: 0; }
+      .row { grid-template-columns: 1fr; gap: 2px; }
+    }
+    .row-label {
+      color: rgba(255,255,255,0.45);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding-top: 2px;
+    }
+    .row-value {
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
+    }
+    .row-value .quote {
+      display: block;
+      margin-top: 6px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border-left: 2px solid #fa6d26;
+      border-radius: 6px;
+      font-style: italic;
+      color: rgba(255,255,255,0.75);
+      font-size: 13px;
+    }
+    .row-value strong { color: #fff; font-weight: 700; }
+
+    /* FOOTER */
+    .footer {
+      margin-top: clamp(40px, 5vw, 56px);
+      padding-top: clamp(28px, 4vw, 40px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+      color: rgba(255,255,255,0.45);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .footer .signature {
+      color: rgba(255,255,255,0.75);
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .brand-block {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 18px 28px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+    }
+    .brand-logo-img {
+      height: 80px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* SECTION BREAK — meeting addendum */
+    .section-break {
+      margin: clamp(36px, 5vw, 56px) 0 clamp(24px, 4vw, 32px);
+      text-align: center;
+    }
+    .section-break-eyebrow {
+      display: inline-block;
+      color: #fa6d26;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .section-break h2 {
+      font-size: clamp(22px, 3.5vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .section-break p {
+      color: rgba(255,255,255,0.55);
+      font-size: 14px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* PENDING badge variant */
+    .badge--pending {
+      background: rgba(250, 109, 38, 0.15);
+      color: #fa6d26;
+    }
+    .badge--pending::before {
+      background: #fa6d26;
+      box-shadow: 0 0 8px rgba(250, 109, 38, 0.6);
+    }
+    .item--pending {
+      border-color: rgba(250, 109, 38, 0.18);
+    }
+    .item--pending:hover {
+      border-color: rgba(250, 109, 38, 0.45);
+    }
+    .item--pending .item-num {
+      background: rgba(250,109,38,0.18);
+    }
+
+    /* Sub-list for grouped requests */
+    .sub-list { list-style: none; padding: 0; margin: 4px 0 0; display: flex; flex-direction: column; gap: 5px; }
+    .sub-list li {
+      position: relative;
+      padding-left: 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.78);
+    }
+    .sub-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(250, 109, 38, 0.7);
+    }
+    .sub-list .add { color: #4ade80; }
+    .sub-list .remove { color: #f87171; }
+    .sub-list .add::before { background: #4ade80; }
+    .sub-list .remove::before { background: #f87171; }
+
+    /* PRINT */
+    @media print {
+      body { background: #fff; color: #0d0d18; }
+      .item { background: #fff; border-color: #e5e7eb; break-inside: avoid; }
+      .item-title, h1, .item-num { color: #0d0d18; }
+      .row-value { color: #1f2937; }
+      .stat { background: #f9fafb; border-color: #e5e7eb; }
+      .stat-label { color: #6b7280; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="wrap">
+
+    <!-- HEADER -->
+    <header class="header">
+      <img src="https://drosagencia.com.br/wp-content/uploads/2025/12/DROS-LOGO-1-1024x1024.png"
+           alt="Dros Agência"
+           style="height:64px;width:auto;display:block;margin:0 auto 24px;" />
+      <span class="eyebrow">Entrega — Maio 2026</span>
+      <h1>Checklist de Ajustes<br/><span class="accent">duoware.com.br</span></h1>
+      <p class="lead">Relatório de ajustes solicitados pelo cliente. Todos os itens revisados, implementados e validados visualmente.</p>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num">10</div>
+          <div class="stat-label">Itens solicitados</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">10</div>
+          <div class="stat-label">Concluídos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Entregue</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ITEMS -->
+    <section class="items">
+
+      <!-- 1 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">01</div>
+          <div class="item-title">Atualização do selo de aniversário</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Atualizar de "11 anos" para "12 anos" no site e na assinatura de e-mails.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">Logo do topo atualizado para a versão <strong>12 anos</strong>. Texto da página <em>/empresa/</em> revisado. Assinatura de e-mails alinhada para atualização nos templates.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">02</div>
+          <div class="item-title">Substituição do card Harness por Figma</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Remover o card Harness e incluir Figma com a descrição enviada.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">
+              Card da Harness removido da página <em>/produtos/</em> e substituído pelo card da Figma.
+              <span class="quote">"Figma é uma ferramenta de design colaborativo usada para criar interfaces digitais, como sites e aplicativos. Permite que designers e desenvolvedores trabalhem juntos em tempo real, facilitando layouts, protótipos interativos e validação rápida de ideias."</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">03</div>
+          <div class="item-title">Tier 1 como pontos centrais</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Posicionar JFrog, Figma, JetBrains e Sonarsource como soluções centrais do site.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">Seção <strong>"Nossas Soluções"</strong> reestruturada na home com as 4 marcas em destaque, cards com glow colorido por marca, logos ampliados e botão de CTA em laranja.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">04</div>
+          <div class="item-title">Atualização do e-mail de contato</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Remover o e-mail do Lucca e substituir por <strong>contato@duoware.com.br</strong>.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">Endereço atualizado em todas as ocorrências: página <em>/contato/</em>, formulário de contato (destinatário), rodapé e links <em>mailto:</em>.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">05</div>
+          <div class="item-title">Legibilidade do rodapé e do logo</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Aumentar o tamanho das palavras no final da página e melhorar a legibilidade do logo Duoware.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">Fonte do rodapé escalada para melhor leitura, logo do rodapé ampliado e ajustado para branco puro — destaque garantido sobre o fundo escuro.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">06</div>
+          <div class="item-title">Limpeza do site — remoção da Pix4D</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Limpar o site, removendo o que não é necessário — incluindo o card da Pix4D.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">Card da Pix4D removido da página <em>/produtos/</em>, do menu superior e da lista do rodapé. Página interna redirecionada.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 7 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">07</div>
+          <div class="item-title">Padronização das imagens</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Padronizar os estilos das imagens — havia logos com fundos, cores e formatos diferentes.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">Logos de clientes uniformizados (mesma altura, mesma opacidade, mesmo comportamento de hover). Logos do Tier 1 padronizados com cores oficiais sobre cards de mesma proporção.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 8 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">08</div>
+          <div class="item-title">Nova frase de posicionamento</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Definir uma frase estratégica com posicionamento forte no início do site.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">
+              Headline substituída por uma frase mais curta, memorável e estratégica:
+              <span class="quote">"Tecnologia global. Parceria local."<br/><span style="font-style:normal;color:rgba(255,255,255,0.55);font-size:12px;">Subtítulo: Representante oficial de JFrog, Figma, JetBrains, Sonar e outras líderes mundiais. Há 12 anos.</span></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 9 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">09</div>
+          <div class="item-title">Correção de quebra de palavras</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Apresentar palavras inteiras, sem quebras forçadas (ex: "soluções", "serviços").</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">Regra de CSS aplicada (<code style="font-family:ui-monospace,monospace;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:12px;">hyphens: none</code> · <code style="font-family:ui-monospace,monospace;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:12px;">word-break: keep-all</code>) garantindo que palavras nunca sejam fragmentadas em nenhum breakpoint.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 10 -->
+      <article class="item">
+        <div class="item-head">
+          <div class="item-num">10</div>
+          <div class="item-title">Upgrade visual dos cards Tier 1</div>
+          <span class="badge">Concluído</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Cores mais chamativas para os cards Tier 1, logos maiores e textos curtos com explicação rápida da solução.</div>
+          </div>
+          <div class="row">
+            <div class="row-label">Entregue</div>
+            <div class="row-value">
+              Cards reconstruídos com <strong>glow colorido por marca</strong> (JFrog ciano, Figma azul, JetBrains vermelho, Sonar roxo), <strong>logos ampliados</strong> ocupando o topo do card, textos descritivos enxutos e botão CTA em laranja <em>(#fa6d26)</em> padronizado.
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- MEETING ADDENDUM -->
+    <div class="section-break">
+      <span class="section-break-eyebrow">Reunião · 12 / 05 / 2026</span>
+      <h2>Solicitações adicionais</h2>
+      <p>Itens alinhados em reunião com o cliente. Em revisão para implementação.</p>
+    </div>
+
+    <section class="items">
+
+      <!-- 11 -->
+      <article class="item item--pending">
+        <div class="item-head">
+          <div class="item-num">11</div>
+          <div class="item-title">Ajustes no rodapé do site</div>
+          <span class="badge badge--pending">Em revisão</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">
+              <ul class="sub-list">
+                <li>Aumentar o tamanho da fonte do rodapé para melhor legibilidade</li>
+                <li>Adicionar telefone com prefixo internacional <strong>+55</strong></li>
+                <li class="remove">Remover ClickUp do rodapé</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 12 -->
+      <article class="item item--pending">
+        <div class="item-head">
+          <div class="item-num">12</div>
+          <div class="item-title">Remoção de cards de produtos</div>
+          <span class="badge badge--pending">Em revisão</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">
+              Remover os seguintes cards/produtos do catálogo do site:
+              <ul class="sub-list">
+                <li class="remove">Halcyon</li>
+                <li class="remove">Darktrace</li>
+                <li class="remove">Digifort</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 13 -->
+      <article class="item item--pending">
+        <div class="item-head">
+          <div class="item-num">13</div>
+          <div class="item-title">JetBrains — atualização de produto</div>
+          <span class="badge badge--pending">Em revisão</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Solicitado</div>
+            <div class="row-value">Remover referência ao <strong>JetBrains Space</strong>, que foi descontinuado pela JetBrains. Ajustar o link do card e da página interna.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 14 -->
+      <article class="item item--pending">
+        <div class="item-head">
+          <div class="item-num">14</div>
+          <div class="item-title">Atualização da grid de clientes "Os melhores estão aqui"</div>
+          <span class="badge badge--pending">Em revisão</span>
+        </div>
+        <div class="item-body">
+          <div class="row">
+            <div class="row-label">Remover</div>
+            <div class="row-value">
+              <ul class="sub-list">
+                <li class="remove">B3</li>
+                <li class="remove">8ª Região Militar</li>
+                <li class="remove">Neoway</li>
+                <li class="remove">Saque e Pague</li>
+                <li class="remove">Exército Brasileiro</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="row-label">Inserir</div>
+            <div class="row-value">
+              <ul class="sub-list">
+                <li class="add">Dataprev</li>
+                <li class="add">Petrobras</li>
+                <li class="add">BNB — Banco do Nordeste</li>
+                <li class="add">BNP Paribas</li>
+                <li class="add">TCU — Tribunal de Contas da União</li>
+                <li class="add">Banco Central</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="brand-block">
+        <img src="https://drosagencia.com.br/wp-content/uploads/2025/12/DROS-LOGO-1-1024x1024.png"
+             alt="Dros Agência"
+             class="brand-logo-img" />
+      </div>
+      <div>Relatório de entrega · Ajustes realizados em <strong>duoware.com.br</strong></div>
+      <div class="signature">Entregue pela Dros Agência · drosagencia.com.br</div>
+    </footer>
+
+  </main>
+
+</body>
+</html>

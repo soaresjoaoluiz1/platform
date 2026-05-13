@@ -1,0 +1,383 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "D DROS Sales" [ref=e4] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e5]: D
+        - generic [ref=e6]: DROS Sales
+      - navigation [ref=e7]:
+        - link "Início" [ref=e8] [cursor=pointer]:
+          - /url: "#inicio"
+        - link "Sobre" [ref=e9] [cursor=pointer]:
+          - /url: "#sobre"
+        - link "Método" [ref=e10] [cursor=pointer]:
+          - /url: "#metodo"
+        - link "Cases" [ref=e11] [cursor=pointer]:
+          - /url: "#cases"
+        - link "Depoimentos" [ref=e12] [cursor=pointer]:
+          - /url: "#depoimentos"
+        - link "Conteúdos" [ref=e13] [cursor=pointer]:
+          - /url: "#conteudos"
+        - link "Contato" [ref=e14] [cursor=pointer]:
+          - /url: "#contato"
+      - link "Falar com a DROS" [ref=e15] [cursor=pointer]:
+        - /url: "#contato"
+  - generic [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]: Método DROS Sales
+      - heading "Canal de vendas para indústria." [level=1] [ref=e21]:
+        - text: Canal de vendas
+        - text: para indústria.
+      - paragraph [ref=e22]: Ajudamos fábricas e distribuidoras a organizar a forma como aparecem, atendem e transformam oportunidades em pedido.
+      - generic [ref=e23]:
+        - paragraph [ref=e24]: Produto bom é importante. Só que, sozinho, ele não garante crescimento.
+        - paragraph [ref=e25]: "Na prática, toda indústria precisa de um canal claro: gente nova conhecendo, atendimento organizado e acompanhamento até a venda acontecer."
+        - paragraph [ref=e26]: Se sua empresa ainda depende muito de indicação, boca a boca ou poucos representantes, talvez o problema não esteja no produto. Talvez esteja no canal.
+      - generic [ref=e27]:
+        - link "Conheça o método" [ref=e28] [cursor=pointer]:
+          - /url: "#metodo"
+        - link "Ver cases" [ref=e29] [cursor=pointer]:
+          - /url: "#cases"
+      - paragraph [ref=e30]: Sem promessa milagrosa. Primeiro a gente entende a operação. Depois mostra o caminho.
+    - complementary [ref=e31]:
+      - generic [ref=e32]: Resultados construídos com processo
+      - list [ref=e33]:
+        - listitem [ref=e34]:
+          - generic [ref=e35]: ✓
+          - generic [ref=e36]: +750 revendedores ativos
+        - listitem [ref=e37]:
+          - generic [ref=e38]: ✓
+          - generic [ref=e39]: 2.600 m² de estrutura operacional
+        - listitem [ref=e40]:
+          - generic [ref=e41]: ✓
+          - generic [ref=e42]: Quase 6 anos de parceria contínua
+  - generic [ref=e44]:
+    - generic [ref=e45]:
+      - heading "Empresas que já confiaram na DROS para crescer, vender mais ou estruturar melhor sua presença." [level=3] [ref=e46]
+      - paragraph [ref=e47]: Não é sobre fazer mais post. É sobre construir caminho para o produto sair da empresa e chegar em quem pode comprar.
+    - generic [ref=e48]:
+      - generic [ref=e49]: ASK
+      - generic [ref=e50]: inVista
+      - generic [ref=e51]: Renove
+      - generic [ref=e52]: Suprema
+      - generic [ref=e53]: Quimiprol
+      - generic [ref=e54]: DoorGrill
+  - generic [ref=e57]:
+    - generic [ref=e58]:
+      - generic [ref=e59]: Sobre a DROS Sales
+      - heading "Não somos agência de post bonito." [level=2] [ref=e60]
+      - paragraph [ref=e61]: A DROS Sales nasceu para trabalhar com empresas que fabricam, distribuem ou vendem produtos físicos.
+    - generic [ref=e62]:
+      - paragraph [ref=e63]: A gente entende que indústria não vende como uma loja comum. Muitas vezes o cliente precisa entender aplicação, entrega, margem, prazo, recompra, região e confiança.
+      - paragraph [ref=e64]: Por isso, nosso trabalho não começa no post. Começa no canal.
+      - paragraph [ref=e65]: "A gente olha para o caminho inteiro: como a empresa aparece, como o interessado chega, como é atendido e o que precisa acontecer para aquilo virar pedido."
+      - blockquote [ref=e66]: Produto bom que ninguém sabe que existe não vende.
+  - generic [ref=e69]:
+    - generic [ref=e70]:
+      - generic [ref=e71]: O mercado
+      - heading "A indústria move o Brasil. Só que muita indústria ainda vende no improviso." [level=2] [ref=e72]
+      - paragraph [ref=e73]:
+        - text: A indústria tem um peso enorme na economia. Em 2025, o setor industrial respondeu por
+        - strong [ref=e74]: 23,4% do PIB brasileiro
+        - text: e por
+        - strong [ref=e75]: 35,2% da arrecadação de tributos federais
+        - text: ", segundo dados da CNI."
+      - paragraph [ref=e76]: "Fonte: CNI / Portal da Indústria."
+    - generic [ref=e77]:
+      - paragraph [ref=e78]: Só que, olhando para a pequena e média indústria, o desafio é outro. Tem dono de fábrica que sabe produzir, sabe entregar, sabe resolver problema, mas ainda não tem clareza de onde a venda está travando.
+      - paragraph [ref=e79]: E aí o que acontece?
+      - paragraph [ref=e80]: Um mês vende bem. No outro cai. O cliente chama e ninguém responde rápido. O representante atende uma região, mas outra fica parada. Tem cliente antigo que comprou uma vez e nunca mais voltou. E o dono fica tentando adivinhar onde está o erro.
+      - paragraph [ref=e81]: Na prática, isso não é só problema de venda.
+      - paragraph [ref=e82]:
+        - strong [ref=e83]: É problema de canal.
+  - generic [ref=e85]:
+    - generic [ref=e86]:
+      - heading "O problema talvez não esteja dentro da fábrica. Pode estar no caminho até o cliente." [level=2] [ref=e87]
+      - paragraph [ref=e88]: Toda semana a gente conversa com dono de fábrica que vive situações parecidas. O produto é bom. A entrega funciona. A equipe trabalha. Só que a venda não cresce como deveria. Quando a gente olha de perto, quase sempre aparecem os mesmos gargalos.
+    - generic [ref=e89]:
+      - article [ref=e90]:
+        - generic [ref=e91]: 👥
+        - heading "Cliente antigo esquecido" [level=3] [ref=e92]
+        - paragraph [ref=e93]: Tem cliente que já comprou, gostou e nunca mais recebeu uma mensagem. O dinheiro fica parado na base porque ninguém chama o cliente de volta.
+      - article [ref=e94]:
+        - generic [ref=e95]: 💬
+        - heading "WhatsApp sem processo" [level=3] [ref=e96]
+        - paragraph [ref=e97]: A pessoa chama, pergunta preço, pede condição e quer comprar. Só que a resposta demora — ou alguém manda uma tabela e some. Mensagem sem resposta é venda indo embora.
+      - article [ref=e98]:
+        - generic [ref=e99]: 🤝
+        - heading "Venda dependendo de indicação" [level=3] [ref=e100]
+        - paragraph [ref=e101]: Boca a boca é bom, mas tem teto. Ele trouxe sua indústria até aqui. Só que, para crescer, precisa de canal.
+      - article [ref=e102]:
+        - generic [ref=e103]: 📍
+        - heading "Regiões vazias" [level=3] [ref=e104]
+        - paragraph [ref=e105]: Tem cidade, bairro, revendedor, comércio ou distribuidor que poderia comprar. Só que ninguém está indo atrás. Aí o concorrente ocupa o espaço.
+      - article [ref=e106]:
+        - generic [ref=e107]: 📊
+        - heading "Representante sem acompanhamento" [level=3] [ref=e108]
+        - paragraph [ref=e109]: Às vezes a indústria tem representante, mas não sabe quantos contatos ele trabalhou, quantas visitas fez ou quantas oportunidades perdeu. Sem número, vira opinião.
+      - article [ref=e110]:
+        - generic [ref=e111]: 📈
+        - heading "Venda oscilando todo mês" [level=3] [ref=e112]
+        - paragraph [ref=e113]: Um mês vende bem. No outro cai. E o dono fica tentando adivinhar se foi preço, mercado, equipe, concorrente ou falta de procura. Sem canal organizado, tudo parece chute.
+  - generic [ref=e116]:
+    - generic [ref=e117]:
+      - generic [ref=e118]: Cenário da indústria
+      - heading "O mercado já é difícil. Vender no escuro deixa tudo mais caro." [level=2] [ref=e119]
+    - generic [ref=e120]:
+      - paragraph [ref=e121]:
+        - text: A Sondagem Industrial da CNI apontou
+        - strong [ref=e122]: carga tributária, taxa de juros e falta de demanda
+        - text: no topo do ranking de principais problemas da indústria no quarto trimestre de 2025.
+      - paragraph [ref=e123]: "Beleza, mas tem uma parte que a indústria consegue controlar melhor: o canal."
+      - paragraph [ref=e124]: Você não controla o imposto. Não controla o juro. Não controla o concorrente. Só que pode controlar como sua empresa aparece, como atende, como acompanha e como transforma oportunidade em pedido.
+      - blockquote [ref=e125]: Se o mercado aperta, vender no improviso fica ainda mais caro.
+  - generic [ref=e127]:
+    - generic [ref=e128]:
+      - generic [ref=e129]: Como funciona
+      - heading "Um método simples para organizar o canal." [level=2] [ref=e130]
+      - paragraph [ref=e131]: A DROS Sales olha para a venda da indústria como uma operação. Antes de anunciar, precisa entender. Antes de cobrar resultado, precisa organizar o atendimento. Antes de falar em crescimento, precisa saber onde a oportunidade está escapando.
+    - generic [ref=e132]:
+      - article [ref=e133]:
+        - generic [ref=e134]: 01 · ANÁLISE
+        - heading "Entender como sua indústria vende hoje." [level=3] [ref=e135]
+        - paragraph [ref=e136]: Sem análise, qualquer decisão é chute.
+        - list [ref=e137]:
+          - listitem [ref=e138]: Quem chega
+          - listitem [ref=e139]: Quem compra
+          - listitem [ref=e140]: Onde o cliente some
+          - listitem [ref=e141]: Qual região está parada
+          - listitem [ref=e142]: Onde existe oportunidade esquecida
+      - article [ref=e143]:
+        - generic [ref=e144]: 02 · ANÚNCIOS
+        - heading "Fazer sua indústria aparecer para quem pode comprar." [level=3] [ref=e145]
+        - paragraph [ref=e146]: Não é anúncio para curtida. É anúncio para colocar seu produto na frente de gente com chance real de comprar.
+        - list [ref=e147]:
+          - listitem [ref=e148]: Revendedor
+          - listitem [ref=e149]: Distribuidor
+          - listitem [ref=e150]: Comércio
+          - listitem [ref=e151]: Empresa
+          - listitem [ref=e152]: Comprador direto
+          - listitem [ref=e153]: Região estratégica
+      - article [ref=e154]:
+        - generic [ref=e155]: 03 · COMERCIAL
+        - heading "Quando a pessoa chama, precisa ter processo." [level=3] [ref=e156]
+        - paragraph [ref=e157]: Não adianta trazer gente querendo comprar se ninguém cuida bem de quem chegou.
+        - list [ref=e158]:
+          - listitem [ref=e159]: Resposta rápida
+          - listitem [ref=e160]: Pergunta certa
+          - listitem [ref=e161]: Acompanhamento
+          - listitem [ref=e162]: Retorno
+          - listitem [ref=e163]: Organização dos contatos
+          - listitem [ref=e164]: Próximo passo claro
+    - paragraph [ref=e165]: Análise mostra o gargalo. Anúncio traz oportunidade. Comercial transforma em pedido.
+  - generic [ref=e167]:
+    - generic [ref=e168]: Case real
+    - generic [ref=e169]:
+      - generic [ref=e171]: 📷 quimiprol-fachada.jpg
+      - generic [ref=e172]:
+        - heading "Resultados construídos com processo e consistência." [level=2] [ref=e173]
+        - paragraph [ref=e174]: De 500 m² para uma operação com mais de 750 revendedores ativos.
+        - generic [ref=e175]:
+          - paragraph [ref=e176]: Um dos nossos clientes mais antigos começou com uma operação de 500 m². Hoje tem 2.600 m², mais de 750 revendedores ativos e fábrica própria de embalagem.
+          - paragraph [ref=e177]: Isso não aconteceu por causa de um post bonito. Aconteceu com anos de construção de canal, campanhas rodando, atendimento sendo ajustado, revendedores sendo ativados e números sendo acompanhados.
+          - paragraph [ref=e178]: Na prática, foi trabalho de formiga. Só que formiga que não para constrói formigueiro gigante.
+        - generic [ref=e179]:
+          - generic [ref=e180]:
+            - generic [ref=e181]: "+750"
+            - generic [ref=e182]: revendedores ativos
+          - generic [ref=e183]:
+            - generic [ref=e184]: 2.600 m²
+            - generic [ref=e185]: de estrutura operacional
+          - generic [ref=e186]:
+            - generic [ref=e187]: ~6 anos
+            - generic [ref=e188]: de parceria contínua
+        - blockquote [ref=e189]: Resultado previsível não nasce de sorte. Nasce de processo.
+        - link "Ver mais cases" [ref=e190] [cursor=pointer]:
+          - /url: "#contato"
+  - generic [ref=e192]:
+    - generic [ref=e193]:
+      - generic [ref=e194]: Para quem é
+      - heading "Trabalhamos com indústria que tem produto e precisa de mais mercado." [level=2] [ref=e195]
+      - paragraph [ref=e196]: A DROS Sales trabalha com empresas que fabricam, distribuem ou vendem produtos físicos. O ponto não é o nicho em si. O ponto é ter produto, margem, operação e necessidade de colocar mais gente comprando.
+    - generic [ref=e197]:
+      - generic [ref=e198]: Produto de limpeza
+      - generic [ref=e199]: Indústria química
+      - generic [ref=e200]: Cosméticos
+      - generic [ref=e201]: Embalagens
+      - generic [ref=e202]: Automotivo
+      - generic [ref=e203]: Ração animal
+      - generic [ref=e204]: ARLA
+      - generic [ref=e205]: Metalúrgica
+      - generic [ref=e206]: Equipamentos
+      - generic [ref=e207]: Distribuidoras
+      - generic [ref=e208]: Fábricas em geral
+    - paragraph [ref=e209]: Se existe produto bom, entrega funcionando e espaço para crescer, dá para olhar o canal.
+  - generic [ref=e211]:
+    - generic [ref=e212]:
+      - generic [ref=e213]: Nossa visão
+      - heading "A forma como a gente enxerga venda industrial." [level=2] [ref=e214]
+      - paragraph [ref=e215]: A indústria não precisa copiar a comunicação de loja, infoproduto ou e-commerce. Venda industrial tem outro ritmo. O comprador quer entender se o produto resolve, se a entrega funciona, se o preço faz sentido, se existe recompra, se dá para revender, se a margem fecha e se a empresa passa confiança. Por isso a comunicação precisa falar com a realidade de quem compra. E o canal precisa sustentar esse caminho.
+    - generic [ref=e216]:
+      - generic [ref=e217]:
+        - heading "Produto bom não vende sozinho" [level=3] [ref=e218]
+        - paragraph [ref=e219]: Sempre precisou de alguém para levar, explicar, mostrar e entregar.
+      - generic [ref=e220]:
+        - heading "Boca a boca tem teto" [level=3] [ref=e221]
+        - paragraph [ref=e222]: Ele é importante. Só que chega uma hora em que depender só de indicação trava o crescimento.
+      - generic [ref=e223]:
+        - heading "Atendimento lento custa caro" [level=3] [ref=e224]
+        - paragraph [ref=e225]: Quem responde primeiro, muitas vezes, vende primeiro.
+      - generic [ref=e226]:
+        - heading "Canal é ativo comercial" [level=3] [ref=e227]
+        - paragraph [ref=e228]: Quando o canal funciona, a empresa para de depender só da sorte do mês.
+  - generic [ref=e230]:
+    - generic [ref=e231]:
+      - generic [ref=e232]: Primeiro passo
+      - heading "Antes de qualquer proposta, a gente olha o cenário." [level=2] [ref=e233]
+      - paragraph [ref=e234]: A gente não começa prometendo resultado. Começa entendendo. Porque cada indústria tem uma realidade — tem empresa que precisa de mais revendedor, tem empresa que precisa vender para comércio, tem empresa que precisa abrir região, tem empresa que tem muita procura mas perde no atendimento, tem empresa que tem cliente antigo parado na base. Então, antes de falar em campanha, a gente entende o canal.
+    - generic [ref=e235]:
+      - article [ref=e236]:
+        - generic [ref=e237]: "1"
+        - heading "Conversa inicial" [level=3] [ref=e238]
+        - paragraph [ref=e239]: Entendemos tua indústria, teu produto, como vende hoje e onde sente que a venda está travando.
+      - article [ref=e240]:
+        - generic [ref=e241]: "2"
+        - heading "Mapa do canal" [level=3] [ref=e242]
+        - paragraph [ref=e243]: "Organizamos o caminho: quem compra, onde compra, como chega, como é atendido e onde a oportunidade está escapando."
+      - article [ref=e244]:
+        - generic [ref=e245]: "3"
+        - heading "Execução" [level=3] [ref=e246]
+        - paragraph [ref=e247]: Entramos com anúncios, organização do atendimento e acompanhamento dos contatos que chegam.
+      - article [ref=e248]:
+        - generic [ref=e249]: "4"
+        - heading "Ajuste contínuo" [level=3] [ref=e250]
+        - paragraph [ref=e251]: Toda semana olhamos o que funcionou, o que travou e o que precisa mudar.
+    - generic [ref=e252]:
+      - paragraph [ref=e253]: Canal não nasce pronto. Canal se constrói.
+      - link "Falar com a DROS" [ref=e254] [cursor=pointer]:
+        - /url: "#contato"
+  - generic [ref=e256]:
+    - generic [ref=e257]:
+      - generic [ref=e258]: Prova social
+      - heading "Quem constrói no dia a dia sabe o valor de ter processo." [level=2] [ref=e259]
+      - paragraph [ref=e260]: Mais do que campanha, o que sustenta resultado é clareza, acompanhamento e uma operação comercial que não depende só da sorte do mês.
+    - generic [ref=e261]:
+      - article [ref=e262]:
+        - generic [ref=e263]: “
+        - paragraph [ref=e264]: "A DROS estruturou nossa operação de marketing do ponto a ponta: criativos, campanhas e otimizações contínuas. Hoje investimos com mais consistência e vendemos para todo o Brasil."
+        - generic [ref=e265]:
+          - generic [ref=e266]: R
+          - generic [ref=e267]:
+            - generic [ref=e268]: Rodri
+            - generic [ref=e269]: CEO, DoorGrill Churrasqueiras
+      - article [ref=e270]:
+        - generic [ref=e271]: “
+        - paragraph [ref=e272]: A DROS entendeu nosso negócio e transformou isso em conteúdo, vídeos e campanhas que fortaleceram a marca. A comunicação ficou mais profissional e a presença digital ganhou força.
+        - generic [ref=e273]:
+          - generic [ref=e274]: W
+          - generic [ref=e275]:
+            - generic [ref=e276]: Welliton
+            - generic [ref=e277]: Gerente Administrativo, Agrozacca Suprema Alimentos
+      - article [ref=e278]:
+        - generic [ref=e279]: “
+        - paragraph [ref=e280]: A DROS nos ajudou a organizar a comunicação e a aquisição de demanda com foco em resultado. A estratégia trouxe clareza para oferta, consistência na geração de oportunidades e evolução mês a mês.
+        - generic [ref=e281]:
+          - generic [ref=e282]: R
+          - generic [ref=e283]:
+            - generic [ref=e284]: Ramon
+            - generic [ref=e285]: Fundador, ASK Equipamentos Industriais
+  - generic [ref=e287]:
+    - heading "Quer entender se sua indústria tem espaço para estruturar melhor o canal?" [level=2] [ref=e288]
+    - paragraph [ref=e289]: A primeira conversa serve para entender tua operação, teu produto e onde a venda pode estar travando. Não é para empurrar proposta. É para olhar o cenário e entender se faz sentido avançar.
+    - generic [ref=e290]:
+      - link "Falar com a DROS" [ref=e291] [cursor=pointer]:
+        - /url: "#"
+      - link "Conhecer o método" [ref=e292] [cursor=pointer]:
+        - /url: "#metodo"
+    - paragraph [ref=e293]: Conversa inicial simples, sem compromisso.
+    - paragraph [ref=e294]: Produto bom não vende sozinho. Canal vende.
+  - contentinfo [ref=e295]:
+    - generic [ref=e296]:
+      - generic [ref=e297]:
+        - generic [ref=e298]:
+          - link "D DROS Sales" [ref=e299] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e300]: D
+            - generic [ref=e301]: DROS Sales
+          - paragraph [ref=e302]: Canal de vendas para indústria. Ajudamos fábricas e distribuidoras a organizar análise, anúncios e atendimento para transformar oportunidade em pedido.
+        - generic [ref=e303]:
+          - heading "Navegação" [level=4] [ref=e304]
+          - list [ref=e305]:
+            - listitem [ref=e306]:
+              - link "Início" [ref=e307] [cursor=pointer]:
+                - /url: "#inicio"
+            - listitem [ref=e308]:
+              - link "Sobre" [ref=e309] [cursor=pointer]:
+                - /url: "#sobre"
+            - listitem [ref=e310]:
+              - link "Método" [ref=e311] [cursor=pointer]:
+                - /url: "#metodo"
+            - listitem [ref=e312]:
+              - link "Cases" [ref=e313] [cursor=pointer]:
+                - /url: "#cases"
+            - listitem [ref=e314]:
+              - link "Depoimentos" [ref=e315] [cursor=pointer]:
+                - /url: "#depoimentos"
+            - listitem [ref=e316]:
+              - link "Conteúdos" [ref=e317] [cursor=pointer]:
+                - /url: "#conteudos"
+            - listitem [ref=e318]:
+              - link "Contato" [ref=e319] [cursor=pointer]:
+                - /url: "#contato"
+        - generic [ref=e320]:
+          - heading "Segmentos" [level=4] [ref=e321]
+          - list [ref=e322]:
+            - listitem [ref=e323]:
+              - link "Produto de limpeza" [ref=e324] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e325]:
+              - link "Indústria química" [ref=e326] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e327]:
+              - link "Cosméticos" [ref=e328] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e329]:
+              - link "Embalagens" [ref=e330] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e331]:
+              - link "Automotivo" [ref=e332] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e333]:
+              - link "Ração animal" [ref=e334] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e335]:
+              - link "ARLA" [ref=e336] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e337]:
+              - link "Metalúrgica" [ref=e338] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e339]:
+              - link "Equipamentos" [ref=e340] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e341]:
+          - heading "Contato" [level=4] [ref=e342]
+          - list [ref=e343]:
+            - listitem [ref=e344]:
+              - link "Fale com a DROS" [ref=e345] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e346]:
+              - 'link "WhatsApp: (inserir)" [ref=e347] [cursor=pointer]':
+                - /url: "#"
+            - listitem [ref=e348]:
+              - 'link "E-mail: (inserir)" [ref=e349] [cursor=pointer]':
+                - /url: "#"
+            - listitem [ref=e350]:
+              - 'link "Instagram: @dros.sales" [ref=e351] [cursor=pointer]':
+                - /url: https://instagram.com/dros.sales
+            - listitem [ref=e352]:
+              - 'link "Instagram: @deividjrs" [ref=e353] [cursor=pointer]':
+                - /url: https://instagram.com/deividjrs
+      - generic [ref=e354]:
+        - paragraph [ref=e355]: © 2026 DROS Sales. Todos os direitos reservados.
+        - link "Falar com a DROS" [ref=e356] [cursor=pointer]:
+          - /url: "#contato"
