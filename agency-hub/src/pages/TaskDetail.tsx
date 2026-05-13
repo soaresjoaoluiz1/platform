@@ -661,7 +661,7 @@ export default function TaskDetail() {
 
       {/* Confirm Recording modal */}
       {showRecording && (
-        <div className="modal-overlay" onClick={() => setShowRecording(false)}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowRecording(false))() }}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
           <h2><Video size={18} style={{ marginRight: 8, verticalAlign: 'middle', color: '#FFB300' }} />Confirmar Data de Gravacao</h2>
           <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Sera criada a tarefa de Gravacao (no dia escolhido) e Criar Imagens (em paralelo). Apos a Gravacao concluir, Subir Arquivos e Editar Video sao criadas automaticamente.</p>
           <div className="form-group"><label>Data e Hora da Gravacao *</label><input className="input" type="datetime-local" value={recordingData.recording_datetime} onChange={e => setRecordingData(p => ({ ...p, recording_datetime: e.target.value }))} /></div>
@@ -709,7 +709,7 @@ export default function TaskDetail() {
 
       {/* New Subtarefa modal */}
       {showNewSub && (
-        <div className="modal-overlay" onClick={() => setShowNewSub(false)}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNewSub(false))() }}>
           <div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
             <h2><Plus size={18} style={{ marginRight: 8, verticalAlign: 'middle', color: '#FFB300' }} />Nova Subtarefa</h2>
             <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Vinculada a "{task?.title}". Ao concluir todas as subtarefas, a mae auto-conclui.</p>
@@ -733,7 +733,7 @@ export default function TaskDetail() {
 
       {/* Reject modal */}
       {showReject && (
-        <div className="modal-overlay" onClick={() => setShowReject(false)}><div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowReject(false))() }}><div className="modal" onClick={e => e.stopPropagation()}>
           <h2>Rejeitar Tarefa</h2>
           <div className="form-group"><label>Motivo da rejeicao *</label><textarea className="input" rows={3} value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="Descreva o que precisa ser alterado..." /></div>
           <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowReject(false)}>Cancelar</button><button className="btn btn-danger" onClick={handleReject} disabled={!rejectReason.trim()}>Rejeitar</button></div>

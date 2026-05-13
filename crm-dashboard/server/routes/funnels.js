@@ -24,9 +24,9 @@ router.post('/', requireRole('super_admin', 'gerente'), (req, res) => {
   const funnelId = result.lastInsertRowid
 
   if (stages && Array.isArray(stages)) {
-    const stmt = db.prepare('INSERT INTO funnel_stages (funnel_id, name, position, color, is_conversion, is_terminal, auto_keywords) VALUES (?, ?, ?, ?, ?, ?, ?)')
+    const stmt = db.prepare('INSERT INTO funnel_stages (funnel_id, name, position, color, is_conversion, is_terminal, auto_keywords, meta_event_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
     stages.forEach((s, i) => {
-      stmt.run(funnelId, s.name, i, s.color || '#FFB300', s.is_conversion ? 1 : 0, s.is_terminal ? 1 : 0, s.auto_keywords ? JSON.stringify(s.auto_keywords) : null)
+      stmt.run(funnelId, s.name, i, s.color || '#FFB300', s.is_conversion ? 1 : 0, s.is_terminal ? 1 : 0, s.auto_keywords ? JSON.stringify(s.auto_keywords) : null, s.meta_event_name || null)
     })
   }
 
@@ -51,27 +51,41 @@ router.put('/:id/stages', requireRole('super_admin', 'gerente'), (req, res) => {
   const funnel = db.prepare('SELECT * FROM funnels WHERE id = ?').get(req.params.id)
   if (!funnel) return res.status(404).json({ error: 'Funil nao encontrado' })
 
-  // Delete old stages that are not referenced by leads, update existing
-  const existingStageIds = new Set(db.prepare('SELECT DISTINCT stage_id FROM leads WHERE funnel_id = ?').all(funnel.id).map(r => r.stage_id))
+  // IDs que o frontend enviou (stages que existem e devem ser mantidas/atualizadas)
+  const sentStageIds = new Set(stages.filter(s => s.id).map(s => s.id))
+  // Stages com QUALQUER lead apontando (inclui arquivados) NUNCA podem ser deletadas
+  const stagesWithLeads = new Set(db.prepare('SELECT DISTINCT stage_id FROM leads WHERE funnel_id = ?').all(funnel.id).map(r => r.stage_id))
+
+  // Tenta deletar stages FORA da transaction principal (falha individual nao quebra tudo)
+  const oldStages = db.prepare('SELECT id FROM funnel_stages WHERE funnel_id = ?').all(funnel.id)
+  for (const old of oldStages) {
+    if (sentStageIds.has(old.id)) continue // mantida pelo front
+    if (stagesWithLeads.has(old.id)) {
+      console.log(`[Funnels] Stage ${old.id} mantida — tem leads (inclui arquivados)`)
+      continue
+    }
+    try {
+      // Limpa stage_history primeiro (FK sem CASCADE)
+      db.prepare('DELETE FROM stage_history WHERE from_stage_id = ? OR to_stage_id = ?').run(old.id, old.id)
+      db.prepare('DELETE FROM funnel_stages WHERE id = ?').run(old.id)
+      console.log(`[Funnels] Stage ${old.id} deletada`)
+    } catch (err) {
+      console.error(`[Funnels] Falha ao deletar stage ${old.id} (FK constraint?):`, err.message)
+      // Segue — stage continua no banco, no proximo GET o front recebe ela de volta
+    }
+  }
 
   const transaction = db.transaction(() => {
-    // Remove stages not in use
-    const oldStages = db.prepare('SELECT id FROM funnel_stages WHERE funnel_id = ?').all(funnel.id)
-    for (const old of oldStages) {
-      if (!existingStageIds.has(old.id)) {
-        db.prepare('DELETE FROM funnel_stages WHERE id = ?').run(old.id)
-      }
-    }
     // Upsert stages
     for (let i = 0; i < stages.length; i++) {
       const s = stages[i]
       if (s.id) {
-        db.prepare('UPDATE funnel_stages SET name = ?, position = ?, color = ?, is_conversion = ?, is_terminal = ?, auto_keywords = ? WHERE id = ?').run(
-          s.name, i, s.color || '#FFB300', s.is_conversion ? 1 : 0, s.is_terminal ? 1 : 0, s.auto_keywords ? JSON.stringify(s.auto_keywords) : null, s.id
+        db.prepare('UPDATE funnel_stages SET name = ?, position = ?, color = ?, is_conversion = ?, is_terminal = ?, auto_keywords = ?, meta_event_name = ? WHERE id = ?').run(
+          s.name, i, s.color || '#FFB300', s.is_conversion ? 1 : 0, s.is_terminal ? 1 : 0, s.auto_keywords ? JSON.stringify(s.auto_keywords) : null, s.meta_event_name || null, s.id
         )
       } else {
-        db.prepare('INSERT INTO funnel_stages (funnel_id, name, position, color, is_conversion, is_terminal, auto_keywords) VALUES (?, ?, ?, ?, ?, ?, ?)').run(
-          funnel.id, s.name, i, s.color || '#FFB300', s.is_conversion ? 1 : 0, s.is_terminal ? 1 : 0, s.auto_keywords ? JSON.stringify(s.auto_keywords) : null
+        db.prepare('INSERT INTO funnel_stages (funnel_id, name, position, color, is_conversion, is_terminal, auto_keywords, meta_event_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').run(
+          funnel.id, s.name, i, s.color || '#FFB300', s.is_conversion ? 1 : 0, s.is_terminal ? 1 : 0, s.auto_keywords ? JSON.stringify(s.auto_keywords) : null, s.meta_event_name || null
         )
       }
     }

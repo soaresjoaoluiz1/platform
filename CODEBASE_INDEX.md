@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-13 · 3948 files · ~12.0M tokens total
+> 2026-05-13 · 4043 files · ~12.1M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -175,6 +175,9 @@
 - `tasks.js`
 - `users.js`
 - `webhooks.js`
+
+**crm-dashboard\server\services/**
+- `metaCapi.js` — Hash padrao Meta: SHA256 lowercase trim · sendCapiEvent, loadLeadForCapi, triggerCapiForStageChange, testCapi
 
 **crm-dashboard\src/**
 - `App.tsx` — default:App
@@ -749,4 +752,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~7.4k tokens · Full codebase: ~12.0M tokens · Saves ~100%*
+*Index: ~7.5k tokens · Full codebase: ~12.1M tokens · Saves ~100%*

@@ -131,7 +131,7 @@ export default function Clients() {
         </table></div>
       )}
       {modalMode !== null && (
-        <div className="modal-overlay" onClick={closeModal}><div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 700, maxHeight: '90vh', overflowY: 'auto' }}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (closeModal)() }}><div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 700, maxHeight: '90vh', overflowY: 'auto' }}>
           <h2>{isEditing ? 'Editar Cliente' : 'Novo Cliente'}</h2>
 
           <div style={{ fontSize: 11, color: '#9B96B0', textTransform: 'uppercase', fontWeight: 600, margin: '12px 0 6px' }}>Identificacao</div>

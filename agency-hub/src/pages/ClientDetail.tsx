@@ -365,7 +365,7 @@ export default function ClientDetail() {
 
           {/* New credential modal */}
           {showNewCred && (
-            <div className="modal-overlay" onClick={() => setShowNewCred(false)}>
+            <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNewCred(false))() }}>
               <div className="modal" onClick={e => e.stopPropagation()}>
                 <h2>Novo Acesso</h2>
                 <div className="form-group"><label>Plataforma *</label>
@@ -423,7 +423,7 @@ export default function ClientDetail() {
 
           {/* Reset password / Create access modal */}
           {resetPassId && (
-            <div className="modal-overlay" onClick={() => setResetPassId(null)}>
+            <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setResetPassId(null))() }}>
               <div className="modal" onClick={e => e.stopPropagation()}>
                 {resetPassId === -1 ? (
                   <>

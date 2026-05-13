@@ -423,7 +423,7 @@ export default function Dashboard() {
       )}
 
       {showRequest && (
-        <div className="modal-overlay" onClick={() => setShowRequest(false)}><div className="modal" style={{ maxWidth: 540 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowRequest(false))() }}><div className="modal" style={{ maxWidth: 540 }} onClick={e => e.stopPropagation()}>
           <h2><Plus size={20} style={{ marginRight: 8, verticalAlign: 'middle', color: '#FFB300' }} />Solicitar Nova Tarefa</h2>
           <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Sua solicitacao sera enviada para aprovacao do gerente/CEO. Apos aprovada, a equipe entrara em producao.</p>
           <div className="form-group"><label>Titulo *</label><input className="input" value={newRequest.title} onChange={e => setNewRequest(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Criar post novo sobre lancamento" /></div>

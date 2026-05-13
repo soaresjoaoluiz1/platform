@@ -308,7 +308,7 @@ export default function Tasks() {
 
       {/* New task modal */}
       {showNew && (
-        <div className="modal-overlay" onClick={() => setShowNew(false)}><div className="modal" style={{ maxWidth: 600 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNew(false))() }}><div className="modal" style={{ maxWidth: 600 }} onClick={e => e.stopPropagation()}>
           <h2>Nova Tarefa</h2>
           <div className="form-group"><label>Titulo *</label><input className="input" value={newTask.title} onChange={e => setNewTask(p => ({ ...p, title: e.target.value }))} /></div>
           <div className="form-group"><label>Descricao</label><textarea className="input" rows={3} value={newTask.description} onChange={e => setNewTask(p => ({ ...p, description: e.target.value }))} /></div>
@@ -331,7 +331,7 @@ export default function Tasks() {
 
       {/* New Mae generica modal */}
       {showNewMae && (
-        <div className="modal-overlay" onClick={() => setShowNewMae(false)}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNewMae(false))() }}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
           <h2>Nova Tarefa Mae</h2>
           <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Cria uma tarefa-mae vazia. Voce adiciona as subtarefas manualmente depois. Quando todas concluirem, a mae auto-conclui.</p>
           <div className="form-row">
@@ -353,7 +353,7 @@ export default function Tasks() {
 
       {/* Client request modal */}
       {showRequest && (
-        <div className="modal-overlay" onClick={() => setShowRequest(false)}><div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowRequest(false))() }}><div className="modal" onClick={e => e.stopPropagation()}>
           <h2>Nova Solicitacao</h2>
           <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Sua solicitacao sera enviada para aprovacao da equipe. Apos aprovada, entrara em producao.</p>
           <div className="form-group"><label>Titulo *</label><input className="input" value={newRequest.title} onChange={e => setNewRequest(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Mudar bio do perfil..." /></div>
@@ -368,7 +368,7 @@ export default function Tasks() {
 
       {/* Bulk stage modal */}
       {showBulkStage && (
-        <div className="modal-overlay" onClick={() => setShowBulkStage(false)}><div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowBulkStage(false))() }}><div className="modal" onClick={e => e.stopPropagation()}>
           <h2>Mover {selected.size} tarefas</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>{stages.map(s => <button key={s.id} className="btn btn-secondary" onClick={() => handleBulkStage(s.slug)} style={{ justifyContent: 'flex-start' }}><span style={{ width: 10, height: 10, borderRadius: '50%', background: s.color }} />{s.name}</button>)}</div>
         </div></div>
@@ -376,7 +376,7 @@ export default function Tasks() {
 
       {/* Bulk assign modal */}
       {showBulkAssign && (
-        <div className="modal-overlay" onClick={() => setShowBulkAssign(false)}><div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowBulkAssign(false))() }}><div className="modal" onClick={e => e.stopPropagation()}>
           <h2>Atribuir {selected.size} tarefas</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <button className="btn btn-secondary" onClick={() => handleBulkAssign(null)} style={{ justifyContent: 'flex-start' }}>Remover responsavel</button>

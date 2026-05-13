@@ -143,7 +143,7 @@ export default function Approvals() {
       )}
 
       {rejectId && (
-        <div className="modal-overlay" onClick={() => setRejectId(null)}><div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setRejectId(null))() }}><div className="modal" onClick={e => e.stopPropagation()}>
           <h2>Rejeitar Tarefa</h2>
           <div className="form-group"><label>Motivo *</label><textarea className="input" rows={3} value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="O que precisa ser alterado..." /></div>
           <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setRejectId(null)}>Cancelar</button><button className="btn btn-danger" onClick={handleReject} disabled={saving || !rejectReason.trim()}>{saving ? 'Rejeitando...' : 'Rejeitar'}</button></div>
@@ -151,7 +151,7 @@ export default function Approvals() {
       )}
 
       {changesId && (
-        <div className="modal-overlay" onClick={() => setChangesId(null)}><div className="modal" style={{ maxWidth: 560 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setChangesId(null))() }}><div className="modal" style={{ maxWidth: 560 }} onClick={e => e.stopPropagation()}>
           <h2><RotateCcw size={18} style={{ marginRight: 8, verticalAlign: 'middle', color: '#FFB300' }} />Solicitar Alteracao</h2>
           <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Descreva de forma <strong>clara e objetiva</strong> o que precisa ser alterado. A tarefa voltara pra revisao da equipe com suas instrucoes.</p>
           <div className="form-group">

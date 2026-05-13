@@ -220,13 +220,12 @@
     }
     .mobile-toggle svg { width: 20px; height: 20px; margin: auto; }
 
-    /* ============ HERO ============ */
+    /* ============ HERO — split layered ============ */
     .hero {
       position: relative;
-      padding: 96px 0 88px;
+      padding: 80px 0 100px;
       overflow: hidden;
       isolation: isolate;
-      text-align: center;
     }
 
     .hero::before {
@@ -243,20 +242,34 @@
       inset: 0;
       z-index: -1;
       background:
-        radial-gradient(900px circle at 50% -20%, rgba(255, 184, 0, 0.06), transparent 60%);
+        radial-gradient(900px circle at 80% -10%, rgba(255, 184, 0, 0.10), transparent 55%),
+        radial-gradient(600px circle at 10% 90%, rgba(255, 184, 0, 0.04), transparent 60%);
+    }
+
+    /* dotted grid overlay */
+    .hero::before {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(180deg, transparent, #000 40%, #000 70%, transparent);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 64px;
+      align-items: center;
     }
 
     .hero-content {
-      max-width: 880px;
-      margin: 0 auto;
+      max-width: 580px;
     }
 
     .hero h1 {
-      font-size: clamp(40px, 6vw, 72px);
+      font-size: clamp(40px, 5.6vw, 72px);
       font-weight: 700;
-      line-height: 1.05;
-      margin: 24px 0 28px;
-      letter-spacing: -0.025em;
+      line-height: 1.04;
+      margin: 22px 0 24px;
+      letter-spacing: -0.03em;
     }
 
     .hero h1 .y {
@@ -264,45 +277,270 @@
       display: block;
     }
 
-    .hero p {
-      max-width: 640px;
-      margin: 0 auto 36px;
+    .hero p.lead {
       color: var(--text-2);
       font-size: 17px;
       line-height: 1.65;
+      margin-bottom: 32px;
+      max-width: 50ch;
     }
 
     .hero-actions {
       display: flex;
-      gap: 14px;
-      justify-content: center;
+      gap: 12px;
       flex-wrap: wrap;
+      margin-bottom: 36px;
     }
 
-    .hero-photo {
-      margin-top: 80px;
-      max-width: 980px;
-      margin-inline: auto;
+    .hero-trust {
+      display: grid;
+      grid-template-columns: repeat(3, max-content);
+      gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+
+    .hero-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 500;
+    }
+
+    .hero-trust-item .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+
+    /* ============ HERO VISUAL STACK ============ */
+    .hero-visual {
+      position: relative;
+      aspect-ratio: 4/4.4;
+    }
+
+    .hv-photo {
+      position: absolute;
+      inset: 0;
       border-radius: var(--r-lg);
       overflow: hidden;
       border: 1px solid var(--border-2);
-      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
-      position: relative;
-      aspect-ratio: 16 / 8;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45);
     }
 
-    .hero-photo img {
-      width: 100%;
-      height: 100%;
+    .hv-photo img {
+      width: 100%; height: 100%;
       object-fit: cover;
     }
 
-    .hero-photo::after {
+    .hv-photo::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(10,14,26,0) 50%, rgba(10,14,26,0.65) 100%);
-      pointer-events: none;
+      background: linear-gradient(180deg, rgba(10,14,26,0.10) 0%, rgba(10,14,26,0.50) 100%);
+    }
+
+    .hv-tag {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      padding: 8px 14px;
+      border-radius: var(--r-pill);
+      background: rgba(10, 14, 26, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-2);
+      font-family: "Poppins", sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hv-tag .pulse-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--yellow);
+      position: relative;
+    }
+    .hv-tag .pulse-dot::after {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: var(--yellow);
+      opacity: 0.4;
+      animation: heroP 2s ease-out infinite;
+    }
+    @keyframes heroP {
+      0% { transform: scale(0.6); opacity: 0.6; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* Floating cards */
+    .hv-card {
+      position: absolute;
+      background: rgba(19, 24, 38, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-2);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Card 1 — Lead notification */
+    .hv-lead {
+      top: 22%;
+      left: -28px;
+      width: 280px;
+      animation: floatA 6s ease-in-out infinite;
+    }
+
+    .hv-lead-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .hv-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--yellow);
+      color: #0a0e1a;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .hv-icon svg { width: 18px; height: 18px; }
+
+    .hv-lead-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hv-lead-meta .t {
+      font-family: "Poppins", sans-serif;
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .hv-lead-meta .v {
+      font-family: "Poppins", sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .hv-lead-msg {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.45;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .hv-lead-msg strong { color: var(--yellow); font-weight: 600; }
+
+    /* Card 2 — Stat with mini chart */
+    .hv-stat {
+      bottom: 12%;
+      right: -28px;
+      width: 240px;
+      animation: floatB 7s ease-in-out infinite;
+    }
+
+    .hv-stat-num {
+      font-family: "Poppins", sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--yellow);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .hv-stat-num small {
+      font-size: 14px;
+      color: var(--text-3);
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .hv-stat-lbl {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .hv-stat-chart {
+      margin-top: 14px;
+      height: 36px;
+    }
+
+    .hv-stat-chart svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .hv-stat-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 10px;
+      padding: 3px 10px;
+      background: rgba(52, 211, 153, 0.12);
+      color: #34d399;
+      font-family: "Poppins", sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: var(--r-pill);
+    }
+
+    /* Card 3 — Bottom region tag */
+    .hv-region {
+      top: 60%;
+      left: -16px;
+      width: 200px;
+      animation: floatA 8s ease-in-out infinite;
+      animation-delay: -2s;
+    }
+
+    .hv-region-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-2);
+      margin-bottom: 6px;
+    }
+
+    .hv-region-row svg { width: 14px; height: 14px; color: var(--yellow); }
+
+    .hv-region-num {
+      font-family: "Poppins", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    @keyframes floatA {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes floatB {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
     }
 
     /* ============ LOGOS BAND ============ */
@@ -451,15 +689,15 @@
     /* ============ YELLOW STAT BAND ============ */
     .stat-band {
       background: var(--yellow-band);
-      padding: 36px 0;
+      padding: 48px 0;
       color: #1a1500;
     }
 
     .stat-band-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      text-align: center;
+      gap: 32px;
+      align-items: end;
     }
 
     .stat-band-item {
@@ -469,29 +707,29 @@
     .stat-band-item:not(:last-child)::after {
       content: "";
       position: absolute;
-      right: -12px; top: 12px; bottom: 12px;
+      right: -16px; top: 8px; bottom: 8px;
       width: 1px;
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.18);
     }
 
     .stat-band-num {
       font-family: "Poppins", sans-serif;
-      font-size: clamp(32px, 4vw, 44px);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1;
+      font-size: clamp(40px, 5vw, 60px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
       color: #1a1500;
     }
 
     .stat-band-lbl {
-      margin-top: 10px;
+      margin-top: 14px;
       font-family: "Poppins", sans-serif;
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.10em;
       color: #1a1500;
-      opacity: 0.78;
+      opacity: 0.72;
     }
 
     /* ============ MERCADO ============ */
@@ -631,27 +869,47 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--r);
-      padding: 32px 30px;
-      transition: all 0.3s var(--ease);
+      padding: 36px 32px 32px;
+      transition: border-color 0.3s var(--ease);
       position: relative;
       display: flex;
       flex-direction: column;
     }
 
     .method-card:hover {
-      border-color: var(--yellow-line);
-      transform: translateY(-4px);
+      border-color: var(--border-strong);
     }
+
+    .method-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 32px; right: 32px;
+      height: 2px;
+      background: var(--yellow);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s var(--ease);
+    }
+
+    .method-card:hover::before { transform: scaleX(1); }
 
     .method-num {
       font-family: "Poppins", sans-serif;
-      font-size: 64px;
-      font-weight: 800;
+      font-size: 12px;
+      font-weight: 600;
       color: var(--yellow);
-      letter-spacing: -0.04em;
-      line-height: 0.9;
-      margin-bottom: 14px;
-      opacity: 0.85;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .method-num::before {
+      content: "";
+      width: 18px; height: 1px;
+      background: var(--yellow);
     }
 
     .method-card h3 {
@@ -817,6 +1075,142 @@
 
     .case-quote .y { color: var(--yellow); }
 
+    /* Dashboard mockup */
+    .case-dash {
+      margin-top: 48px;
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .case-dash-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+
+    .case-dash-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .case-dash-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.10);
+    }
+
+    .case-dash-title {
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      color: var(--text-3);
+      flex: 1;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .case-dash-title strong { color: var(--text); font-weight: 600; }
+
+    .case-dash-tag {
+      font-family: "Poppins", sans-serif;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: var(--r-pill);
+      background: rgba(52, 211, 153, 0.12);
+      color: #34d399;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    .case-dash-body {
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .case-dash-chart {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .case-dash-chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+
+    .case-dash-chart-head .lbl {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .case-dash-chart-head .val {
+      font-family: "Poppins", sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .case-dash-chart-head .val span { color: var(--yellow); }
+
+    .case-dash-chart-svg {
+      width: 100%;
+      height: 120px;
+    }
+
+    .case-dash-kpis {
+      display: grid;
+      gap: 16px;
+    }
+
+    .case-dash-kpi {
+      padding: 16px 18px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .case-dash-kpi .name {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .case-dash-kpi .num {
+      font-family: "Poppins", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-top: 2px;
+    }
+
+    .case-dash-kpi .num span { color: var(--yellow); }
+
+    .case-dash-kpi .pill {
+      font-family: "Poppins", sans-serif;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: var(--r-pill);
+      background: rgba(52, 211, 153, 0.12);
+      color: #34d399;
+      font-weight: 600;
+    }
+
     /* ============ SEGMENTOS ============ */
     .segs-grid {
       display: grid;
@@ -825,23 +1219,22 @@
     }
 
     .seg-pill {
-      padding: 16px 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      padding: 14px 22px;
+      background: transparent;
+      border: 1px solid var(--border-2);
       border-radius: var(--r-pill);
       text-align: center;
       font-family: "Poppins", sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
       transition: all 0.25s var(--ease);
+      letter-spacing: -0.005em;
     }
 
     .seg-pill:hover {
-      border-color: var(--yellow);
-      background: var(--yellow-soft);
-      color: var(--yellow);
-      transform: translateY(-2px);
+      border-color: var(--text-3);
+      color: var(--text);
     }
 
     /* ============ VISÃO ============ */
@@ -1208,20 +1601,34 @@
       .nav-menu { display: none; }
       .mobile-toggle { display: inline-grid; place-items: center; }
 
+      .hero-grid,
       .sobre-grid,
       .mercado-grid,
       .case-grid {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 48px;
       }
+
+      .hero-visual { max-width: 520px; margin-inline: auto; }
+      .hv-lead { left: -8px; width: 240px; }
+      .hv-stat { right: -8px; width: 220px; }
+      .hv-region { left: -4px; width: 180px; }
+      .hero-trust { grid-template-columns: 1fr; gap: 12px; }
 
       .logos-grid { grid-template-columns: repeat(3, 1fr); }
       .problem-grid,
       .method-grid,
-      .vision-grid,
       .dep-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+      .problem-card:nth-child(3n) { border-right: 1px solid var(--border-2); padding-right: 28px; }
+      .problem-card:nth-child(2n) { border-right: 0; padding-right: 0; }
+      .problem-card:nth-child(2n+1) { padding-left: 0; }
+      .problem-card:nth-child(2n) { padding-left: 28px; }
+      .vision-row { grid-template-columns: 80px 1fr; gap: 20px; }
+      .vision-row p { grid-column: 2; }
+      .vision-row h3 { grid-column: 2; }
+      .processo-wrap::before { display: none; }
       .processo-grid,
       .case-numbers,
       .stat-band-grid {
@@ -1242,7 +1649,6 @@
       .logos-grid { grid-template-columns: repeat(2, 1fr); }
       .problem-grid,
       .method-grid,
-      .vision-grid,
       .dep-grid,
       .processo-grid,
       .case-numbers,
@@ -1252,7 +1658,21 @@
         grid-template-columns: 1fr;
       }
 
-      .hero-photo { aspect-ratio: 4/3; }
+      .problem-card { border-right: 0 !important; padding-right: 0 !important; padding-left: 0 !important; }
+
+      .case-dash-body { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+      .case-dash-title { display: none; }
+
+      .hero { padding: 48px 0 80px; }
+      .hero-visual { aspect-ratio: 3/3.4; max-width: 100%; }
+      .hv-lead { width: 200px; left: 0; padding: 12px 14px; }
+      .hv-lead .hv-lead-msg { font-size: 12px; }
+      .hv-stat { width: 180px; right: 0; padding: 12px 14px; }
+      .hv-stat-num { font-size: 26px; }
+      .hv-region { display: none; }
+
+      .nav { height: 76px; }
+      .logo-img { height: 48px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1318,30 +1738,86 @@
 
     <!-- ===== HERO ===== -->
     <section class="hero">
-      <div class="container hero-content">
-        <span class="badge">Bem-vindo à DROS Sales</span>
-        <h1>
-          Canal de vendas para
-          <span class="y">indústria vender mais.</span>
-        </h1>
-        <p>
-          Ajudamos fábricas e distribuidoras a organizar a forma como aparecem, atendem e transformam oportunidades em pedido. Análise, anúncios e comercial em um único método.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href="#metodo">
-            Conheça o método
-            <svg><use href="#i-arrow"/></svg>
-          </a>
-          <a class="btn btn-dark btn-lg" href="#cases">
-            Ver cases de sucesso
-            <svg><use href="#i-arrow-up-right"/></svg>
-          </a>
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="badge">Método DROS Sales · 2026</span>
+          <h1>
+            Canal de vendas para
+            <span class="y">indústria vender mais.</span>
+          </h1>
+          <p class="lead">
+            Ajudamos fábricas e distribuidoras a organizar a forma como aparecem, atendem e transformam oportunidades em pedido. Análise, anúncios e comercial em um único método.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="#metodo">
+              Conheça o método
+              <svg><use href="#i-arrow"/></svg>
+            </a>
+            <a class="btn btn-dark btn-lg" href="#cases">
+              Ver cases
+              <svg><use href="#i-arrow-up-right"/></svg>
+            </a>
+          </div>
+          <div class="hero-trust">
+            <div class="hero-trust-item"><span class="dot"></span> Conversa sem compromisso</div>
+            <div class="hero-trust-item"><span class="dot"></span> Foco em resultado</div>
+            <div class="hero-trust-item"><span class="dot"></span> Especialistas em indústria</div>
+          </div>
         </div>
-      </div>
 
-      <div class="container">
-        <div class="hero-photo">
-          <img src="img/hero-foto-site-dros-sales.jpg" alt="Operação industrial DROS Sales" />
+        <div class="hero-visual">
+          <div class="hv-photo">
+            <img src="img/hero-foto-site-dros-sales.jpg" alt="Operação industrial DROS Sales" />
+            <div class="hv-tag">
+              <span class="pulse-dot"></span>
+              Operação ao vivo · Quimiprol
+            </div>
+          </div>
+
+          <div class="hv-card hv-lead">
+            <div class="hv-lead-row">
+              <div class="hv-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+              </div>
+              <div class="hv-lead-meta">
+                <div class="t">Novo lead · Há 12s</div>
+                <div class="v">Eduardo · Curitiba/PR</div>
+              </div>
+            </div>
+            <p class="hv-lead-msg">
+              "Quero ser revendedor de vocês, qual o ticket inicial?" <strong>+R$ 12.500</strong> potencial
+            </p>
+          </div>
+
+          <div class="hv-card hv-stat">
+            <div class="hv-stat-num">+47<small> leads/sem</small></div>
+            <div class="hv-stat-lbl">Últimas 4 semanas</div>
+            <div class="hv-stat-chart">
+              <svg viewBox="0 0 200 36" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#ffb800" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#ffb800" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,28 Q20,22 40,24 T80,18 T120,12 T160,8 T200,4 L200,36 L0,36 Z" fill="url(#g1)"/>
+                <path d="M0,28 Q20,22 40,24 T80,18 T120,12 T160,8 T200,4" fill="none" stroke="#ffb800" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="hv-stat-trend">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 18 12 12 18 18"/></svg>
+              +28%
+            </div>
+          </div>
+
+          <div class="hv-card hv-region">
+            <div class="hv-region-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Região ativada
+            </div>
+            <div class="hv-region-num">Sul + Sudeste</div>
+            <div style="font-size:11px;color:var(--text-4);margin-top:4px;">12 cidades · 3 estados</div>
+          </div>
         </div>
       </div>
     </section>
@@ -1384,19 +1860,19 @@
       <div class="container">
         <div class="stat-band-grid">
           <div class="stat-band-item">
-            <div class="stat-band-num">+750</div>
+            <div class="stat-band-num"><span class="counter" data-target="750" data-prefix="+">+0</span></div>
             <div class="stat-band-lbl">Revendedores ativos</div>
           </div>
           <div class="stat-band-item">
-            <div class="stat-band-num">2.600 m²</div>
+            <div class="stat-band-num"><span class="counter" data-target="2600" data-suffix=" m²">0 m²</span></div>
             <div class="stat-band-lbl">Estrutura operacional</div>
           </div>
           <div class="stat-band-item">
-            <div class="stat-band-num">+R$ 1,5 mi</div>
+            <div class="stat-band-num">+R$ <span class="counter" data-target="1.5" data-decimals="1">0</span> mi</div>
             <div class="stat-band-lbl">Faturamento mensal</div>
           </div>
           <div class="stat-band-item">
-            <div class="stat-band-num">~6 anos</div>
+            <div class="stat-band-num">~<span class="counter" data-target="6">0</span> anos</div>
             <div class="stat-band-lbl">Parceria contínua</div>
           </div>
         </div>
@@ -1489,7 +1965,7 @@
 
         <div class="method-grid reveal">
           <article class="method-card">
-            <div class="method-num">01</div>
+            <div class="method-num">Etapa 01 / 03</div>
             <h3>Análise</h3>
             <p>A gente entende como sua indústria vende hoje. Sem análise, qualquer decisão é chute.</p>
             <ul class="method-bullets">
@@ -1502,7 +1978,7 @@
           </article>
 
           <article class="method-card">
-            <div class="method-num">02</div>
+            <div class="method-num">Etapa 02 / 03</div>
             <h3>Anúncios</h3>
             <p>Fazemos sua indústria aparecer para quem realmente pode comprar. Não é anúncio para curtida.</p>
             <ul class="method-bullets">
@@ -1514,7 +1990,7 @@
           </article>
 
           <article class="method-card">
-            <div class="method-num">03</div>
+            <div class="method-num">Etapa 03 / 03</div>
             <h3>Comercial</h3>
             <p>Quando a pessoa chama, precisa ter processo. Não adianta trazer gente se ninguém cuida bem.</p>
             <ul class="method-bullets">
@@ -1574,6 +2050,73 @@
 
         <div class="case-quote reveal">
           "Resultado previsível não nasce de sorte. <span class="y">Nasce de processo.</span>"
+        </div>
+
+        <!-- Dashboard mockup -->
+        <div class="case-dash reveal">
+          <div class="case-dash-bar">
+            <div class="case-dash-dots"><span></span><span></span><span></span></div>
+            <div class="case-dash-title">DROS Sales · <strong>Operação Quimiprol</strong> · 2020 → 2026</div>
+            <div class="case-dash-tag">● ATIVO</div>
+          </div>
+
+          <div class="case-dash-body">
+            <div class="case-dash-chart">
+              <div class="case-dash-chart-head">
+                <div>
+                  <div class="lbl">Faturamento mensal</div>
+                  <div class="val">R$ 1,5 mi <span>↑</span></div>
+                </div>
+                <div style="text-align:right;">
+                  <div class="lbl" style="margin-bottom:4px;">2020 → 2026</div>
+                  <div style="font-family:Poppins;font-size:11px;color:#34d399;font-weight:600;">+412% acumulado</div>
+                </div>
+              </div>
+              <svg class="case-dash-chart-svg" viewBox="0 0 600 120" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="cg1" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#ffb800" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#ffb800" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <!-- grid lines -->
+                <line x1="0" y1="30" x2="600" y2="30" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="90" x2="600" y2="90" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <!-- area -->
+                <path d="M0,100 Q60,95 100,88 T200,72 T300,52 T400,32 T500,20 T600,12 L600,120 L0,120 Z" fill="url(#cg1)"/>
+                <!-- line -->
+                <path d="M0,100 Q60,95 100,88 T200,72 T300,52 T400,32 T500,20 T600,12" fill="none" stroke="#ffb800" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- end dot -->
+                <circle cx="600" cy="12" r="5" fill="#ffb800"/>
+                <circle cx="600" cy="12" r="10" fill="#ffb800" opacity="0.2"/>
+              </svg>
+            </div>
+
+            <div class="case-dash-kpis">
+              <div class="case-dash-kpi">
+                <div>
+                  <div class="name">Revendedores ativos</div>
+                  <div class="num"><span>+750</span></div>
+                </div>
+                <div class="pill">↑ 8x</div>
+              </div>
+              <div class="case-dash-kpi">
+                <div>
+                  <div class="name">Estrutura operacional</div>
+                  <div class="num">2.600 <span>m²</span></div>
+                </div>
+                <div class="pill">↑ 5,2x</div>
+              </div>
+              <div class="case-dash-kpi">
+                <div>
+                  <div class="name">Parceria contínua</div>
+                  <div class="num">~6 <span>anos</span></div>
+                </div>
+                <div class="pill">● ATIVO</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1695,33 +2238,39 @@
 
         <div class="dep-grid reveal">
           <article class="dep-card">
-            <div class="dep-avatar">R</div>
-            <div class="dep-name">Rodri</div>
-            <div class="dep-role">CEO · DoorGrill Churrasqueiras</div>
-            <div class="dep-stars">
-              <svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg>
-            </div>
+            <div class="dep-mark"></div>
             <p class="dep-text">A DROS estruturou nossa operação de marketing do ponto a ponta: criativos, campanhas e otimizações contínuas. Hoje investimos com mais consistência e vendemos para todo o Brasil.</p>
+            <div class="dep-person">
+              <div class="dep-avatar">R</div>
+              <div>
+                <div class="dep-name">Rodri</div>
+                <div class="dep-role">CEO · DoorGrill Churrasqueiras</div>
+              </div>
+            </div>
           </article>
 
           <article class="dep-card">
-            <div class="dep-avatar">W</div>
-            <div class="dep-name">Welliton</div>
-            <div class="dep-role">Gerente Adm · Agrozacca Suprema</div>
-            <div class="dep-stars">
-              <svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg>
-            </div>
+            <div class="dep-mark"></div>
             <p class="dep-text">A DROS entendeu nosso negócio e transformou isso em conteúdo, vídeos e campanhas que fortaleceram a marca. A comunicação ficou mais profissional e a presença digital ganhou força.</p>
+            <div class="dep-person">
+              <div class="dep-avatar">W</div>
+              <div>
+                <div class="dep-name">Welliton</div>
+                <div class="dep-role">Gerente Adm · Agrozacca Suprema</div>
+              </div>
+            </div>
           </article>
 
           <article class="dep-card">
-            <div class="dep-avatar">R</div>
-            <div class="dep-name">Ramon</div>
-            <div class="dep-role">Fundador · ASK Equipamentos</div>
-            <div class="dep-stars">
-              <svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg>
-            </div>
+            <div class="dep-mark"></div>
             <p class="dep-text">A DROS nos ajudou a organizar a comunicação e a aquisição de demanda com foco em resultado. A estratégia trouxe clareza para oferta, consistência na geração de oportunidades e evolução mês a mês.</p>
+            <div class="dep-person">
+              <div class="dep-avatar">R</div>
+              <div>
+                <div class="dep-name">Ramon</div>
+                <div class="dep-role">Fundador · ASK Equipamentos</div>
+              </div>
+            </div>
           </article>
         </div>
       </div>
@@ -1864,6 +2413,44 @@
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
     reveals.forEach(el => revealObs.observe(el));
+
+    // Animated counters (stat band)
+    const formatNum = (n, decimals) => {
+      if (decimals > 0) return n.toFixed(decimals).replace('.', ',');
+      const v = Math.round(n);
+      if (v >= 1000) return v.toLocaleString('pt-BR');
+      return v.toString();
+    };
+
+    const animateCounter = (el) => {
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || '0', 10);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const duration = 1600;
+      const start = performance.now();
+
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        // ease-out cubic
+        const eased = 1 - Math.pow(1 - t, 3);
+        const v = target * eased;
+        el.textContent = prefix + formatNum(v, decimals) + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+        else el.textContent = prefix + formatNum(target, decimals) + suffix;
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const counterObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.counter').forEach(el => counterObs.observe(el));
   </script>
 </body>
 </html>

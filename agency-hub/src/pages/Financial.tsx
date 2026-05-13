@@ -527,7 +527,7 @@ export default function Financial() {
 
       {/* Pay Modal */}
       {payModal && (
-        <div className="modal-overlay" onClick={() => setPayModal(null)}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setPayModal(null))() }}>
           <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 400 }}>
             <h2>Registrar Pagamento</h2>
             <p style={{ color: '#9B96B0', fontSize: 13, marginBottom: 16 }}>{payModal.name} — {formatMonth(month)}</p>
@@ -542,7 +542,7 @@ export default function Financial() {
 
       {/* New Installment Modal */}
       {showNewInst && (
-        <div className="modal-overlay" onClick={() => setShowNewInst(false)}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNewInst(false))() }}>
           <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 450 }}>
             <h2>Novo Parcelamento</h2>
             <div className="form-group"><label>Nome</label><input className="input" value={newInst.name} onChange={e => setNewInst(p => ({ ...p, name: e.target.value }))} placeholder="Ex: Camera Sony A7III, Notebook Dell..." /></div>
@@ -568,7 +568,7 @@ export default function Financial() {
 
       {/* New Extra Revenue Modal */}
       {showNewExtra && (
-        <div className="modal-overlay" onClick={() => setShowNewExtra(false)}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNewExtra(false))() }}>
           <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 450 }}>
             <h2>Nova Receita Extra — {formatMonth(month)}</h2>
             <div className="form-group"><label>Cliente (opcional)</label>
@@ -590,7 +590,7 @@ export default function Financial() {
 
       {/* New / Edit Expense Modal */}
       {showNewExp && (
-        <div className="modal-overlay" onClick={() => { setShowNewExp(false); setEditingExpId(null) }}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => { setShowNewExp(false); setEditingExpId(null) })() }}>
           <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 450 }}>
             <h2>{editingExpId ? 'Editar Despesa' : `Nova Despesa — ${formatMonth(month)}`}</h2>
             <div className="form-group"><label>Categoria</label>

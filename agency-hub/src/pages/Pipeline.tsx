@@ -189,7 +189,7 @@ export default function Pipeline() {
         )
       })}
       {moveTaskId && (
-        <div className="modal-overlay" onClick={() => setMoveTaskId(null)}><div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setMoveTaskId(null))() }}><div className="modal" onClick={e => e.stopPropagation()}>
           <h2>Mover tarefa</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {stages.map(s => { const current = tasks.find(t => t.id === moveTaskId)?.stage === s.slug; return (
@@ -345,7 +345,7 @@ export default function Pipeline() {
 
       {/* New task modal */}
       {showNew && (
-        <div className="modal-overlay" onClick={() => setShowNew(false)}><div className="modal" style={{ maxWidth: 550 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNew(false))() }}><div className="modal" style={{ maxWidth: 550 }} onClick={e => e.stopPropagation()}>
           <h2>Nova Tarefa</h2>
           <div className="form-group"><label>Titulo *</label><input className="input" value={newTask.title} onChange={e => setNewTask(p => ({ ...p, title: e.target.value }))} /></div>
           <div className="form-group"><label>Descricao</label><textarea className="input" rows={2} value={newTask.description} onChange={e => setNewTask(p => ({ ...p, description: e.target.value }))} /></div>
@@ -396,7 +396,7 @@ export default function Pipeline() {
 
       {/* New Editorial modal */}
       {showNewEditorial && (
-        <div className="modal-overlay" onClick={() => setShowNewEditorial(false)}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNewEditorial(false))() }}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
           <h2><Layers size={18} style={{ marginRight: 8, verticalAlign: 'middle', color: '#FFB300' }} />Nova Linha Editorial</h2>
           <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Cria uma tarefa-mae com 5 subtarefas fixas: Briefing, Aprovacoes e Publicacao.</p>
           <div className="form-row">
@@ -437,7 +437,7 @@ export default function Pipeline() {
 
       {/* New Mae generica modal */}
       {showNewMae && (
-        <div className="modal-overlay" onClick={() => setShowNewMae(false)}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) (() => setShowNewMae(false))() }}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
           <h2><Layers size={18} style={{ marginRight: 8, verticalAlign: 'middle', color: '#FFB300' }} />Nova Tarefa Mae</h2>
           <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Cria uma tarefa-mae vazia. Voce adiciona as subtarefas manualmente depois. Quando todas concluirem, a mae auto-conclui.</p>
           <div className="form-row">

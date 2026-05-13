@@ -2,6 +2,7 @@ import { Router } from 'express'
 import fetch from 'node-fetch'
 import db from '../db.js'
 import { broadcastSSE } from '../sse.js'
+import { triggerCapiForStageChange } from '../services/metaCapi.js'
 
 const router = Router()
 
@@ -111,9 +112,11 @@ function autoDetectStage(lead, messageText) {
     if (matched) {
       const oldStageId = lead.stage_id
       db.prepare("UPDATE leads SET stage_id = ?, updated_at = datetime('now') WHERE id = ?").run(stage.id, lead.id)
-      db.prepare('INSERT INTO stage_history (lead_id, from_stage_id, to_stage_id, trigger_type) VALUES (?, ?, ?, ?)').run(
+      const histRes = db.prepare('INSERT INTO stage_history (lead_id, from_stage_id, to_stage_id, trigger_type) VALUES (?, ?, ?, ?)').run(
         lead.id, oldStageId, stage.id, 'auto_keyword'
       )
+      // Dispara CAPI se a etapa tem evento Meta mapeado
+      triggerCapiForStageChange(lead.id, stage.id, histRes.lastInsertRowid)
       break // Only advance to first match
     }
   }
@@ -171,6 +174,60 @@ router.post('/evolution/:accountSlug', (req, res) => {
       mediaType = 'document'; mediaUrl = msg.documentMessage.url || null; content = msg.documentMessage.fileName || '[Documento]'
     } else if (msg.stickerMessage) {
       mediaType = 'sticker'; mediaUrl = msg.stickerMessage.url || null; content = '[Sticker]'
+    } else if (msg.reactionMessage) {
+      // Lead reagiu a uma mensagem com emoji
+      const emoji = msg.reactionMessage.text || '❤️'
+      content = `${emoji} (reacao)`
+      mediaType = 'reaction'
+    } else if (msg.locationMessage || msg.liveLocationMessage) {
+      const loc = msg.locationMessage || msg.liveLocationMessage
+      const lat = loc.degreesLatitude
+      const lng = loc.degreesLongitude
+      const name = loc.name || ''
+      content = name ? `📍 ${name}` : (lat && lng ? `📍 Localizacao: ${lat}, ${lng}` : '📍 Localizacao compartilhada')
+      mediaType = 'location'
+    } else if (msg.contactMessage || msg.contactsArrayMessage) {
+      const contact = msg.contactMessage?.displayName || msg.contactsArrayMessage?.contacts?.[0]?.displayName || ''
+      content = contact ? `👤 Contato: ${contact}` : '👤 Contato compartilhado'
+      mediaType = 'contact'
+    } else if (msg.protocolMessage?.type === 0 || msg.protocolMessage?.type === 'REVOKE') {
+      // type 0 = REVOKE (mensagem apagada pelo remetente)
+      content = '🚫 Mensagem apagada'
+      mediaType = 'system'
+    } else if (msg.pollCreationMessage || msg.pollCreationMessageV2 || msg.pollCreationMessageV3) {
+      const poll = msg.pollCreationMessage || msg.pollCreationMessageV2 || msg.pollCreationMessageV3
+      content = poll?.name ? `📊 Enquete: ${poll.name}` : '📊 Enquete'
+      mediaType = 'poll'
+    } else if (msg.pollUpdateMessage) {
+      content = '📊 Voto em enquete'
+      mediaType = 'poll'
+    } else if (msg.editedMessage || msg.protocolMessage?.editedMessage) {
+      // Mensagem editada — tenta pegar o novo texto
+      const edited = msg.editedMessage || msg.protocolMessage?.editedMessage
+      const newText = edited?.message?.conversation || edited?.message?.extendedTextMessage?.text || ''
+      content = newText ? `✏️ ${newText}` : '✏️ Mensagem editada'
+    } else if (msg.buttonsResponseMessage) {
+      content = msg.buttonsResponseMessage.selectedDisplayText || msg.buttonsResponseMessage.selectedButtonId || '[Botao clicado]'
+    } else if (msg.listResponseMessage) {
+      content = msg.listResponseMessage.title || msg.listResponseMessage.singleSelectReply?.selectedRowId || '[Opcao selecionada]'
+    } else if (msg.templateButtonReplyMessage) {
+      content = msg.templateButtonReplyMessage.selectedDisplayText || '[Botao de template]'
+    } else if (msg.viewOnceMessage || msg.viewOnceMessageV2 || msg.viewOnceMessageV2Extension) {
+      content = '👁️ Mensagem de visualizacao unica'
+      mediaType = 'view_once'
+    } else if (msg.ephemeralMessage) {
+      // Mensagem temporaria — desempacota a mensagem interna
+      const inner = msg.ephemeralMessage.message || {}
+      if (inner.conversation) content = inner.conversation
+      else if (inner.extendedTextMessage?.text) content = inner.extendedTextMessage.text
+      else content = '⏱️ Mensagem temporaria'
+    }
+    // Log de tipos nao mapeados pra ajudar a expandir a lista futuramente
+    if (!content && Object.keys(msg).length > 0) {
+      const tipo = Object.keys(msg).filter(k => k !== 'messageContextInfo' && k !== 'senderKeyDistributionMessage')[0] || 'desconhecido'
+      console.log(`[Webhook] Tipo de mensagem nao tratado: ${tipo}`, JSON.stringify(msg).substring(0, 200))
+      content = `[${tipo}]`
+      mediaType = 'unknown'
     }
 
     // ─── Detecta click-to-WhatsApp Ad (CTWA) — lead veio de campanha de mensagem
@@ -282,6 +339,17 @@ router.post('/evolution/:accountSlug', (req, res) => {
       }
     }
 
+    // Salva o ctwa_clid do CTWA na primeira vez que detectamos — vai ser usado pra montar fbc no CAPI
+    if (adInfo?.ctwaClid && !lead.ctwa_clid) {
+      db.prepare("UPDATE leads SET ctwa_clid = ? WHERE id = ?").run(adInfo.ctwaClid, lead.id)
+      lead.ctwa_clid = adInfo.ctwaClid
+    }
+
+    // CAPI: lead novo → dispara evento da primeira etapa (se mapeada)
+    if (isNew) {
+      triggerCapiForStageChange(lead.id, lead.stage_id, null)
+    }
+
     // Fetch profile picture in background (no await)
     if (waInstance && (isNew || !lead.profile_pic_url)) {
       fetchAndSaveProfilePic(waInstance, phone, lead.id)
@@ -293,9 +361,10 @@ router.post('/evolution/:accountSlug', (req, res) => {
       const secondStage = db.prepare('SELECT id FROM funnel_stages WHERE funnel_id = ? ORDER BY position LIMIT 1 OFFSET 1').get(lead.funnel_id)
       if (firstStage && secondStage && lead.stage_id === firstStage.id) {
         db.prepare("UPDATE leads SET stage_id = ?, updated_at = datetime('now') WHERE id = ?").run(secondStage.id, lead.id)
-        db.prepare('INSERT INTO stage_history (lead_id, from_stage_id, to_stage_id, trigger_type) VALUES (?, ?, ?, ?)').run(
+        const histRes = db.prepare('INSERT INTO stage_history (lead_id, from_stage_id, to_stage_id, trigger_type) VALUES (?, ?, ?, ?)').run(
           lead.id, firstStage.id, secondStage.id, 'webhook'
         )
+        triggerCapiForStageChange(lead.id, secondStage.id, histRes.lastInsertRowid)
       }
     }
 
@@ -450,6 +519,11 @@ router.post('/sheets/:accountSlug', (req, res) => {
     if (instagram) db.prepare('UPDATE leads SET instagram = COALESCE(instagram, ?) WHERE id = ?').run(instagram, lead.id)
     if (source_detail) db.prepare('UPDATE leads SET source_detail = COALESCE(source_detail, ?) WHERE id = ?').run(source_detail, lead.id)
 
+    // Marcadores Meta — guarda ids da campanha/anuncio/form pra usar no CAPI depois
+    if (body.ad_id) db.prepare('UPDATE leads SET meta_ad_id = COALESCE(meta_ad_id, ?) WHERE id = ?').run(String(body.ad_id), lead.id)
+    if (body.campaign_id) db.prepare('UPDATE leads SET meta_campaign_id = COALESCE(meta_campaign_id, ?) WHERE id = ?').run(String(body.campaign_id), lead.id)
+    if (body.form_id) db.prepare('UPDATE leads SET meta_form_id = COALESCE(meta_form_id, ?) WHERE id = ?').run(String(body.form_id), lead.id)
+
     // Movimentacao opcional pra etapa especifica do funil (case-insensitive, ignora acentos)
     const stageName = body.stage_name || body.stage || body.etapa || ''
     if (stageName && lead.funnel_id) {
@@ -460,7 +534,8 @@ router.post('/sheets/:accountSlug', (req, res) => {
       if (match && match.id !== lead.stage_id) {
         const prevStage = lead.stage_id
         db.prepare("UPDATE leads SET stage_id = ?, updated_at = datetime('now') WHERE id = ?").run(match.id, lead.id)
-        db.prepare('INSERT INTO stage_history (lead_id, from_stage_id, to_stage_id, trigger_type) VALUES (?, ?, ?, ?)').run(lead.id, prevStage, match.id, 'webhook')
+        const histRes = db.prepare('INSERT INTO stage_history (lead_id, from_stage_id, to_stage_id, trigger_type) VALUES (?, ?, ?, ?)').run(lead.id, prevStage, match.id, 'webhook')
+        triggerCapiForStageChange(lead.id, match.id, histRes.lastInsertRowid)
       }
     }
 
@@ -479,6 +554,8 @@ router.post('/sheets/:accountSlug', (req, res) => {
 
     if (isNew) {
       try { broadcastSSE(account.id, 'lead:created', lead) } catch {}
+      // CAPI: dispara evento da etapa inicial (mas service vai filtrar se nao tiver ctwa_clid)
+      triggerCapiForStageChange(lead.id, lead.stage_id, null)
     }
 
     console.log(`[Webhook Sheets] ${isNew ? 'New' : 'Existing'} lead: ${name || phone} → account ${account.name}`)
