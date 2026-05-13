@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useSSE } from '../context/SSEContext'
-import { fetchTask, fetchClients, fetchDepartments, fetchUsers, fetchCategories, fetchStages, updateTask, moveTaskStage, addTaskComment, addTaskAttachment, deleteTaskAttachment, approveTask, rejectTask, startTimer, stopTimer, confirmRecording, type Task, type TaskComment, type TaskHistory, type TaskAttachment, type TimeEntry, type Client, type Department, type User as UserT, type TaskCategory, type PipelineStage } from '../lib/api'
+import { fetchTask, fetchClients, fetchDepartments, fetchUsers, fetchCategories, fetchStages, updateTask, moveTaskStage, addTaskComment, addTaskAttachment, deleteTaskAttachment, approveTask, rejectTask, startTimer, stopTimer, confirmRecording, addSubtask, type Task, type TaskComment, type TaskHistory, type TaskAttachment, type TimeEntry, type Client, type Department, type User as UserT, type TaskCategory, type PipelineStage } from '../lib/api'
 import { ArrowLeft, Building2, Clock, User, ExternalLink, CheckCircle, XCircle, Send, MessageCircle, GitBranch, Paperclip, Eye, Edit3, Save, X, Plus, AlertTriangle, Layers, ChevronRight, Video, Trash2 } from 'lucide-react'
 import { useToast } from '../components/Toast'
 
@@ -39,6 +39,10 @@ export default function TaskDetail() {
   // Recording confirmation modal (editorial workflow)
   const [showRecording, setShowRecording] = useState(false)
   const [recordingData, setRecordingData] = useState({ recording_datetime: '', capture_user_id: '', edit_user_id: '', design_user_id: '' })
+  // Subtarefa modal (mae generica e editorial)
+  const [showNewSub, setShowNewSub] = useState(false)
+  const [newSub, setNewSub] = useState({ title: '', description: '', due_date: '', priority: 'normal', assigned_to: '', department_id: '', category_id: '' })
+  const [savingSub, setSavingSub] = useState(false)
 
   const { toast } = useToast()
   const isDono = user?.role === 'dono' || user?.role === 'gerente'
@@ -113,6 +117,27 @@ export default function TaskDetail() {
     if (!task || !newAttUrl || !newAttName) return
     await addTaskAttachment(task.id, newAttUrl, newAttName)
     setNewAttUrl(''); setNewAttName(''); loadTask()
+  }
+
+  const handleAddSubtask = async () => {
+    if (!task || !newSub.title) return
+    setSavingSub(true)
+    try {
+      await addSubtask(task.id, {
+        title: newSub.title,
+        description: newSub.description || undefined,
+        due_date: newSub.due_date || undefined,
+        priority: newSub.priority,
+        assigned_to: newSub.assigned_to ? +newSub.assigned_to : undefined,
+        department_id: newSub.department_id ? +newSub.department_id : undefined,
+        category_id: newSub.category_id ? +newSub.category_id : undefined,
+      })
+      setShowNewSub(false)
+      setNewSub({ title: '', description: '', due_date: '', priority: 'normal', assigned_to: '', department_id: '', category_id: '' })
+      loadTask()
+      toast('Subtarefa adicionada')
+    } catch (e: any) { toast(e?.message || 'Erro ao adicionar subtarefa', 'error') }
+    finally { setSavingSub(false) }
   }
 
   const handleComment = async () => {
@@ -422,15 +447,25 @@ export default function TaskDetail() {
           </div>
 
           {/* Subtasks (when viewing a mother task) */}
-          {(task as any).subtasks?.length > 0 && (
+          {(((task as any).subtasks?.length > 0) || (task as any).task_type === 'mae' || (task as any).task_type === 'mae_editorial') && (
             <div className="card" style={{ marginBottom: 16, borderLeft: '3px solid #FFB300' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: '#FFB300', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Layers size={12} /> Subtarefas ({(task as any).subtasks.filter((s: any) => s.stage === 'concluido').length}/{(task as any).subtasks.length})
+                  <Layers size={12} /> Subtarefas ({((task as any).subtasks || []).filter((s: any) => s.stage === 'concluido').length}/{((task as any).subtasks || []).length})
                 </div>
+                {!isCliente && (
+                  <button className="btn btn-secondary btn-sm" onClick={() => setShowNewSub(true)} style={{ padding: '4px 10px', fontSize: 11 }}>
+                    <Plus size={11} /> Subtarefa
+                  </button>
+                )}
               </div>
+              {((task as any).subtasks || []).length === 0 && (
+                <div style={{ padding: '12px 14px', fontSize: 12, color: '#9B96B0', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: 8 }}>
+                  Sem subtarefas ainda. Clica em "+ Subtarefa" pra adicionar a primeira.
+                </div>
+              )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {(task as any).subtasks.map((sub: any) => {
+                {((task as any).subtasks || []).map((sub: any) => {
                   const isOverdueSub = sub.due_date && sub.due_date.slice(0, 10) < (() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}` })() && sub.stage !== 'concluido' && sub.stage !== 'rejeitado'
                   return (
                     <div key={sub.id} onClick={() => navigate(`/tasks/${sub.id}`)}
@@ -669,6 +704,30 @@ export default function TaskDetail() {
             <button className="btn btn-primary" onClick={handleConfirmRecording} disabled={!recordingData.recording_datetime}>Confirmar e Criar Tarefas</button>
           </div>
         </div></div>
+      )}
+
+      {/* New Subtarefa modal */}
+      {showNewSub && (
+        <div className="modal-overlay" onClick={() => setShowNewSub(false)}>
+          <div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
+            <h2><Plus size={18} style={{ marginRight: 8, verticalAlign: 'middle', color: '#FFB300' }} />Nova Subtarefa</h2>
+            <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Vinculada a "{task?.title}". Ao concluir todas as subtarefas, a mae auto-conclui.</p>
+            <div className="form-group"><label>Titulo *</label><input className="input" value={newSub.title} onChange={e => setNewSub(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Desenhar capa" autoFocus /></div>
+            <div className="form-group"><label>Descricao</label><textarea className="input" rows={3} value={newSub.description} onChange={e => setNewSub(p => ({ ...p, description: e.target.value }))} /></div>
+            <div className="form-row">
+              <div className="form-group"><label>Prazo</label><input className="input" type="date" value={newSub.due_date} onChange={e => setNewSub(p => ({ ...p, due_date: e.target.value }))} /></div>
+              <div className="form-group"><label>Prioridade</label><select className="select" value={newSub.priority} onChange={e => setNewSub(p => ({ ...p, priority: e.target.value }))}><option value="baixa">Baixa</option><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></div>
+            </div>
+            <div className="form-row">
+              <div className="form-group"><label>Departamento</label><select className="select" value={newSub.department_id} onChange={e => setNewSub(p => ({ ...p, department_id: e.target.value }))}><option value="">Nenhum</option>{departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}</select></div>
+              <div className="form-group"><label>Responsavel</label><select className="select" value={newSub.assigned_to} onChange={e => setNewSub(p => ({ ...p, assigned_to: e.target.value }))}><option value="">Ninguem</option>{users.filter(u => u.role !== 'cliente').map(u => <option key={u.id} value={u.id}>{u.name}</option>)}</select></div>
+            </div>
+            <div className="modal-actions">
+              <button className="btn btn-secondary" onClick={() => setShowNewSub(false)}>Cancelar</button>
+              <button className="btn btn-primary" onClick={handleAddSubtask} disabled={savingSub || !newSub.title}>{savingSub ? 'Adicionando...' : 'Adicionar'}</button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Reject modal */}

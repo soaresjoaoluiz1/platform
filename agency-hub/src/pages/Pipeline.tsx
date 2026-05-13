@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useSSE } from '../context/SSEContext'
-import { fetchPipelineTasks, fetchClients, fetchDepartments, fetchUsers, fetchCategories, createTask, createEditorialTask, moveTaskStage, type Task, type PipelineStage, type Client, type Department, type User as UserT, type TaskCategory } from '../lib/api'
+import { fetchPipelineTasks, fetchClients, fetchDepartments, fetchUsers, fetchCategories, createTask, createEditorialTask, createMaeTask, moveTaskStage, type Task, type PipelineStage, type Client, type Department, type User as UserT, type TaskCategory } from '../lib/api'
 import { Clock, Building2, User, ExternalLink, ChevronDown, ChevronRight, ArrowRight, Search, AlertTriangle, Plus, Layers } from 'lucide-react'
 import { useToast } from '../components/Toast'
 
@@ -47,7 +47,9 @@ export default function Pipeline() {
   const [categories, setCategories] = useState<TaskCategory[]>([])
   const [showNew, setShowNew] = useState(false)
   const [showNewEditorial, setShowNewEditorial] = useState(false)
+  const [showNewMae, setShowNewMae] = useState(false)
   const [newEditorial, setNewEditorial] = useState({ client_id: '', month_label: '', num_posts: '8', num_videos: '4', due_date: '', category_id: '' })
+  const [newMae, setNewMae] = useState({ title: '', client_id: '', description: '', due_date: '', category_id: '', department_id: '', priority: 'normal' })
   const [newTask, setNewTask] = useState({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: '', priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' })
   const isDono = user?.role === 'dono'
   const isFunc = user?.role === 'funcionario' || user?.role === 'gerente'
@@ -93,6 +95,27 @@ export default function Pipeline() {
       setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [], due_date: '', priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' }); loadData()
       toast('Tarefa criada com sucesso!')
     } catch (err: any) { toast(err.message || 'Erro ao criar tarefa', 'error') }
+    finally { setSaving(false) }
+  }
+
+  const handleCreateMae = async () => {
+    if (!newMae.title || !newMae.client_id) return
+    setSaving(true)
+    try {
+      await createMaeTask({
+        client_id: +newMae.client_id,
+        title: newMae.title,
+        description: newMae.description || undefined,
+        due_date: newMae.due_date || undefined,
+        category_id: newMae.category_id ? +newMae.category_id : undefined,
+        department_id: newMae.department_id ? +newMae.department_id : undefined,
+        priority: newMae.priority,
+      })
+      setShowNewMae(false)
+      setNewMae({ title: '', client_id: '', description: '', due_date: '', category_id: '', department_id: '', priority: 'normal' })
+      loadData()
+      toast('Tarefa Mae criada — abra ela e adicione as subtarefas')
+    } catch (err: any) { toast(err.message || 'Erro ao criar tarefa mae', 'error') }
     finally { setSaving(false) }
   }
 
@@ -186,6 +209,7 @@ export default function Pipeline() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h1>Pipeline</h1>
           {(isDono || isFunc) && <button className="btn btn-primary btn-sm" onClick={() => setShowNew(true)}><Plus size={14} /> Nova Tarefa</button>}
+          {(isDono || isFunc) && <button className="btn btn-secondary btn-sm" onClick={() => setShowNewMae(true)}><Layers size={14} /> Tarefa Mae</button>}
           {isDono && <button className="btn btn-secondary btn-sm" onClick={() => setShowNewEditorial(true)}><Layers size={14} /> Linha Editorial</button>}
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -407,6 +431,28 @@ export default function Pipeline() {
             <div style={{ marginTop: 8, fontStyle: 'italic' }}>Quando todas concluirem, a tarefa-mae auto-conclui.</div>
           </div>
           <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNewEditorial(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreateEditorial} disabled={saving || !newEditorial.client_id || !newEditorial.month_label}>{saving ? 'Criando...' : 'Criar Linha Editorial'}</button></div>
+        </div></div>
+      )}
+
+      {/* New Mae generica modal */}
+      {showNewMae && (
+        <div className="modal-overlay" onClick={() => setShowNewMae(false)}><div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
+          <h2><Layers size={18} style={{ marginRight: 8, verticalAlign: 'middle', color: '#FFB300' }} />Nova Tarefa Mae</h2>
+          <p style={{ fontSize: 12, color: '#9B96B0', marginTop: -6, marginBottom: 16 }}>Cria uma tarefa-mae vazia. Voce adiciona as subtarefas manualmente depois. Quando todas concluirem, a mae auto-conclui.</p>
+          <div className="form-row">
+            <div className="form-group"><label>Titulo *</label><input className="input" value={newMae.title} onChange={e => setNewMae(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Campanha Black Friday 2026" /></div>
+            <div className="form-group"><label>Cliente *</label><select className="select" value={newMae.client_id} onChange={e => setNewMae(p => ({ ...p, client_id: e.target.value }))}><option value="">Selecione</option>{clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
+          </div>
+          <div className="form-group"><label>Descricao</label><textarea className="input" rows={3} value={newMae.description} onChange={e => setNewMae(p => ({ ...p, description: e.target.value }))} /></div>
+          <div className="form-row">
+            <div className="form-group"><label>Prazo</label><input className="input" type="date" value={newMae.due_date} onChange={e => setNewMae(p => ({ ...p, due_date: e.target.value }))} /></div>
+            <div className="form-group"><label>Prioridade</label><select className="select" value={newMae.priority} onChange={e => setNewMae(p => ({ ...p, priority: e.target.value }))}><option value="baixa">Baixa</option><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label>Departamento</label><select className="select" value={newMae.department_id} onChange={e => setNewMae(p => ({ ...p, department_id: e.target.value }))}><option value="">Nenhum</option>{departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}</select></div>
+            <div className="form-group"><label>Categoria</label><select className="select" value={newMae.category_id} onChange={e => setNewMae(p => ({ ...p, category_id: e.target.value }))}><option value="">Nenhuma</option>{categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
+          </div>
+          <div className="modal-actions"><button className="btn btn-secondary" onClick={() => setShowNewMae(false)}>Cancelar</button><button className="btn btn-primary" onClick={handleCreateMae} disabled={saving || !newMae.title || !newMae.client_id}>{saving ? 'Criando...' : 'Criar Tarefa Mae'}</button></div>
         </div></div>
       )}
     </div>

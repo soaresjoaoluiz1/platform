@@ -261,6 +261,42 @@ router.get('/gravacoes/calendar', (req, res) => {
   res.json({ gravacoes })
 })
 
+// Create generic mae task — sem subtarefas auto-criadas (option C)
+// Subtarefas sao adicionadas manualmente via POST /:id/subtasks
+router.post('/mae', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
+  const { client_id, title, description, due_date, category_id, department_id, priority } = req.body
+  if (!client_id || !title) return res.status(400).json({ error: 'client_id e title obrigatorios' })
+  const result = db.prepare(`
+    INSERT INTO tasks (client_id, category_id, department_id, title, description, priority, due_date, created_by, stage, task_type)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'backlog', 'mae')
+  `).run(client_id, category_id || null, department_id || null, title, description || null, priority || 'normal', due_date || null, req.user.id)
+  db.prepare('INSERT INTO task_history (task_id, to_stage, user_id) VALUES (?, ?, ?)').run(result.lastInsertRowid, 'backlog', req.user.id)
+  const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(result.lastInsertRowid)
+  broadcastSSE(task.client_id, 'task:created', task)
+  res.json({ task })
+})
+
+// Add a custom subtask to a mae (works for task_type='mae' OR 'mae_editorial')
+router.post('/:id/subtasks', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
+  const parent = db.prepare('SELECT * FROM tasks WHERE id = ?').get(req.params.id)
+  if (!parent) return res.status(404).json({ error: 'Tarefa-mae nao encontrada' })
+  if (!parent.task_type || parent.task_type === 'normal') return res.status(400).json({ error: 'Tarefa nao e mae — nao aceita subtarefas' })
+  const { title, description, due_date, category_id, department_id, priority, assigned_to } = req.body
+  if (!title) return res.status(400).json({ error: 'title obrigatorio' })
+  const maxPos = db.prepare('SELECT COALESCE(MAX(subtask_position), 0) as m FROM tasks WHERE parent_task_id = ?').get(parent.id).m
+  const result = db.prepare(`
+    INSERT INTO tasks (client_id, category_id, department_id, title, description, priority, due_date, created_by, stage, task_type, parent_task_id, subtask_position, assigned_to)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'backlog', 'normal', ?, ?, ?)
+  `).run(parent.client_id, category_id || null, department_id || null, title, description || null, priority || 'normal', due_date || null, req.user.id, parent.id, maxPos + 1, assigned_to || null)
+  if (assigned_to) {
+    db.prepare('INSERT OR IGNORE INTO task_assignees (task_id, user_id) VALUES (?, ?)').run(result.lastInsertRowid, assigned_to)
+  }
+  db.prepare('INSERT INTO task_history (task_id, to_stage, user_id) VALUES (?, ?, ?)').run(result.lastInsertRowid, 'backlog', req.user.id)
+  const subtask = db.prepare('SELECT * FROM tasks WHERE id = ?').get(result.lastInsertRowid)
+  broadcastSSE(parent.client_id, 'task:created', subtask)
+  res.json({ subtask })
+})
+
 // Create Editorial parent task with fixed subtasks (hardcoded workflow)
 router.post('/editorial', requireRole('dono', 'gerente'), (req, res) => {
   const { client_id, month_label, num_posts, num_videos, due_date, category_id } = req.body
@@ -614,6 +650,24 @@ router.put('/:id/stage', (req, res) => {
   // ===== Editorial workflow triggers (when subtask completes) =====
   if (stage === 'concluido' && updated.parent_task_id && updated.subtask_kind) {
     triggerEditorialWorkflow(updated, req.user.id)
+  }
+
+  // ===== Mae generica auto-close: quando todas as filhas de uma mae='mae' concluem =====
+  if (stage === 'concluido' && updated.parent_task_id) {
+    const maeParent = db.prepare("SELECT * FROM tasks WHERE id = ? AND task_type = 'mae'").get(updated.parent_task_id)
+    if (maeParent && maeParent.stage !== 'concluido') {
+      const status = db.prepare(`
+        SELECT COUNT(*) as total,
+          SUM(CASE WHEN stage = 'concluido' THEN 1 ELSE 0 END) as done
+        FROM tasks WHERE parent_task_id = ? AND is_active = 1
+      `).get(maeParent.id)
+      if (status.total > 0 && status.total === status.done) {
+        db.prepare("UPDATE tasks SET stage = 'concluido', updated_at = datetime('now', '-3 hours') WHERE id = ?").run(maeParent.id)
+        db.prepare('INSERT INTO task_history (task_id, from_stage, to_stage, user_id, comment) VALUES (?, ?, ?, ?, ?)').run(maeParent.id, maeParent.stage, 'concluido', req.user.id, 'Auto: todas as subtarefas concluidas')
+        const updatedMae = db.prepare('SELECT * FROM tasks WHERE id = ?').get(maeParent.id)
+        broadcastSSE(maeParent.client_id, 'task:stage_changed', updatedMae)
+      }
+    }
   }
 
   res.json({ task: updated })
