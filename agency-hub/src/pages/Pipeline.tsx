@@ -49,8 +49,9 @@ export default function Pipeline() {
   const [showNewEditorial, setShowNewEditorial] = useState(false)
   const [showNewMae, setShowNewMae] = useState(false)
   const [newEditorial, setNewEditorial] = useState({ client_id: '', month_label: '', num_posts: '8', num_videos: '4', due_date: '', category_id: '' })
-  const [newMae, setNewMae] = useState({ title: '', client_id: '', description: '', due_date: '', category_id: '', department_id: '', priority: 'normal' })
-  const [newTask, setNewTask] = useState({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: '', priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' })
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
+  const [newMae, setNewMae] = useState({ title: '', client_id: '', description: '', due_date: today, category_id: '', department_id: '', priority: 'normal' })
+  const [newTask, setNewTask] = useState({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: today, priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' })
   const isDono = user?.role === 'dono'
   const isFunc = user?.role === 'funcionario' || user?.role === 'gerente'
 
@@ -92,7 +93,7 @@ export default function Pipeline() {
     try {
       const recording_datetime = newTask.recording_date ? `${newTask.recording_date}T${newTask.recording_time || '09:00'}` : undefined
       await createTask({ ...newTask, client_id: +newTask.client_id, category_id: newTask.category_id ? +newTask.category_id : undefined, department_id: newTask.department_id ? +newTask.department_id : undefined, assigned_to: newTask.assigned_to.map(Number), recording_datetime } as any)
-      setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [], due_date: '', priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' }); loadData()
+      setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [], due_date: today, priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' }); loadData()
       toast('Tarefa criada com sucesso!')
     } catch (err: any) { toast(err.message || 'Erro ao criar tarefa', 'error') }
     finally { setSaving(false) }
@@ -112,7 +113,7 @@ export default function Pipeline() {
         priority: newMae.priority,
       })
       setShowNewMae(false)
-      setNewMae({ title: '', client_id: '', description: '', due_date: '', category_id: '', department_id: '', priority: 'normal' })
+      setNewMae({ title: '', client_id: '', description: '', due_date: today, category_id: '', department_id: '', priority: 'normal' })
       loadData()
       toast('Tarefa Mae criada — abra ela e adicione as subtarefas')
     } catch (err: any) { toast(err.message || 'Erro ao criar tarefa mae', 'error') }

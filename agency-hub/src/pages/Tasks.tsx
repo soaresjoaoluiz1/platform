@@ -74,8 +74,9 @@ export default function Tasks() {
   const [showNewMae, setShowNewMae] = useState(false)
   const [showRequest, setShowRequest] = useState(false)
   const [newRequest, setNewRequest] = useState({ title: '', description: '', drive_link_raw: '' })
-  const [newTask, setNewTask] = useState({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: '', priority: 'normal', drive_link: '' })
-  const [newMae, setNewMae] = useState({ title: '', client_id: '', description: '', due_date: '', category_id: '', department_id: '', priority: 'normal' })
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
+  const [newTask, setNewTask] = useState({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: today, priority: 'normal', drive_link: '' })
+  const [newMae, setNewMae] = useState({ title: '', client_id: '', description: '', due_date: today, category_id: '', department_id: '', priority: 'normal' })
   // Bulk
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const [showBulkStage, setShowBulkStage] = useState(false)
@@ -119,7 +120,7 @@ export default function Tasks() {
     setSaving(true)
     try {
       await createTask({ ...newTask, client_id: +newTask.client_id, category_id: newTask.category_id ? +newTask.category_id : undefined, department_id: newTask.department_id ? +newTask.department_id : undefined, assigned_to: newTask.assigned_to.map(Number) } as any)
-      setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: '', priority: 'normal', drive_link: '' }); loadTasks()
+      setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: today, priority: 'normal', drive_link: '' }); loadTasks()
       toast('Tarefa criada com sucesso!')
     } catch (err: any) { toast(err.message || 'Erro ao criar tarefa', 'error') }
     finally { setSaving(false) }
@@ -138,7 +139,7 @@ export default function Tasks() {
         priority: newMae.priority,
       })
       setShowNewMae(false)
-      setNewMae({ title: '', client_id: '', description: '', due_date: '', category_id: '', department_id: '', priority: 'normal' })
+      setNewMae({ title: '', client_id: '', description: '', due_date: today, category_id: '', department_id: '', priority: 'normal' })
       loadTasks()
       toast('Tarefa Mae criada — abra ela e adicione as subtarefas')
     } catch (err: any) { toast(err.message || 'Erro ao criar tarefa mae', 'error') }

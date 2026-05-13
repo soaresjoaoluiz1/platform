@@ -40,8 +40,9 @@ export default function TaskDetail() {
   const [showRecording, setShowRecording] = useState(false)
   const [recordingData, setRecordingData] = useState({ recording_datetime: '', capture_user_id: '', edit_user_id: '', design_user_id: '' })
   // Subtarefa modal (mae generica e editorial)
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
   const [showNewSub, setShowNewSub] = useState(false)
-  const [newSub, setNewSub] = useState({ title: '', description: '', due_date: '', priority: 'normal', assigned_to: '', department_id: '', category_id: '' })
+  const [newSub, setNewSub] = useState({ title: '', description: '', due_date: today, priority: 'normal', assigned_to: '', department_id: '', category_id: '' })
   const [savingSub, setSavingSub] = useState(false)
 
   const { toast } = useToast()
@@ -133,7 +134,7 @@ export default function TaskDetail() {
         category_id: newSub.category_id ? +newSub.category_id : undefined,
       })
       setShowNewSub(false)
-      setNewSub({ title: '', description: '', due_date: '', priority: 'normal', assigned_to: '', department_id: '', category_id: '' })
+      setNewSub({ title: '', description: '', due_date: today, priority: 'normal', assigned_to: '', department_id: '', category_id: '' })
       loadTask()
       toast('Subtarefa adicionada')
     } catch (e: any) { toast(e?.message || 'Erro ao adicionar subtarefa', 'error') }
