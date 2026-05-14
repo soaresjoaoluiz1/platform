@@ -2,36 +2,37 @@
  * Importacao em lote de leads pra conta QUIMIPROL no Dros CRM.
  *
  * Como usar:
- *   1. Abre a planilha com os leads no Google Sheets
- *   2. Extensoes > Apps Script > cola esse codigo
- *   3. Ajusta SHEET_NAME se a aba nao se chamar "Página1"
- *   4. Clica Salvar > Executar > funcao "importarLeadsQuimiprol"
- *   5. Autoriza acesso na 1a vez (UrlFetchApp + SpreadsheetApp)
- *   6. Abre Visualizar > Logs pra ver progresso
+ *   1. Abre a planilha "leads_2026-05-14.xlsx" no Google Sheets
+ *   2. Menu Extensoes > Apps Script > apaga codigo padrao e cola tudo isso
+ *   3. Clica Salvar > Executar > funcao "importarLeadsQuimiprol"
+ *   4. Autoriza acesso na 1a vez (UrlFetchApp + SpreadsheetApp)
+ *   5. Menu Ver > Registros pra acompanhar progresso
  *
  * Mapeamento de colunas (A-G):
  *   A = Nome
  *   B = Email
  *   C = Telefone
- *   D = Status        (Loja Autorizada -> stage "Em Atendimento" + tag "Loja Autorizada"
- *                      qualquer outro  -> stage "Em Atendimento" + tag "Revendedor")
- *   E = Corretor      (Nelson / Darlan -> vira atendente do lead)
- *   F = Origem        (SITE -> source do lead)
- *   G = Publico       (ignorado, mas pode ser usado depois)
+ *   D = Status        valores possiveis: "Novo Lead", "Atendimento", "Loja Autorizada"
+ *                     - "Loja Autorizada" -> etapa "Atendimento" + tag "Loja Autorizada"
+ *                     - qualquer outro    -> etapa = mesmo nome do status + tag "Revendedor"
+ *   E = Corretor      "Nelson" ou "Darlan" -> vira atendente do lead
+ *   F = Origem        SITE -> source do lead
+ *   G = Publico       ignorado
  *
  * Comportamento:
  *   - Linha 1 e header, comeca da linha 2
- *   - Se telefone ja existe no CRM, faz update (mantem dados existentes via COALESCE)
- *   - Cria atendentes (corretores) que ainda nao existem? NAO. Voce ja criou Nelson e Darlan.
- *   - Cria tags que ainda nao existem? SIM, automaticamente
- *   - Move lead pra etapa "Em Atendimento"
+ *   - Se telefone ja existe no CRM da QUIMIPROL, faz update (nao duplica)
+ *   - Cria tags automaticamente se ainda nao existirem
+ *   - Busca atendente pelo nome do corretor (Nelson eh gerente, Darlan atendente — ambos OK)
  *
- * IMPORTANTE: rode 1x so. Se rodar 2x, vai atualizar (nao duplica) mas adiciona log dobrado.
+ * IMPORTANTE:
+ *   - Rode apenas 1x. Se rodar 2x, atualiza dados mas nao duplica leads.
+ *   - Confira se conta "QUIMIPROL" tem slug "quimiprol" no CRM (se for diferente, ajuste CRM_WEBHOOK)
  */
 
 const CRM_WEBHOOK = 'https://drosagencia.com.br/crm/api/webhooks/sheets/quimiprol'
-const SHEET_NAME = 'Página1' // Ajuste se sua aba tiver outro nome (ex: 'LEADS', 'Sheet1')
-const START_ROW = 2          // Pula header
+const SHEET_NAME = 'Leads'   // Nome da aba (em baixo da planilha)
+const START_ROW = 2          // Linha 1 e header
 
 function importarLeadsQuimiprol() {
   const ss = SpreadsheetApp.getActiveSpreadsheet()
@@ -46,7 +47,6 @@ function importarLeadsQuimiprol() {
     return
   }
 
-  // Le A2:G{lastRow} de uma vez (rapido)
   const numRows = lastRow - START_ROW + 1
   const data = sheet.getRange(START_ROW, 1, numRows, 7).getValues()
 
@@ -56,16 +56,23 @@ function importarLeadsQuimiprol() {
   for (let i = 0; i < data.length; i++) {
     const row = data[i]
     const nome    = String(row[0] || '').trim()
-    const email   = String(row[1] || '').trim()
-    const tel     = String(row[2] || '').trim()
+    const email   = String(row[1] || '').trim().replace(/^-$/, '') // celula com "-" vira vazio
+    const tel     = String(row[2] || '').trim().replace(/[^\d]/g, '')
     const status  = String(row[3] || '').trim()
     const corretor= String(row[4] || '').trim()
     const origem  = String(row[5] || '').trim() || 'SITE'
 
-    if (!tel) { skipCount++; continue } // sem telefone, pula
+    if (!tel) { skipCount++; continue }
 
-    // Decide tag pelo status
-    const tag = /loja\s+autorizada/i.test(status) ? 'Loja Autorizada' : 'Revendedor'
+    // Decisao etapa + tag conforme status
+    let stageName, tag
+    if (/loja\s+autorizada/i.test(status)) {
+      stageName = 'Atendimento'
+      tag = 'Loja Autorizada'
+    } else {
+      stageName = status || 'Novo Lead' // se vazio, joga em Novo Lead
+      tag = 'Revendedor'
+    }
 
     const payload = {
       nome: nome,
@@ -73,7 +80,7 @@ function importarLeadsQuimiprol() {
       email: email,
       source: origem,
       corretor: corretor,
-      stage_name: 'Em Atendimento',
+      stage_name: stageName,
       tags: [tag],
     }
 
@@ -96,7 +103,6 @@ function importarLeadsQuimiprol() {
       errors.push(`Linha ${i + START_ROW} (${tel}): ${e.message}`)
     }
 
-    // Throttle leve pra nao saturar o backend
     if ((i + 1) % 25 === 0) {
       Logger.log(`Progresso: ${i + 1}/${data.length} (ok=${okCount} err=${errCount})`)
       Utilities.sleep(500)
