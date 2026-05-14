@@ -159,6 +159,55 @@ router.get('/stats', (req, res) => {
       break
     }
 
+    // Recorde de streak: maior sequencia de dias uteis com >=1 conclusao em toda a historia do usuario.
+    // Mesma regra: fim de semana ignorado, dia util sem conclusao quebra.
+    const allDatesRow = db.prepare(`
+      SELECT date(th.created_at, '-3 hours') as date
+      FROM task_history th
+      JOIN task_assignees ta ON ta.task_id = th.task_id AND ta.user_id = ?
+      WHERE th.to_stage = 'concluido'
+      GROUP BY date(th.created_at, '-3 hours')
+      ORDER BY date
+    `).all(uid)
+    let streakRecord = 0
+    let streakRecordDate = null
+    if (allDatesRow.length > 0) {
+      const completedSet = new Set(allDatesRow.map(r => r.date))
+      const firstDate = new Date(allDatesRow[0].date + 'T12:00:00')
+      const todayDate = new Date(new Date().toISOString().slice(0, 10) + 'T12:00:00')
+      let current = 0
+      let currentEnd = null
+      for (let d = new Date(firstDate); d <= todayDate; d.setDate(d.getDate() + 1)) {
+        const dow = d.getDay()
+        if (dow === 0 || dow === 6) continue
+        const key = d.toISOString().slice(0, 10)
+        if (completedSet.has(key)) {
+          current++
+          currentEnd = key
+          if (current > streakRecord) { streakRecord = current; streakRecordDate = currentEnd }
+        } else {
+          current = 0
+          currentEnd = null
+        }
+      }
+    }
+
+    // Proximas tarefas vencendo nos proximos 2 dias (alem das ja vencidas que ja contam em overdue)
+    const upcoming = db.prepare(`
+      SELECT t.id, t.title, t.due_date, t.stage, ps.name as stage_name, ps.color as stage_color, c.name as client_name
+      FROM tasks t
+      LEFT JOIN pipeline_stages ps ON ps.slug = t.stage
+      LEFT JOIN clients c ON c.id = t.client_id
+      WHERE t.id IN (SELECT task_id FROM task_assignees WHERE user_id = ?)
+        AND t.is_active = 1
+        AND t.stage NOT IN ('concluido', 'rejeitado')
+        AND t.due_date IS NOT NULL AND t.due_date != ''
+        AND date(t.due_date) >= date('now', '-3 hours')
+        AND date(t.due_date) <= date('now', '-3 hours', '+2 days')
+      ORDER BY t.due_date ASC
+      LIMIT 5
+    `).all(uid)
+
     // Evolucao semanal (8 semanas)
     const weeklyHistory = []
     for (let w = 7; w >= 0; w--) {
@@ -173,7 +222,7 @@ router.get('/stats', (req, res) => {
       weeklyHistory.push({ label, count: cnt })
     }
 
-    res.json({ myTasks, byStage, overdue, concludedToday, concludedWeek, concludedMonth, heatmap, streak, weeklyHistory })
+    res.json({ myTasks, byStage, overdue, concludedToday, concludedWeek, concludedMonth, heatmap, streak, streakRecord, streakRecordDate, weeklyHistory, upcoming })
   } else { // cliente
     const totalTasks = db.prepare('SELECT COUNT(*) as c FROM tasks WHERE client_id = ? AND is_active = 1').get(req.user.client_id).c
     const pendingApproval = db.prepare("SELECT COUNT(*) as c FROM tasks WHERE client_id = ? AND stage = 'aguardando_cliente' AND is_active = 1").get(req.user.client_id).c

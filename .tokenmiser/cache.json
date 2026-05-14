@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-14T17:08:41.812Z",
+  "generatedAt": "2026-05-14T17:12:52.576Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -2537,8 +2537,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\Dashboard.tsx": {
-      "mtime": 1778696246537.5674,
-      "size": 29630,
+      "mtime": 1778778770761.9485,
+      "size": 33939,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2752,8 +2752,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\dashboard.js": {
-      "mtime": 1778778519661.6504,
-      "size": 12047,
+      "mtime": 1778778700436.3567,
+      "size": 14199,
       "symbols": {
         "purpose": null,
         "exports": [],

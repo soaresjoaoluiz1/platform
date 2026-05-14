@@ -144,6 +144,32 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
+              {/* Recorde pessoal */}
+              {stats.streakRecord > 0 && (() => {
+                const pct = stats.streakRecord > 0 ? Math.min(100, (stats.streak / stats.streakRecord) * 100) : 0
+                const tied = stats.streak >= stats.streakRecord && stats.streak > 0
+                return (
+                  <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: 11, color: '#A8A3B8', marginBottom: 6 }}>
+                      <span>Recorde pessoal {tied ? '🏆' : ''}</span>
+                      <span style={{ fontWeight: 700, color: tied ? '#FFB300' : '#fff' }}>{stats.streakRecord} {stats.streakRecord === 1 ? 'dia' : 'dias'}</span>
+                    </div>
+                    <div style={{ height: 6, background: 'rgba(255,255,255,0.06)', borderRadius: 3, overflow: 'hidden' }}>
+                      <div style={{ width: `${pct}%`, height: '100%', background: tied ? 'var(--gradient-primary)' : '#34C759', transition: 'width 0.4s ease' }} />
+                    </div>
+                    {!tied && stats.streak > 0 && stats.streakRecord - stats.streak <= 3 && (
+                      <div style={{ fontSize: 10, color: '#FFB300', marginTop: 6, fontWeight: 600 }}>
+                        Faltam {stats.streakRecord - stats.streak} {stats.streakRecord - stats.streak === 1 ? 'dia' : 'dias'} pra bater seu recorde!
+                      </div>
+                    )}
+                    {tied && (
+                      <div style={{ fontSize: 10, color: '#FFB300', marginTop: 6, fontWeight: 700 }}>
+                        Novo recorde! Continua quebrando.
+                      </div>
+                    )}
+                  </div>
+                )
+              })()}
             </div>
 
             <div className="chart-card">
@@ -167,6 +193,35 @@ export default function Dashboard() {
               )}
             </div>
           </div>
+
+          {stats.upcoming?.length > 0 && (
+            <div className="chart-card" style={{ marginTop: 16, borderLeft: '3px solid #FFB300' }}>
+              <h3>Vencendo nos proximos 2 dias</h3>
+              <p style={{ fontSize: 11, color: '#6B6580', marginTop: -4, marginBottom: 12 }}>Clica pra abrir a tarefa</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {stats.upcoming.map((t: any) => {
+                  const dueDate = t.due_date.slice(0, 10)
+                  const today = new Date().toISOString().slice(0, 10)
+                  const isToday = dueDate === today
+                  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1)
+                  const isTomorrow = dueDate === tomorrow.toISOString().slice(0, 10)
+                  const label = isToday ? 'HOJE' : isTomorrow ? 'AMANHA' : dueDate.split('-').reverse().slice(0, 2).join('/')
+                  return (
+                    <div key={t.id} onClick={() => navigate(`/tasks/${t.id}`)}
+                      style={{ padding: '10px 14px', borderRadius: 8, cursor: 'pointer', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderLeft: `3px solid ${t.stage_color || '#6B6580'}`, transition: 'background 0.15s', display: 'flex', alignItems: 'center', gap: 12 }}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}>
+                      <span style={{ minWidth: 60, padding: '3px 8px', borderRadius: 4, fontSize: 10, fontWeight: 800, textAlign: 'center', background: isToday ? 'rgba(255,107,107,0.18)' : isTomorrow ? 'rgba(255,179,0,0.18)' : 'rgba(255,255,255,0.05)', color: isToday ? '#FF6B6B' : isTomorrow ? '#FFB300' : '#A8A3B8', fontFamily: 'var(--font-heading)', letterSpacing: 0.5 }}>{label}</span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.title}</div>
+                        <div style={{ fontSize: 11, color: '#6B6580', marginTop: 2 }}>{t.client_name} · {t.stage_name}</div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           <div className="chart-card" style={{ marginTop: 16 }}>
             <h3>Atividade nos Ultimos 90 Dias</h3>
