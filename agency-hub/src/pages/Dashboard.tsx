@@ -196,22 +196,31 @@ export default function Dashboard() {
 
           {stats.upcoming?.length > 0 && (
             <div className="chart-card" style={{ marginTop: 16, borderLeft: '3px solid #FFB300' }}>
-              <h3>Vencendo nos proximos 2 dias</h3>
-              <p style={{ fontSize: 11, color: '#6B6580', marginTop: -4, marginBottom: 12 }}>Clica pra abrir a tarefa</p>
+              <h3>Tarefas que precisam de atencao</h3>
+              <p style={{ fontSize: 11, color: '#6B6580', marginTop: -4, marginBottom: 12 }}>Atrasadas + vencendo nos proximos 2 dias. Click pra abrir.</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {stats.upcoming.map((t: any) => {
                   const dueDate = t.due_date.slice(0, 10)
                   const today = new Date().toISOString().slice(0, 10)
-                  const isToday = dueDate === today
                   const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1)
+                  const isOverdue = dueDate < today
+                  const isToday = dueDate === today
                   const isTomorrow = dueDate === tomorrow.toISOString().slice(0, 10)
-                  const label = isToday ? 'HOJE' : isTomorrow ? 'AMANHA' : dueDate.split('-').reverse().slice(0, 2).join('/')
+                  // Dias atrasados
+                  const daysLate = isOverdue ? Math.floor((new Date(today + 'T12:00:00').getTime() - new Date(dueDate + 'T12:00:00').getTime()) / 86400000) : 0
+                  const label = isOverdue
+                    ? `${daysLate}d ATRASO`
+                    : isToday ? 'HOJE'
+                    : isTomorrow ? 'AMANHA'
+                    : dueDate.split('-').reverse().slice(0, 2).join('/')
+                  const labelBg = isOverdue ? 'rgba(255,107,107,0.25)' : isToday ? 'rgba(255,107,107,0.18)' : isTomorrow ? 'rgba(255,179,0,0.18)' : 'rgba(255,255,255,0.05)'
+                  const labelColor = isOverdue ? '#FF6B6B' : isToday ? '#FF6B6B' : isTomorrow ? '#FFB300' : '#A8A3B8'
                   return (
                     <div key={t.id} onClick={() => navigate(`/tasks/${t.id}`)}
-                      style={{ padding: '10px 14px', borderRadius: 8, cursor: 'pointer', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderLeft: `3px solid ${t.stage_color || '#6B6580'}`, transition: 'background 0.15s', display: 'flex', alignItems: 'center', gap: 12 }}
-                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
-                      onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}>
-                      <span style={{ minWidth: 60, padding: '3px 8px', borderRadius: 4, fontSize: 10, fontWeight: 800, textAlign: 'center', background: isToday ? 'rgba(255,107,107,0.18)' : isTomorrow ? 'rgba(255,179,0,0.18)' : 'rgba(255,255,255,0.05)', color: isToday ? '#FF6B6B' : isTomorrow ? '#FFB300' : '#A8A3B8', fontFamily: 'var(--font-heading)', letterSpacing: 0.5 }}>{label}</span>
+                      style={{ padding: '10px 14px', borderRadius: 8, cursor: 'pointer', background: isOverdue ? 'rgba(255,107,107,0.04)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isOverdue ? 'rgba(255,107,107,0.18)' : 'rgba(255,255,255,0.06)'}`, borderLeft: `3px solid ${isOverdue ? '#FF6B6B' : (t.stage_color || '#6B6580')}`, transition: 'background 0.15s', display: 'flex', alignItems: 'center', gap: 12 }}
+                      onMouseEnter={e => (e.currentTarget.style.background = isOverdue ? 'rgba(255,107,107,0.08)' : 'rgba(255,255,255,0.04)')}
+                      onMouseLeave={e => (e.currentTarget.style.background = isOverdue ? 'rgba(255,107,107,0.04)' : 'rgba(255,255,255,0.02)')}>
+                      <span style={{ minWidth: 80, padding: '3px 8px', borderRadius: 4, fontSize: 10, fontWeight: 800, textAlign: 'center', background: labelBg, color: labelColor, fontFamily: 'var(--font-heading)', letterSpacing: 0.5 }}>{label}</span>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.title}</div>
                         <div style={{ fontSize: 11, color: '#6B6580', marginTop: 2 }}>{t.client_name} · {t.stage_name}</div>

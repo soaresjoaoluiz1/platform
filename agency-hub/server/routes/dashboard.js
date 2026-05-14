@@ -192,7 +192,8 @@ router.get('/stats', (req, res) => {
       }
     }
 
-    // Proximas tarefas vencendo nos proximos 2 dias (alem das ja vencidas que ja contam em overdue)
+    // Tarefas que requerem atencao agora: atrasadas (ja vencidas) + vencendo nos
+    // proximos 2 dias. Ordenadas por due_date ASC (mais atrasadas primeiro).
     const upcoming = db.prepare(`
       SELECT t.id, t.title, t.due_date, t.stage, ps.name as stage_name, ps.color as stage_color, c.name as client_name
       FROM tasks t
@@ -202,10 +203,9 @@ router.get('/stats', (req, res) => {
         AND t.is_active = 1
         AND t.stage NOT IN ('concluido', 'rejeitado')
         AND t.due_date IS NOT NULL AND t.due_date != ''
-        AND date(t.due_date) >= date('now', '-3 hours')
         AND date(t.due_date) <= date('now', '-3 hours', '+2 days')
       ORDER BY t.due_date ASC
-      LIMIT 5
+      LIMIT 8
     `).all(uid)
 
     // Evolucao semanal (8 semanas)
