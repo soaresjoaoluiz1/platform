@@ -95,6 +95,14 @@ router.post('/', (req, res) => {
 
   phone = normalizePhone(phone)
 
+  // Duplicata: se ja existe lead com mesmo telefone nessa conta, retorna 409 com o existente
+  if (phone) {
+    const existing = db.prepare('SELECT * FROM leads WHERE account_id = ? AND phone = ? ORDER BY is_archived ASC, created_at DESC LIMIT 1').get(req.accountId, phone)
+    if (existing) {
+      return res.status(409).json({ error: 'Contato ja existe com esse telefone', existing })
+    }
+  }
+
   // Atendente only sees own leads, so creation always self-assigns
   if (req.user.role === 'atendente') attendant_id = req.user.id
 
@@ -127,7 +135,19 @@ router.post('/', (req, res) => {
   )
 
   const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(result.lastInsertRowid)
-  // CAPI: dispara evento da etapa inicial (service filtra se nao tiver ctwa_clid)
+
+  // Cria assignment do lead com a instancia escolhida (necessario pras tabs aparecerem no Chat)
+  // Tambem grava last_instance_id pra o envio manual usar essa instancia por padrao
+  if (instance_id) {
+    db.prepare("UPDATE leads SET last_instance_id = ? WHERE id = ?").run(instance_id, lead.id)
+    db.prepare(`
+      INSERT OR IGNORE INTO lead_instance_assignments (lead_id, instance_id, attendant_id)
+      VALUES (?, ?, ?)
+    `).run(lead.id, instance_id, attendant_id || null)
+    lead.last_instance_id = instance_id
+  }
+
+  // CAPI: dispara evento da etapa inicial
   triggerCapiForStageChange(lead.id, firstStage.id, histRes.lastInsertRowid)
   try { broadcastSSE(req.accountId, 'lead:created', lead) } catch {}
   res.json({ lead })

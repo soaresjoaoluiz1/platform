@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-13 · 4043 files · ~12.1M tokens total
+> 2026-05-14 · 4199 files · ~12.9M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -195,7 +195,7 @@
 - `SSEContext.tsx` — SSEProvider, useSSE, useSSEStatus
 
 **crm-dashboard\src\lib/**
-- `api.ts` — apiFetch, formatBRL, formatNumber, pctChange, fetchMessageMedia, login, fetchAccounts, createAccount +2
+- `api.ts` — apiFetch, formatBRL, formatNumber, pctChange, createLeadOrFindExisting, fetchMessageMedia, login, fetchAccounts +2
 - `dates.ts` — Parser de timestamps do SQLite que sao gravados em UTC mas sem marcador de timezone. · parseSqlDate, formatTime, formatDate, formatDateTime
 - `messageVars.ts` — Single source of truth for message template variables. · applyMessageVars, MESSAGE_VARIABLES, VarContext, VarDoc
 
@@ -752,4 +752,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~7.5k tokens · Full codebase: ~12.1M tokens · Saves ~100%*
+*Index: ~7.5k tokens · Full codebase: ~12.9M tokens · Saves ~100%*

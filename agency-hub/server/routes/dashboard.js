@@ -145,12 +145,18 @@ router.get('/stats', (req, res) => {
       heatmap.push({ date: key, count: completionMap.get(key) || 0 })
     }
 
-    // Streak: dias consecutivos com pelo menos 1 conclusao terminando em hoje (ou ontem se zero hoje)
+    // Streak: dias uteis consecutivos com pelo menos 1 conclusao terminando em hoje.
+    // - Sabado e domingo NAO quebram a sequencia (sao ignorados)
+    // - Tolera zero conclusoes hoje (comeca a contar de ontem)
+    // - Quebra na primeira sexta/qua/etc com zero conclusoes
     let streak = 0
     for (let i = heatmap.length - 1; i >= 0; i--) {
-      if (heatmap[i].count > 0) streak++
-      else if (i === heatmap.length - 1) continue // tolera zero hoje, comeca a contar de ontem
-      else break
+      const d = new Date(heatmap[i].date + 'T12:00:00')
+      const dow = d.getDay() // 0=domingo, 6=sabado
+      if (dow === 0 || dow === 6) continue // fim de semana: nao quebra nem soma
+      if (heatmap[i].count > 0) { streak++; continue }
+      if (i === heatmap.length - 1) continue // tolera zero hoje
+      break
     }
 
     // Evolucao semanal (8 semanas)

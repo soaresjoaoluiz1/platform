@@ -33,6 +33,10 @@ export interface Lead {
   is_archived?: number; archived_at?: string | null; has_new_after_archive?: number
   empresa?: string | null; cpf_cnpj?: string | null; instagram?: string | null; trabalha_anuncio?: number; investimento_anuncios?: number | null
   opted_in_at?: string | null; opted_out_at?: string | null; last_broadcast_at?: string | null
+  state?: string | null; zip?: string | null; birthdate?: string | null; gender?: string | null
+  ctwa_clid?: string | null; fbp?: string | null; fbc?: string | null
+  meta_ad_id?: string | null; meta_campaign_id?: string | null; meta_form_id?: string | null; lead_form_lead_id?: string | null
+  client_ip_address?: string | null; client_user_agent?: string | null
   stage_name?: string; stage_color?: string; attendant_name?: string; instance_name?: string
   last_message?: string; message_count?: number; tags?: Tag[]
 }
@@ -99,6 +103,23 @@ export const fetchLeads = (accountId: number, filters: LeadFilters = {}) => {
 }
 export const fetchLead = (id: number, accountId: number) => apiFetch<{ lead: Lead; messages: Message[]; stageHistory: StageHistoryEntry[]; notes: LeadNote[] }>(`/api/leads/${id}?account_id=${accountId}`)
 export const createLead = (accountId: number, data: Partial<Lead>) => apiFetch<{ lead: Lead }>(`/api/leads?account_id=${accountId}`, { method: 'POST', body: JSON.stringify(data) }).then(d => d.lead)
+export async function createLeadOrFindExisting(accountId: number, data: Partial<Lead>): Promise<{ lead: Lead; alreadyExisted: boolean }> {
+  const url = `${BASE}/api/leads?account_id=${accountId}`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (res.status === 401) { localStorage.removeItem('dros_crm_token'); window.location.href = `${BASE}/login`; throw new Error('Unauthorized') }
+  if (res.status === 409) {
+    const body = await res.json().catch(() => ({}))
+    if (body.existing) return { lead: body.existing as Lead, alreadyExisted: true }
+    throw new Error(body.error || 'Contato ja existe')
+  }
+  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || `API error: ${res.status}`) }
+  const body = await res.json()
+  return { lead: body.lead as Lead, alreadyExisted: false }
+}
 export const updateLead = (id: number, data: Partial<Lead>) => apiFetch(`/api/leads/${id}`, { method: 'PUT', body: JSON.stringify(data) })
 export const optInLead = (id: number) => apiFetch(`/api/leads/${id}/opt-in`, { method: 'POST' })
 export const optOutLead = (id: number) => apiFetch(`/api/leads/${id}/opt-out`, { method: 'POST' })
@@ -170,6 +191,11 @@ export const createBroadcast = (accountId: number, data: { name: string; message
 export const sendBroadcast = (id: number, accountId: number) => apiFetch(`/api/broadcasts/${id}/send?account_id=${accountId}`, { method: 'POST' })
 export const resumeBroadcast = (id: number, accountId: number) => apiFetch(`/api/broadcasts/${id}/resume?account_id=${accountId}`, { method: 'POST' })
 export const deleteBroadcast = (id: number, accountId: number) => apiFetch(`/api/broadcasts/${id}?account_id=${accountId}`, { method: 'DELETE' })
+export interface BroadcastCloneData {
+  clone: { name: string; message_template: string; message_variations: string[]; media_url: string | null; delay_seconds: number; instance_id: number | null; leads: Lead[] }
+  original: { total_count: number; valid_leads_now: number }
+}
+export const fetchBroadcastCloneData = (id: number, accountId: number) => apiFetch<BroadcastCloneData>(`/api/broadcasts/${id}/clone-data?account_id=${accountId}`)
 
 // Admin: check all WhatsApp instances across all accounts (super_admin only)
 export interface InstanceCheckResult {

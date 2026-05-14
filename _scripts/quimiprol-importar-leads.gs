@@ -1,85 +1,84 @@
 /**
- * Importacao em lote de leads pra conta QUIMIPROL no Dros CRM.
+ * Importacao em lote de leads pra QUIMIPROL.
+ * Tem checkpoint automatico: se der timeout (6min), rerodar Executar continua de onde parou.
  *
- * Como usar:
- *   1. Abre a planilha "leads_2026-05-14.xlsx" no Google Sheets
- *   2. Menu Extensoes > Apps Script > apaga codigo padrao e cola tudo isso
- *   3. Clica Salvar > Executar > funcao "importarLeadsQuimiprol"
- *   4. Autoriza acesso na 1a vez (UrlFetchApp + SpreadsheetApp)
- *   5. Menu Ver > Registros pra acompanhar progresso
- *
- * Mapeamento de colunas (A-G):
- *   A = Nome
- *   B = Email
- *   C = Telefone
- *   D = Status        valores possiveis: "Novo Lead", "Atendimento", "Loja Autorizada"
- *                     - "Loja Autorizada" -> etapa "Atendimento" + tag "Loja Autorizada"
- *                     - qualquer outro    -> etapa = mesmo nome do status + tag "Revendedor"
- *   E = Corretor      "Nelson" ou "Darlan" -> vira atendente do lead
- *   F = Origem        SITE -> source do lead
- *   G = Publico       ignorado
- *
- * Comportamento:
- *   - Linha 1 e header, comeca da linha 2
- *   - Se telefone ja existe no CRM da QUIMIPROL, faz update (nao duplica)
- *   - Cria tags automaticamente se ainda nao existirem
- *   - Busca atendente pelo nome do corretor (Nelson eh gerente, Darlan atendente — ambos OK)
- *
- * IMPORTANTE:
- *   - Rode apenas 1x. Se rodar 2x, atualiza dados mas nao duplica leads.
- *   - Confira se conta "QUIMIPROL" tem slug "quimiprol" no CRM (se for diferente, ajuste CRM_WEBHOOK)
+ * Pra zerar progresso e comecar do zero: rodar funcao `resetarCheckpoint`
  */
 
 const CRM_WEBHOOK = 'https://drosagencia.com.br/crm/api/webhooks/sheets/quimiprol'
-const SHEET_NAME = 'Leads'   // Nome da aba (em baixo da planilha)
-const START_ROW = 2          // Linha 1 e header
+const SHEET_NAME = 'Leads'
+const HEADER_ROW = 1
+const FIRST_DATA_ROW = 2
+const CHECKPOINT_KEY = 'quimiprol_last_row'
+const MAX_RUNTIME_MS = 5 * 60 * 1000 // 5min — para antes do limite de 6min, evita timeout
+
+const STAGE_MAP = {
+  'novo lead': 'Novo Lead',
+  'atendimento': 'Em Atendimento',
+  'em atendimento': 'Em Atendimento',
+  'loja autorizada': 'Em Atendimento',
+  'qualificado': 'Qualificado',
+  'visita agendada': 'Visita Agendada',
+  'proposta': 'Proposta',
+  'venda': 'Venda',
+  'perdido': 'Perdido',
+}
 
 function importarLeadsQuimiprol() {
+  const props = PropertiesService.getScriptProperties()
+  const startTime = Date.now()
+
   const ss = SpreadsheetApp.getActiveSpreadsheet()
   const sheet = ss.getSheetByName(SHEET_NAME)
-  if (!sheet) {
-    throw new Error(`Aba "${SHEET_NAME}" nao encontrada. Ajuste a constante SHEET_NAME.`)
-  }
+  if (!sheet) throw new Error(`Aba "${SHEET_NAME}" nao encontrada.`)
 
   const lastRow = sheet.getLastRow()
-  if (lastRow < START_ROW) {
-    Logger.log('Nenhum lead pra importar.')
+  const lastProcessed = Number(props.getProperty(CHECKPOINT_KEY)) || (HEADER_ROW)
+  const startRow = lastProcessed + 1
+
+  if (startRow > lastRow) {
+    Logger.log(`Nada novo pra importar. Ultimo processado: linha ${lastProcessed}, ultima da planilha: ${lastRow}`)
+    Logger.log(`Pra reimportar tudo do zero, rode "resetarCheckpoint" e depois "importarLeadsQuimiprol".`)
     return
   }
 
-  const numRows = lastRow - START_ROW + 1
-  const data = sheet.getRange(START_ROW, 1, numRows, 7).getValues()
+  Logger.log(`Retomando da linha ${startRow} ate ${lastRow} (${lastRow - startRow + 1} restantes)`)
 
-  let okCount = 0, errCount = 0, skipCount = 0
+  const numRows = lastRow - startRow + 1
+  const data = sheet.getRange(startRow, 1, numRows, 7).getValues()
+  let ok = 0, err = 0, skip = 0
   const errors = []
+  let currentRow = startRow
 
   for (let i = 0; i < data.length; i++) {
+    currentRow = startRow + i
+
+    // Checa runtime — se ja passou 5min, salva checkpoint e para
+    if (Date.now() - startTime > MAX_RUNTIME_MS) {
+      props.setProperty(CHECKPOINT_KEY, String(currentRow - 1))
+      Logger.log(`\n⏱  TIMEOUT preventivo na linha ${currentRow}. Rerode "importarLeadsQuimiprol" pra continuar.`)
+      Logger.log(`Parcial: ok=${ok} err=${err} skip=${skip}`)
+      return
+    }
+
     const row = data[i]
     const nome    = String(row[0] || '').trim()
-    const email   = String(row[1] || '').trim().replace(/^-$/, '') // celula com "-" vira vazio
+    const email   = String(row[1] || '').trim().replace(/^-$/, '')
     const tel     = String(row[2] || '').trim().replace(/[^\d]/g, '')
     const status  = String(row[3] || '').trim()
     const corretor= String(row[4] || '').trim()
     const origem  = String(row[5] || '').trim() || 'SITE'
 
-    if (!tel) { skipCount++; continue }
+    if (!tel) { skip++; props.setProperty(CHECKPOINT_KEY, String(currentRow)); continue }
 
-    // Decisao etapa + tag conforme status
-    let stageName, tag
-    if (/loja\s+autorizada/i.test(status)) {
-      stageName = 'Atendimento'
-      tag = 'Loja Autorizada'
-    } else {
-      stageName = status || 'Novo Lead' // se vazio, joga em Novo Lead
-      tag = 'Revendedor'
-    }
+    const statusLower = status.toLowerCase()
+    const stageName = STAGE_MAP[statusLower] || 'Novo Lead'
+    const tag = statusLower === 'loja autorizada' ? 'Loja Autorizada' : 'Revendedor'
 
     const payload = {
-      nome: nome,
-      telefone: tel,
-      email: email,
+      nome, telefone: tel, email,
       source: origem,
-      corretor: corretor,
+      corretor,
       stage_name: stageName,
       tags: [tag],
     }
@@ -92,31 +91,37 @@ function importarLeadsQuimiprol() {
         muteHttpExceptions: true,
       })
       const code = r.getResponseCode()
-      if (code >= 200 && code < 300) {
-        okCount++
-      } else {
-        errCount++
-        errors.push(`Linha ${i + START_ROW} (${tel}): HTTP ${code} - ${r.getContentText().substring(0, 200)}`)
-      }
+      if (code >= 200 && code < 300) ok++
+      else { err++; errors.push(`L${currentRow} (${tel}): HTTP ${code} - ${r.getContentText().substring(0, 200)}`) }
     } catch (e) {
-      errCount++
-      errors.push(`Linha ${i + START_ROW} (${tel}): ${e.message}`)
+      err++; errors.push(`L${currentRow} (${tel}): ${e.message}`)
     }
 
-    if ((i + 1) % 25 === 0) {
-      Logger.log(`Progresso: ${i + 1}/${data.length} (ok=${okCount} err=${errCount})`)
-      Utilities.sleep(500)
-    }
+    // Salva checkpoint a cada 10 linhas pra nao perder progresso
+    if ((i + 1) % 10 === 0) props.setProperty(CHECKPOINT_KEY, String(currentRow))
+    if ((i + 1) % 25 === 0) { Logger.log(`Linha ${currentRow}/${lastRow} (ok=${ok} err=${err})`); Utilities.sleep(300) }
   }
 
-  Logger.log(`\n=== RESUMO ===`)
-  Logger.log(`Total linhas:  ${data.length}`)
-  Logger.log(`Enviados OK:   ${okCount}`)
-  Logger.log(`Erros:         ${errCount}`)
-  Logger.log(`Pulados:       ${skipCount} (sem telefone)`)
-  if (errors.length > 0) {
-    Logger.log(`\n=== ERROS ===`)
-    errors.slice(0, 30).forEach(e => Logger.log(e))
-    if (errors.length > 30) Logger.log(`... +${errors.length - 30} erros (so 30 mostrados)`)
-  }
+  // Acabou tudo
+  props.setProperty(CHECKPOINT_KEY, String(lastRow))
+  Logger.log(`\n=== CONCLUIDO ===`)
+  Logger.log(`Faixa processada: ${startRow}-${lastRow} | OK: ${ok} | Erros: ${err} | Pulados: ${skip}`)
+  if (errors.length) { Logger.log(`\n=== ERROS ===`); errors.slice(0, 30).forEach(e => Logger.log(e)) }
+}
+
+function resetarCheckpoint() {
+  PropertiesService.getScriptProperties().deleteProperty(CHECKPOINT_KEY)
+  Logger.log('Checkpoint zerado. Proxima execucao comeca da linha 2.')
+}
+
+function verCheckpoint() {
+  const v = PropertiesService.getScriptProperties().getProperty(CHECKPOINT_KEY)
+  Logger.log(`Ultima linha processada: ${v || '(nenhuma — vai comecar do inicio)'}`)
+}
+
+// Define checkpoint manualmente — proxima execucao retoma da linha SEGUINTE
+// Util quando a 1a tentativa rodou sem checkpoint e voce precisa pular as ja importadas
+function definirCheckpoint() {
+  PropertiesService.getScriptProperties().setProperty(CHECKPOINT_KEY, '3100')
+  Logger.log(`Checkpoint definido em 3100. Proxima execucao comeca na linha 3101.`)
 }
