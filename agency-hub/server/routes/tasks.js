@@ -144,17 +144,22 @@ router.get('/pipeline', (req, res) => {
 
 // Create task
 router.post('/', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
-  const { client_id, title, description, category_id, department_id, assigned_to, due_date, priority, drive_link, drive_link_raw, recording_datetime, approval_link, approval_text, publish_date, publish_objective } = req.body
+  const { client_id, title, description, category_id, department_id, assigned_to, due_date, priority, drive_link, drive_link_raw, recording_datetime, approval_link, approval_text, approval_files, publish_date, publish_objective } = req.body
   if (!client_id || !title) return res.status(400).json({ error: 'client_id e title obrigatorios' })
 
   // assigned_to can be a single ID or array of IDs
   const assigneeIds = Array.isArray(assigned_to) ? assigned_to.filter(Boolean).map(Number) : (assigned_to ? [Number(assigned_to)] : [])
   const primaryAssignee = assigneeIds[0] || null
 
+  // approval_files: array de strings. Quando preenchido, approval_link recebe o primeiro item (retrocompat).
+  const filesArr = Array.isArray(approval_files) ? approval_files.filter(s => s && String(s).trim()) : []
+  const filesJson = filesArr.length > 0 ? JSON.stringify(filesArr) : null
+  const effectiveApprovalLink = filesArr.length > 0 ? filesArr[0] : (approval_link || null)
+
   const result = db.prepare(`
-    INSERT INTO tasks (client_id, category_id, department_id, title, description, due_date, priority, assigned_to, drive_link, drive_link_raw, approval_link, approval_text, publish_date, publish_objective, created_by, recording_datetime)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(client_id, category_id || null, department_id || null, title, description || null, due_date || null, priority || 'normal', primaryAssignee, drive_link || null, drive_link_raw || null, approval_link || null, approval_text || null, publish_date || null, publish_objective || null, req.user.id, recording_datetime || null)
+    INSERT INTO tasks (client_id, category_id, department_id, title, description, due_date, priority, assigned_to, drive_link, drive_link_raw, approval_link, approval_files, approval_text, publish_date, publish_objective, created_by, recording_datetime)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(client_id, category_id || null, department_id || null, title, description || null, due_date || null, priority || 'normal', primaryAssignee, drive_link || null, drive_link_raw || null, effectiveApprovalLink, filesJson, approval_text || null, publish_date || null, publish_objective || null, req.user.id, recording_datetime || null)
 
   setAssignees(result.lastInsertRowid, assigneeIds)
   db.prepare('INSERT INTO task_history (task_id, to_stage, user_id) VALUES (?, ?, ?)').run(result.lastInsertRowid, 'backlog', req.user.id)
@@ -540,7 +545,7 @@ router.put('/:id', requireRole('dono', 'gerente', 'funcionario'), (req, res) => 
     if (!isAssignee && task.assigned_to !== req.user.id) return res.status(403).json({ error: 'Sem permissao' })
   }
 
-  const { title, description, due_date, priority, department_id, assigned_to, drive_link, drive_link_raw, category_id, approval_link, approval_text, publish_date, publish_objective, meeting_datetime, recording_datetime } = req.body
+  const { title, description, due_date, priority, department_id, assigned_to, drive_link, drive_link_raw, category_id, approval_link, approval_text, approval_files, publish_date, publish_objective, meeting_datetime, recording_datetime } = req.body
   const sets = []; const params = []
   if (title !== undefined) { sets.push('title = ?'); params.push(title) }
   if (description !== undefined) { sets.push('description = ?'); params.push(description) }
@@ -550,6 +555,15 @@ router.put('/:id', requireRole('dono', 'gerente', 'funcionario'), (req, res) => 
   if (drive_link !== undefined) { sets.push('drive_link = ?'); params.push(drive_link) }
   if (drive_link_raw !== undefined) { sets.push('drive_link_raw = ?'); params.push(drive_link_raw) }
   if (category_id !== undefined) { sets.push('category_id = ?'); params.push(category_id) }
+  // approval_files (array) — quando enviado, escreve JSON e sincroniza approval_link com o primeiro item
+  if (approval_files !== undefined) {
+    const filesArr = Array.isArray(approval_files) ? approval_files.filter(s => s && String(s).trim()) : []
+    sets.push('approval_files = ?'); params.push(filesArr.length > 0 ? JSON.stringify(filesArr) : null)
+    // Sincroniza approval_link com primeiro item (retrocompat) — so se nao foi enviado approval_link explicitamente
+    if (approval_link === undefined) {
+      sets.push('approval_link = ?'); params.push(filesArr.length > 0 ? filesArr[0] : null)
+    }
+  }
   if (approval_link !== undefined) { sets.push('approval_link = ?'); params.push(approval_link) }
   if (approval_text !== undefined) { sets.push('approval_text = ?'); params.push(approval_text) }
   if (publish_date !== undefined) { sets.push('publish_date = ?'); params.push(publish_date) }

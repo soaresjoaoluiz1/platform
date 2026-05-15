@@ -340,6 +340,8 @@ try { db.exec("ALTER TABLE tasks ADD COLUMN subtask_kind TEXT") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN meeting_datetime TEXT") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN requested_by_client INTEGER DEFAULT 0") } catch {}
 try { db.exec("ALTER TABLE tasks ADD COLUMN changes_requested TEXT") } catch {}
+// Multi-arquivo pra aprovacao (carrossel) — JSON array de strings. approval_link fica como fallback/compat.
+try { db.exec("ALTER TABLE tasks ADD COLUMN approval_files TEXT") } catch {}
 // Seed solicitacao_pendente stage for existing DBs
 try {
   const exists = db.prepare("SELECT id FROM pipeline_stages WHERE slug = 'solicitacao_pendente'").get()

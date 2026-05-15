@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useSSE } from '../context/SSEContext'
-import { fetchTask, fetchClients, fetchDepartments, fetchUsers, fetchCategories, fetchStages, updateTask, moveTaskStage, addTaskComment, addTaskAttachment, deleteTaskAttachment, approveTask, rejectTask, startTimer, stopTimer, confirmRecording, addSubtask, type Task, type TaskComment, type TaskHistory, type TaskAttachment, type TimeEntry, type Client, type Department, type User as UserT, type TaskCategory, type PipelineStage } from '../lib/api'
+import { fetchTask, fetchClients, fetchDepartments, fetchUsers, fetchCategories, fetchStages, updateTask, moveTaskStage, addTaskComment, addTaskAttachment, deleteTaskAttachment, approveTask, rejectTask, startTimer, stopTimer, confirmRecording, addSubtask, getApprovalFiles, type Task, type TaskComment, type TaskHistory, type TaskAttachment, type TimeEntry, type Client, type Department, type User as UserT, type TaskCategory, type PipelineStage } from '../lib/api'
 import { isDriveUrl, toDriveEmbedUrl } from '../lib/drive'
 import { ArrowLeft, Building2, Clock, User, ExternalLink, CheckCircle, XCircle, Send, MessageCircle, GitBranch, Paperclip, Eye, Edit3, Save, X, Plus, AlertTriangle, Layers, ChevronRight, Video, Trash2 } from 'lucide-react'
 import { useToast } from '../components/Toast'
@@ -56,7 +56,8 @@ export default function TaskDetail() {
     if (!id) return
     const data = await fetchTask(+id)
     setTask(data.task); setComments(data.comments); setHistory(data.history); setAttachments(data.attachments)
-    setEditData({ title: data.task.title, description: data.task.description || '', due_date: data.task.due_date?.slice(0, 10) || '', priority: data.task.priority, department_id: data.task.department_id || '', assigned_to: (data.task.assignees || []).map((a: any) => String(a.user_id)), category_id: data.task.category_id || '', drive_link: data.task.drive_link || '', drive_link_raw: data.task.drive_link_raw || '', approval_link: data.task.approval_link || '', approval_text: data.task.approval_text || '', publish_date: data.task.publish_date || '', publish_objective: data.task.publish_objective || '', meeting_datetime: (data.task as any).meeting_datetime || '', recording_datetime: (data.task as any).recording_datetime || '' })
+    const files = getApprovalFiles(data.task as any)
+    setEditData({ title: data.task.title, description: data.task.description || '', due_date: data.task.due_date?.slice(0, 10) || '', priority: data.task.priority, department_id: data.task.department_id || '', assigned_to: (data.task.assignees || []).map((a: any) => String(a.user_id)), category_id: data.task.category_id || '', drive_link: data.task.drive_link || '', drive_link_raw: data.task.drive_link_raw || '', approval_link: data.task.approval_link || '', approval_files: files, is_carrossel: files.length > 1, approval_text: data.task.approval_text || '', publish_date: data.task.publish_date || '', publish_objective: data.task.publish_objective || '', meeting_datetime: (data.task as any).meeting_datetime || '', recording_datetime: (data.task as any).recording_datetime || '' })
     setTimeEntries(data.timeEntries || []); setTotalTime(data.totalTimeSeconds || 0)
     if (data.activeTimer) { setActiveTimerEntry(data.activeTimer); setTimerRunning(true) } else { setActiveTimerEntry(null); setTimerRunning(false) }
   }, [id])
@@ -109,7 +110,18 @@ export default function TaskDetail() {
   const handleSaveEdit = async () => {
     if (!task) return
     try {
-      await updateTask(task.id, { ...editData, department_id: editData.department_id ? +editData.department_id : null, assigned_to: (editData.assigned_to || []).map(Number), category_id: editData.category_id ? +editData.category_id : null })
+      // Normaliza approval_files: se carrossel use array, senao usa approval_link como single
+      const cleanFiles = (editData.approval_files || []).filter((s: string) => s && s.trim())
+      const payload: any = { ...editData, department_id: editData.department_id ? +editData.department_id : null, assigned_to: (editData.assigned_to || []).map(Number), category_id: editData.category_id ? +editData.category_id : null }
+      if (editData.is_carrossel) {
+        payload.approval_files = cleanFiles
+        delete payload.approval_link // backend sincroniza com primeiro item
+      } else {
+        // modo single: envia approval_files com 1 item (= approval_link), pra zerar carrossel anterior
+        payload.approval_files = editData.approval_link ? [editData.approval_link] : []
+      }
+      delete payload.is_carrossel
+      await updateTask(task.id, payload)
       setEditing(false); loadTask()
       toast('Tarefa atualizada!')
     } catch (err: any) { toast(err.message || 'Erro ao salvar', 'error') }
@@ -352,14 +364,55 @@ export default function TaskDetail() {
 
                 {/* Approval content section */}
                 <div style={{ marginTop: 12, padding: '14px 16px', background: 'rgba(245,166,35,0.04)', border: '1px solid rgba(245,166,35,0.12)', borderRadius: 10 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Conteudo para Aprovacao</div>
-                  <div className="form-group"><label>Link do arquivo finalizado *</label><input className="input" value={editData.approval_link} onChange={e => setEditData((p: any) => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive — compartilhamento: qualquer pessoa com o link" /><small style={{ fontSize: 11, color: '#6B6580', marginTop: 4, display: 'block' }}>O cliente vai ver o video/imagem embutido. Precisa estar publico no Drive.</small></div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, gap: 8, flexWrap: 'wrap' }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Conteudo para Aprovacao</div>
+                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#A8A3B8', cursor: 'pointer' }}>
+                      <input type="checkbox" checked={!!editData.is_carrossel} onChange={e => {
+                        const checked = e.target.checked
+                        setEditData((p: any) => {
+                          if (checked) {
+                            // OFF -> ON: usa approval_link atual como primeiro slide (se existir)
+                            const initial = (p.approval_files && p.approval_files.length > 0) ? p.approval_files : (p.approval_link ? [p.approval_link] : [''])
+                            return { ...p, is_carrossel: true, approval_files: initial }
+                          } else {
+                            // ON -> OFF: pega o primeiro slide como approval_link
+                            const first = (p.approval_files && p.approval_files[0]) || p.approval_link || ''
+                            return { ...p, is_carrossel: false, approval_link: first, approval_files: first ? [first] : [] }
+                          }
+                        })
+                      }} style={{ accentColor: '#FFB300' }} />
+                      Carrossel (varios arquivos)
+                    </label>
+                  </div>
+                  {editData.is_carrossel ? (
+                    <div className="form-group">
+                      <label>Arquivos do carrossel *</label>
+                      {(editData.approval_files || []).map((url: string, idx: number) => (
+                        <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                          <span style={{ minWidth: 56, fontSize: 11, color: '#6B6580', fontWeight: 700 }}>Slide {idx + 1}</span>
+                          <input className="input" value={url} placeholder="Link do Drive (publico)" style={{ flex: 1 }} onChange={e => {
+                            const v = e.target.value
+                            setEditData((p: any) => ({ ...p, approval_files: p.approval_files.map((x: string, i: number) => i === idx ? v : x) }))
+                          }} />
+                          <button type="button" className="btn btn-secondary btn-sm" onClick={() => setEditData((p: any) => ({ ...p, approval_files: p.approval_files.filter((_: string, i: number) => i !== idx) }))} title="Remover" style={{ padding: '6px 10px' }}>
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ))}
+                      <button type="button" className="btn btn-secondary btn-sm" onClick={() => setEditData((p: any) => ({ ...p, approval_files: [...(p.approval_files || []), ''] }))} style={{ marginTop: 4 }}>
+                        <Plus size={12} /> Adicionar slide
+                      </button>
+                      <small style={{ fontSize: 11, color: '#6B6580', marginTop: 6, display: 'block' }}>Cada link vira um slide pro cliente ver. Precisam ser publicos no Drive.</small>
+                    </div>
+                  ) : (
+                    <div className="form-group"><label>Link do arquivo finalizado *</label><input className="input" value={editData.approval_link} onChange={e => setEditData((p: any) => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive — compartilhamento: qualquer pessoa com o link" /><small style={{ fontSize: 11, color: '#6B6580', marginTop: 4, display: 'block' }}>O cliente vai ver o video/imagem embutido. Precisa estar publico no Drive.</small></div>
+                  )}
                   <div className="form-group"><label>Texto / Legenda</label><textarea className="input" rows={3} value={editData.approval_text} onChange={e => setEditData((p: any) => ({ ...p, approval_text: e.target.value }))} placeholder="Legenda do post, texto da publicacao, descricao..." /></div>
                   <div className="form-row">
                     <div className="form-group"><label>Data da Publicacao</label><input className="input" type="date" value={editData.publish_date} onChange={e => setEditData((p: any) => ({ ...p, publish_date: e.target.value }))} /></div>
                     <div className="form-group"><label>Objetivo da Publicacao</label><input className="input" value={editData.publish_objective} onChange={e => setEditData((p: any) => ({ ...p, publish_objective: e.target.value }))} placeholder="Ex: Gerar leads, engajamento, branding..." /></div>
                   </div>
-                  <div style={{ fontSize: 10, color: '#6E6887' }}>Obrigatorio preencher o link antes de enviar pra aprovacao. Data e objetivo sao opcionais.</div>
+                  <div style={{ fontSize: 10, color: '#6E6887' }}>Obrigatorio preencher pelo menos 1 link antes de enviar pra aprovacao. Data e objetivo sao opcionais.</div>
                 </div>
                 <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
                   <button className="btn btn-primary btn-sm" onClick={handleSaveEdit}><Save size={12} /> Salvar</button>
@@ -516,31 +569,51 @@ export default function TaskDetail() {
               {(task.approval_link || task.approval_text) ? (
                 <div className="card" style={{ marginBottom: 12 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>Conteudo para Aprovacao</div>
-                  {task.approval_link && (
-                    <div style={{ marginBottom: 12 }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#9B96B0', marginBottom: 6 }}>Arquivo a ser postado</div>
-                      {isCliente && isDriveUrl(task.approval_link) ? (
-                        <>
-                          <div style={{ width: '100%', maxWidth: 800, aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: '#000' }}>
-                            <iframe
-                              src={toDriveEmbedUrl(task.approval_link) || ''}
-                              title={`Arquivo para aprovacao — ${task.title}`}
-                              allow="autoplay; fullscreen; encrypted-media"
-                              allowFullScreen
-                              style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-                            />
+                  {(() => {
+                    const files = getApprovalFiles(task as any)
+                    if (files.length === 0) return null
+                    const isCarrossel = files.length > 1
+                    return (
+                      <div style={{ marginBottom: 12 }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#9B96B0', marginBottom: 6 }}>
+                          {isCarrossel ? `Carrossel — ${files.length} arquivos` : 'Arquivo a ser postado'}
+                        </div>
+                        {isCliente ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                            {files.map((url, idx) => isDriveUrl(url) ? (
+                              <div key={idx}>
+                                {isCarrossel && <div style={{ fontSize: 11, fontWeight: 700, color: '#FFB300', marginBottom: 6, letterSpacing: 0.5 }}>SLIDE {idx + 1} / {files.length}</div>}
+                                <div style={{ width: '100%', maxWidth: 800, aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: '#000' }}>
+                                  <iframe
+                                    src={toDriveEmbedUrl(url) || ''}
+                                    title={`Arquivo ${idx + 1} — ${task.title}`}
+                                    allow="autoplay; fullscreen; encrypted-media"
+                                    allowFullScreen
+                                    style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+                                  />
+                                </div>
+                                <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: 11, color: '#9B96B0', textDecoration: 'none' }}>
+                                  <ExternalLink size={11} /> Abrir em nova aba
+                                </a>
+                              </div>
+                            ) : (
+                              <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm" style={{ display: 'inline-flex', alignSelf: 'flex-start' }}>
+                                <ExternalLink size={14} /> {isCarrossel ? `Ver Slide ${idx + 1}` : 'Ver Arquivo'}
+                              </a>
+                            ))}
                           </div>
-                          <a href={task.approval_link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: 11, color: '#9B96B0', textDecoration: 'none' }}>
-                            <ExternalLink size={11} /> Abrir em nova aba
-                          </a>
-                        </>
-                      ) : (
-                        <a href={task.approval_link} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm" style={{ display: 'inline-flex' }}>
-                          <ExternalLink size={14} /> Ver Arquivo
-                        </a>
-                      )}
-                    </div>
-                  )}
+                        ) : (
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                            {files.map((url, idx) => (
+                              <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm" style={{ display: 'inline-flex' }}>
+                                <ExternalLink size={14} /> {isCarrossel ? `Slide ${idx + 1}` : 'Ver Arquivo'}
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
                   {task.approval_text && (
                     <div style={{ marginBottom: 12 }}>
                       <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#9B96B0', marginBottom: 6 }}>Legenda do post</div>

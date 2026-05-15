@@ -80,7 +80,7 @@
 - `SSEContext.tsx` — SSEProvider, useSSE
 
 **agency-hub\src\lib/**
-- `api.ts` — apiFetch, formatNumber, formatBRL, fetchClients, createClient, fetchClient, generateApprovalToken, revokeApprovalToken +2
+- `api.ts` — apiFetch, getApprovalFiles, formatNumber, formatBRL, fetchClients, createClient, fetchClient, generateApprovalToken +2
 - `drive.ts` — ===================================================================== · isDriveUrl, toDriveEmbedUrl
 - `performanceApi.ts` — ===================================================================== · fetchAccounts, fetchCompare, fetchDailyCompare, getAction, formatBRL, formatNumber, formatPercent, pctChange +2
 

@@ -174,7 +174,7 @@ app.get('/api/public/approvals/:token', (req, res) => {
   const client = findClientByApprovalToken(req.params.token)
   if (!client) return res.status(404).json({ error: 'Link invalido ou revogado' })
   const tasks = db.prepare(`
-    SELECT t.id, t.title, t.description, t.approval_link, t.approval_text, t.publish_date, t.publish_objective,
+    SELECT t.id, t.title, t.description, t.approval_link, t.approval_files, t.approval_text, t.publish_date, t.publish_objective,
       t.task_type, t.parent_task_id, t.subtask_kind, t.created_at, t.updated_at,
       ps.name as stage_name, ps.color as stage_color,
       cat.name as category_name, cat.color as category_color

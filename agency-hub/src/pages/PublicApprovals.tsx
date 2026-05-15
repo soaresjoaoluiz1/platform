@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { CheckCircle, XCircle, RotateCcw, ExternalLink, Calendar, Target } from 'lucide-react'
 import { isDriveUrl, toDriveEmbedUrl } from '../lib/drive'
+import { getApprovalFiles } from '../lib/api'
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '')
 
@@ -10,6 +11,7 @@ interface PublicTask {
   title: string
   description: string | null
   approval_link: string | null
+  approval_files?: string | null
   approval_text: string | null
   publish_date: string | null
   publish_objective: string | null
@@ -144,31 +146,41 @@ export default function PublicApprovals() {
                   {t.category_name && <span style={{ padding: '3px 10px', background: `${t.category_color}20`, color: t.category_color, borderRadius: 6, fontSize: 11, fontWeight: 600 }}>{t.category_name}</span>}
                 </div>
 
-                {t.approval_link && (
-                  <div style={{ marginBottom: 10 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#9B96B0', marginBottom: 6 }}>Arquivo a ser postado</div>
-                    {isDriveUrl(t.approval_link) ? (
-                      <>
-                        <div style={{ width: '100%', maxWidth: 800, aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: '#000' }}>
-                          <iframe
-                            src={toDriveEmbedUrl(t.approval_link) || ''}
-                            title={`Arquivo para aprovacao — ${t.title}`}
-                            allow="autoplay; fullscreen; encrypted-media"
-                            allowFullScreen
-                            style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-                          />
-                        </div>
-                        <a href={t.approval_link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: 11, color: '#9B96B0', textDecoration: 'none' }}>
-                          <ExternalLink size={11} /> Abrir em nova aba
-                        </a>
-                      </>
-                    ) : (
-                      <a href={t.approval_link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'linear-gradient(135deg, #5DADE2, #3498DB)', color: '#fff', borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
-                        <ExternalLink size={14} /> Ver Arquivo
-                      </a>
-                    )}
-                  </div>
-                )}
+                {(() => {
+                  const files = getApprovalFiles(t)
+                  if (files.length === 0) return null
+                  const isCarrossel = files.length > 1
+                  return (
+                    <div style={{ marginBottom: 10 }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#9B96B0', marginBottom: 6 }}>
+                        {isCarrossel ? `Carrossel — ${files.length} arquivos` : 'Arquivo a ser postado'}
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                        {files.map((url, idx) => isDriveUrl(url) ? (
+                          <div key={idx}>
+                            {isCarrossel && <div style={{ fontSize: 11, fontWeight: 700, color: '#FFB300', marginBottom: 6, letterSpacing: 0.5 }}>SLIDE {idx + 1} / {files.length}</div>}
+                            <div style={{ width: '100%', maxWidth: 800, aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: '#000' }}>
+                              <iframe
+                                src={toDriveEmbedUrl(url) || ''}
+                                title={`Arquivo ${idx + 1} — ${t.title}`}
+                                allow="autoplay; fullscreen; encrypted-media"
+                                allowFullScreen
+                                style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+                              />
+                            </div>
+                            <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: 11, color: '#9B96B0', textDecoration: 'none' }}>
+                              <ExternalLink size={11} /> Abrir em nova aba
+                            </a>
+                          </div>
+                        ) : (
+                          <a key={idx} href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'linear-gradient(135deg, #5DADE2, #3498DB)', color: '#fff', borderRadius: 8, fontSize: 14, fontWeight: 700, textDecoration: 'none', alignSelf: 'flex-start' }}>
+                            <ExternalLink size={14} /> {isCarrossel ? `Ver Slide ${idx + 1}` : 'Ver Arquivo'}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })()}
 
                 {t.approval_text && (
                   <div style={{ marginBottom: 10 }}>

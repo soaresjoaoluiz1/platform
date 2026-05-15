@@ -9,6 +9,17 @@ export async function apiFetch<T = any>(path: string, opts: RequestInit = {}): P
   return res.json()
 }
 
+// Parse approval_files (JSON array no DB) pra array limpo. Fallback: approval_link como item unico.
+export function getApprovalFiles(task: { approval_files?: string | null; approval_link?: string | null }): string[] {
+  if (task.approval_files) {
+    try {
+      const parsed = JSON.parse(task.approval_files)
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed.filter((s: any) => s && String(s).trim()).map(String)
+    } catch {}
+  }
+  return task.approval_link ? [task.approval_link] : []
+}
+
 export function formatNumber(n: number) { return n.toLocaleString('pt-BR') }
 export function formatBRL(n: number) { return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }
 
@@ -25,7 +36,7 @@ export interface Task {
   id: number; client_id: number; category_id: number | null; department_id: number | null
   stage: string; title: string; description: string | null; due_date: string | null
   priority: string; assigned_to: number | null; drive_link: string | null; drive_link_raw: string | null
-  approval_link: string | null; approval_text: string | null; publish_date: string | null; publish_objective: string | null
+  approval_link: string | null; approval_text: string | null; approval_files?: string | null; publish_date: string | null; publish_objective: string | null
   created_by: number; is_active: number; created_at: string; updated_at: string
   client_name?: string; department_name?: string; department_color?: string
   category_name?: string; category_color?: string; assigned_name?: string

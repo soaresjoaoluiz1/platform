@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-15T09:38:52.721Z",
+  "generatedAt": "2026-05-15T09:55:11.628Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -649,8 +649,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\index.js": {
-      "mtime": 1778508232036.431,
-      "size": 17291,
+      "mtime": 1778838847620.9778,
+      "size": 17309,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -658,8 +658,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\db.js": {
-      "mtime": 1778515217268.7168,
-      "size": 25040,
+      "mtime": 1778838515724.5076,
+      "size": 25230,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2363,12 +2363,13 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\api.ts": {
-      "mtime": 1778665755846.8445,
-      "size": 21585,
+      "mtime": 1778838609720.9604,
+      "size": 22139,
       "symbols": {
         "purpose": null,
         "exports": [
           "apiFetch",
+          "getApprovalFiles",
           "formatNumber",
           "formatBRL",
           "fetchClients",
@@ -2376,8 +2377,7 @@
           "fetchClient",
           "generateApprovalToken",
           "revokeApprovalToken",
-          "updateClient",
-          "fetchDepartments"
+          "updateClient"
         ],
         "language": "typescript"
       }
@@ -2405,8 +2405,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\TaskDetail.tsx": {
-      "mtime": 1778837921733.3354,
-      "size": 64452,
+      "mtime": 1778838754333.7148,
+      "size": 69985,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2438,8 +2438,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\PublicApprovals.tsx": {
-      "mtime": 1778837869630.6926,
-      "size": 15762,
+      "mtime": 1778838822563.9604,
+      "size": 16607,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2449,8 +2449,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\Pipeline.tsx": {
-      "mtime": 1778837930989.7188,
-      "size": 40029,
+      "mtime": 1778838909786.7607,
+      "size": 42651,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2707,8 +2707,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\tasks.js": {
-      "mtime": 1778665743314.437,
-      "size": 56458,
+      "mtime": 1778838576511.0264,
+      "size": 57535,
       "symbols": {
         "purpose": null,
         "exports": [],

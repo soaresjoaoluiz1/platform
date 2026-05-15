@@ -52,6 +52,8 @@ export default function Pipeline() {
   const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
   const [newMae, setNewMae] = useState({ title: '', client_id: '', description: '', due_date: today, category_id: '', department_id: '', priority: 'normal' })
   const [newTask, setNewTask] = useState({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [] as string[], due_date: today, priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' })
+  const [newTaskIsCarrossel, setNewTaskIsCarrossel] = useState(false)
+  const [newTaskFiles, setNewTaskFiles] = useState<string[]>([''])
   const isDono = user?.role === 'dono'
   const isFunc = user?.role === 'funcionario' || user?.role === 'gerente'
 
@@ -92,8 +94,11 @@ export default function Pipeline() {
     setSaving(true)
     try {
       const recording_datetime = newTask.recording_date ? `${newTask.recording_date}T${newTask.recording_time || '09:00'}` : undefined
-      await createTask({ ...newTask, client_id: +newTask.client_id, category_id: newTask.category_id ? +newTask.category_id : undefined, department_id: newTask.department_id ? +newTask.department_id : undefined, assigned_to: newTask.assigned_to.map(Number), recording_datetime } as any)
-      setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [], due_date: today, priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' }); loadData()
+      const approval_files = newTaskIsCarrossel ? newTaskFiles.filter(s => s && s.trim()) : (newTask.approval_link ? [newTask.approval_link] : [])
+      await createTask({ ...newTask, client_id: +newTask.client_id, category_id: newTask.category_id ? +newTask.category_id : undefined, department_id: newTask.department_id ? +newTask.department_id : undefined, assigned_to: newTask.assigned_to.map(Number), recording_datetime, approval_files } as any)
+      setShowNew(false); setNewTask({ title: '', description: '', client_id: '', category_id: '', department_id: '', assigned_to: [], due_date: today, priority: 'normal', drive_link_raw: '', drive_link: '', approval_link: '', approval_text: '', publish_date: '', publish_objective: '', recording_date: '', recording_time: '' })
+      setNewTaskIsCarrossel(false); setNewTaskFiles([''])
+      loadData()
       toast('Tarefa criada com sucesso!')
     } catch (err: any) { toast(err.message || 'Erro ao criar tarefa', 'error') }
     finally { setSaving(false) }
@@ -366,8 +371,38 @@ export default function Pipeline() {
             <div className="form-group"><label>Link Drive (Arquivo Pronto)</label><input className="input" value={newTask.drive_link} onChange={e => setNewTask(p => ({ ...p, drive_link: e.target.value }))} placeholder="https://drive.google.com/..." /></div>
           </div>
           <div style={{ padding: '14px 16px', background: 'rgba(245,166,35,0.04)', border: '1px solid rgba(245,166,35,0.12)', borderRadius: 10, marginBottom: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Conteudo para Aprovacao (opcional)</div>
-            <div className="form-group"><label>Link do arquivo finalizado</label><input className="input" value={newTask.approval_link} onChange={e => setNewTask(p => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive — compartilhamento: qualquer pessoa com o link" /><small style={{ fontSize: 11, color: '#6B6580', marginTop: 4, display: 'block' }}>O cliente vai ver o video/imagem embutido. Precisa estar publico no Drive.</small></div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, gap: 8, flexWrap: 'wrap' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Conteudo para Aprovacao (opcional)</div>
+              <label style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#A8A3B8', cursor: 'pointer' }}>
+                <input type="checkbox" checked={newTaskIsCarrossel} onChange={e => {
+                  const checked = e.target.checked
+                  if (checked) {
+                    setNewTaskIsCarrossel(true)
+                    setNewTaskFiles(newTask.approval_link ? [newTask.approval_link] : [''])
+                  } else {
+                    setNewTaskIsCarrossel(false)
+                    setNewTask(p => ({ ...p, approval_link: newTaskFiles[0] || '' }))
+                  }
+                }} style={{ accentColor: '#FFB300' }} />
+                Carrossel (varios arquivos)
+              </label>
+            </div>
+            {newTaskIsCarrossel ? (
+              <div className="form-group">
+                <label>Arquivos do carrossel</label>
+                {newTaskFiles.map((url, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                    <span style={{ minWidth: 56, fontSize: 11, color: '#6B6580', fontWeight: 700 }}>Slide {idx + 1}</span>
+                    <input className="input" value={url} placeholder="Link do Drive (publico)" style={{ flex: 1 }} onChange={e => setNewTaskFiles(arr => arr.map((x, i) => i === idx ? e.target.value : x))} />
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => setNewTaskFiles(arr => arr.filter((_, i) => i !== idx))} title="Remover" style={{ padding: '6px 10px' }}><X size={12} /></button>
+                  </div>
+                ))}
+                <button type="button" className="btn btn-secondary btn-sm" onClick={() => setNewTaskFiles(arr => [...arr, ''])} style={{ marginTop: 4 }}><Plus size={12} /> Adicionar slide</button>
+                <small style={{ fontSize: 11, color: '#6B6580', marginTop: 6, display: 'block' }}>Cada link vira um slide pro cliente ver. Precisam ser publicos no Drive.</small>
+              </div>
+            ) : (
+              <div className="form-group"><label>Link do arquivo finalizado</label><input className="input" value={newTask.approval_link} onChange={e => setNewTask(p => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive — compartilhamento: qualquer pessoa com o link" /><small style={{ fontSize: 11, color: '#6B6580', marginTop: 4, display: 'block' }}>O cliente vai ver o video/imagem embutido. Precisa estar publico no Drive.</small></div>
+            )}
             <div className="form-group"><label>Texto / Legenda</label><textarea className="input" rows={3} value={newTask.approval_text} onChange={e => setNewTask(p => ({ ...p, approval_text: e.target.value }))} placeholder="Legenda do post, texto da publicacao, descricao..." /></div>
             <div className="form-row">
               <div className="form-group"><label>Data da Publicacao</label><input className="input" type="date" value={newTask.publish_date} onChange={e => setNewTask(p => ({ ...p, publish_date: e.target.value }))} /></div>
