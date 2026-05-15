@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-15 · 4217 files · ~13.0M tokens total
+> 2026-05-15 · 4322 files · ~13.7M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -220,6 +220,7 @@
 - `Tags.tsx` — default:Tags
 - `Tasks.tsx` — default:Tasks
 - `Team.tsx` — default:Team
+- `TransferRequests.tsx` — default:TransferRequests
 
 **crm-dashboard\src\pages\admin/**
 - `ClientDetail.tsx` — default:ClientDetail
@@ -753,4 +754,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~7.5k tokens · Full codebase: ~13.0M tokens · Saves ~100%*
+*Index: ~7.5k tokens · Full codebase: ~13.7M tokens · Saves ~100%*

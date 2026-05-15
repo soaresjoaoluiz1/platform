@@ -306,14 +306,17 @@ app.get('/{*path}', (req, res) => {
 app.listen(PORT, () => {
   console.log(`[Dros Hub API] Running on http://localhost:${PORT}`)
 
-  // Server-side timer check — every 2 hours
-  const TIMER_CHECK_SECONDS = 7200 // 2 hours
+  // Server-side timer check — every 1 hora
+  // Pergunta "ainda esta produzindo?" a cada 1h de timer rodando
+  const TIMER_CHECK_SECONDS = 3600 // 1 hora
   setInterval(() => {
     const activeTimers = db.prepare('SELECT te.*, t.title as task_title FROM time_entries te JOIN tasks t ON te.task_id = t.id WHERE te.ended_at IS NULL').all()
     for (const timer of activeTimers) {
       const startedAt = new Date(timer.started_at + '-03:00').getTime()
       const elapsed = Math.floor((Date.now() - startedAt) / 1000)
-      if (elapsed > 0 && elapsed % TIMER_CHECK_SECONDS < 60) { // Within 1 minute of each interval
+      // Guarda: so dispara depois de pelo menos 1 intervalo cheio decorrido
+      // (sem isso, qualquer timer com elapsed entre 0-60s tambem batia)
+      if (elapsed >= TIMER_CHECK_SECONDS && elapsed % TIMER_CHECK_SECONDS < 60) {
         sendToUser(timer.user_id, 'timer:check', { taskId: timer.task_id, taskTitle: timer.task_title, elapsed })
       }
     }

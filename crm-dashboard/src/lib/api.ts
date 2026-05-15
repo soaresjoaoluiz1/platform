@@ -21,7 +21,7 @@ export function pctChange(c: number, p: number) { if (p === 0) return c > 0 ? 10
 // =============================================
 
 export interface Account { id: number; name: string; slug: string; logo_url: string | null; is_active: number; created_at: string; lead_count?: number; user_count?: number; cnpj?: string | null; razao_social?: string | null; segmento?: string | null; website?: string | null; instagram?: string | null; whatsapp_comercial?: string | null; valor_mensal?: number | null; contrato_inicio?: string | null; cidade?: string | null; estado?: string | null; observacoes?: string | null; trabalha_anuncio?: number; investimento_anuncios?: number | null; meta_pixel_id?: string | null; meta_capi_token?: string | null; meta_capi_test_event_code?: string | null; meta_capi_enabled?: number }
-export interface User { id: number; account_id: number | null; name: string; email: string; role: string; is_active: number; primary_instance_id?: number | null; can_manage_proposals?: number; created_at: string }
+export interface User { id: number; account_id: number | null; name: string; email: string; role: string; is_active: number; primary_instance_id?: number | null; can_manage_proposals?: number; can_grab_leads?: number; created_at: string }
 export interface FunnelStage { id: number; funnel_id: number; name: string; position: number; color: string; is_conversion: number; is_terminal: number; auto_keywords: string | null; meta_event_name?: string | null }
 export interface Funnel { id: number; account_id: number; name: string; is_default: number; is_active: number; stages: FunnelStage[] }
 export interface Tag { id: number; account_id: number; name: string; color: string }
@@ -114,7 +114,12 @@ export async function createLeadOrFindExisting(accountId: number, data: Partial<
   if (res.status === 409) {
     const body = await res.json().catch(() => ({}))
     if (body.existing) return { lead: body.existing as Lead, alreadyExisted: true }
-    throw new Error(body.error || 'Contato ja existe')
+    // Lead pertence a outro atendente da mesma empresa — atendente atual nao pode acessar
+    const err: any = new Error(body.error || 'Contato ja existe')
+    err.otherAttendant = !!body.otherAttendant
+    err.ownerName = body.ownerName || null
+    err.leadId = body.leadId || null
+    throw err
   }
   if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || `API error: ${res.status}`) }
   const body = await res.json()
@@ -196,6 +201,28 @@ export interface BroadcastCloneData {
   original: { total_count: number; valid_leads_now: number }
 }
 export const fetchBroadcastCloneData = (id: number, accountId: number) => apiFetch<BroadcastCloneData>(`/api/broadcasts/${id}/clone-data?account_id=${accountId}`)
+
+// Lead transfer requests (atendente pede atendimento de lead que esta com outro atendente)
+export interface TransferRequest {
+  id: number; lead_id: number; from_attendant_id: number; to_attendant_id: number | null
+  account_id: number; status: 'pending'|'accepted'|'rejected'|'cancelled'
+  message: string | null; created_at: string; responded_at: string | null
+  lead_name?: string | null; lead_phone?: string | null; from_attendant_name?: string | null
+}
+export const requestLeadTransfer = (leadId: number, accountId: number, message?: string) =>
+  apiFetch<{ request: TransferRequest; alreadyExists: boolean }>(`/api/leads/${leadId}/transfer-request?account_id=${accountId}`, { method: 'POST', body: JSON.stringify({ message }) })
+export const acceptTransferRequest = (reqId: number) =>
+  apiFetch(`/api/leads/transfer-requests/${reqId}/accept`, { method: 'POST', body: JSON.stringify({}) })
+export const rejectTransferRequest = (reqId: number) =>
+  apiFetch(`/api/leads/transfer-requests/${reqId}/reject`, { method: 'POST', body: JSON.stringify({}) })
+export const fetchPendingTransferRequests = () =>
+  apiFetch<{ requests: TransferRequest[] }>(`/api/leads/transfer-requests/pending`)
+export const fetchAllTransferRequests = () =>
+  apiFetch<{ received: TransferRequest[]; sent: TransferRequest[] }>(`/api/leads/transfer-requests/all`)
+export const cancelTransferRequest = (reqId: number) =>
+  apiFetch(`/api/leads/transfer-requests/${reqId}/cancel`, { method: 'POST', body: JSON.stringify({}) })
+export const grabLead = (leadId: number, accountId: number) =>
+  apiFetch<{ ok: boolean; leadId: number }>(`/api/leads/${leadId}/grab?account_id=${accountId}`, { method: 'POST', body: JSON.stringify({}) })
 
 // Admin: check all WhatsApp instances across all accounts (super_admin only)
 export interface InstanceCheckResult {

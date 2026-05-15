@@ -9,13 +9,14 @@ import {
   archiveLead, createStandaloneTask, fetchLeadTasks, completeStandaloneTask, deleteStandaloneTask, completeTask, skipTask, fetchLeadConversations, type LeadConversation,
   fetchReadyMessages, type ReadyMessage,
   createLeadOrFindExisting,
+  requestLeadTransfer, acceptTransferRequest, rejectTransferRequest, fetchPendingTransferRequests, grabLead, type TransferRequest,
   type WhatsAppInstance, type Lead, type Message, type StageHistoryEntry, type LeadNote,
   type Funnel, type User as UserType, type Tag, type LeadCadence, type Cadence,
 } from '../lib/api'
 import EditTaskModal from '../components/EditTaskModal'
 import {
   MessageCircle, Search, Send, Phone, User, Edit3, Save, X, Plus,
-  StickyNote, Tag as TagIcon, GitBranch, Smartphone, ListOrdered, ChevronRight, Check, Clock, Archive, ListTodo, ChevronDown, ChevronUp, Trash2, Paperclip, FileText, MessageSquarePlus,
+  StickyNote, Tag as TagIcon, GitBranch, Smartphone, ListOrdered, ChevronRight, Check, Clock, Archive, ListTodo, ChevronDown, ChevronUp, Trash2, Paperclip, FileText, MessageSquarePlus, Copy,
 } from 'lucide-react'
 import MessageMedia from '../components/MessageMedia'
 import { applyMessageVars } from '../lib/messageVars'
@@ -33,7 +34,7 @@ function timeAgo(dateStr: string) {
 
 export default function Chat() {
   const { user } = useAuth()
-  const { accountId } = useAccount()
+  const { accountId, accounts } = useAccount()
   const [instances, setInstances] = useState<WhatsAppInstance[]>([])
   const [selectedInstance, setSelectedInstance] = useState<number | 'all'>('all')
   const [leads, setLeads] = useState<Lead[]>([])
@@ -47,7 +48,9 @@ export default function Chat() {
   const [newChatPhone, setNewChatPhone] = useState('')
   const [newChatInstanceId, setNewChatInstanceId] = useState<number | null>(null)
   const [creatingNewChat, setCreatingNewChat] = useState(false)
-  const [notice, setNotice] = useState<{ kind: 'info' | 'error' | 'success'; title: string; message: string } | null>(null)
+  type NoticeAction = { label: string; onClick: () => void; primary?: boolean; danger?: boolean }
+  const [notice, setNotice] = useState<{ kind: 'info' | 'error' | 'success'; title: string; message: string; actions?: NoticeAction[] } | null>(null)
+  const [pendingTransfers, setPendingTransfers] = useState<TransferRequest[]>([])
   const [lead, setLead] = useState<Lead | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [history, setHistory] = useState<StageHistoryEntry[]>([])
@@ -216,12 +219,111 @@ export default function Chat() {
   }, [selectedLeadId]))
   useSSE('lead:unarchived', useCallback(() => loadLeadsList(), [loadLeadsList]))
 
+  // Pedido de transferencia recebido — filtra por mim e mostra modal de aceite
+  useSSE('lead:transfer-requested', useCallback((data: TransferRequest) => {
+    if (!user || data.to_attendant_id !== user.id) return
+    setPendingTransfers(prev => prev.some(p => p.id === data.id) ? prev : [data, ...prev])
+    setNotice({
+      kind: 'info',
+      title: 'Pedido de transferencia',
+      message: `${data.from_attendant_name || 'Um atendente'} quer atender o lead ${data.lead_name || data.lead_phone || '?'}. Aceitar?`,
+      actions: [
+        {
+          label: 'Rejeitar',
+          danger: true,
+          onClick: async () => {
+            try { await rejectTransferRequest(data.id); setPendingTransfers(prev => prev.filter(p => p.id !== data.id)) }
+            catch (e: any) { setNotice({ kind: 'error', title: 'Erro', message: e?.message || 'Falha ao rejeitar' }) }
+          },
+        },
+        {
+          label: 'Aceitar',
+          primary: true,
+          onClick: async () => {
+            try {
+              await acceptTransferRequest(data.id)
+              setPendingTransfers(prev => prev.filter(p => p.id !== data.id))
+              setNotice({ kind: 'success', title: 'Transferencia feita', message: `Lead transferido pra ${data.from_attendant_name}.` })
+              loadLeadsList()
+            } catch (e: any) { setNotice({ kind: 'error', title: 'Erro', message: e?.message || 'Falha ao aceitar' }) }
+          },
+        },
+      ],
+    })
+  }, [user, loadLeadsList]))
+
+  // Pedido aceito — pra quem pediu, atualiza lista e avisa
+  useSSE('lead:transfer-accepted', useCallback((data: any) => {
+    if (!user || data.newAttendantId !== user.id) return
+    loadLeadsList()
+    setNotice({ kind: 'success', title: 'Transferencia aprovada', message: `O lead ja esta com voce. Pode comecar o atendimento.` })
+  }, [user, loadLeadsList]))
+
+  // Pedido rejeitado — pra quem pediu
+  useSSE('lead:transfer-rejected', useCallback((data: any) => {
+    if (!user || data.fromUserId !== user.id) return
+    setNotice({ kind: 'info', title: 'Transferencia recusada', message: 'O atendente recusou a transferencia. Fale com o gerente se precisar urgente.' })
+  }, [user]))
+
+  // Carrega pendings ao montar (so pra atualizar state — modal aparece em /transferencias)
+  useEffect(() => {
+    if (!user) return
+    fetchPendingTransferRequests().then(r => setPendingTransfers(r.requests || [])).catch(() => {})
+  }, [user?.id])
+
   const handleArchiveLead = async (leadId: number, e?: { stopPropagation?: () => void }) => {
     e?.stopPropagation?.()
     if (!confirm('Arquivar este lead? Ele some do chat e do pipeline, mas o historico fica salvo.')) return
     setLeads(prev => prev.filter(l => l.id !== leadId))
     if (selectedLeadId === leadId) setSelectedLeadId(null)
     try { await archiveLead(leadId) } catch { loadLeadsList() }
+  }
+
+  // Formata conversa como texto plano otimizado pra analise por LLM (ChatGPT/Claude)
+  const formatConversationForLLM = (msgs: Message[]): string => {
+    if (!lead) return ''
+    const lines: string[] = []
+    const phone = lead.phone || 's/ tel'
+    const leadName = lead.name || phone
+    const companyName = (accounts.find(a => a.id === accountId)?.name || 'Empresa').toUpperCase()
+    lines.push(companyName)
+    lines.push(`Conversa com ${leadName} (${phone})`)
+    const attendantName = attendants.find(a => a.id === lead.attendant_id)?.name
+    if (attendantName) lines.push(`Atendente responsavel: ${attendantName}`)
+    lines.push(`Total: ${msgs.length} mensagens`)
+    lines.push('')
+    for (const m of msgs) {
+      const d = parseSqlDate(m.created_at)
+      const ts = isNaN(d.getTime()) ? '?' : `${d.toLocaleDateString('pt-BR')} ${d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+      let sender: string
+      if (m.direction === 'inbound') {
+        sender = leadName
+      } else {
+        // Nome da instancia WhatsApp que enviou (ex: "Ramon", "Central ASK")
+        const inst = m.instance_id ? instances.find(i => i.id === m.instance_id)?.instance_name : null
+        sender = inst || companyName
+      }
+      const content = (m.content || '').trim().replace(/\n+/g, '\n')
+      lines.push(`${sender} enviou (${ts})`)
+      lines.push(content)
+      lines.push('')
+    }
+    return lines.join('\n').trim()
+  }
+
+  const handleCopyConversation = async () => {
+    if (!lead) return
+    const text = formatConversationForLLM(visibleMessages)
+    if (!text || visibleMessages.length === 0) {
+      setNotice({ kind: 'info', title: 'Conversa vazia', message: 'Nao ha mensagens pra copiar.' })
+      return
+    }
+    try {
+      await navigator.clipboard.writeText(text)
+      setNotice({ kind: 'success', title: 'Conversa copiada', message: `${visibleMessages.length} mensagem${visibleMessages.length !== 1 ? 's' : ''} copiada${visibleMessages.length !== 1 ? 's' : ''}. Cole no ChatGPT/Claude pra analise.` })
+    } catch (e: any) {
+      setNotice({ kind: 'error', title: 'Erro ao copiar', message: e?.message || 'Browser bloqueou acesso ao clipboard (precisa HTTPS)' })
+    }
   }
 
   const connectedInstances = useMemo(() => instances.filter(i => i.status === 'connected'), [instances])
@@ -250,7 +352,56 @@ export default function Chat() {
         setNotice({ kind: 'info', title: 'Contato ja existia', message: `Voce ja tinha conversa com ${targetLead.name || phone}. Abrindo a conversa atual.` })
       }
     } catch (e: any) {
-      setNotice({ kind: 'error', title: 'Erro ao criar contato', message: e.message || 'Erro desconhecido' })
+      if (e?.otherAttendant) {
+        // Fecha o modal de Novo Chat ANTES de mostrar o notice, senao ele cobre
+        setShowNewChat(false)
+        setNewChatName('')
+        setNewChatPhone('')
+        setNewChatInstanceId(null)
+        const ownerName = e.ownerName || 'outro atendente'
+        const leadId = e.leadId
+        const canGrab = !!user?.can_grab_leads || user?.role === 'super_admin' || user?.role === 'gerente'
+        const actions: NoticeAction[] = []
+        if (leadId && accountId) {
+          actions.push({
+            label: 'Pedir transferencia',
+            onClick: async () => {
+              try {
+                await requestLeadTransfer(leadId, accountId)
+                setNotice({ kind: 'success', title: 'Pedido enviado', message: `${ownerName} foi avisado(a). Quando aceitar, o lead vira seu automaticamente.` })
+              } catch (err: any) {
+                setNotice({ kind: 'error', title: 'Erro', message: err?.message || 'Falha ao pedir transferencia' })
+              }
+            },
+          })
+          if (canGrab) {
+            actions.push({
+              label: 'Assumir lead',
+              primary: true,
+              onClick: async () => {
+                try {
+                  await grabLead(leadId, accountId)
+                  setNotice({ kind: 'success', title: 'Lead assumido', message: 'O lead agora esta com voce.' })
+                  loadLeadsList()
+                  setSelectedLeadId(leadId)
+                } catch (err: any) {
+                  setNotice({ kind: 'error', title: 'Erro', message: err?.message || 'Falha ao assumir' })
+                }
+              },
+            })
+          }
+        }
+        setNotice({
+          kind: 'info',
+          title: 'Contato ja em atendimento',
+          message: canGrab
+            ? `Esse telefone ja esta com ${ownerName}. Voce pode pedir transferencia (${ownerName} aprova) ou assumir direto (sua permissao especial).`
+            : `Esse telefone ja esta cadastrado com ${ownerName} da sua empresa. Voce pode pedir transferencia — ${ownerName} sera avisado e pode aceitar.`,
+          actions: actions.length > 0 ? actions : undefined,
+        })
+      } else {
+        setNotice({ kind: 'error', title: 'Erro ao criar contato', message: e.message || 'Erro desconhecido' })
+      }
     } finally {
       setCreatingNewChat(false)
     }
@@ -534,6 +685,11 @@ export default function Chat() {
                   {lead.phone && <div style={{ fontSize: 11, color: '#9B96B0', display: 'flex', alignItems: 'center', gap: 4 }}><Phone size={10} />{lead.phone}</div>}
                 </div>
                 {lead.instance_name && <span style={{ fontSize: 10, color: '#34C759', display: 'flex', alignItems: 'center', gap: 4 }}><Smartphone size={10} />{lead.instance_name}</span>}
+                {user?.role === 'super_admin' && (
+                  <button className="btn btn-secondary btn-sm" title="Copiar conversa (pra analise por LLM)" onClick={handleCopyConversation} style={{ padding: '4px 8px' }}>
+                    <Copy size={12} />
+                  </button>
+                )}
                 <button className="btn btn-secondary btn-sm" title="Arquivar" onClick={() => handleArchiveLead(lead.id)} style={{ padding: '4px 8px' }}>
                   <Archive size={12} />
                 </button>
@@ -1163,7 +1319,22 @@ export default function Chat() {
             </h2>
             <p style={{ fontSize: 13, color: '#C8C2D8', marginTop: 8, lineHeight: 1.5 }}>{notice.message}</p>
             <div className="modal-actions">
-              <button className="btn btn-primary" onClick={() => setNotice(null)} autoFocus>OK</button>
+              {notice.actions && notice.actions.length > 0 ? (
+                <>
+                  <button className="btn btn-secondary" onClick={() => setNotice(null)}>Fechar</button>
+                  {notice.actions.map((a, i) => (
+                    <button
+                      key={i}
+                      className={`btn ${a.danger ? 'btn-danger' : a.primary ? 'btn-primary' : 'btn-secondary'}`}
+                      onClick={() => { a.onClick(); setNotice(null) }}
+                    >
+                      {a.label}
+                    </button>
+                  ))}
+                </>
+              ) : (
+                <button className="btn btn-primary" onClick={() => setNotice(null)} autoFocus>OK</button>
+              )}
             </div>
           </div>
         </div>

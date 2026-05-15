@@ -118,6 +118,20 @@ router.post('/', (req, res) => {
       }
     }
     if (existing) {
+      // Se atendente nao eh dono do lead duplicado, retorna mensagem especial (sem expor dados do lead alheio)
+      if (req.user.role === 'atendente' && existing.attendant_id !== req.user.id) {
+        // Verifica tambem se ela esta atribuida via lead_instance_assignments (multi-instancia)
+        const isAssigned = db.prepare('SELECT 1 FROM lead_instance_assignments WHERE lead_id = ? AND attendant_id = ?').get(existing.id, req.user.id)
+        if (!isAssigned) {
+          const owner = existing.attendant_id ? db.prepare('SELECT name FROM users WHERE id = ?').get(existing.attendant_id) : null
+          return res.status(409).json({
+            error: owner ? `Esse telefone ja esta cadastrado com o atendente ${owner.name} da sua empresa.` : 'Esse telefone ja esta cadastrado com outro atendente da sua empresa.',
+            otherAttendant: true,
+            ownerName: owner?.name || null,
+            leadId: existing.id,
+          })
+        }
+      }
       return res.status(409).json({ error: 'Contato ja existe com esse telefone', existing })
     }
   }
@@ -181,6 +195,176 @@ router.get('/archived-count', (req, res) => {
   const count = db.prepare(`SELECT COUNT(*) as n FROM leads WHERE ${base.where}`).get(...base.args).n
   const withActivity = db.prepare(`SELECT COUNT(*) as n FROM leads WHERE ${base.where} AND has_new_after_archive = 1`).get(...base.args).n
   res.json({ count, withActivity })
+})
+
+// ─── Pedidos de transferencia de lead entre atendentes ─────────────
+// IMPORTANTE: precisam vir ANTES da rota '/:id' pra nao serem capturadas como id
+
+// Lista pedidos pendentes recebidos pelo usuario atual (pra notification badge)
+router.get('/transfer-requests/pending', (req, res) => {
+  const requests = db.prepare(`
+    SELECT tr.id, tr.lead_id, tr.from_attendant_id, tr.message, tr.created_at,
+           l.name as lead_name, l.phone as lead_phone,
+           u.name as from_attendant_name
+    FROM lead_transfer_requests tr
+    JOIN leads l ON l.id = tr.lead_id
+    JOIN users u ON u.id = tr.from_attendant_id
+    WHERE tr.to_attendant_id = ? AND tr.status = 'pending'
+    ORDER BY tr.created_at DESC
+  `).all(req.user.id)
+  res.json({ requests })
+})
+
+// Lista TODOS os pedidos relacionados ao usuario (recebidos + enviados, todos status)
+router.get('/transfer-requests/all', (req, res) => {
+  const received = db.prepare(`
+    SELECT tr.*, l.name as lead_name, l.phone as lead_phone,
+           uf.name as from_attendant_name,
+           ut.name as to_attendant_name
+    FROM lead_transfer_requests tr
+    JOIN leads l ON l.id = tr.lead_id
+    JOIN users uf ON uf.id = tr.from_attendant_id
+    LEFT JOIN users ut ON ut.id = tr.to_attendant_id
+    WHERE tr.to_attendant_id = ?
+    ORDER BY (tr.status = 'pending') DESC, tr.created_at DESC
+    LIMIT 100
+  `).all(req.user.id)
+  const sent = db.prepare(`
+    SELECT tr.*, l.name as lead_name, l.phone as lead_phone,
+           uf.name as from_attendant_name,
+           ut.name as to_attendant_name
+    FROM lead_transfer_requests tr
+    JOIN leads l ON l.id = tr.lead_id
+    JOIN users uf ON uf.id = tr.from_attendant_id
+    LEFT JOIN users ut ON ut.id = tr.to_attendant_id
+    WHERE tr.from_attendant_id = ?
+    ORDER BY (tr.status = 'pending') DESC, tr.created_at DESC
+    LIMIT 100
+  `).all(req.user.id)
+  res.json({ received, sent })
+})
+
+// Cancela pedido (so o requester ou gerente/admin pode)
+router.post('/transfer-requests/:reqId/cancel', (req, res) => {
+  const tr = db.prepare('SELECT * FROM lead_transfer_requests WHERE id = ?').get(req.params.reqId)
+  if (!tr) return res.status(404).json({ error: 'Pedido nao encontrado' })
+  if (tr.status !== 'pending') return res.status(400).json({ error: 'Pedido ja respondido, nao pode cancelar' })
+  const canCancel = tr.from_attendant_id === req.user.id || ['gerente','super_admin'].includes(req.user.role)
+  if (!canCancel) return res.status(403).json({ error: 'Sem permissao' })
+  db.prepare("UPDATE lead_transfer_requests SET status = 'cancelled', responded_at = datetime('now') WHERE id = ?").run(tr.id)
+  try { broadcastSSE(tr.account_id, 'lead:transfer-rejected', { requestId: tr.id, leadId: tr.lead_id, fromUserId: tr.from_attendant_id, cancelled: true }) } catch {}
+  res.json({ ok: true })
+})
+
+// Assumir lead diretamente (so pra atendentes com permissao can_grab_leads ou gerente/admin)
+router.post('/:id/grab', (req, res) => {
+  if (!req.accountId) return res.status(400).json({ error: 'account_id required' })
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ? AND account_id = ?').get(req.params.id, req.accountId)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  if (lead.attendant_id === req.user.id) return res.status(400).json({ error: 'Voce ja eh o atendente deste lead' })
+
+  // Permissao: gerente/admin sempre podem; atendente precisa de can_grab_leads=1
+  const fresh = db.prepare('SELECT can_grab_leads FROM users WHERE id = ?').get(req.user.id)
+  const allowed = ['super_admin','gerente'].includes(req.user.role) || (fresh?.can_grab_leads === 1)
+  if (!allowed) return res.status(403).json({ error: 'Voce nao tem permissao pra assumir leads de outros atendentes' })
+
+  const oldAttendantId = lead.attendant_id
+  db.prepare("UPDATE leads SET attendant_id = ?, updated_at = datetime('now') WHERE id = ?").run(req.user.id, lead.id)
+  if (oldAttendantId) {
+    db.prepare('UPDATE lead_instance_assignments SET attendant_id = ? WHERE lead_id = ? AND attendant_id = ?').run(req.user.id, lead.id, oldAttendantId)
+  } else {
+    db.prepare('UPDATE lead_instance_assignments SET attendant_id = ? WHERE lead_id = ? AND attendant_id IS NULL').run(req.user.id, lead.id)
+  }
+  // Cancela quaisquer pedidos pending pra esse lead
+  db.prepare("UPDATE lead_transfer_requests SET status = 'cancelled', responded_at = datetime('now') WHERE lead_id = ? AND status = 'pending'").run(lead.id)
+
+  // SSE pra atualizar UIs (atendente antigo perde, novo ganha)
+  try { broadcastSSE(req.accountId, 'lead:transfer-accepted', { requestId: null, leadId: lead.id, newAttendantId: req.user.id, newAttendantName: req.user.name, grabbed: true }) } catch {}
+
+  res.json({ ok: true, leadId: lead.id })
+})
+
+// Criar pedido de transferencia (Emily pede pra Deivid)
+router.post('/:id/transfer-request', (req, res) => {
+  if (!req.accountId) return res.status(400).json({ error: 'account_id required' })
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ? AND account_id = ?').get(req.params.id, req.accountId)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  if (lead.attendant_id === req.user.id) return res.status(400).json({ error: 'Voce ja eh o atendente deste lead' })
+
+  // Verifica se ja tem pedido pending do mesmo requester pro mesmo lead — nao duplica
+  const existing = db.prepare(`
+    SELECT * FROM lead_transfer_requests
+    WHERE lead_id = ? AND from_attendant_id = ? AND status = 'pending'
+  `).get(lead.id, req.user.id)
+  if (existing) return res.json({ request: existing, alreadyExists: true })
+
+  const message = String(req.body?.message || '').trim().substring(0, 500) || null
+  const result = db.prepare(`
+    INSERT INTO lead_transfer_requests (lead_id, from_attendant_id, to_attendant_id, account_id, message)
+    VALUES (?, ?, ?, ?, ?)
+  `).run(lead.id, req.user.id, lead.attendant_id || null, req.accountId, message)
+
+  const request = db.prepare(`
+    SELECT tr.*, l.name as lead_name, l.phone as lead_phone, u.name as from_attendant_name
+    FROM lead_transfer_requests tr
+    JOIN leads l ON l.id = tr.lead_id
+    JOIN users u ON u.id = tr.from_attendant_id
+    WHERE tr.id = ?
+  `).get(result.lastInsertRowid)
+
+  // SSE broadcast — frontend filtra pelo to_attendant_id
+  try { broadcastSSE(req.accountId, 'lead:transfer-requested', request) } catch {}
+
+  res.json({ request, alreadyExists: false })
+})
+
+// Deivid aceita o pedido
+router.post('/transfer-requests/:reqId/accept', (req, res) => {
+  const tr = db.prepare('SELECT * FROM lead_transfer_requests WHERE id = ?').get(req.params.reqId)
+  if (!tr) return res.status(404).json({ error: 'Pedido nao encontrado' })
+  if (tr.status !== 'pending') return res.status(400).json({ error: 'Pedido ja respondido' })
+  // Quem pode aceitar: o destinatario (to_attendant_id) OU gerente/super_admin da conta
+  const canAccept = tr.to_attendant_id === req.user.id || ['gerente','super_admin'].includes(req.user.role)
+  if (!canAccept) return res.status(403).json({ error: 'Sem permissao pra aceitar este pedido' })
+
+  // Transfere o lead
+  db.prepare("UPDATE leads SET attendant_id = ?, updated_at = datetime('now') WHERE id = ?").run(tr.from_attendant_id, tr.lead_id)
+  // Atualiza assignments pra new atendente onde antigo era atendente
+  if (tr.to_attendant_id) {
+    db.prepare('UPDATE lead_instance_assignments SET attendant_id = ? WHERE lead_id = ? AND attendant_id = ?').run(tr.from_attendant_id, tr.lead_id, tr.to_attendant_id)
+  } else {
+    db.prepare('UPDATE lead_instance_assignments SET attendant_id = ? WHERE lead_id = ? AND attendant_id IS NULL').run(tr.from_attendant_id, tr.lead_id)
+  }
+  // Marca pedido como aceito
+  db.prepare("UPDATE lead_transfer_requests SET status = 'accepted', responded_at = datetime('now') WHERE id = ?").run(tr.id)
+  // Cancela outros pedidos pendentes pro mesmo lead (de outros atendentes que tambem queriam)
+  db.prepare("UPDATE lead_transfer_requests SET status = 'cancelled', responded_at = datetime('now') WHERE lead_id = ? AND status = 'pending'").run(tr.lead_id)
+
+  const requester = db.prepare('SELECT name FROM users WHERE id = ?').get(tr.from_attendant_id)
+  const payload = {
+    requestId: tr.id,
+    leadId: tr.lead_id,
+    newAttendantId: tr.from_attendant_id,
+    newAttendantName: requester?.name || null,
+    accountId: tr.account_id,
+  }
+  try { broadcastSSE(tr.account_id, 'lead:transfer-accepted', payload) } catch {}
+
+  res.json({ ok: true })
+})
+
+// Deivid rejeita
+router.post('/transfer-requests/:reqId/reject', (req, res) => {
+  const tr = db.prepare('SELECT * FROM lead_transfer_requests WHERE id = ?').get(req.params.reqId)
+  if (!tr) return res.status(404).json({ error: 'Pedido nao encontrado' })
+  if (tr.status !== 'pending') return res.status(400).json({ error: 'Pedido ja respondido' })
+  const canReject = tr.to_attendant_id === req.user.id || ['gerente','super_admin'].includes(req.user.role)
+  if (!canReject) return res.status(403).json({ error: 'Sem permissao' })
+
+  db.prepare("UPDATE lead_transfer_requests SET status = 'rejected', responded_at = datetime('now') WHERE id = ?").run(tr.id)
+  try { broadcastSSE(tr.account_id, 'lead:transfer-rejected', { requestId: tr.id, leadId: tr.lead_id, fromUserId: tr.from_attendant_id }) } catch {}
+
+  res.json({ ok: true })
 })
 
 // Get lead detail

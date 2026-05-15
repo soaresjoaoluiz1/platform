@@ -448,6 +448,8 @@ addColumnIfNotExists('leads', 'last_instance_id', 'INTEGER REFERENCES whatsapp_i
 addColumnIfNotExists('users', 'primary_instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
 // users.can_manage_proposals: permissao granular pra acessar a area de Propostas (super_admin sempre tem)
 addColumnIfNotExists('users', 'can_manage_proposals', 'INTEGER NOT NULL DEFAULT 0')
+// users.can_grab_leads: permite ao atendente "tomar" leads de outros sem precisar aprovacao
+addColumnIfNotExists('users', 'can_grab_leads', 'INTEGER NOT NULL DEFAULT 0')
 // messages.instance_id: qual instancia enviou/recebeu cada mensagem (mostrado internamente no chat)
 addColumnIfNotExists('messages', 'instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
 
@@ -503,6 +505,27 @@ db.exec(`
     FOREIGN KEY (assigned_to) REFERENCES users(id),
     FOREIGN KEY (created_by) REFERENCES users(id)
   )
+`)
+
+// Pedidos de transferencia de lead entre atendentes (Emily pede o lead que esta com Deivid)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS lead_transfer_requests (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id           INTEGER NOT NULL,
+    from_attendant_id INTEGER NOT NULL,
+    to_attendant_id   INTEGER,
+    account_id        INTEGER NOT NULL,
+    status            TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','accepted','rejected','cancelled')),
+    message           TEXT,
+    created_at        TEXT NOT NULL DEFAULT (datetime('now')),
+    responded_at      TEXT,
+    FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
+    FOREIGN KEY (from_attendant_id) REFERENCES users(id),
+    FOREIGN KEY (to_attendant_id) REFERENCES users(id),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_transfer_pending ON lead_transfer_requests(to_attendant_id, status);
+  CREATE INDEX IF NOT EXISTS idx_transfer_from ON lead_transfer_requests(from_attendant_id, status);
 `)
 
 // Proposals (proposta comercial gerada pelo super_admin)

@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-15T10:30:48.832Z",
+  "generatedAt": "2026-05-15T16:53:53.314Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -533,8 +533,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\App.tsx": {
-      "mtime": 1778671478820.3367,
-      "size": 5242,
+      "mtime": 1778853830049.2356,
+      "size": 5374,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -578,8 +578,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\db.js": {
-      "mtime": 1778766158930.3208,
-      "size": 26228,
+      "mtime": 1778853911733.8877,
+      "size": 27488,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -649,8 +649,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\index.js": {
-      "mtime": 1778838847620.9778,
-      "size": 17309,
+      "mtime": 1778864019628.215,
+      "size": 17509,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -1818,8 +1818,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Team.tsx": {
-      "mtime": 1778257846121.6611,
-      "size": 8818,
+      "mtime": 1778855287692.38,
+      "size": 9639,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -1994,8 +1994,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Chat.tsx": {
-      "mtime": 1778774593757.9448,
-      "size": 81102,
+      "mtime": 1778857227037.1448,
+      "size": 89461,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2055,8 +2055,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\lib\\api.ts": {
-      "mtime": 1778776923982.2158,
-      "size": 32843,
+      "mtime": 1778854012750.743,
+      "size": 34851,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2075,8 +2075,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\context\\SSEContext.tsx": {
-      "mtime": 1778242354106.0413,
-      "size": 2170,
+      "mtime": 1778847562033.6028,
+      "size": 2249,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2088,8 +2088,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\context\\AuthContext.tsx": {
-      "mtime": 1778242354105.0408,
-      "size": 2112,
+      "mtime": 1778857215094.7974,
+      "size": 2172,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2113,8 +2113,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\Sidebar.tsx": {
-      "mtime": 1778257373565.7632,
-      "size": 8701,
+      "mtime": 1778853867554.8003,
+      "size": 9565,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2180,8 +2180,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\users.js": {
-      "mtime": 1778257282078.7668,
-      "size": 5891,
+      "mtime": 1778856788390.0713,
+      "size": 6582,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2236,8 +2236,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\leads.js": {
-      "mtime": 1778836292903.1404,
-      "size": 30404,
+      "mtime": 1778853987091.4395,
+      "size": 40882,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2302,8 +2302,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\auth.js": {
-      "mtime": 1778257309652.6338,
-      "size": 1872,
+      "mtime": 1778857185333.7942,
+      "size": 1930,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2405,8 +2405,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\TaskDetail.tsx": {
-      "mtime": 1778838754333.7148,
-      "size": 69985,
+      "mtime": 1778864031337.948,
+      "size": 69984,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -3623,8 +3623,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\admin\\Users.tsx": {
-      "mtime": 1778257449510.3591,
-      "size": 8405,
+      "mtime": 1778854103926.7664,
+      "size": 9280,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -5268,6 +5268,17 @@
         "exports": [
           "isDriveUrl",
           "toDriveEmbedUrl"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\TransferRequests.tsx": {
+      "mtime": 1778853772779.7417,
+      "size": 8769,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:TransferRequests"
         ],
         "language": "typescript"
       }
