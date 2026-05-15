@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-15T09:55:11.628Z",
+  "generatedAt": "2026-05-15T10:30:48.832Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -2449,8 +2449,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\Pipeline.tsx": {
-      "mtime": 1778838909786.7607,
-      "size": 42651,
+      "mtime": 1778841046651.986,
+      "size": 42654,
       "symbols": {
         "purpose": null,
         "exports": [
