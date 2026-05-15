@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-14T17:15:41.672Z",
+  "generatedAt": "2026-05-15T09:38:52.721Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -2171,8 +2171,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\webhooks.js": {
-      "mtime": 1778772317101.6838,
-      "size": 40098,
+      "mtime": 1778836263836.6528,
+      "size": 41697,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2236,8 +2236,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\leads.js": {
-      "mtime": 1778766908415.5962,
-      "size": 29565,
+      "mtime": 1778836292903.1404,
+      "size": 30404,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -2405,8 +2405,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\TaskDetail.tsx": {
-      "mtime": 1778696246541.08,
-      "size": 62995,
+      "mtime": 1778837921733.3354,
+      "size": 64452,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2438,8 +2438,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\PublicApprovals.tsx": {
-      "mtime": 1777886580868.6985,
-      "size": 14557,
+      "mtime": 1778837869630.6926,
+      "size": 15762,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -2449,8 +2449,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\Pipeline.tsx": {
-      "mtime": 1778696246540.0767,
-      "size": 39854,
+      "mtime": 1778837930989.7188,
+      "size": 40029,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -5257,6 +5257,18 @@
       "symbols": {
         "purpose": null,
         "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\drive.ts": {
+      "mtime": 1778837829036.7097,
+      "size": 2071,
+      "symbols": {
+        "purpose": "=====================================================================",
+        "exports": [
+          "isDriveUrl",
+          "toDriveEmbedUrl"
+        ],
         "language": "typescript"
       }
     }

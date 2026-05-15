@@ -7,6 +7,15 @@ import { triggerCapiForStageChange } from '../services/metaCapi.js'
 
 const router = Router()
 
+// Chave canonica pra dedup: DDD + 8 digitos finais (ignora 55 e 9 de celular)
+function phoneCompareKey(p) {
+  let d = String(p || '').replace(/[^\d]/g, '')
+  if (!d) return ''
+  if (d.startsWith('55') && (d.length === 12 || d.length === 13)) d = d.slice(2)
+  if (d.length === 11 && d[2] === '9') d = d.slice(0, 2) + d.slice(3)
+  return d.length === 10 ? d : d.slice(-10)
+}
+
 // Normalize phone to Brazil format (55DDXXXXXXXXX = 13 digits)
 // Only normalizes when we have enough info. Never invents DDD.
 function normalizePhone(phone) {
@@ -95,9 +104,19 @@ router.post('/', (req, res) => {
 
   phone = normalizePhone(phone)
 
-  // Duplicata: se ja existe lead com mesmo telefone nessa conta, retorna 409 com o existente
+  // Duplicata: chave canonica (DDD + 8 digitos) cobre todos formatos
   if (phone) {
-    const existing = db.prepare('SELECT * FROM leads WHERE account_id = ? AND phone = ? ORDER BY is_archived ASC, created_at DESC LIMIT 1').get(req.accountId, phone)
+    // 1) match exato
+    let existing = db.prepare('SELECT * FROM leads WHERE account_id = ? AND phone = ? ORDER BY is_archived ASC, created_at DESC LIMIT 1').get(req.accountId, phone)
+    // 2) fallback: busca por sufixo 8d e compara chave canonica
+    if (!existing) {
+      const key = phoneCompareKey(phone)
+      if (key) {
+        const last8 = key.slice(-8)
+        const candidates = db.prepare('SELECT * FROM leads WHERE account_id = ? AND phone LIKE ? ORDER BY is_archived ASC, created_at DESC').all(req.accountId, '%' + last8)
+        existing = candidates.find(c => phoneCompareKey(c.phone) === key) || null
+      }
+    }
     if (existing) {
       return res.status(409).json({ error: 'Contato ja existe com esse telefone', existing })
     }

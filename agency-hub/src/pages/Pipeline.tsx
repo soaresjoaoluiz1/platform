@@ -367,7 +367,7 @@ export default function Pipeline() {
           </div>
           <div style={{ padding: '14px 16px', background: 'rgba(245,166,35,0.04)', border: '1px solid rgba(245,166,35,0.12)', borderRadius: 10, marginBottom: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Conteudo para Aprovacao (opcional)</div>
-            <div className="form-group"><label>Link do arquivo finalizado</label><input className="input" value={newTask.approval_link} onChange={e => setNewTask(p => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive com o arquivo pronto pra aprovacao..." /></div>
+            <div className="form-group"><label>Link do arquivo finalizado</label><input className="input" value={newTask.approval_link} onChange={e => setNewTask(p => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive — compartilhamento: qualquer pessoa com o link" /><small style={{ fontSize: 11, color: '#6B6580', marginTop: 4, display: 'block' }}>O cliente vai ver o video/imagem embutido. Precisa estar publico no Drive.</small></div>
             <div className="form-group"><label>Texto / Legenda</label><textarea className="input" rows={3} value={newTask.approval_text} onChange={e => setNewTask(p => ({ ...p, approval_text: e.target.value }))} placeholder="Legenda do post, texto da publicacao, descricao..." /></div>
             <div className="form-row">
               <div className="form-group"><label>Data da Publicacao</label><input className="input" type="date" value={newTask.publish_date} onChange={e => setNewTask(p => ({ ...p, publish_date: e.target.value }))} /></div>

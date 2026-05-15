@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useSSE } from '../context/SSEContext'
 import { fetchTask, fetchClients, fetchDepartments, fetchUsers, fetchCategories, fetchStages, updateTask, moveTaskStage, addTaskComment, addTaskAttachment, deleteTaskAttachment, approveTask, rejectTask, startTimer, stopTimer, confirmRecording, addSubtask, type Task, type TaskComment, type TaskHistory, type TaskAttachment, type TimeEntry, type Client, type Department, type User as UserT, type TaskCategory, type PipelineStage } from '../lib/api'
+import { isDriveUrl, toDriveEmbedUrl } from '../lib/drive'
 import { ArrowLeft, Building2, Clock, User, ExternalLink, CheckCircle, XCircle, Send, MessageCircle, GitBranch, Paperclip, Eye, Edit3, Save, X, Plus, AlertTriangle, Layers, ChevronRight, Video, Trash2 } from 'lucide-react'
 import { useToast } from '../components/Toast'
 
@@ -352,7 +353,7 @@ export default function TaskDetail() {
                 {/* Approval content section */}
                 <div style={{ marginTop: 12, padding: '14px 16px', background: 'rgba(245,166,35,0.04)', border: '1px solid rgba(245,166,35,0.12)', borderRadius: 10 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: '#F5A623', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Conteudo para Aprovacao</div>
-                  <div className="form-group"><label>Link do arquivo finalizado *</label><input className="input" value={editData.approval_link} onChange={e => setEditData((p: any) => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive com o arquivo pronto pra aprovacao..." /></div>
+                  <div className="form-group"><label>Link do arquivo finalizado *</label><input className="input" value={editData.approval_link} onChange={e => setEditData((p: any) => ({ ...p, approval_link: e.target.value }))} placeholder="Link do Drive — compartilhamento: qualquer pessoa com o link" /><small style={{ fontSize: 11, color: '#6B6580', marginTop: 4, display: 'block' }}>O cliente vai ver o video/imagem embutido. Precisa estar publico no Drive.</small></div>
                   <div className="form-group"><label>Texto / Legenda</label><textarea className="input" rows={3} value={editData.approval_text} onChange={e => setEditData((p: any) => ({ ...p, approval_text: e.target.value }))} placeholder="Legenda do post, texto da publicacao, descricao..." /></div>
                   <div className="form-row">
                     <div className="form-group"><label>Data da Publicacao</label><input className="input" type="date" value={editData.publish_date} onChange={e => setEditData((p: any) => ({ ...p, publish_date: e.target.value }))} /></div>
@@ -518,9 +519,26 @@ export default function TaskDetail() {
                   {task.approval_link && (
                     <div style={{ marginBottom: 12 }}>
                       <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#9B96B0', marginBottom: 6 }}>Arquivo a ser postado</div>
-                      <a href={task.approval_link} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm" style={{ display: 'inline-flex' }}>
-                        <ExternalLink size={14} /> Ver Arquivo
-                      </a>
+                      {isCliente && isDriveUrl(task.approval_link) ? (
+                        <>
+                          <div style={{ width: '100%', maxWidth: 800, aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: '#000' }}>
+                            <iframe
+                              src={toDriveEmbedUrl(task.approval_link) || ''}
+                              title={`Arquivo para aprovacao — ${task.title}`}
+                              allow="autoplay; fullscreen; encrypted-media"
+                              allowFullScreen
+                              style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+                            />
+                          </div>
+                          <a href={task.approval_link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: 11, color: '#9B96B0', textDecoration: 'none' }}>
+                            <ExternalLink size={11} /> Abrir em nova aba
+                          </a>
+                        </>
+                      ) : (
+                        <a href={task.approval_link} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm" style={{ display: 'inline-flex' }}>
+                          <ExternalLink size={14} /> Ver Arquivo
+                        </a>
+                      )}
                     </div>
                   )}
                   {task.approval_text && (

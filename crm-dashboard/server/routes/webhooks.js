@@ -33,12 +33,33 @@ function normalizePhone(p) {
   return p // can't normalize safely — return as-is
 }
 
+// Gera chave canonica de comparacao: DDD + 8 digitos finais (sem 55, sem 9 inicial de celular)
+// Cobre todos formatos: "5547991351835", "47991351835", "4791351835" -> "4791351835"
+function phoneCompareKey(p) {
+  let d = String(p || '').replace(/[^\d]/g, '')
+  if (!d) return ''
+  if (d.startsWith('55') && (d.length === 12 || d.length === 13)) d = d.slice(2)
+  if (d.length === 11 && d[2] === '9') d = d.slice(0, 2) + d.slice(3)
+  return d.length === 10 ? d : d.slice(-10) // fallback: ultimos 10 se formato desconhecido
+}
+
 function getOrCreateLead(accountId, phone, name, source, waJid, instanceId) {
   phone = normalizePhone(phone)
-  // Procura lead existente (priorizando NAO arquivado; se so achar arquivado, retorna mesmo assim mas SEM desarquivar)
   let lead = null
   if (waJid) lead = db.prepare('SELECT * FROM leads WHERE account_id = ? AND wa_remote_jid = ? ORDER BY is_archived ASC, created_at DESC LIMIT 1').get(accountId, waJid)
-  if (!lead && phone) lead = db.prepare('SELECT * FROM leads WHERE account_id = ? AND phone = ? ORDER BY is_archived ASC, created_at DESC LIMIT 1').get(accountId, phone)
+  if (!lead && phone) {
+    // 1) match exato (rapido, usa index)
+    lead = db.prepare('SELECT * FROM leads WHERE account_id = ? AND phone = ? ORDER BY is_archived ASC, created_at DESC LIMIT 1').get(accountId, phone)
+    // 2) fallback: busca candidatos por sufixo 8d e compara via phoneCompareKey
+    if (!lead) {
+      const key = phoneCompareKey(phone)
+      if (key) {
+        const last8 = key.slice(-8)
+        const candidates = db.prepare(`SELECT * FROM leads WHERE account_id = ? AND phone LIKE ? ORDER BY is_archived ASC, created_at DESC`).all(accountId, '%' + last8)
+        lead = candidates.find(c => phoneCompareKey(c.phone) === key) || null
+      }
+    }
+  }
 
   if (lead) {
     // Update instance_id if not set
@@ -605,6 +626,17 @@ router.post('/sheets/:accountSlug', (req, res) => {
 
     const { lead, isNew } = getOrCreateLead(account.id, phone, name, source, null)
     if (!lead) return res.status(400).json({ error: 'Falha ao criar lead (sem funil configurado?)' })
+
+    // Atualiza nome se vier mais completo (lead antigo pode estar so com telefone, ou nome incompleto)
+    // Substitui se nome novo eh nao-vazio E (nome atual eh vazio OU eh igual ao phone OU eh mais curto)
+    if (!isNew && name && name.trim()) {
+      const currentName = (lead.name || '').trim()
+      const newName = name.trim()
+      const isPhoneAsName = currentName === lead.phone || /^\d+$/.test(currentName)
+      if (!currentName || isPhoneAsName || (newName.length > currentName.length && newName.toLowerCase() !== currentName.toLowerCase())) {
+        db.prepare('UPDATE leads SET name = ? WHERE id = ?').run(newName, lead.id)
+      }
+    }
 
     // Update optional fields
     if (email) db.prepare('UPDATE leads SET email = COALESCE(email, ?) WHERE id = ?').run(email, lead.id)

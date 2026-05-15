@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-14 · 4199 files · ~12.9M tokens total
+> 2026-05-15 · 4217 files · ~13.0M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -81,6 +81,7 @@
 
 **agency-hub\src\lib/**
 - `api.ts` — apiFetch, formatNumber, formatBRL, fetchClients, createClient, fetchClient, generateApprovalToken, revokeApprovalToken +2
+- `drive.ts` — ===================================================================== · isDriveUrl, toDriveEmbedUrl
 - `performanceApi.ts` — ===================================================================== · fetchAccounts, fetchCompare, fetchDailyCompare, getAction, formatBRL, formatNumber, formatPercent, pctChange +2
 
 **agency-hub\src\pages/**
@@ -752,4 +753,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~7.5k tokens · Full codebase: ~12.9M tokens · Saves ~100%*
+*Index: ~7.5k tokens · Full codebase: ~13.0M tokens · Saves ~100%*
