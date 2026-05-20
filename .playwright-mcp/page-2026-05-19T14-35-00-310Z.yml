@@ -1,0 +1,250 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Box Paper Embalagens" [ref=e4] [cursor=pointer]:
+        - /url: "#"
+        - img "Box Paper Embalagens" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Como funciona" [ref=e7] [cursor=pointer]:
+          - /url: "#problema"
+        - link "Vantagens" [ref=e8] [cursor=pointer]:
+          - /url: "#vantagens"
+        - link "Box Paper" [ref=e9] [cursor=pointer]:
+          - /url: "#box-paper"
+        - link "Acabamentos" [ref=e10] [cursor=pointer]:
+          - /url: "#acabamentos"
+        - link "Clientes" [ref=e11] [cursor=pointer]:
+          - /url: "#depoimentos"
+        - link "Contato" [ref=e12] [cursor=pointer]:
+          - /url: "#contato"
+      - generic [ref=e13]:
+        - img [ref=e14]
+        - text: (48) 99989-2391
+      - link "Falar no WhatsApp" [ref=e16] [cursor=pointer]:
+        - /url: https://wa.me/5548999892391?text=Quero%20saber%20mais%20sobre%20a%20entrega%20programada%20da%20Box%20Paper.
+        - img [ref=e17]
+        - text: Falar no WhatsApp
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]: Oferta exclusiva · Entrega programada
+      - heading "Sua pizzaria nunca mais para por falta de caixa." [level=1] [ref=e23]:
+        - text: Sua pizzaria nunca mais para
+        - emphasis [ref=e24]: por falta de caixa.
+      - paragraph [ref=e25]: Entrega programada, pagamento fracionado e zero estoque parado. Você recebe só o que precisa, no dia combinado.
+      - generic [ref=e26]:
+        - link "Falar no WhatsApp" [ref=e27] [cursor=pointer]:
+          - /url: https://wa.me/5548999892391?text=Quero%20conhecer%20o%20plano%20de%20entrega%20programada%20da%20Box%20Paper.
+          - img [ref=e28]
+          - text: Falar no WhatsApp
+        - link "Como funciona →" [ref=e30] [cursor=pointer]:
+          - /url: "#problema"
+          - text: Como funciona
+          - generic [ref=e31]: →
+      - generic [ref=e32]:
+        - generic [ref=e33]: 14 anos de mercado
+        - generic [ref=e35]: SC + RS
+        - generic [ref=e37]: Caixas personalizadas
+    - generic [ref=e39]:
+      - img "Estoque de caixas de pizza" [ref=e41]
+      - img "Entrega Box Paper" [ref=e43]
+      - img "Caixa com sua marca" [ref=e45]
+      - generic [ref=e46]:
+        - text: Pagamento
+        - strong [ref=e47]: fracionado
+  - generic [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]: O problema
+      - heading "Comprar caixa em lote grande trava o caixa e o espaço da pizzaria." [level=2] [ref=e53]:
+        - text: Comprar caixa em lote grande
+        - emphasis [ref=e54]: trava o caixa
+        - text: e o espaço da pizzaria.
+      - generic [ref=e55]:
+        - paragraph [ref=e56]: Você compra um lote grande de caixas, paga tudo de uma vez, empilha num canto da pizzaria e torce pra não faltar antes do próximo pedido.
+        - paragraph [ref=e57]:
+          - text: Seu
+          - strong [ref=e58]: dinheiro fica travado em papelão
+          - text: . Seu espaço fica ocupado. E quando o estoque acaba no meio do fim de semana, é correria.
+      - paragraph [ref=e59]: Isso não precisa mais acontecer.
+    - img "Estoque desorganizado de caixas de pizza" [ref=e61]
+  - generic [ref=e63]:
+    - generic [ref=e64]:
+      - generic [ref=e65]: Como funciona
+      - heading "Um sistema simples para você nunca mais ficar sem caixa." [level=2] [ref=e66]:
+        - text: Um sistema simples para você
+        - emphasis [ref=e67]: nunca mais
+        - text: ficar sem caixa.
+      - paragraph [ref=e68]: A Box Paper entrega as caixas da sua pizzaria de forma programada. Sem complicação.
+    - generic [ref=e69]:
+      - article [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]: "01"
+          - img "Caixa personalizada" [ref=e73]
+        - generic [ref=e74]:
+          - heading "Você define o dia e a quantidade" [level=3] [ref=e75]
+          - paragraph [ref=e76]: A gente combina junto qual o melhor dia da semana e quantas caixas você precisa por entrega.
+      - article [ref=e77]:
+        - generic [ref=e78]:
+          - generic [ref=e79]: "02"
+          - img "Entrega Box Paper" [ref=e80]
+        - generic [ref=e81]:
+          - heading "A gente fabrica e entrega no prazo" [level=3] [ref=e82]
+          - paragraph [ref=e83]: Toda semana, no dia combinado, as caixas chegam na sua pizzaria. Sem atraso, sem você precisar ligar ou cobrar.
+      - article [ref=e84]:
+        - generic [ref=e85]:
+          - generic [ref=e86]: "03"
+          - img "Caixas organizadas" [ref=e87]
+        - generic [ref=e88]:
+          - heading "Você paga só pelo que recebeu" [level=3] [ref=e89]
+          - paragraph [ref=e90]: Pagamento fracionado. Nada de comprometer o caixa com lote grande. Você paga conforme recebe.
+  - generic [ref=e92]:
+    - generic [ref=e93]:
+      - generic [ref=e94]: O que muda na sua pizzaria
+      - heading "Você foca na pizza. A gente cuida da caixa." [level=2] [ref=e95]:
+        - text: Você foca na pizza.
+        - emphasis [ref=e96]: A gente cuida da caixa.
+    - generic [ref=e97]:
+      - article [ref=e98]:
+        - img [ref=e100]
+        - heading "Sem estoque gigante" [level=4] [ref=e102]
+        - paragraph [ref=e103]: Caixas no ritmo do consumo. Espaço da pizzaria liberado.
+      - article [ref=e104]:
+        - img [ref=e106]
+        - heading "Sem dinheiro parado" [level=4] [ref=e108]
+        - paragraph [ref=e109]: Você paga só pelo que recebeu. Capital livre.
+      - article [ref=e110]:
+        - img [ref=e112]
+        - heading "Sem risco no fim de semana" [level=4] [ref=e114]
+        - paragraph [ref=e115]: Estoque sempre renovado. Zero correria.
+      - article [ref=e116]:
+        - img [ref=e118]
+        - heading "Sem precisar lembrar" [level=4] [ref=e120]
+        - paragraph [ref=e121]: Entrega automática no dia combinado.
+  - generic [ref=e124]:
+    - generic [ref=e125]:
+      - generic [ref=e126]: Por que Box Paper
+      - heading "14 anos fabricando embalagens para pizzarias no Sul do Brasil." [level=2] [ref=e127]:
+        - text: 14 anos fabricando embalagens para pizzarias
+        - emphasis [ref=e128]: no Sul do Brasil.
+      - paragraph [ref=e129]: Caixas personalizadas com a sua marca, fabricadas na nossa estrutura em Sombrio · SC, com entrega direta nas pizzarias parceiras.
+      - generic [ref=e130]:
+        - generic [ref=e131]:
+          - generic [ref=e132]:
+            - emphasis [ref=e133]: "14"
+            - text: anos
+          - generic [ref=e134]: No mercado de embalagens para pizzaria
+        - generic [ref=e135]:
+          - generic [ref=e136]: SC + RS
+          - generic [ref=e137]: Atendimento em Santa Catarina e Rio Grande do Sul
+        - generic [ref=e138]:
+          - generic [ref=e139]: 100%
+          - generic [ref=e140]: Caixas personalizadas com a sua marca
+        - generic [ref=e141]:
+          - generic [ref=e142]:
+            - text: Mín.
+            - emphasis [ref=e143]: "[QTD]"
+          - generic [ref=e144]: Pedido a partir de [QUANTIDADE] · [PREÇO]/un.
+    - img "Caixa de pizza personalizada com a marca da pizzaria" [ref=e146]
+  - generic [ref=e148]:
+    - generic [ref=e149]:
+      - generic [ref=e150]: Duas opções de acabamento
+      - heading "Escolha o estilo que combina com a sua pizzaria." [level=2] [ref=e151]:
+        - text: Escolha o estilo que
+        - emphasis [ref=e152]: combina com a sua pizzaria.
+    - generic [ref=e153]:
+      - article [ref=e154]:
+        - img "Caixa fundo branco padrão" [ref=e156]
+        - generic [ref=e157]:
+          - generic [ref=e158]: Padrão · sem custo extra
+          - heading "Fundo branco" [level=3] [ref=e159]
+          - paragraph [ref=e160]: Limpo, profissional, já sai com a sua logo impressa. Ideal pra quem quer personalizar sem custo adicional e manter a operação simples.
+      - article [ref=e161]:
+        - img "Caixa fundo laminado premium" [ref=e163]
+        - generic [ref=e164]:
+          - generic [ref=e165]: Premium · pequeno acréscimo
+          - heading "Fundo laminado" [level=3] [ref=e166]
+          - paragraph [ref=e167]: Acabamento brilhante que muda a aparência da caixa. Pra quem quer passar uma imagem premium pro cliente desde o momento da entrega.
+  - generic [ref=e169]:
+    - generic [ref=e170]:
+      - generic [ref=e171]: Quem já usa aprova
+      - heading "Pizzarias que já não param por falta de caixa." [level=2] [ref=e172]:
+        - text: Pizzarias que
+        - emphasis [ref=e173]: já não param
+        - text: por falta de caixa.
+    - generic [ref=e174]:
+      - article [ref=e175]:
+        - generic [ref=e176]: "\""
+        - paragraph [ref=e177]: Desde que começamos com a entrega programada, nunca mais ficamos sem caixa. E o pagamento fracionado aliviou o caixa.
+        - generic [ref=e180]:
+          - generic [ref=e181]: Marcelo
+          - generic [ref=e182]: Pizzaria Sabor da Serra
+      - article [ref=e183]:
+        - generic [ref=e184]: "\""
+        - paragraph [ref=e185]: Atendimento nota 10 e as caixas com qualidade excelente. Recomendo!
+        - generic [ref=e188]:
+          - generic [ref=e189]: Juliana
+          - generic [ref=e190]: Pizzaria Bella Pizza
+    - generic [ref=e191]:
+      - generic [ref=e192]: Pizzarias que confiam na Box Paper
+      - generic [ref=e193]:
+        - generic [ref=e194]: Forno Nobre
+        - generic [ref=e195]: Sabor da Serra
+        - generic [ref=e196]: Bella Pizza
+        - generic [ref=e197]: Pizza & CIA
+  - generic [ref=e200]:
+    - generic [ref=e201]:
+      - generic [ref=e202]: Próximo passo
+      - heading "Quer receber suas caixas toda semana sem se preocupar com estoque?" [level=2] [ref=e203]:
+        - text: Quer receber suas caixas
+        - emphasis [ref=e204]: toda semana
+        - text: sem se preocupar com estoque?
+      - paragraph [ref=e205]: Fale com nosso time comercial. A gente monta o plano de entrega programada pra sua pizzaria.
+      - generic [ref=e206]:
+        - link "Falar no WhatsApp" [ref=e207] [cursor=pointer]:
+          - /url: https://wa.me/5548999892391?text=Quero%20o%20plano%20de%20entrega%20programada%20da%20Box%20Paper.%20Minha%20pizzaria%20%C3%A9...
+          - img [ref=e208]
+          - text: Falar no WhatsApp
+        - link "Pedir orçamento →" [ref=e210] [cursor=pointer]:
+          - /url: mailto:contato@boxpaperembalagens.com.br?subject=Pedido%20de%20orcamento%20-%20entrega%20programada
+          - text: Pedir orçamento
+          - generic [ref=e211]: →
+    - img "Entregador Box Paper entregando caixas em casa" [ref=e213]
+  - contentinfo [ref=e214]:
+    - generic [ref=e215]:
+      - generic [ref=e216]:
+        - generic [ref=e217]:
+          - img "Box Paper Embalagens" [ref=e219]
+          - paragraph [ref=e220]: Entrega programada · Pagamento fracionado · Caixas personalizadas. 14 anos imprimindo marcas de sucesso para pizzarias no Sul do Brasil.
+        - generic [ref=e221]:
+          - heading "Navegação" [level=4] [ref=e222]
+          - list [ref=e223]:
+            - listitem [ref=e224]:
+              - link "O problema" [ref=e225] [cursor=pointer]:
+                - /url: "#problema"
+            - listitem [ref=e226]:
+              - link "Como funciona" [ref=e227] [cursor=pointer]:
+                - /url: "#vantagens"
+            - listitem [ref=e228]:
+              - link "Por que Box Paper" [ref=e229] [cursor=pointer]:
+                - /url: "#box-paper"
+            - listitem [ref=e230]:
+              - link "Acabamentos" [ref=e231] [cursor=pointer]:
+                - /url: "#acabamentos"
+            - listitem [ref=e232]:
+              - link "Clientes" [ref=e233] [cursor=pointer]:
+                - /url: "#depoimentos"
+        - generic [ref=e234]:
+          - heading "Fale com a gente" [level=4] [ref=e235]
+          - list [ref=e236]:
+            - listitem [ref=e237]:
+              - link "(48) 99989-2391" [ref=e238] [cursor=pointer]:
+                - /url: https://wa.me/5548999892391
+            - listitem [ref=e239]:
+              - link "(48) 99989-2082" [ref=e240] [cursor=pointer]:
+                - /url: https://wa.me/5548999892082
+            - listitem [ref=e241]:
+              - link "contato@boxpaperembalagens.com.br" [ref=e242] [cursor=pointer]:
+                - /url: mailto:contato@boxpaperembalagens.com.br
+            - listitem [ref=e243]: Sombrio · SC
+      - generic [ref=e244]:
+        - paragraph [ref=e245]: © 2026 Box Paper Embalagens. Todos os direitos reservados.
+        - paragraph [ref=e246]: Imprimindo marcas de sucesso desde 2012.

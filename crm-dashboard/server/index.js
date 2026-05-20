@@ -14,6 +14,7 @@ import accountRoutes from './routes/accounts.js'
 import userRoutes from './routes/users.js'
 import funnelRoutes from './routes/funnels.js'
 import leadRoutes from './routes/leads.js'
+import tagMappingRoutes from './routes/tag-mapping.js'
 import messageRoutes from './routes/messages.js'
 import dashboardRoutes from './routes/dashboard.js'
 import webhookRoutes from './routes/webhooks.js'
@@ -25,6 +26,7 @@ import qualificationRoutes from './routes/qualifications.js'
 import launchRoutes from './routes/launches.js'
 import taskRoutes from './routes/tasks.js'
 import proposalRoutes, { publicProposalHandler } from './routes/proposals.js'
+import contractRoutes from './routes/contracts.js'
 import adminRoutes from './routes/admin.js'
 import { authenticate, scopeToAccount } from './middleware/auth.js'
 import { addSSEClient, removeSSEClient } from './sse.js'
@@ -59,6 +61,7 @@ app.use('/api/accounts', authenticate, accountRoutes)
 app.use('/api/users', authenticate, userRoutes)
 app.use('/api/funnels', authenticate, scopeToAccount, funnelRoutes)
 app.use('/api/leads', authenticate, scopeToAccount, leadRoutes)
+app.use('/api/tag-mapping', authenticate, scopeToAccount, tagMappingRoutes)
 app.use('/api/messages', authenticate, scopeToAccount, messageRoutes)
 app.use('/api/dashboard', authenticate, scopeToAccount, dashboardRoutes)
 app.use('/api/integrations', authenticate, scopeToAccount, integrationRoutes)
@@ -69,6 +72,7 @@ app.use('/api/qualifications', authenticate, scopeToAccount, qualificationRoutes
 app.use('/api/launches', authenticate, scopeToAccount, launchRoutes)
 app.use('/api/tasks', authenticate, scopeToAccount, taskRoutes)
 app.use('/api/proposals', authenticate, proposalRoutes)
+app.use('/api/contracts', authenticate, contractRoutes)
 app.use('/api/admin', authenticate, adminRoutes)
 
 // Settings: distribution rules

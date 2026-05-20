@@ -37,8 +37,8 @@ function normalizePhone(phone) {
 router.get('/', (req, res) => {
   if (!req.accountId) return res.status(400).json({ error: 'account_id required' })
 
-  const { stage_id, attendant_id, funnel_id, source, tag, city, search, date_from, date_to, show_archived, page = '1', limit = '50' } = req.query
-  const where = ['l.account_id = ?', 'l.is_active = 1']
+  const { stage_id, attendant_id, instance_id, funnel_id, source, tag, city, search, date_from, date_to, show_archived, page = '1', limit = '50' } = req.query
+  const where = ['l.account_id = ?', 'l.is_active = 1', 'l.is_blocked = 0']
   const params = [req.accountId]
 
   // Archive filter: default hides archived; pass show_archived=1 to list only archived, =all to include both
@@ -51,8 +51,31 @@ router.get('/', (req, res) => {
     params.push(req.user.id, req.user.id)
   }
 
-  if (stage_id) { where.push('l.stage_id = ?'); params.push(stage_id) }
-  if (attendant_id) { where.push('l.attendant_id = ?'); params.push(attendant_id) }
+  // Helper: parse CSV de IDs ("1,2,3" → [1,2,3])
+  const parseIds = (v) => String(v || '').split(',').map(s => s.trim()).filter(Boolean).map(Number).filter(n => !isNaN(n))
+
+  if (stage_id) {
+    const ids = parseIds(stage_id)
+    if (ids.length === 1) { where.push('l.stage_id = ?'); params.push(ids[0]) }
+    else if (ids.length > 1) { where.push(`l.stage_id IN (${ids.map(() => '?').join(',')})`); params.push(...ids) }
+  }
+  if (attendant_id) {
+    const parts = String(attendant_id).split(',').map(s => s.trim()).filter(Boolean)
+    const wantNone = parts.includes('none')
+    const ids = parts.filter(p => p !== 'none').map(Number).filter(n => !isNaN(n))
+    const conds = []
+    if (wantNone) conds.push('l.attendant_id IS NULL')
+    if (ids.length > 0) {
+      conds.push(`l.attendant_id IN (${ids.map(() => '?').join(',')})`)
+      params.push(...ids)
+    }
+    if (conds.length > 0) where.push(`(${conds.join(' OR ')})`)
+  }
+  if (instance_id) {
+    const ids = parseIds(instance_id)
+    if (ids.length === 1) { where.push('l.instance_id = ?'); params.push(ids[0]) }
+    else if (ids.length > 1) { where.push(`l.instance_id IN (${ids.map(() => '?').join(',')})`); params.push(...ids) }
+  }
   if (funnel_id) { where.push('l.funnel_id = ?'); params.push(funnel_id) }
   if (source) { where.push('l.source = ?'); params.push(source) }
   if (city) { where.push('l.city LIKE ?'); params.push(`%${city}%`) }
@@ -60,8 +83,16 @@ router.get('/', (req, res) => {
   if (date_from) { where.push('l.created_at >= ?'); params.push(date_from) }
   if (date_to) { where.push('l.created_at <= ?'); params.push(date_to + ' 23:59:59') }
   if (tag) {
-    where.push('l.id IN (SELECT lead_id FROM lead_tags WHERE tag_id = ?)')
-    params.push(tag)
+    const parts = String(tag).split(',').map(s => s.trim()).filter(Boolean)
+    const wantUntagged = parts.includes('untagged') || parts.includes('none')
+    const ids = parts.filter(p => p !== 'untagged' && p !== 'none').map(Number).filter(n => !isNaN(n))
+    const conds = []
+    if (wantUntagged) conds.push('l.id NOT IN (SELECT lead_id FROM lead_tags)')
+    if (ids.length > 0) {
+      conds.push(`l.id IN (SELECT lead_id FROM lead_tags WHERE tag_id IN (${ids.map(() => '?').join(',')}))`)
+      params.push(...ids)
+    }
+    if (conds.length > 0) where.push(`(${conds.join(' OR ')})`)
   }
 
   const countSql = `SELECT COUNT(*) as total FROM leads l WHERE ${where.join(' AND ')}`
@@ -520,6 +551,31 @@ router.patch('/:id/unarchive', (req, res) => {
   res.json({ lead: updated })
 })
 
+// Block lead — soft-delete: lead some do CRM e mensagens futuras desse numero sao ignoradas pelo webhook.
+// Historico (msgs, tags, etc) e preservado pra eventual unblock futuro.
+router.post('/:id/block', (req, res) => {
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  if (req.accountId && lead.account_id !== req.accountId) return res.status(403).json({ error: 'Sem permissao' })
+  if (req.user.role === 'atendente' && lead.attendant_id !== req.user.id && !db.prepare('SELECT 1 FROM lead_instance_assignments WHERE lead_id = ? AND attendant_id = ?').get(lead.id, req.user.id)) return res.status(403).json({ error: 'Sem permissao' })
+  db.prepare("UPDATE leads SET is_blocked = 1, blocked_at = datetime('now'), blocked_by = ?, updated_at = datetime('now') WHERE id = ?").run(req.user.id, lead.id)
+  const updated = db.prepare('SELECT * FROM leads WHERE id = ?').get(lead.id)
+  try { broadcastSSE(lead.account_id, 'lead:archived', { id: lead.id }) } catch {}
+  res.json({ lead: updated })
+})
+
+// Unblock lead — restaura visibilidade e processamento de mensagens
+router.post('/:id/unblock', (req, res) => {
+  const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id)
+  if (!lead) return res.status(404).json({ error: 'Lead nao encontrado' })
+  if (req.accountId && lead.account_id !== req.accountId) return res.status(403).json({ error: 'Sem permissao' })
+  if (req.user.role === 'atendente' && lead.attendant_id !== req.user.id && !db.prepare('SELECT 1 FROM lead_instance_assignments WHERE lead_id = ? AND attendant_id = ?').get(lead.id, req.user.id)) return res.status(403).json({ error: 'Sem permissao' })
+  db.prepare("UPDATE leads SET is_blocked = 0, blocked_at = NULL, blocked_by = NULL, updated_at = datetime('now') WHERE id = ?").run(lead.id)
+  const updated = db.prepare('SELECT * FROM leads WHERE id = ?').get(lead.id)
+  try { broadcastSSE(lead.account_id, 'lead:unarchived', updated) } catch {}
+  res.json({ lead: updated })
+})
+
 // Assign attendant
 router.put('/:id/assign', requireRole('super_admin', 'gerente'), (req, res) => {
   const { attendant_id } = req.body
@@ -574,7 +630,7 @@ router.delete('/:id/tags/:tagId', (req, res) => {
 router.get('/export', requireRole('super_admin', 'gerente'), (req, res) => {
   if (!req.accountId) return res.status(400).json({ error: 'account_id required' })
   const { date_from, date_to, funnel_id } = req.query
-  const where = ['l.account_id = ?']
+  const where = ['l.account_id = ?', 'l.is_blocked = 0']
   const params = [req.accountId]
   if (date_from) { where.push('l.created_at >= ?'); params.push(date_from) }
   if (date_to) { where.push('l.created_at <= ?'); params.push(date_to + ' 23:59:59') }
@@ -660,6 +716,9 @@ router.delete('/tags/:tagId', requireRole('super_admin', 'gerente'), (req, res) 
   res.json({ ok: true })
 })
 
+// (rotas de tag-mapping movidas pra /api/tag-mapping em routes/tag-mapping.js
+//  por causa de conflito com /:id e /tags/:tagId neste mesmo router)
+
 // =============================================
 // OPT-IN / OPT-OUT (WhatsApp broadcast consent)
 // =============================================
@@ -737,7 +796,7 @@ router.get('/pipeline/metrics', (req, res) => {
       COUNT(l.id) as lead_count,
       AVG(CASE WHEN l.updated_at != l.created_at THEN (julianday(l.updated_at) - julianday(l.created_at)) * 24 ELSE NULL END) as avg_hours_in_stage
     FROM funnel_stages fs
-    LEFT JOIN leads l ON l.stage_id = fs.id AND l.is_active = 1 AND l.is_archived = 0
+    LEFT JOIN leads l ON l.stage_id = fs.id AND l.is_active = 1 AND l.is_archived = 0 AND l.is_blocked = 0
     WHERE fs.funnel_id = ?
     GROUP BY fs.id
     ORDER BY fs.position

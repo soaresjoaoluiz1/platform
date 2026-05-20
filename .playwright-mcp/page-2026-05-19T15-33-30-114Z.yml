@@ -1,0 +1,47 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Box Paper Embalagens" [ref=e4] [cursor=pointer]:
+      - /url: index.html
+      - img "Box Paper Embalagens" [ref=e5]
+  - generic [ref=e7]:
+    - img [ref=e9]
+    - heading "Cadastro recebido. Falamos com você em breve." [level=1] [ref=e11]:
+      - text: Cadastro recebido.
+      - emphasis [ref=e12]: Falamos com você em breve.
+    - paragraph [ref=e13]:
+      - text: Em até
+      - strong [ref=e14]: 1 dia útil
+      - text: nosso time comercial vai te chamar no WhatsApp pra montar o plano de entrega programada da sua pizzaria.
+  - generic [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e18]: Próximos passos
+      - heading "O que acontece agora" [level=2] [ref=e19]
+    - generic [ref=e20]:
+      - article [ref=e21]:
+        - generic [ref=e22]: "1"
+        - heading "Vamos te chamar" [level=3] [ref=e23]
+        - paragraph [ref=e24]: Em até 1 dia útil você recebe nossa mensagem no WhatsApp com 2 ou 3 horários sugeridos pra conversa rápida.
+      - article [ref=e25]:
+        - generic [ref=e26]: "2"
+        - heading "Conversa de 15 minutos" [level=3] [ref=e27]
+        - paragraph [ref=e28]: Conhecemos a operação da sua pizzaria, alinhamos quantidade, dia de entrega e tipo de acabamento.
+      - article [ref=e29]:
+        - generic [ref=e30]: "3"
+        - heading "Plano sob medida" [level=3] [ref=e31]
+        - paragraph [ref=e32]: Montamos o plano de entrega programada com pagamento fracionado. Você aprova e começamos a fabricar.
+  - generic [ref=e34]:
+    - heading "Quer adiantar a conversa?" [level=2] [ref=e35]:
+      - text: Quer
+      - emphasis [ref=e36]: adiantar a conversa?
+    - paragraph [ref=e37]: Fala com a gente agora mesmo no WhatsApp. Atendemos em horário comercial.
+    - generic [ref=e38]:
+      - link "Falar no WhatsApp" [ref=e39] [cursor=pointer]:
+        - /url: https://wa.me/5548999892391?text=Acabei%20de%20me%20cadastrar%20no%20site.%20Quero%20adiantar%20a%20conversa.
+        - img [ref=e40]
+        - text: Falar no WhatsApp
+      - link "Voltar ao site" [ref=e42] [cursor=pointer]:
+        - /url: index.html
+  - contentinfo [ref=e43]:
+    - generic [ref=e45]:
+      - paragraph [ref=e46]: © 2026 Box Paper Embalagens. Todos os direitos reservados.
+      - paragraph [ref=e47]: Imprimindo marcas de sucesso desde 2012.

@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-15 · 4322 files · ~13.7M tokens total
+> 2026-05-20 · 5226 files · ~19.5M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -108,6 +108,195 @@
 **bin/**
 - `opensquad.js`
 
+**claude-cookbooks-main\claude-cookbooks-main\.claude\skills\cookbook-audit/**
+- `validate_notebook.py` — main, NotebookValidator
+
+**claude-cookbooks-main\claude-cookbooks-main\.github\scripts/**
+- `verify_registry.py` — check_github_handle, check_url, verify_authors, verify_registry_authors, verify_paths, verify_schemas, main
+
+**claude-cookbooks-main\claude-cookbooks-main\anthropic_cookbook/**
+- `__init__.py`
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\classification\evaluation/**
+- `prompts.py` — simple_classify, rag_classify, rag_chain_of_thought_classify
+- `transform.py` — get_transform
+- `vectordb.py` — VectorDB
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\contextual-embeddings\contextual-rag-lambda-function/**
+- `inference_adapter.py` — InferenceAdapter
+- `lambda_function.py` — lambda_handler
+- `s3_adapter.py` — S3Adapter
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\knowledge_graph\evaluation/**
+- `eval_extraction.py` — Precision/recall scoring for knowledge-graph extraction. · load_alias_map, fetch_summary, extract, prf, main, Entity, Relation, ExtractedGraph
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\retrieval_augmented_generation\evaluation/**
+- `eval_end_to_end.py` — evaluate_end_to_end, get_assert
+- `eval_retrieval.py` — calculate_mrr, evaluate_retrieval, get_assert
+- `prompts.py` — answer_query_base, retrieve_level_two, answer_query_level_two, answer_query_level_three
+- `provider_retrieval.py` — retrieve_base, retrieve_level_two, retrieve_level_three
+- `vectordb.py` — VectorDB, SummaryIndexedVectorDB
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\summarization\data/**
+- `multiple_subleases.py`
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\summarization\evaluation/**
+- `prompts.py` — basic_summarize, guided_legal_summary, summarize_long_document
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\summarization\evaluation\custom_evals/**
+- `bleu_eval.py` — nltk_bleu_eval, get_assert
+- `llm_eval.py` — llm_eval, get_assert
+- `rouge_eval.py` — rouge_eval, get_assert
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\text_to_sql\evaluation/**
+- `prompts.py` — get_schema_info, generate_prompt, generate_prompt_with_examples, generate_prompt_with_cot, generate_prompt_with_rag
+- `vectordb.py` — VectorDB
+
+**claude-cookbooks-main\claude-cookbooks-main\capabilities\text_to_sql\evaluation\tests/**
+- `test_above_average_salary.py` — get_assert
+- `test_average_salary.py` — get_assert
+- `test_budget_allocation.py` — get_assert
+- `test_employee_count.py` — get_assert
+- `test_employee_details.py` — get_assert
+- `test_hierarchical_query.py` — get_assert
+- `test_simple_query.py` — get_assert
+- `utils.py` — extract_sql, execute_sql
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\chief_of_staff_agent/**
+- `agent.py` — get_activity_text, print_activity, send_query
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\chief_of_staff_agent\.claude\hooks/**
+- `report-tracker.py` — track_report
+- `script-usage-logger.py` — log_script_usage
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\chief_of_staff_agent\scripts/**
+- `decision_matrix.py` — create_decision_matrix, generate_analysis, main, OptionScore, Analysis, DecisionMatrix
+- `financial_forecast.py` — forecast_financials, calculate_profitability_date, calculate_cash_needed, main
+- `hiring_impact.py` — calculate_hiring_impact, main
+- `simple_calculation.py` — calculate_metrics
+- `talent_scorer.py` — score_candidate, get_recommendation, identify_risks, rank_candidates, main
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\observability_agent/**
+- `agent.py` — get_github_mcp_server, send_query
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\research_agent/**
+- `agent.py` — get_activity_text, send_query
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\site_reliability_agent/**
+- `infra_setup.py` — init_database, update_connection_metrics, lifespan, get_db, health_check, metrics, list_users, list_orders +2
+- `sre_mcp_server.py` — query_metrics, list_metrics, get_service_health
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\site_reliability_agent\examples/**
+- `sre_bot_slack.py` — handle_pagerduty_webhook, handle_health, convert_markdown_to_slack, process_investigation, handle_mention, handle_message, start_webhook_server, main
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\utils/**
+- `agent_visualizer.py` — extract_model_from_messages, print_activity, reset_activity_context, print_final_result, visualize_conversation
+- `html_renderer.py` — render_content, display_card, display_agent_response, visualize_conversation_html
+
+**claude-cookbooks-main\claude-cookbooks-main\claude_agent_sdk\vulnerability_detection_agent\canary/**
+- `canary.c`
+
+**claude-cookbooks-main\claude-cookbooks-main\managed_agents/**
+- `utilities.py` — wait_for_idle_status, stream_until_end_turn, make_unfamiliar_repo_zip
+
+**claude-cookbooks-main\claude-cookbooks-main\managed_agents\cma-mcp\src/**
+- `cma.ts` — listAgents, getAgent, createSession, sendMessage, interrupt, getSession, listEvents, archiveSession +1
+- `server-http.ts` — Streamable HTTP transport — for claude.ai web Connectors (or any remote MCP client).
+- `server.ts` — stdio transport — for Claude Desktop / Claude Code.
+- `tools.ts` — registerTools
+
+**claude-cookbooks-main\claude-cookbooks-main\managed_agents\example_data\iterate/**
+- `calc.py` — add, divide, mean
+- `test_calc.py` — test_add, test_divide, test_mean
+
+**claude-cookbooks-main\claude-cookbooks-main\managed_agents\example_data\orchestrate\src/**
+- `__init__.py`
+- `blog.py` — generate_post_url, generate_author_url
+- `url_utils.py` — slugify, normalize_path
+
+**claude-cookbooks-main\claude-cookbooks-main\managed_agents\example_data\orchestrate\tests/**
+- `__init__.py`
+- `test_urls.py` — test_slugify_basic, test_slugify_unicode, test_slugify_special_chars, test_post_url_unicode, test_author_url_unicode, test_normalize_path
+
+**claude-cookbooks-main\claude-cookbooks-main\managed_agents\linear\setup/**
+- `create-agent.ts` — One-time: create the Claude agent + environment. Copy the printed IDs into .env.local.
+
+**claude-cookbooks-main\claude-cookbooks-main\managed_agents\linear\src/**
+- `agent.ts` — kickoffAgentSession
+- `cma-webhook.ts` — handleCmaWebhook
+- `main.ts`
+- `oauth.ts` — handleOAuthAuthorize, handleOAuthCallback, getAccessToken
+
+**claude-cookbooks-main\claude-cookbooks-main\patterns\agents/**
+- `util.py` — llm_call, extract_xml
+
+**claude-cookbooks-main\claude-cookbooks-main\scripts/**
+- `test_notebooks.py` — list_notebooks, run_quick_validation, run_pytest, run_tox, main
+- `validate_all_notebooks.py` — main, NotebookValidator
+- `validate_authors_sorted.py` — load_authors, is_sorted, sort_authors, show_diff, main
+- `validate_notebooks.py` — validate_notebook, main
+
+**claude-cookbooks-main\claude-cookbooks-main\scripts\detect-secrets/**
+- `plugins.py` — AnthropicSecretsDetector
+
+**claude-cookbooks-main\claude-cookbooks-main\skills/**
+- `file_utils.py` — extract_file_ids, download_file, download_all_files, get_file_info, print_download_summary
+- `skill_utils.py` — create_skill, list_custom_skills, get_skill_version, create_skill_version, delete_skill, test_skill, list_skill_versions, validate_skill_directory +1
+
+**claude-cookbooks-main\claude-cookbooks-main\skills\custom_skills\analyzing-financial-statements/**
+- `calculate_ratios.py` — calculate_ratios_from_data, generate_summary, FinancialRatioCalculator
+- `interpret_ratios.py` — perform_comprehensive_analysis, RatioInterpreter
+
+**claude-cookbooks-main\claude-cookbooks-main\skills\custom_skills\applying-brand-guidelines/**
+- `apply_brand.py` — apply_brand_to_document, BrandFormatter
+- `validate_brand.py` — load_guidelines_from_json, get_acme_corporation_guidelines, main, BrandGuidelines, ValidationResult, BrandValidator
+
+**claude-cookbooks-main\claude-cookbooks-main\skills\custom_skills\creating-financial-models/**
+- `dcf_model.py` — calculate_beta, calculate_fcf_cagr, DCFModel
+- `sensitivity_analysis.py` — create_data_table, SensitivityAnalyzer
+
+**claude-cookbooks-main\claude-cookbooks-main\tests/**
+- `__init__.py`
+- `conftest.py` — Pytest configuration and fixtures for notebook testing. · pytest_addoption, get_project_root, load_registry, get_notebooks_to_test, pytest_generate_tests, project_root, notebook_data, notebook_cells +2
+
+**claude-cookbooks-main\claude-cookbooks-main\tests\notebook_tests/**
+- `__init__.py`
+- `conftest.py` — Pytest hooks for notebook-specific test reporting. · pytest_runtest_makereport, pytest_terminal_summary, pytest_configure
+- `test_notebooks.py` — TestNotebookStructure, TestCellExecution, TestCellOutputs, TestSecurity, TestDependencies, TestNotebookExecution, TestNotebookMetadata, TestModelUsage
+- `utils.py` — Core utilities for notebook testing and validation. · load_notebook, parse_notebook_cells, validate_cell_execution_order, validate_all_cells_executed, validate_no_error_outputs, validate_no_empty_cells, validate_no_hardcoded_secrets, validate_uses_env_for_api_key +2
+
+**claude-cookbooks-main\claude-cookbooks-main\third_party\ElevenLabs/**
+- `stream_voice_assistant_websocket.py` — Low Latency Voice Assistant with WebSocket Streaming · record_audio, transcribe_audio, stream_claude_and_synthesize_ws, main, AudioQueue
+
+**claude-cookbooks-main\claude-cookbooks-main\tool_use/**
+- `__init__.py`
+- `memory_tool.py` — MemoryToolHandler
+
+**claude-cookbooks-main\claude-cookbooks-main\tool_use\context_engineering/**
+- `research_corpus.py` — Synthetic research documents for the context-management cookbook.
+
+**claude-cookbooks-main\claude-cookbooks-main\tool_use\memory_demo/**
+- `__init__.py` — Memory cookbook demo package.
+- `code_review_demo.py` — run_session_1, run_session_2, run_session_3, main, CodeReviewAssistant
+- `demo_helpers.py` — execute_tool, run_conversation_turn, run_conversation_loop, print_context_management_info
+
+**claude-cookbooks-main\claude-cookbooks-main\tool_use\memory_demo\sample_code/**
+- `api_client_v1.py` — main, AsyncAPIClient
+- `cache_manager.py` — CacheManager, DataProcessor
+- `data_processor_v1.py` — DataProcessor, SharedCache
+- `sql_query_builder.py` — UserDatabase, QueryBuilder
+- `web_scraper_v1.py` — WebScraper
+
+**claude-cookbooks-main\claude-cookbooks-main\tool_use\tests/**
+- `test_memory_tool.py` — TestMemoryToolHandler
+
+**claude-cookbooks-main\claude-cookbooks-main\tool_use\utils/**
+- `__init__.py`
+- `customer_service_api.py` — determine_priority, process_ticket, main, TicketCategory, TicketPriority, TicketStatus, Ticket, TicketGenerator
+- `customer_service_tools.py` — initialize_ticket_queue, get_next_ticket, classify_ticket, search_knowledge_base, set_priority, route_to_team, draft_response, add_note +2
+- `team_expense_api.py` — get_team_members, get_expenses, get_custom_budget, get_expense_tools
+- `visualize.py` — parse_content_block, parse_response, format_json, render_text_content, render_tool_use, render_server_tool_use, render_tool_result, render_code_execution_result +2
+
 **client-dashboard/**
 - `vite.config.ts`
 
@@ -162,8 +351,9 @@
 - `accounts.js`
 - `admin.js`
 - `auth.js`
-- `broadcasts.js` — resumeBroadcastIfPaused, recoverPendingBroadcasts
+- `broadcasts.js` — runBroadcastLoop, resumeBroadcastIfPaused, recoverPendingBroadcasts
 - `cadences.js`
+- `contracts.js`
 - `dashboard.js`
 - `funnels.js`
 - `integrations.js`
@@ -173,11 +363,13 @@
 - `proposals.js` — publicProposalHandler
 - `qualifications.js`
 - `ready-messages.js`
+- `tag-mapping.js`
 - `tasks.js`
 - `users.js`
 - `webhooks.js`
 
 **crm-dashboard\server\services/**
+- `autoMessages.js` — Aplica variaveis no texto da auto-mensagem · applyVars, getInstanceConfig, wasAutoMsgSentRecently, shouldSendAway, sendAutoMessage
 - `metaCapi.js` — Hash padrao Meta: SHA256 lowercase trim · sendCapiEvent, loadLeadForCapi, triggerCapiForStageChange, testCapi
 
 **crm-dashboard\src/**
@@ -186,7 +378,10 @@
 
 **crm-dashboard\src\components/**
 - `AccountSelector.tsx` — default:AccountSelector
+- `DisconnectedInstancesAlert.tsx` — default:DisconnectedInstancesAlert
 - `EditTaskModal.tsx` — default:EditTaskModal
+- `FilterDropdown.tsx` — Dropdown de multi-selecao com checkboxes — usado em Pipeline e Chat · FilterValue, default:FilterDropdown
+- `InstanceAutoMessagesModal.tsx` — default:InstanceAutoMessagesModal
 - `MessageMedia.tsx` — default:MessageMedia
 - `Sidebar.tsx` — default:Sidebar
 
@@ -194,6 +389,9 @@
 - `AccountContext.tsx` — AccountProvider, useAccount
 - `AuthContext.tsx` — AuthProvider, useAuth, User
 - `SSEContext.tsx` — SSEProvider, useSSE, useSSEStatus
+
+**crm-dashboard\src\hooks/**
+- `useIsMobile.ts` — Hook compartilhado pra detectar viewport mobile. Default 640px (sm do Tailwind). · useIsMobile
 
 **crm-dashboard\src\lib/**
 - `api.ts` — apiFetch, formatBRL, formatNumber, pctChange, createLeadOrFindExisting, fetchMessageMedia, login, fetchAccounts +2
@@ -204,6 +402,7 @@
 - `BroadcastDetail.tsx` — default:BroadcastDetail
 - `Cadences.tsx` — default:Cadences
 - `Chat.tsx` — default:Chat
+- `Contratos.tsx` — default:Contratos
 - `Dashboard.tsx` — default:Dashboard
 - `Funnels.tsx` — default:Funnels
 - `Integrations.tsx` — default:Integrations
@@ -267,6 +466,17 @@
 
 **dashboard\src\types/**
 - `state.ts` — state.json structure — matches Pipeline Runner output · AgentDesk, AgentStatus, Agent, Handoff, SquadStatus, SquadState, SquadInfo, WsMessage
+
+**dros-sales-site-v2/**
+- `_bp-acabamentos-split.js` — Gera duas imagens separadas a partir da fonte:
+- `_bp-boleto.js`
+- `_bp-entrega.js`
+- `_bp-extra-images.js` — Otimiza:
+- `_bp-hero-img.js` — Otimiza box-paper-img-hero.png pra usar no hero do V8.
+- `_bp-hero2.js`
+- `_bp-hero3.js` — Otimiza as 3 imagens do hero — alternando entre Pizza Pitzz, Aló Pizza e Leal Pizzas.
+- `_bp-replace-images.js` — Replace box-paper images with new professional ones.
+- `optimize-images.js` — Otimiza as imagens grandes do site para deploy em produção.
 
 **gestao-clin/**
 - `vite.config.ts`
@@ -709,13 +919,12 @@
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-07T17-46-59-901Z.yml`
-- `.playwright-mcp\page-2026-05-12T16-58-11-634Z.yml`
-- `.playwright-mcp\page-2026-05-12T17-12-13-366Z.yml`
-- `.playwright-mcp\page-2026-05-12T17-13-15-164Z.yml`
-- `.playwright-mcp\page-2026-05-12T17-13-32-925Z.yml`
-- `.playwright-mcp\page-2026-05-12T17-14-46-429Z.yml`
-- `.playwright-mcp\page-2026-05-12T17-23-52-655Z.yml`
+- `.playwright-mcp\page-2026-05-20T14-04-15-296Z.yml`
+- `.playwright-mcp\page-2026-05-20T14-15-42-313Z.yml`
+- `.playwright-mcp\page-2026-05-20T14-17-06-531Z.yml`
+- `.playwright-mcp\page-2026-05-20T14-18-33-568Z.yml`
+- `.playwright-mcp\page-2026-05-20T14-58-51-265Z.yml`
+- `.playwright-mcp\page-2026-05-20T15-03-26-787Z.yml`
 - `.vscode\mcp.json`
 - `.vscode\tasks.json`
 - `agency-hub\package.json`
@@ -726,6 +935,7 @@
 - `crm-dashboard\tsconfig.json`
 - `dashboard\package.json`
 - `dashboard\tsconfig.json`
+- `dros-sales-site-v2\package.json`
 - `gestao-clin\package.json`
 - `gestao-clin\tsconfig.json`
 - `oxi-pedidos\package.json`
@@ -738,13 +948,13 @@
 
 ## Docs
 - `CLAUDE.md`
+- `client-dashboard\DEPLOY.md`
+- `client-dashboard\README.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
-- `crm-dashboard\DEPLOY.md`
-- `crm-dashboard\PLANO_PERFORMANCE.md`
-- `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
+- `dros-sales-site-v2\INTEGRACAO-LEADS.md`
 - `dros-sales-site-v2\README.md`
 - `dros-sales-site\README.md`
 - `oxi-pedidos\DEPLOY.md`
@@ -754,4 +964,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~7.5k tokens · Full codebase: ~13.7M tokens · Saves ~100%*
+*Index: ~11.0k tokens · Full codebase: ~19.5M tokens · Saves ~100%*

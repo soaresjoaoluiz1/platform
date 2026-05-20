@@ -1,0 +1,129 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "DROS Sales" [ref=e4] [cursor=pointer]:
+      - /url: index.html
+      - img "DROS Sales" [ref=e5]
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]: Diagnóstico DROS Sales
+      - heading "Entenda onde sua indústria está perdendo venda." [level=1] [ref=e10]
+      - paragraph [ref=e11]: Uma conversa de 30 minutos para olhar tua operação, teu produto e onde a venda pode estar travando. Não é para empurrar proposta. É para entender se faz sentido avançar.
+      - list [ref=e12]:
+        - listitem [ref=e13]:
+          - img [ref=e14]
+          - generic [ref=e16]:
+            - strong [ref=e17]: 30 minutos
+            - text: de conversa, sem compromisso
+        - listitem [ref=e18]:
+          - img [ref=e19]
+          - generic [ref=e21]:
+            - text: Mapeamento dos
+            - strong [ref=e22]: gargalos do canal
+        - listitem [ref=e23]:
+          - img [ref=e24]
+          - generic [ref=e26]:
+            - text: Identificação de
+            - strong [ref=e27]: oportunidades concretas
+        - listitem [ref=e28]:
+          - img [ref=e29]
+          - generic [ref=e31]: 100% confidencial. Sem cobrança.
+    - complementary [ref=e32]:
+      - generic [ref=e33]: Preencha para agendar
+      - generic [ref=e37]:
+        - generic [ref=e38]: Identificação
+        - generic [ref=e39]: Sua empresa
+        - generic [ref=e40]: Investimento
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]: Nome completo *
+            - textbox "Nome completo *" [ref=e45]:
+              - /placeholder: Seu nome
+          - generic [ref=e46]:
+            - generic [ref=e47]: Nome da indústria / empresa *
+            - textbox "Nome da indústria / empresa *" [ref=e48]:
+              - /placeholder: "Ex: Quimiprol Indústria"
+          - generic [ref=e49]:
+            - generic [ref=e50]: WhatsApp *
+            - textbox "WhatsApp *" [ref=e51]:
+              - /placeholder: (41) 99999-9999
+        - button "Continuar →" [ref=e53] [cursor=pointer]:
+          - text: Continuar
+          - generic [ref=e54]: →
+        - paragraph [ref=e55]:
+          - img [ref=e56]
+          - text: Seus dados ficam só com a DROS. Sem spam.
+  - generic [ref=e59]:
+    - generic [ref=e60]:
+      - generic [ref=e61]: O que vamos avaliar
+      - heading "7 pontos que mostram onde está o gargalo do canal." [level=2] [ref=e62]
+      - paragraph [ref=e63]: Não é teste de pizza. É um mapa simples e direto da operação. Em 30 minutos a gente identifica o que mais pesa hoje.
+    - generic [ref=e64]:
+      - generic [ref=e65]:
+        - img [ref=e66]
+        - generic [ref=e68]: Como sua indústria aparece para comprador novo
+      - generic [ref=e69]:
+        - img [ref=e70]
+        - generic [ref=e72]: Onde os interessados chegam (WhatsApp, site, ligação, indicação)
+      - generic [ref=e73]:
+        - img [ref=e74]
+        - generic [ref=e76]: Tempo médio de resposta e processo de atendimento
+      - generic [ref=e77]:
+        - img [ref=e78]
+        - generic [ref=e80]: Quantos representantes ou revendedores estão ativos
+      - generic [ref=e81]:
+        - img [ref=e82]
+        - generic [ref=e84]: Regiões cobertas vs. regiões com oportunidade parada
+      - generic [ref=e85]:
+        - img [ref=e86]
+        - generic [ref=e88]: "Cliente antigo: tem cadência de recompra?"
+      - generic [ref=e89]:
+        - img [ref=e90]
+        - generic [ref=e92]: O que dá pra organizar primeiro para virar pedido novo
+  - generic [ref=e94]:
+    - generic [ref=e95]:
+      - generic [ref=e96]: Como funciona
+      - heading "3 passos. Sem complicação." [level=2] [ref=e97]
+    - generic [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]: "1"
+        - heading "Você preenche o formulário" [level=3] [ref=e101]
+        - paragraph [ref=e102]: Leva menos de 2 minutos. Só os dados essenciais para a gente entender tua operação antes de conversar.
+      - generic [ref=e103]:
+        - generic [ref=e104]: "2"
+        - heading "Agendamos pelo WhatsApp" [level=3] [ref=e105]
+        - paragraph [ref=e106]: Em até 1 dia útil retornamos com 2 ou 3 horários sugeridos. Você escolhe o que cabe na agenda.
+      - generic [ref=e107]:
+        - generic [ref=e108]: "3"
+        - heading "Conversa de 30 minutos" [level=3] [ref=e109]
+        - paragraph [ref=e110]: Por telefone ou videochamada. A gente olha tua operação e mostra onde a venda pode estar travando. Sem proposta empurrada.
+  - generic [ref=e112]:
+    - generic [ref=e113]:
+      - generic [ref=e114]: Perguntas frequentes
+      - heading "As dúvidas que mais aparecem." [level=2] [ref=e115]
+    - generic [ref=e116]:
+      - group [ref=e117]:
+        - generic "O diagnóstico é cobrado? +" [ref=e118] [cursor=pointer]
+        - paragraph [ref=e119]: Não. A primeira conversa é totalmente gratuita. Serve para entendermos se faz sentido seguir e, se sim, em que ponto a gente pode ajudar.
+      - group [ref=e120]:
+        - generic "Preciso ser indústria grande para participar? +" [ref=e121] [cursor=pointer]
+      - group [ref=e122]:
+        - generic "Quanto tempo dura a conversa? +" [ref=e123] [cursor=pointer]
+      - group [ref=e124]:
+        - generic "Meus dados estão seguros? +" [ref=e125] [cursor=pointer]
+      - group [ref=e126]:
+        - generic "E se eu não for o perfil ideal? +" [ref=e127] [cursor=pointer]
+  - generic [ref=e129]:
+    - heading "Pronto para olhar o cenário com a gente?" [level=2] [ref=e130]
+    - paragraph [ref=e131]: Preenche o formulário no topo da página. Em 1 dia útil a gente retorna.
+    - generic [ref=e132]:
+      - link "Quero meu diagnóstico →" [ref=e133] [cursor=pointer]:
+        - /url: "#diag-form"
+        - text: Quero meu diagnóstico
+        - generic [ref=e134]: →
+      - link "Voltar ao site" [ref=e135] [cursor=pointer]:
+        - /url: index.html
+  - contentinfo [ref=e136]:
+    - generic [ref=e138]:
+      - paragraph [ref=e139]: © 2025 DROS Sales. Todos os direitos reservados.
+      - paragraph [ref=e140]: Canal de vendas para indústria vender mais.

@@ -1,0 +1,438 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "DROS Sales" [ref=e4] [cursor=pointer]:
+        - /url: "#"
+        - img "DROS Sales" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Início" [ref=e7] [cursor=pointer]:
+          - /url: "#inicio"
+        - link "Sobre" [ref=e8] [cursor=pointer]:
+          - /url: "#sobre"
+        - link "Método" [ref=e9] [cursor=pointer]:
+          - /url: "#metodo"
+        - link "Cases" [ref=e10] [cursor=pointer]:
+          - /url: "#cases"
+        - link "Tecnologia" [ref=e11] [cursor=pointer]:
+          - /url: "#tecnologia"
+        - link "Depoimentos" [ref=e12] [cursor=pointer]:
+          - /url: "#depoimentos"
+        - link "Contato" [ref=e13] [cursor=pointer]:
+          - /url: "#contato"
+      - link "Quero um diagnóstico →" [ref=e14] [cursor=pointer]:
+        - /url: diagnostico.html
+        - text: Quero um diagnóstico
+        - generic [ref=e15]: →
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]: Método DROS Sales
+      - heading "Canal de vendas para indústria vender mais." [level=1] [ref=e20]:
+        - text: Canal de vendas
+        - text: para indústria vender mais.
+      - paragraph [ref=e21]: Ajudamos indústrias e distribuidoras a atrair os compradores certos, estruturar o atendimento e transformar oportunidades em pedidos, todos os meses.
+      - generic [ref=e22]:
+        - link "Quero um diagnóstico →" [ref=e23] [cursor=pointer]:
+          - /url: diagnostico.html
+          - text: Quero um diagnóstico
+          - generic [ref=e24]: →
+        - link "Ver como funciona" [ref=e25] [cursor=pointer]:
+          - /url: "#metodo"
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - img [ref=e29]
+          - text: Conversa inicial sem compromisso
+        - generic [ref=e31]:
+          - img [ref=e33]
+          - text: Foco em resultado e previsibilidade
+        - generic [ref=e35]:
+          - img [ref=e37]
+          - text: Especialistas em indústria
+    - complementary [ref=e39]:
+      - generic [ref=e40]: Resultados que nossos clientes estão conquistando
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - img [ref=e44]
+          - generic [ref=e46]:
+            - generic [ref=e47]: "+750"
+            - generic [ref=e48]: revendedores ativos
+        - generic [ref=e49]:
+          - img [ref=e51]
+          - generic [ref=e53]:
+            - generic [ref=e54]: 2.600 m²
+            - generic [ref=e55]: de estrutura operacional
+        - generic [ref=e56]:
+          - img [ref=e58]
+          - generic [ref=e60]:
+            - generic [ref=e61]: ~6 anos
+            - generic [ref=e62]: de parceria contínua
+  - generic [ref=e64]:
+    - heading "Indústrias que já confiaram na DROS para crescer" [level=3] [ref=e66]
+    - generic [ref=e67]:
+      - img "ASK Equipamentos" [ref=e68]
+      - img "Agrozacca Suprema" [ref=e69]
+      - img "Quimiprol" [ref=e70]
+      - img "DoorGrill" [ref=e71]
+  - generic [ref=e74]:
+    - generic [ref=e75]:
+      - generic [ref=e76]: A indústria move o Brasil
+      - heading "O produto é bom. O problema pode estar no caminho até o cliente." [level=2] [ref=e77]
+      - generic [ref=e78]:
+        - paragraph [ref=e79]: A indústria representa 23,4% do PIB brasileiro e 35,2% da arrecadação de tributos federais, segundo a CNI (2025).
+        - paragraph [ref=e80]: "Mesmo assim, muitas indústrias ainda enfrentam os mesmos desafios: demanda instável, alta carga tributária, concorrência acirrada e canais de venda desorganizados."
+      - paragraph [ref=e81]: Canal não é sorte. É estratégia.
+    - generic [ref=e82]:
+      - generic [ref=e83]: Os principais problemas
+      - generic [ref=e84]:
+        - article [ref=e85]:
+          - img [ref=e87]
+          - heading "Cliente antigo esquecido" [level=4] [ref=e89]
+          - paragraph [ref=e90]: Dinheiro parado na base porque ninguém lembra de chamar.
+        - article [ref=e91]:
+          - img [ref=e93]
+          - heading "Regiões vazias" [level=4] [ref=e95]
+          - paragraph [ref=e96]: Tem cidades e revendedores que poderiam comprar, mas ninguém está indo atrás.
+        - article [ref=e97]:
+          - img [ref=e99]
+          - heading "WhatsApp sem processo" [level=4] [ref=e101]
+          - paragraph [ref=e102]: Mensagens sem resposta são vendas indo embora.
+        - article [ref=e103]:
+          - img [ref=e105]
+          - heading "Representante sem acompanhamento" [level=4] [ref=e107]
+          - paragraph [ref=e108]: Sem números, vira opinião e oportunidade perdida.
+        - article [ref=e109]:
+          - img [ref=e111]
+          - heading "Venda dependendo de indicação" [level=4] [ref=e113]
+          - paragraph [ref=e114]: Boca a boca trouxe até aqui, mas tem teto.
+        - article [ref=e115]:
+          - img [ref=e117]
+          - heading "Venda oscilando todo mês" [level=4] [ref=e119]
+          - paragraph [ref=e120]: Sem canal organizado, tudo parece chute.
+  - generic [ref=e122]:
+    - generic [ref=e123]:
+      - generic [ref=e124]: Como funciona o método DROS Sales
+      - heading "Um método simples para organizar o canal." [level=2] [ref=e125]
+      - paragraph [ref=e126]: A DROS Sales olha para a venda da indústria como uma operação. Antes de anunciar, precisa entender. Antes de cobrar resultado, precisa organizar o atendimento.
+    - generic [ref=e127]:
+      - article [ref=e128]:
+        - generic [ref=e129]: "01"
+        - heading "Análise" [level=3] [ref=e130]
+        - paragraph [ref=e131]: Entendemos como sua indústria vende hoje, onde estão os gargalos e as oportunidades escondidas no canal.
+        - list [ref=e132]:
+          - listitem [ref=e133]: → Quem chega e quem compra
+          - listitem [ref=e134]: → Onde o cliente some
+          - listitem [ref=e135]: → Qual região está parada
+      - generic [ref=e136]: →
+      - article [ref=e137]:
+        - generic [ref=e138]: "02"
+        - heading "Anúncios" [level=3] [ref=e139]
+        - paragraph [ref=e140]: Fazemos sua indústria aparecer para quem realmente pode comprar, na região certa.
+        - list [ref=e141]:
+          - listitem [ref=e142]: → Revendedor e distribuidor
+          - listitem [ref=e143]: → Comércio e empresa
+          - listitem [ref=e144]: → Comprador direto
+      - generic [ref=e145]: →
+      - article [ref=e146]:
+        - generic [ref=e147]: "03"
+        - heading "Comercial" [level=3] [ref=e148]
+        - paragraph [ref=e149]: Organizamos o atendimento e o acompanhamento para transformar interessados em pedidos.
+        - list [ref=e150]:
+          - listitem [ref=e151]: → Resposta rápida
+          - listitem [ref=e152]: → Pergunta certa
+          - listitem [ref=e153]: → Acompanhamento
+    - paragraph [ref=e154]: Análise mostra o gargalo. Anúncio traz oportunidade. Comercial transforma em pedido.
+  - generic [ref=e157]:
+    - generic [ref=e158]:
+      - generic [ref=e159]: 199+
+      - generic [ref=e160]: Projetos concluídos
+    - generic [ref=e161]:
+      - generic [ref=e162]: 16+
+      - generic [ref=e163]: Clientes ativos
+    - generic [ref=e164]:
+      - generic [ref=e165]: 6+
+      - generic [ref=e166]: Anos de experiência
+    - generic [ref=e167]:
+      - generic [ref=e168]: 0%
+      - generic [ref=e169]: Achismo · 100% Dados
+  - generic [ref=e171]:
+    - generic [ref=e172]: Case real
+    - generic [ref=e173]:
+      - img "Fachada Quimiprol — operação consolidada" [ref=e175]
+      - generic [ref=e176]:
+        - heading "Resultados construídos com processo e consistência." [level=2] [ref=e177]
+        - paragraph [ref=e178]: De 500 m² para uma operação com mais de 750 revendedores ativos.
+        - generic [ref=e179]:
+          - paragraph [ref=e180]: Um dos nossos clientes mais antigos começou com uma operação de 500 m². Hoje tem 2.600 m², mais de 750 revendedores ativos e fábrica própria de embalagem.
+          - paragraph [ref=e181]: Quase 6 anos de parceria, construção de canal, campanhas rodando, atendimento sendo ajustado e números acompanhados toda semana.
+        - generic [ref=e182]:
+          - generic [ref=e183]:
+            - generic [ref=e184]: "+750"
+            - generic [ref=e185]: revendedores ativos
+          - generic [ref=e186]:
+            - generic [ref=e187]: 2.600 m²
+            - generic [ref=e188]: estrutura operacional
+          - generic [ref=e189]:
+            - generic [ref=e190]: ~6 anos
+            - generic [ref=e191]: parceria contínua
+    - generic [ref=e192]:
+      - generic [ref=e193]:
+        - generic [ref=e195]:
+          - generic [ref=e196]: “
+          - paragraph [ref=e197]: "A DROS estruturou nossa operação de marketing do ponto a ponta: criativos, campanhas e otimizações contínuas. Hoje investimos com mais consistência e vendemos para todo o Brasil."
+          - generic [ref=e198]:
+            - img "Rodri Serafim" [ref=e200]
+            - generic [ref=e201]:
+              - generic [ref=e202]: Rodri
+              - generic [ref=e203]: CEO, DoorGrill Churrasqueiras
+        - generic:
+          - generic:
+            - generic: “
+            - paragraph: A DROS entendeu nosso negócio e transformou isso em conteúdo, vídeos e campanhas que fortaleceram a marca. A comunicação ficou mais profissional e a presença digital ganhou força.
+            - generic:
+              - generic:
+                - img "Welliton"
+              - generic:
+                - generic: Welliton
+                - generic: Gerente Administrativo, Agrozacca Suprema Alimentos
+        - generic:
+          - generic:
+            - generic: “
+            - paragraph: A DROS nos ajudou a organizar a comunicação e a aquisição de demanda com foco em resultado. A estratégia trouxe clareza para oferta, consistência na geração de oportunidades e evolução mês a mês.
+            - generic:
+              - generic:
+                - img "Ramon"
+              - generic:
+                - generic: Ramon
+                - generic: Fundador, ASK Equipamentos Industriais
+      - generic [ref=e204]:
+        - button "Depoimento 1" [ref=e205] [cursor=pointer]
+        - button "Depoimento 2" [ref=e206] [cursor=pointer]
+        - button "Depoimento 3" [ref=e207] [cursor=pointer]
+  - generic [ref=e209]:
+    - generic [ref=e210]:
+      - generic [ref=e211]: Tecnologia DROS Sales
+      - heading "Não é só estratégia. A gente entrega o sistema que vende." [level=2] [ref=e212]
+      - paragraph [ref=e213]:
+        - text: "Cada cliente recebe a stack completa pra operar o canal: CRM com IA direto no WhatsApp, landing pages que aprendem, sistemas sob medida e tudo conectado com a Meta pra otimizar campanha pra"
+        - strong [ref=e214]: venda real
+        - text: — não pra clique.
+    - generic [ref=e215]:
+      - generic [ref=e216]:
+        - generic [ref=e217]:
+          - img [ref=e218]
+          - text: Plataforma proprietária
+        - heading "CRM Inteligente que vende pelo WhatsApp." [level=3] [ref=e220]
+        - paragraph [ref=e221]: A operação inteira roda direto do WhatsApp. O cliente fala como sempre falou. Por trás, IA qualifica leads, gerência acompanha em tempo real e cada conversa vira pedido ou dado de otimização.
+        - list [ref=e222]:
+          - listitem [ref=e223]:
+            - img [ref=e224]
+            - generic [ref=e226]:
+              - strong [ref=e227]: IA qualifica e responde
+              - text: leads em tempo real, no idioma do comprador
+          - listitem [ref=e228]:
+            - img [ref=e229]
+            - generic [ref=e231]:
+              - strong [ref=e232]: Cadências automáticas e manuais
+              - text: por etapa do funil ou tag
+          - listitem [ref=e233]:
+            - img [ref=e234]
+            - generic [ref=e236]:
+              - strong [ref=e237]: Múltiplos atendentes
+              - text: operando em paralelo no mesmo número
+          - listitem [ref=e238]:
+            - img [ref=e239]
+            - generic [ref=e241]:
+              - strong [ref=e242]: Distribuição automática
+              - text: de leads por região, regra ou roleta
+          - listitem [ref=e243]:
+            - img [ref=e244]
+            - generic [ref=e246]:
+              - strong [ref=e247]: Gerência acompanha tudo em tempo real
+              - text: — cliente nem percebe
+          - listitem [ref=e248]:
+            - img [ref=e249]
+            - generic [ref=e251]:
+              - strong [ref=e252]: Disparos segmentados
+              - text: por etapa do funil ou tag (sem broadcast burro)
+        - generic [ref=e253]:
+          - img [ref=e254]
+          - generic [ref=e256]:
+            - generic [ref=e257]: "Diferencial técnico: integração Meta CAPI"
+            - paragraph [ref=e258]:
+              - text: Enviamos eventos de conversão (lead qualificado · atendido · proposta · venda) direto pra Meta. O algoritmo passa a otimizar campanha pra
+              - strong [ref=e259]: quem realmente compra
+              - text: — não pra quem clica ou manda mensagem.
+      - generic [ref=e260]:
+        - generic [ref=e261]:
+          - generic [ref=e266]:
+            - strong [ref=e267]: DROS
+            - text: CRM · Chat
+          - generic [ref=e268]: 24 ativas
+        - generic [ref=e269]:
+          - generic [ref=e270]:
+            - generic [ref=e271] [cursor=pointer]:
+              - generic [ref=e272]: PS
+              - generic [ref=e273]:
+                - generic [ref=e274]: Pedro Santos
+                - generic [ref=e275]: Em Atendimento
+            - generic [ref=e276] [cursor=pointer]:
+              - generic [ref=e277]: MI
+              - generic [ref=e278]:
+                - generic [ref=e279]: Maria Industrial
+                - generic [ref=e280]: Proposta
+            - generic [ref=e281] [cursor=pointer]:
+              - generic [ref=e282]: JD
+              - generic [ref=e283]:
+                - generic [ref=e284]: João Distribuidor
+                - generic [ref=e285]: Cliente
+            - generic [ref=e286] [cursor=pointer]:
+              - generic [ref=e287]: AF
+              - generic [ref=e288]:
+                - generic [ref=e289]: Agro Forte
+                - generic [ref=e290]: Em Atendimento
+          - generic [ref=e291]:
+            - generic [ref=e292]:
+              - generic [ref=e293]: MI
+              - generic [ref=e294]:
+                - generic [ref=e295]: Maria Industrial
+                - generic [ref=e296]: +55 17 9XXXX-XXXX
+              - generic [ref=e297]: Proposta
+            - generic [ref=e298]:
+              - generic [ref=e299]: Quando podemos fechar o pedido?
+              - generic [ref=e300]: Perfeito! Te explico como funciona a revenda 👇
+              - generic [ref=e301]: revendedor.oxiquimica.com.br/catalogo
+        - generic [ref=e302]:
+          - img [ref=e303]
+          - generic [ref=e305]:
+            - strong [ref=e306]: 3 eventos
+            - text: enviados pra Meta CAPI · otimizando pra venda
+    - generic [ref=e307]:
+      - article [ref=e308]:
+        - img [ref=e310]
+        - heading "Landing pages iterativas" [level=4] [ref=e312]
+        - paragraph [ref=e313]: Páginas que melhoram com dado real. Cada versão aprende com o tráfego anterior e converte mais.
+      - article [ref=e314]:
+        - img [ref=e316]
+        - heading "Sistemas sob medida" [level=4] [ref=e318]
+        - paragraph [ref=e319]: Plataformas de pedido, vitrines de revendedor, fluxos de conversão. Construídos rápido, focados em onde tua indústria perde venda.
+      - article [ref=e320]:
+        - img [ref=e322]
+        - heading "Tudo personalizado pra indústria" [level=4] [ref=e324]
+        - paragraph [ref=e325]: Zero template genérico. Cada entrega é desenhada pra como tua indústria vende — produto, comprador, região e ciclo de compra.
+  - generic [ref=e327]:
+    - generic [ref=e328]:
+      - generic [ref=e329]: Por que indústrias escolhem a DROS Sales
+      - heading "A diferença está em entender indústria." [level=2] [ref=e330]
+    - generic [ref=e331]:
+      - article [ref=e332]:
+        - img [ref=e334]
+        - heading "Falamos a língua do dono de fábrica" [level=4] [ref=e336]
+        - paragraph [ref=e337]: "Sem termos difíceis. Focamos no que importa: venda, comprador, pedido e resultado."
+      - article [ref=e338]:
+        - img [ref=e340]
+        - heading "Olhamos o processo inteiro" [level=4] [ref=e342]
+        - paragraph [ref=e343]: Não é só anúncio. É o caminho completo até o pedido.
+      - article [ref=e344]:
+        - img [ref=e346]
+        - heading "Trabalhamos com números" [level=4] [ref=e348]
+        - paragraph [ref=e349]: O que não é medido, não é gerenciado.
+      - article [ref=e350]:
+        - img [ref=e352]
+        - heading "Construímos com consistência" [level=4] [ref=e354]
+        - paragraph [ref=e355]: Sem milagres em 7 dias. Com método, rotina e ajuste contínuo.
+      - article [ref=e356]:
+        - img [ref=e358]
+        - heading "Foco em indústria" [level=4] [ref=e360]
+        - paragraph [ref=e361]: Entendemos o mercado industrial, seus ciclos, compradores e desafios.
+  - generic [ref=e364]:
+    - generic [ref=e365]:
+      - generic [ref=e366]: Sobre a DROS Sales
+      - heading "A DROS Sales é especializada em estruturar canais de vendas para indústrias e distribuidoras." [level=2] [ref=e367]
+      - paragraph [ref=e368]: Unimos análise, anúncios e comercial para gerar resultado previsível e crescimento sustentável.
+      - generic [ref=e369]:
+        - link "Instagram" [ref=e370] [cursor=pointer]:
+          - /url: https://instagram.com/dros.sales
+          - img [ref=e371]
+        - link "LinkedIn" [ref=e373] [cursor=pointer]:
+          - /url: "#"
+          - img [ref=e374]
+        - link "YouTube" [ref=e376] [cursor=pointer]:
+          - /url: "#"
+          - img [ref=e377]
+    - generic [ref=e379]:
+      - heading "Quer entender onde sua indústria está perdendo venda?" [level=3] [ref=e380]
+      - paragraph [ref=e381]: Conversa inicial de 15 minutos. Sem compromisso.
+      - link "Quero um diagnóstico →" [ref=e382] [cursor=pointer]:
+        - /url: diagnostico.html
+        - text: Quero um diagnóstico
+        - generic [ref=e383]: →
+  - contentinfo [ref=e384]:
+    - generic [ref=e385]:
+      - generic [ref=e386]:
+        - generic [ref=e387]:
+          - link "DROS Sales" [ref=e388] [cursor=pointer]:
+            - /url: "#"
+            - img "DROS Sales" [ref=e389]
+          - paragraph [ref=e390]: Canal de vendas para indústria vender mais.
+        - generic [ref=e391]:
+          - heading "Navegação" [level=4] [ref=e392]
+          - list [ref=e393]:
+            - listitem [ref=e394]:
+              - link "Início" [ref=e395] [cursor=pointer]:
+                - /url: "#inicio"
+            - listitem [ref=e396]:
+              - link "Sobre" [ref=e397] [cursor=pointer]:
+                - /url: "#sobre"
+            - listitem [ref=e398]:
+              - link "Método" [ref=e399] [cursor=pointer]:
+                - /url: "#metodo"
+            - listitem [ref=e400]:
+              - link "Cases" [ref=e401] [cursor=pointer]:
+                - /url: "#cases"
+            - listitem [ref=e402]:
+              - link "Tecnologia" [ref=e403] [cursor=pointer]:
+                - /url: "#tecnologia"
+            - listitem [ref=e404]:
+              - link "Contato" [ref=e405] [cursor=pointer]:
+                - /url: "#contato"
+        - generic [ref=e406]:
+          - heading "Segmentos" [level=4] [ref=e407]
+          - list [ref=e408]:
+            - listitem [ref=e409]:
+              - link "Produto de limpeza" [ref=e410] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e411]:
+              - link "Indústria química" [ref=e412] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e413]:
+              - link "Cosméticos" [ref=e414] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e415]:
+              - link "Embalagens" [ref=e416] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e417]:
+              - link "Automotivo" [ref=e418] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e419]:
+              - link "Ração animal" [ref=e420] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e421]:
+              - link "ARLA" [ref=e422] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e423]:
+              - link "Metalúrgica" [ref=e424] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e425]:
+          - heading "Fale com a gente" [level=4] [ref=e426]
+          - generic [ref=e427]:
+            - img [ref=e429]
+            - generic [ref=e431]: (41) 99521-1546
+          - generic [ref=e432]:
+            - img [ref=e434]
+            - generic [ref=e436]: contato@drossales.com.br
+          - link "Quero um diagnóstico →" [ref=e437] [cursor=pointer]:
+            - /url: diagnostico.html
+            - text: Quero um diagnóstico
+            - generic [ref=e438]: →
+      - generic [ref=e439]:
+        - paragraph [ref=e440]: © 2025 DROS Sales. Todos os direitos reservados.
+        - paragraph [ref=e441]: Canal de vendas para indústria vender mais.

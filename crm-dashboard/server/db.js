@@ -200,6 +200,7 @@ db.exec(`
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
   );
+  CREATE INDEX IF NOT EXISTS idx_broadcasts_scheduled ON broadcasts(status, scheduled_at);
 
   -- Broadcast recipients
   CREATE TABLE IF NOT EXISTS broadcast_recipients (
@@ -396,6 +397,13 @@ addColumnIfNotExists('accounts', 'meta_pixel_id', 'TEXT')
 addColumnIfNotExists('accounts', 'meta_capi_token', 'TEXT')
 addColumnIfNotExists('accounts', 'meta_capi_test_event_code', 'TEXT')
 addColumnIfNotExists('accounts', 'meta_capi_enabled', 'INTEGER NOT NULL DEFAULT 0')
+// Ultimo lead recebido via webhook Google Sheets (pra UI mostrar status da integração)
+addColumnIfNotExists('accounts', 'last_sheets_lead_at', 'TEXT')
+
+// Normaliza configs antigas que tinham modo manual (feature descontinuada — agora so schedule)
+try {
+  db.prepare("UPDATE instance_auto_messages SET away_mode = 'schedule', away_manual_active = 0 WHERE away_mode = 'manual'").run()
+} catch {}
 
 // Funnel stages: evento Meta enviado quando lead entra nessa etapa (CAPI)
 addColumnIfNotExists('funnel_stages', 'meta_event_name', 'TEXT')
@@ -448,6 +456,19 @@ addColumnIfNotExists('leads', 'last_instance_id', 'INTEGER REFERENCES whatsapp_i
 addColumnIfNotExists('users', 'primary_instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
 // users.can_manage_proposals: permissao granular pra acessar a area de Propostas (super_admin sempre tem)
 addColumnIfNotExists('users', 'can_manage_proposals', 'INTEGER NOT NULL DEFAULT 0')
+// users.can_manage_contracts: permite ao atendente gerenciar contratos (igual proposals)
+addColumnIfNotExists('users', 'can_manage_contracts', 'INTEGER NOT NULL DEFAULT 0')
+// instance_auto_messages.greeting_cooldown_hours: cooldown configuravel da saudacao (default 24h, comportamento anterior)
+addColumnIfNotExists('instance_auto_messages', 'greeting_cooldown_hours', 'INTEGER NOT NULL DEFAULT 24')
+// leads.is_blocked: bloqueio total (lead some do CRM e mensagens futuras sao silenciosamente ignoradas pelo webhook)
+addColumnIfNotExists('leads', 'is_blocked', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('leads', 'blocked_at', 'TEXT')
+addColumnIfNotExists('leads', 'blocked_by', 'INTEGER REFERENCES users(id) ON DELETE SET NULL')
+// Indice composto pra query O(1) do gate no webhook (account + phone + flag)
+db.exec('CREATE INDEX IF NOT EXISTS idx_leads_blocked_phone ON leads(account_id, phone, is_blocked)')
+// contracts: quantidade de videos/imagens por mes (so aparece quando Frente 4 - Linha Editorial esta ativa)
+addColumnIfNotExists('contracts', 'videos_por_mes', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('contracts', 'imagens_por_mes', 'INTEGER NOT NULL DEFAULT 0')
 // users.can_grab_leads: permite ao atendente "tomar" leads de outros sem precisar aprovacao
 addColumnIfNotExists('users', 'can_grab_leads', 'INTEGER NOT NULL DEFAULT 0')
 // messages.instance_id: qual instancia enviou/recebeu cada mensagem (mostrado internamente no chat)
@@ -528,6 +549,58 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_transfer_from ON lead_transfer_requests(from_attendant_id, status);
 `)
 
+// Auto-mensagens por instância (saudação, ausência)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS instance_auto_messages (
+    id                          INTEGER PRIMARY KEY AUTOINCREMENT,
+    instance_id                 INTEGER NOT NULL UNIQUE,
+    greeting_enabled            INTEGER NOT NULL DEFAULT 0,
+    greeting_text               TEXT,
+    away_enabled                INTEGER NOT NULL DEFAULT 0,
+    away_mode                   TEXT NOT NULL DEFAULT 'manual',
+    away_manual_active          INTEGER NOT NULL DEFAULT 0,
+    away_text                   TEXT,
+    away_schedule_json          TEXT,
+    away_cooldown_hours         INTEGER NOT NULL DEFAULT 4,
+    greeting_cooldown_hours     INTEGER NOT NULL DEFAULT 24,
+    updated_at                  TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (instance_id) REFERENCES whatsapp_instances(id) ON DELETE CASCADE
+  );
+
+  -- Log de auto-mensagens enviadas (anti-flood + auditoria)
+  -- type aceita 'greeting' e 'away' (outros tipos legados ficam no CHECK pra compat)
+  CREATE TABLE IF NOT EXISTS auto_messages_log (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id     INTEGER NOT NULL,
+    instance_id INTEGER NOT NULL,
+    account_id  INTEGER NOT NULL,
+    type        TEXT NOT NULL CHECK (type IN ('greeting','away','inactivity_lead','inactivity_agent')),
+    message_id  INTEGER,
+    sent_at     TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
+    FOREIGN KEY (instance_id) REFERENCES whatsapp_instances(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_auto_log_lead ON auto_messages_log(lead_id, type, sent_at);
+  CREATE INDEX IF NOT EXISTS idx_auto_log_instance ON auto_messages_log(instance_id, type);
+
+  CREATE TABLE IF NOT EXISTS tag_instance_mapping (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id    INTEGER NOT NULL,
+    tag_id        INTEGER NOT NULL,
+    instance_id   INTEGER NOT NULL,
+    attendant_id  INTEGER,
+    created_at    TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(account_id, tag_id),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE,
+    FOREIGN KEY (instance_id) REFERENCES whatsapp_instances(id) ON DELETE CASCADE,
+    FOREIGN KEY (attendant_id) REFERENCES users(id) ON DELETE SET NULL
+  );
+`)
+
+// Instância padrão pra leads de formulário
+addColumnIfNotExists('accounts', 'default_form_instance_id', 'INTEGER REFERENCES whatsapp_instances(id) ON DELETE SET NULL')
+
 // Proposals (proposta comercial gerada pelo super_admin)
 db.exec(`
   CREATE TABLE IF NOT EXISTS proposals (
@@ -548,6 +621,49 @@ db.exec(`
     FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
   );
   CREATE INDEX IF NOT EXISTS idx_proposals_slug ON proposals(slug);
+`)
+
+// Contracts (contrato de prestacao de servicos — gerenciado por super_admin OU users.can_manage_contracts=1)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS contracts (
+    id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+    numero                TEXT NOT NULL UNIQUE,
+    razao_social          TEXT NOT NULL,
+    cnpj                  TEXT NOT NULL,
+    inscricao_estadual    TEXT,
+    endereco_logradouro   TEXT NOT NULL,
+    endereco_bairro       TEXT NOT NULL,
+    endereco_cep          TEXT NOT NULL,
+    endereco_cidade       TEXT NOT NULL,
+    endereco_estado       TEXT NOT NULL,
+    fee_mensal            REAL NOT NULL DEFAULT 3500,
+    comissao_percent      REAL NOT NULL DEFAULT 1.0,
+    vigencia_meses        INTEGER NOT NULL DEFAULT 3,
+    data_inicio           TEXT NOT NULL,
+    data_fim              TEXT NOT NULL,
+    renovacao_meses       INTEGER NOT NULL DEFAULT 12,
+    aviso_previo_dias     INTEGER NOT NULL DEFAULT 30,
+    reajuste_indice       TEXT NOT NULL DEFAULT 'IGPM/FGV',
+    frente_diagnostico    INTEGER NOT NULL DEFAULT 1,
+    frente_estruturacao   INTEGER NOT NULL DEFAULT 1,
+    frente_aquisicao      INTEGER NOT NULL DEFAULT 1,
+    frente_editorial      INTEGER NOT NULL DEFAULT 1,
+    exclusoes_extras      TEXT,
+    fat_mes1_ref          TEXT,
+    fat_mes1_valor        REAL,
+    fat_mes2_ref          TEXT,
+    fat_mes2_valor        REAL,
+    fat_mes3_ref          TEXT,
+    fat_mes3_valor        REAL,
+    fat_base              REAL,
+    local_assinatura      TEXT NOT NULL DEFAULT 'Sombrio/SC',
+    data_assinatura       TEXT NOT NULL,
+    created_by            INTEGER,
+    created_at            TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at            TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+  );
+  CREATE INDEX IF NOT EXISTS idx_contracts_created_at ON contracts(created_at DESC);
 `)
 
 // Seed super_admin if not exists

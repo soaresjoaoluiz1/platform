@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Box Paper · Caixas de pizza por assinatura — Entrega programada para pizzarias</title>
+  <meta name="description" content="Sua pizzaria nunca mais para por falta de caixa. Entrega programada, pagamento fracionado, caixas personalizadas. 14 anos imprimindo marcas de sucesso.">
+  <meta name="theme-color" content="#5cb3e8">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Box Paper Embalagens">
+  <meta property="og:title" content="Box Paper · Caixas de pizza por assinatura">
+  <meta property="og:description" content="Entrega programada, pagamento fracionado, zero estoque parado.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500;1,6..72,600&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" as="image" href="assets/img/caixa-personalizada.jpg" fetchpriority="high">
+</head>
+<body>
+
+<!-- SVG sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-wpp" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H2v11h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></symbol>
+  </defs>
+</svg>
+
+<!-- ===== NAV — sky band + navy band ===== -->
+<header class="nav" id="nav">
+  <div class="nav-main">
+    <div class="wrap nav-main-inner">
+      <a href="#" class="nav-logo" aria-label="Box Paper">
+        <img src="assets/img/logo-box-paper.png" alt="Box Paper Embalagens — Imprimindo marcas de sucesso" width="200" height="92">
+      </a>
+      <div class="nav-meta">
+        <a href="tel:+5548999892391" class="nav-phone">
+          <svg width="16" height="16"><use href="#i-phone"/></svg>
+          <span>
+            <small>Atendimento comercial</small>
+            <strong>(48) 99989-2391</strong>
+          </span>
+        </a>
+        <button type="button" class="btn btn--accent" data-open-modal>
+          Conheça o plano <svg width="14" height="14"><use href="#i-arrow"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-menu">
+    <div class="wrap nav-menu-inner">
+      <nav aria-label="principal" class="nav-links">
+        <a href="#funciona">Como funciona</a>
+        <a href="#comparativo">Comparativo</a>
+        <a href="#acabamentos">Acabamentos</a>
+        <a href="#clientes">Pizzarias</a>
+        <a href="#contato">Contato</a>
+      </nav>
+      <span class="nav-since">Desde 2012</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-left">
+      <h1 class="h-display" data-motion="fade-up">
+        Sua pizzaria nunca mais para <em>por falta de caixa.</em>
+      </h1>
+      <p class="hero-lead" data-motion="fade-up">
+        Você recebe toda semana exatamente a quantidade que sua pizzaria usa.
+        Sem estoque grande, sem dinheiro travado em papelão. Paga conforme recebe.
+      </p>
+      <div class="hero-actions" data-motion="fade-up">
+        <button class="btn btn--accent btn--lg" data-open-modal>
+          Conheça o plano <svg width="16" height="16"><use href="#i-arrow"/></svg>
+        </button>
+        <a href="#funciona" class="btn btn--outline btn--lg">Como funciona</a>
+      </div>
+      <dl class="hero-facts" data-motion="fade-up">
+        <div><dt>Desde</dt><dd>2012</dd></div>
+        <div><dt>Atendimento</dt><dd>SC + RS</dd></div>
+        <div><dt>Personalização</dt><dd>100%</dd></div>
+      </dl>
+    </div>
+
+    <figure class="hero-photo" data-motion="scale-in">
+      <div class="hero-photo-stack" id="heroStack">
+        <img src="assets/img/hero-pizza-1.jpg" alt="Caixa de pizza Pizza Pitzz pela Box Paper" width="1400" height="1880" class="is-active" data-cap-name="Pizza Pitzz" data-cap-size="Caixa 35×35">
+        <img src="assets/img/hero-pizza-2.jpg" alt="Caixas Pizza Pitzz e Aló Pizza pela Box Paper" width="1400" height="1880" loading="lazy" data-cap-name="Aló Pizza" data-cap-size="Caixa 16 pedaços">
+        <img src="assets/img/hero-pizza-3.jpg" alt="Caixa Leal Pizzas pela Box Paper" width="1400" height="1880" loading="lazy" data-cap-name="Leal Pizzas" data-cap-size="Caixa premium">
+      </div>
+      <figcaption>
+        <span id="heroCapName">Pizza Pitzz</span>
+        <span id="heroCapSize">Caixa 35×35</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ===== PROBLEMA ===== -->
+<section class="section section--paper" id="problema">
+  <div class="wrap">
+    <div class="section-head" data-motion="fade-up">
+      <h2 class="h-section">Comprar caixa em lote <em>trava o caixa</em> e o espaço da pizzaria.</h2>
+      <p class="section-sub">A maneira tradicional cria 4 problemas operacionais ao mesmo tempo. A entrega programada resolve os quatro.</p>
+    </div>
+
+    <div class="problem-grid" data-stagger>
+      <article class="problem-item">
+        <span class="problem-mark">1.</span>
+        <h3>Capital travado em papelão.</h3>
+        <p>O lote grande some do caixa no dia do pagamento. O que devia girar pra pizza vira pilha de caixa empoeirada num canto.</p>
+      </article>
+      <article class="problem-item">
+        <span class="problem-mark">2.</span>
+        <h3>Espaço perdido na pizzaria.</h3>
+        <p>3–5 m² de estoque ocupam salão, despensa ou cozinha. Espaço útil convertido em pilha de caixa.</p>
+      </article>
+      <article class="problem-item">
+        <span class="problem-mark">3.</span>
+        <h3>Risco no fim de semana.</h3>
+        <p>Aquele momento que a caixa some bem na hora do pico. Cliente esperando, equipe correndo. Sex 21h.</p>
+      </article>
+      <article class="problem-item">
+        <span class="problem-mark">4.</span>
+        <h3>O loop nunca acaba.</h3>
+        <p>Compra grande → estoque grande → caixa fica → próximo lote → repete. Você não sai dele sozinho.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMO FUNCIONA ===== -->
+<section class="section section--sky" id="funciona">
+  <div class="wrap">
+    <div class="section-head" data-motion="fade-up">
+      <h2 class="h-section">Um sistema simples para você <em>nunca mais</em> pensar em caixa.</h2>
+      <p class="section-sub">A gente combina o ritmo da sua pizzaria, fabrica, entrega no dia certo e cobra só pelo que você recebeu.</p>
+    </div>
+
+    <ol class="steps">
+      <li class="step" data-motion="fade-up">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <span class="step-tag">Setup · 1 dia</span>
+          <h3>Você define o <em>dia</em> e a <em>quantidade.</em></h3>
+          <p>Combinamos juntos o melhor dia da semana e quantas caixas a sua pizzaria precisa por entrega. Sem amarra, sem pedido mínimo gigante. Plano feito pro <em>seu</em> fluxo.</p>
+        </div>
+        <figure class="step-photo">
+          <img src="assets/img/metodo-cronograma.jpg" alt="Cronograma de entregas Box Paper" loading="lazy">
+        </figure>
+      </li>
+      <li class="step step--reverse" data-motion="fade-up">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <span class="step-tag">Toda semana</span>
+          <h3>A gente fabrica e <em>entrega no prazo.</em></h3>
+          <p>Toda semana, no dia combinado, suas caixas chegam direto da nossa fábrica em Sombrio · SC até a porta da pizzaria. Sem atraso, sem você precisar ligar ou cobrar.</p>
+        </div>
+        <figure class="step-photo">
+          <img src="assets/img/entrega-van.jpg" alt="Van Box Paper entregando caixas" loading="lazy">
+        </figure>
+      </li>
+      <li class="step" data-motion="fade-up">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <span class="step-tag">Pagamento fracionado</span>
+          <h3>Você paga <em>só pelo que recebeu.</em></h3>
+          <p>Nada de comprometer o caixa com lote grande de uma vez. Você paga conforme recebe — capital de giro livre pra investir no que importa: a pizza.</p>
+        </div>
+        <figure class="step-photo">
+          <img src="assets/img/metodo-pagamento.jpg" alt="Pagamento fracionado conforme entrega" loading="lazy">
+        </figure>
+      </li>
+    </ol>
+  </div>
+</section>
+
+
+<!-- ===== COMPARATIVO ===== -->
+<section class="section section--paper" id="comparativo">
+  <div class="wrap">
+    <div class="section-head" data-motion="fade-up">
+      <h2 class="h-section">Lote tradicional <em>vs.</em> Box Paper.</h2>
+      <p class="section-sub">A diferença operacional na sua pizzaria, ponto a ponto.</p>
+    </div>
+
+    <div class="compare" data-stagger>
+      <div class="compare-row compare-row--head">
+        <div></div>
+        <div class="compare-col compare-col--bad">Comprar em lote</div>
+        <div class="compare-col compare-col--good">Box Paper · Programada</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-feature">Capital de giro</div>
+        <div class="compare-col compare-col--bad"><svg width="16" height="16"><use href="#i-x"/></svg> Travado em papelão</div>
+        <div class="compare-col compare-col--good"><svg width="16" height="16"><use href="#i-check"/></svg> Livre, paga conforme recebe</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-feature">Espaço da pizzaria</div>
+        <div class="compare-col compare-col--bad"><svg width="16" height="16"><use href="#i-x"/></svg> 3–5 m² de estoque</div>
+        <div class="compare-col compare-col--good"><svg width="16" height="16"><use href="#i-check"/></svg> Só o que precisa na semana</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-feature">Risco de faltar</div>
+        <div class="compare-col compare-col--bad"><svg width="16" height="16"><use href="#i-x"/></svg> Alto no fim de semana</div>
+        <div class="compare-col compare-col--good"><svg width="16" height="16"><use href="#i-check"/></svg> Zero. Entrega automática.</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-feature">Pedido mínimo</div>
+        <div class="compare-col compare-col--bad"><svg width="16" height="16"><use href="#i-x"/></svg> 5.000 caixas / lote</div>
+        <div class="compare-col compare-col--good"><svg width="16" height="16"><use href="#i-check"/></svg> Sob medida pela sua semana</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-feature">Personalização</div>
+        <div class="compare-col compare-col--bad"><svg width="16" height="16"><use href="#i-x"/></svg> Caixa genérica</div>
+        <div class="compare-col compare-col--good"><svg width="16" height="16"><use href="#i-check"/></svg> 100% com sua marca</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-feature">Você lembra de pedir</div>
+        <div class="compare-col compare-col--bad"><svg width="16" height="16"><use href="#i-x"/></svg> Sim — e às vezes esquece</div>
+        <div class="compare-col compare-col--good"><svg width="16" height="16"><use href="#i-check"/></svg> Não. Chega automático.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACABAMENTOS ===== -->
+<section class="section section--sky" id="acabamentos">
+  <div class="wrap">
+    <div class="section-head" data-motion="fade-up">
+      <h2 class="h-section">Duas opções pra <em>combinar</em> com a sua pizzaria.</h2>
+    </div>
+
+    <div class="finishes">
+      <article class="finish-card" data-motion="scale-in">
+        <figure class="finish-card-media">
+          <img src="assets/img/acabamento-branco.jpg" alt="Caixa fundo branco padrão Box Paper" loading="lazy">
+        </figure>
+        <div class="finish-card-body">
+          <span class="finish-card-tag">Padrão · sem custo extra</span>
+          <h3>Fundo branco</h3>
+          <p>Limpo, profissional, já sai com a sua logo impressa. Ideal pra quem quer personalizar sem custo extra.</p>
+        </div>
+      </article>
+
+      <article class="finish-card finish-card--premium" data-motion="scale-in">
+        <figure class="finish-card-media">
+          <img src="assets/img/acabamento-laminado.jpg" alt="Caixa fundo laminado premium Box Paper" loading="lazy">
+        </figure>
+        <div class="finish-card-body">
+          <span class="finish-card-tag finish-card-tag--gold">Premium · pequeno acréscimo</span>
+          <h3>Fundo laminado</h3>
+          <p>Acabamento brilhante que muda a aparência da caixa. Pra quem quer passar imagem premium desde a entrega.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PIZZARIAS / SOCIAL PROOF ===== -->
+<section class="section section--paper" id="clientes">
+  <div class="wrap">
+    <div class="section-head" data-motion="fade-up">
+      <h2 class="h-section">No Sul do Brasil, <em>já não param</em> por falta de caixa.</h2>
+    </div>
+
+    <div class="testimonials" data-stagger>
+      <article class="testimonial" data-motion="fade-up">
+        <p>"Desde que entramos no plano da Box Paper, <strong>nunca mais ficamos sem caixa</strong>. O pagamento fracionado aliviou o nosso fluxo."</p>
+        <footer>
+          <span class="avatar">M</span>
+          <div>
+            <strong>Marcelo R.</strong>
+            <span>Pizzaria Sabor da Serra · Garopaba</span>
+          </div>
+        </footer>
+      </article>
+      <article class="testimonial" data-motion="fade-up">
+        <p>"Atendimento nota 10 e qualidade <strong>impecável</strong>. Antes a gente comprava em lote, hoje a caixa chega toda quinta sem a gente nem ter que lembrar."</p>
+        <footer>
+          <span class="avatar">J</span>
+          <div>
+            <strong>Juliana M.</strong>
+            <span>Bella Pizza · Tubarão</span>
+          </div>
+        </footer>
+      </article>
+      <article class="testimonial" data-motion="fade-up">
+        <p>"O capital de giro que voltou pra dentro da operação foi grande. Em vez de papelão parado, <strong>mais farinha e queijo</strong> rodando."</p>
+        <footer>
+          <span class="avatar">R</span>
+          <div>
+            <strong>Rafael F.</strong>
+            <span>Forno Nobre · Torres</span>
+          </div>
+        </footer>
+      </article>
+    </div>
+
+    <div class="logos">
+      <span class="logos-label">Pizzarias atendidas em SC + RS</span>
+      <div class="logos-track">
+        <div class="logos-set">
+          <span>Forno Nobre</span>
+          <span>Sabor da Serra</span>
+          <span>Bella Pizza</span>
+          <span>Pizza &amp; CIA</span>
+          <span>Via Roma</span>
+          <span>Bella Napoli</span>
+          <span>Forno &amp; Lenha</span>
+          <span>Sabor &amp; Lenha</span>
+        </div>
+        <div class="logos-set" aria-hidden="true">
+          <span>Forno Nobre</span>
+          <span>Sabor da Serra</span>
+          <span>Bella Pizza</span>
+          <span>Pizza &amp; CIA</span>
+          <span>Via Roma</span>
+          <span>Bella Napoli</span>
+          <span>Forno &amp; Lenha</span>
+          <span>Sabor &amp; Lenha</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA FINAL ===== -->
+<section class="section section--navy cta-section" id="contato">
+  <div class="wrap">
+    <div class="final" data-motion="fade-up">
+      <div class="final-text">
+        <h2 class="h-display h-display--md h-display--light">Quer receber suas caixas <em>toda semana</em> sem se preocupar com estoque?</h2>
+        <p class="section-sub section-sub--light">A gente desenha o plano de entrega programada da sua pizzaria em <strong>2 minutos</strong>. Sem fidelidade, sem compromisso.</p>
+        <div class="final-actions">
+          <button class="btn btn--accent btn--lg" data-open-modal>
+            Conheça o plano <svg width="16" height="16"><use href="#i-arrow"/></svg>
+          </button>
+          <a href="mailto:contato@boxpaperembalagens.com.br?subject=Pedido%20de%20orcamento" class="btn btn--outline-light btn--lg">
+            Pedir orçamento
+          </a>
+        </div>
+        <ul class="final-bullets">
+          <li><svg width="14" height="14"><use href="#i-check"/></svg> Sem fidelidade · cancela quando quiser</li>
+          <li><svg width="14" height="14"><use href="#i-check"/></svg> Personalização inclusa</li>
+          <li><svg width="14" height="14"><use href="#i-check"/></svg> Resposta em até 4 horas úteis</li>
+        </ul>
+      </div>
+      <figure class="final-photo">
+        <img src="assets/img/cta-entrega.jpg" alt="Entregador Box Paper entregando caixas para família" loading="lazy">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <img src="assets/img/logo-box-paper.png" alt="Box Paper Embalagens" width="180" height="84" class="footer-logo">
+      <p>Sistema de assinatura de embalagens para pizzarias. Fábrica própria em Sombrio · SC. 14 anos imprimindo marcas de sucesso no Sul do Brasil.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Plano</h4>
+      <ul>
+        <li><a href="#funciona">Como funciona</a></li>
+        <li><a href="#comparativo">Comparativo</a></li>
+        <li><a href="#acabamentos">Acabamentos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="https://wa.me/5548999892391" target="_blank" rel="noopener">(48) 99989-2391</a></li>
+        <li><a href="https://wa.me/5548999892082" target="_blank" rel="noopener">(48) 99989-2082</a></li>
+        <li><a href="mailto:contato@boxpaperembalagens.com.br">contato@<wbr>boxpaperembalagens.com.br</a></li>
+        <li>Av. Getúlio Vargas — Sombrio · SC</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Box Paper®</h4>
+      <ul>
+        <li>Imprimindo marcas de sucesso</li>
+        <li>Desde 2012</li>
+        <li>Fábrica própria em Sombrio · SC</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom wrap">
+    <span>© 2026 Box Paper Embalagens — Todos os direitos reservados.</span>
+    <span>Atendimento SC + RS</span>
+  </div>
+</footer>
+
+<!-- ===== MODAL ===== -->
+<div class="modal" id="cadastroModal" hidden>
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" data-close-modal aria-label="Fechar">×</button>
+    <div class="modal-header">
+      <span class="chap chap--ink">— Cadastro · 2 minutos</span>
+      <h3 class="modal-title" id="modalTitle">Vamos montar o <em>plano</em> da sua pizzaria.</h3>
+      <p class="modal-sub">Em até <strong>4 horas úteis</strong> o comercial volta com o plano de entrega ideal. Sem compromisso.</p>
+      <div class="modal-progress">
+        <div class="modal-progress-track"><div class="modal-progress-fill" id="modalProgressFill" style="width: 50%"></div></div>
+        <div class="modal-steps">
+          <span class="modal-step-label active" data-label="1">01 · Você</span>
+          <span class="modal-step-label" data-label="2">02 · Pizzaria</span>
+        </div>
+      </div>
+    </div>
+    <form id="cadastroForm" class="modal-form" novalidate>
+      <div class="modal-step active" data-step="1">
+        <label class="field">
+          <span class="field-label">Nome completo *</span>
+          <input type="text" name="nome" placeholder="Seu nome" required>
+        </label>
+        <label class="field">
+          <span class="field-label">WhatsApp *</span>
+          <input type="tel" name="whatsapp" placeholder="(48) 99999-9999" required>
+        </label>
+        <label class="field">
+          <span class="field-label">Nome da pizzaria *</span>
+          <input type="text" name="pizzaria" placeholder="Ex: Sabor da Serra" required>
+        </label>
+      </div>
+      <div class="modal-step" data-step="2">
+        <label class="field">
+          <span class="field-label">Caixas por mês *</span>
+          <select name="caixas_mes" required>
+            <option value="">Selecione...</option>
+            <option>Até 500 caixas/mês</option>
+            <option>500 – 1.500 caixas/mês</option>
+            <option>1.500 – 3.000 caixas/mês</option>
+            <option>3.000 – 5.000 caixas/mês</option>
+            <option>Mais de 5.000 caixas/mês</option>
+            <option>Ainda não sei</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">Faturamento mensal *</span>
+          <select name="faturamento" required>
+            <option value="">Selecione...</option>
+            <option>Até R$ 30 mil/mês</option>
+            <option>R$ 30 mil – R$ 80 mil/mês</option>
+            <option>R$ 80 mil – R$ 150 mil/mês</option>
+            <option>R$ 150 mil – R$ 300 mil/mês</option>
+            <option>Acima de R$ 300 mil/mês</option>
+            <option>Prefiro não informar</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">Cidade / UF *</span>
+          <input type="text" name="cidade" placeholder="Ex: Sombrio, SC" required>
+        </label>
+        <label class="field">
+          <span class="field-label">Frequência preferida <span class="opt">(opcional)</span></span>
+          <select name="frequencia">
+            <option value="">Selecione...</option>
+            <option>Semanal</option>
+            <option>Quinzenal</option>
+            <option>Mensal</option>
+            <option>Combinar com vendedor</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-nav">
+        <button type="button" class="btn btn--ghost-ink" id="btnBack" hidden>← Voltar</button>
+        <button type="button" class="btn btn--accent btn--lg btn-grow" id="btnNext">Continuar <svg width="14" height="14"><use href="#i-arrow"/></svg></button>
+        <button type="submit" class="btn btn--accent btn--lg btn-grow" id="btnSubmit" hidden>Enviar cadastro <svg width="14" height="14"><use href="#i-arrow"/></svg></button>
+      </div>
+      <p class="modal-microcopy">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Seus dados ficam só com a Box Paper. Sem spam.
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+/* tracking */
+(function(){
+  const KEY='bp8_tracking'; let t={};
+  try{ t=JSON.parse(sessionStorage.getItem(KEY)||'{}'); }catch(_){}
+  const p=new URLSearchParams(location.search);
+  ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','fbclid','gclid','gbraid','wbraid','ttclid','li_fat_id','msclkid'].forEach(k=>{ if(p.get(k)) t[k]=p.get(k); });
+  if(!t.landing_page) t.landing_page=location.href;
+  if(!t.referrer && document.referrer) t.referrer=document.referrer;
+  if(!t.session_start) t.session_start=Date.now();
+  const ck=n=>{const m=document.cookie.match(new RegExp('(^|; )'+n+'=([^;]+)'));return m?decodeURIComponent(m[2]):'';};
+  t._fbp=ck('_fbp'); t._fbc=ck('_fbc')||(t.fbclid?'fb.1.'+Date.now()+'.'+t.fbclid:'');
+  sessionStorage.setItem(KEY, JSON.stringify(t));
+  window._bpTracking=t;
+})();
+
+/* nav scroll detect */
+(()=>{ const nav=document.getElementById('nav'); if(!nav) return;
+  const fn=()=>nav.classList.toggle('is-scrolled', window.scrollY>32);
+  fn(); window.addEventListener('scroll', fn, {passive:true});
+})();
+
+/* hero photo slideshow — alterna 3 imagens com fade */
+(()=>{
+  const stack = document.getElementById('heroStack');
+  const capName = document.getElementById('heroCapName');
+  const capSize = document.getElementById('heroCapSize');
+  if(!stack) return;
+  const imgs = stack.querySelectorAll('img');
+  if(imgs.length < 2) return;
+  let idx = 0;
+  setInterval(()=>{
+    imgs[idx].classList.remove('is-active');
+    idx = (idx + 1) % imgs.length;
+    imgs[idx].classList.add('is-active');
+    if(capName) capName.textContent = imgs[idx].dataset.capName || '';
+    if(capSize) capSize.textContent = imgs[idx].dataset.capSize || '';
+  }, 4200);
+})();
+
+/* calculadora — com count-up suave nos valores */
+(()=>{
+  const slider=document.getElementById('calcSlider');
+  const out=document.getElementById('calcOutput');
+  const freq=document.getElementById('calcFreq');
+  const freqMeta=document.getElementById('calcFreqMeta');
+  const cap=document.getElementById('calcCapital');
+  const parc=document.getElementById('calcParcela');
+  const parcMeta=document.getElementById('calcParcelaMeta');
+  if(!slider) return;
+  const fmt=v=>v.toLocaleString('pt-BR');
+  const real=v=>'R$ '+v.toLocaleString('pt-BR',{maximumFractionDigits:0});
+  const fmtK=v=>v>=1000 ? (v/1000).toFixed(v%1000===0?0:1).replace('.',',')+'k' : fmt(v);
+
+  // count-up animator
+  const animators={};
+  function animateValue(key, el, from, to, formatter, duration=420){
+    cancelAnimationFrame(animators[key]);
+    const start=performance.now();
+    function step(t){
+      const p=Math.min((t-start)/duration, 1);
+      const eased=1-Math.pow(1-p, 3);
+      const cur=Math.round(from + (to-from)*eased);
+      el.textContent = formatter(cur);
+      if(p<1) animators[key]=requestAnimationFrame(step);
+    }
+    animators[key]=requestAnimationFrame(step);
+  }
+
+  let prev = { v: parseInt(slider.value,10), liberado: 0, parcela: 0 };
+  const update=()=>{
+    const v=parseInt(slider.value,10);
+    let f, fm, parcelas;
+    if(v < 600){ f='Quinzenal'; fm='≈ '+fmt(Math.round(v/2))+' caixas por entrega'; parcelas=2; }
+    else if(v <= 3500){ f='Semanal'; fm='≈ '+fmt(Math.round(v/4))+' caixas por entrega'; parcelas=4; }
+    else { f='2× por semana'; fm='≈ '+fmt(Math.round(v/8))+' caixas por entrega'; parcelas=8; }
+    freq.textContent=f; freqMeta.textContent=fm;
+
+    const precoUn = 4.2;
+    const liberado = v * 2 * precoUn;
+    const totalMes = v * precoUn;
+    const porParcela = Math.round(totalMes/parcelas);
+
+    animateValue('cap', cap, prev.liberado, liberado, real);
+    animateValue('out', out, prev.v, v, fmtK);
+    parc.textContent = parcelas + '× por mês';
+    animateValue('parc', { set textContent(t){ parcMeta.textContent = '≈ ' + t + ' por entrega'; } }, prev.parcela, porParcela, real);
+
+    prev = { v, liberado, parcela: porParcela };
+
+    const pct = ((v-200)/(8000-200))*100;
+    slider.style.setProperty('--pct', pct+'%');
+  };
+  slider.addEventListener('input', update);
+  update();
+})();
+
+/* modal */
+(()=>{
+  const modal=document.getElementById('cadastroModal');
+  const form=document.getElementById('cadastroForm');
+  if(!modal||!form) return;
+  const openers=document.querySelectorAll('[data-open-modal]');
+  const closers=modal.querySelectorAll('[data-close-modal]');
+  const steps=form.querySelectorAll('.modal-step');
+  const labels=modal.querySelectorAll('.modal-step-label');
+  const fill=document.getElementById('modalProgressFill');
+  const btnNext=document.getElementById('btnNext');
+  const btnBack=document.getElementById('btnBack');
+  const btnSubmit=document.getElementById('btnSubmit');
+  let current=1; const TOTAL=2;
+  const showStep=(n)=>{
+    steps.forEach(s=>s.classList.toggle('active', +s.dataset.step===n));
+    labels.forEach(l=>{ l.classList.toggle('active', +l.dataset.label===n); l.classList.toggle('done', +l.dataset.label<n); });
+    fill.style.width = ((n/TOTAL)*100)+'%';
+    btnBack.hidden = n===1;
+    btnNext.hidden = n===TOTAL;
+    btnSubmit.hidden = n!==TOTAL;
+    current=n;
+  };
+  const validateStep=()=>{
+    const step=form.querySelector(`.modal-step[data-step="${current}"]`);
+    let ok=true;
+    step.querySelectorAll('[required]').forEach(f=>{
+      f.classList.remove('invalid');
+      if(!f.value.trim()){ ok=false; f.classList.add('invalid'); }
+    });
+    return ok;
+  };
+  const openModal=()=>{
+    modal.hidden=false; document.body.style.overflow='hidden';
+    setTimeout(()=>modal.classList.add('open'), 10);
+    showStep(1);
+    setTimeout(()=>form.querySelector('input[name="nome"]')?.focus(), 320);
+  };
+  const closeModal=()=>{
+    modal.classList.remove('open'); document.body.style.overflow='';
+    setTimeout(()=>{ modal.hidden=true; }, 280);
+  };
+  openers.forEach(b=>b.addEventListener('click', openModal));
+  closers.forEach(b=>b.addEventListener('click', closeModal));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !modal.hidden) closeModal(); });
+  btnNext.addEventListener('click', ()=>{ if(validateStep()) showStep(current+1); });
+  btnBack.addEventListener('click', ()=>{ if(current>1) showStep(current-1); });
+  form.addEventListener('input', e=>e.target.classList?.remove('invalid'));
+  const genId=()=> (crypto&&crypto.randomUUID) ? crypto.randomUUID() :
+    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c=>{const r=Math.random()*16|0; return (c==='x'?r:(r&3|8)).toString(16); });
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    if(!validateStep()) return;
+    const fd=new FormData(form); const data=Object.fromEntries(fd.entries());
+    const t=JSON.parse(sessionStorage.getItem('bp8_tracking')||'{}');
+    const payload={
+      event_id: genId(), event_name:'Lead', submitted_at:new Date().toISOString(),
+      time_on_page: t.session_start ? Math.round((Date.now()-t.session_start)/1000) : null,
+      ...data,
+      landing_page: t.landing_page||location.href, current_page: location.href, referrer: t.referrer||'',
+      utm_source: t.utm_source||'', utm_medium: t.utm_medium||'',
+      utm_campaign: t.utm_campaign||'', utm_term: t.utm_term||'', utm_content: t.utm_content||'',
+      fbclid: t.fbclid||'', gclid: t.gclid||'', ttclid: t.ttclid||'',
+      fbp: t._fbp||'', fbc: t._fbc||'',
+      user_agent: navigator.userAgent, screen: screen.width+'x'+screen.height,
+    };
+    try{ const list=JSON.parse(localStorage.getItem('bp8_leads')||'[]'); list.push(payload); localStorage.setItem('bp8_leads', JSON.stringify(list)); }catch(_){}
+    const ENDPOINT=''; if(ENDPOINT){ fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).catch(()=>{}); }
+    const params=new URLSearchParams({ event_id: payload.event_id });
+    setTimeout(()=>{ window.location.href='obrigado.html?'+params.toString(); }, 250);
+  });
+})();
+</script>
+
+<!-- ===== Motion One — scroll/inView/parallax/stagger ===== -->
+<script type="module">
+import { animate, inView, scroll, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.18.0/+esm";
+
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const EASE = [0.16, 1, 0.3, 1];
+
+if (reduce) {
+  document.querySelectorAll('[data-motion], [data-stagger] > *').forEach(el => {
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  });
+} else {
+
+  // -------- progress bar no topo da página --------
+  const pb = document.createElement('div');
+  pb.className = 'scroll-progress';
+  document.body.appendChild(pb);
+  scroll((p) => { pb.style.width = (p * 100) + '%'; });
+
+  // -------- HERO entrada coreografada --------
+  const heroFadeUp = document.querySelectorAll('.hero [data-motion="fade-up"]');
+  const heroScale = document.querySelectorAll('.hero [data-motion="scale-in"]');
+  animate(heroFadeUp, { opacity: 1, transform: 'translateY(0px)' },
+    { duration: 0.9, delay: stagger(0.10, { start: 0.10 }), easing: EASE });
+  animate(heroScale, { opacity: 1, transform: 'scale(1)' },
+    { duration: 1.1, delay: 0.35, easing: EASE });
+
+  // -------- Generic fade-up fora do hero, e que NÃO esteja num stagger --------
+  document.querySelectorAll('[data-motion="fade-up"]').forEach(el => {
+    if (el.closest('.hero')) return;
+    if (el.parentElement && el.parentElement.hasAttribute('data-stagger')) return;
+    inView(el, () => {
+      animate(el, { opacity: 1, transform: 'translateY(0px)' },
+        { duration: 0.85, easing: EASE });
+    }, { margin: '0px 0px -10% 0px' });
+  });
+
+  // -------- scale-in fora do hero --------
+  document.querySelectorAll('[data-motion="scale-in"]').forEach(el => {
+    if (el.closest('.hero')) return;
+    inView(el, () => {
+      animate(el, { opacity: 1, transform: 'scale(1)' },
+        { duration: 0.85, easing: EASE });
+    }, { margin: '0px 0px -10% 0px' });
+  });
+
+  // -------- slide-left / slide-right --------
+  document.querySelectorAll('[data-motion="slide-left"], [data-motion="slide-right"]').forEach(el => {
+    inView(el, () => {
+      animate(el, { opacity: 1, transform: 'translateX(0px)' },
+        { duration: 0.9, easing: EASE });
+    }, { margin: '0px 0px -10% 0px' });
+  });
+
+  // -------- STAGGER em containers (problem-grid, compare, testimonials) --------
+  document.querySelectorAll('[data-stagger]').forEach(container => {
+    const children = Array.from(container.children);
+    inView(container, () => {
+      animate(children, { opacity: 1, transform: 'translateY(0px)' },
+        { duration: 0.65, delay: stagger(0.08), easing: EASE });
+    }, { margin: '0px 0px -10% 0px' });
+  });
+
+  // -------- PARALLAX nas fotos editoriais --------
+  document.querySelectorAll('.hero-photo, .step-photo, .final-photo').forEach(box => {
+    const img = box.querySelector('img');
+    if (!img) return;
+    scroll(
+      animate(img, { transform: ['translateY(-5%)', 'translateY(5%)'] }),
+      { target: box, offset: ['start end', 'end start'] }
+    );
+  });
+}
+</script>
+</body>
+</html>

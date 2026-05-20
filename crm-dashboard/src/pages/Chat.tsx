@@ -14,13 +14,16 @@ import {
   type Funnel, type User as UserType, type Tag, type LeadCadence, type Cadence,
 } from '../lib/api'
 import EditTaskModal from '../components/EditTaskModal'
+import FilterDropdown, { type FilterValue } from '../components/FilterDropdown'
 import {
   MessageCircle, Search, Send, Phone, User, Edit3, Save, X, Plus,
   StickyNote, Tag as TagIcon, GitBranch, Smartphone, ListOrdered, ChevronRight, Check, Clock, Archive, ListTodo, ChevronDown, ChevronUp, Trash2, Paperclip, FileText, MessageSquarePlus, Copy,
+  Menu as MenuIcon, MessagesSquare, Info as InfoIcon, History as HistoryIcon, ChevronLeft,
 } from 'lucide-react'
 import MessageMedia from '../components/MessageMedia'
 import { applyMessageVars } from '../lib/messageVars'
 import { parseSqlDate, formatTime } from '../lib/dates'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - parseSqlDate(dateStr).getTime()
@@ -36,7 +39,7 @@ export default function Chat() {
   const { user } = useAuth()
   const { accountId, accounts } = useAccount()
   const [instances, setInstances] = useState<WhatsAppInstance[]>([])
-  const [selectedInstance, setSelectedInstance] = useState<number | 'all'>('all')
+  const [instanceFilter, setInstanceFilter] = useState<FilterValue[]>([])
   const [leads, setLeads] = useState<Lead[]>([])
   const [selectedLeadId, setSelectedLeadId] = useState<number | null>(() => {
     const params = new URLSearchParams(window.location.search)
@@ -51,6 +54,26 @@ export default function Chat() {
   type NoticeAction = { label: string; onClick: () => void; primary?: boolean; danger?: boolean }
   const [notice, setNotice] = useState<{ kind: 'info' | 'error' | 'success'; title: string; message: string; actions?: NoticeAction[] } | null>(null)
   const [pendingTransfers, setPendingTransfers] = useState<TransferRequest[]>([])
+
+  // Mobile single-pane com bottom nav de 5 tabs
+  const isMobile = useIsMobile()
+  const [mobileTab, setMobileTab] = useState<'conversas' | 'chat' | 'info' | 'history'>('conversas')
+  // Quando seleciona lead em mobile, auto-vai pra tab Chat (UX igual WhatsApp)
+  const selectLead = (id: number | null) => {
+    setSelectedLeadId(id)
+    if (isMobile && id !== null) setMobileTab('chat')
+  }
+  // Quando vai pra Info/Historico via bottom nav, sincroniza com a rightTab interna
+  const switchMobileTab = (tab: 'conversas' | 'chat' | 'info' | 'history') => {
+    setMobileTab(tab)
+    if (tab === 'info') setRightTab('info')
+    if (tab === 'history') setRightTab('history')
+  }
+  // Pra "Menu" abrir a sidebar — reusa o hamburger button da Sidebar via custom event
+  const openSidebarMenu = () => {
+    const btn = document.querySelector('.hamburger-btn') as HTMLButtonElement | null
+    if (btn) btn.click()
+  }
   const [lead, setLead] = useState<Lead | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [history, setHistory] = useState<StageHistoryEntry[]>([])
@@ -62,9 +85,9 @@ export default function Chat() {
   const [cadences, setCadences] = useState<Cadence[]>([])
   const [showCadenceMenu, setShowCadenceMenu] = useState(false)
   const [search, setSearch] = useState('')
-  const [tagFilter, setTagFilter] = useState<number | ''>('')
-  const [attendantFilter, setAttendantFilter] = useState<number | 'all' | 'unassigned'>('all')
-  const [stageFilter, setStageFilter] = useState<number | ''>('')
+  const [tagFilter, setTagFilter] = useState<FilterValue[]>([])
+  const [attendantFilter, setAttendantFilter] = useState<FilterValue[]>([])
+  const [stageFilter, setStageFilter] = useState<FilterValue[]>([])
   const [showArchived, setShowArchived] = useState(false)
   const [msgText, setMsgText] = useState('')
   const [readyMessages, setReadyMessages] = useState<ReadyMessage[]>([])
@@ -84,6 +107,9 @@ export default function Chat() {
   const [savingNotes, setSavingNotes] = useState(false)
   const [editing, setEditing] = useState(false)
   const [infoCollapsed, setInfoCollapsed] = useState(() => localStorage.getItem('chat_info_collapsed') !== '0')
+  const [notesCollapsed, setNotesCollapsed] = useState(() => localStorage.getItem('chat_notes_collapsed') === '1')
+  const [tagsCollapsed, setTagsCollapsed] = useState(() => localStorage.getItem('chat_tags_collapsed') === '1')
+  const [cadenceCollapsed, setCadenceCollapsed] = useState(() => localStorage.getItem('chat_cadence_collapsed') === '1')
   const [leadTasks, setLeadTasks] = useState<any[]>([])
   const [editingTask, setEditingTask] = useState<any>(null)
   const [sendInstanceOverride, setSendInstanceOverride] = useState<number | null>(null)
@@ -156,16 +182,24 @@ export default function Chat() {
     setTimeout(() => msgInputRef.current?.focus(), 0)
   }
 
-  // Load leads list (with optional instance filter)
+  // Load leads list — passa filtros pro backend pra evitar perder leads que ficam fora do limit
   const loadLeadsList = useCallback(() => {
     if (!accountId) return
-    const filters: any = { limit: 200 }
+    const filters: any = { limit: 500 }
     if (showArchived) filters.show_archived = '1'
-    fetchLeads(accountId, filters).then(data => {
-      const filtered = selectedInstance === 'all' ? data.leads : data.leads.filter(l => l.instance_id === selectedInstance)
-      setLeads(filtered)
-    })
-  }, [accountId, selectedInstance, showArchived])
+
+    const toCsv = (arr: FilterValue[]) => arr.filter(v => typeof v === 'number' || v === 'none' || v === 'untagged').join(',')
+    const stageCsv = toCsv(stageFilter)
+    if (stageCsv) filters.stage_id = stageCsv
+    const tagCsv = toCsv(tagFilter)
+    if (tagCsv) filters.tag = tagCsv
+    const attCsv = toCsv(attendantFilter)
+    if (attCsv) filters.attendant_id = attCsv
+    const instCsv = toCsv(instanceFilter)
+    if (instCsv) filters.instance_id = instCsv
+
+    fetchLeads(accountId, filters).then(data => setLeads(data.leads))
+  }, [accountId, instanceFilter, tagFilter, stageFilter, attendantFilter, showArchived])
   useEffect(() => { loadLeadsList() }, [loadLeadsList])
 
   // Load selected lead detail
@@ -409,10 +443,28 @@ export default function Chat() {
 
   const filteredLeads = useMemo(() => {
     let result = leads
-    if (tagFilter) result = result.filter(l => l.tags?.some(t => t.id === tagFilter))
-    if (attendantFilter === 'unassigned') result = result.filter(l => !l.attendant_id)
-    else if (typeof attendantFilter === 'number') result = result.filter(l => l.attendant_id === attendantFilter)
-    if (stageFilter) result = result.filter(l => l.stage_id === stageFilter)
+    if (tagFilter.length > 0) {
+      const wantsUntagged = tagFilter.includes('untagged')
+      const wantedTagIds = tagFilter.filter((v): v is number => typeof v === 'number')
+      result = result.filter(l => {
+        const hasNoTags = !l.tags || l.tags.length === 0
+        const hasWantedTag = l.tags?.some(t => wantedTagIds.includes(t.id)) || false
+        return (wantsUntagged && hasNoTags) || hasWantedTag
+      })
+    }
+    if (attendantFilter.length > 0) {
+      const wantsNoAttendant = attendantFilter.includes('none')
+      const wantedAttIds = attendantFilter.filter((v): v is number => typeof v === 'number')
+      result = result.filter(l => {
+        const isNone = !l.attendant_id
+        const matches = l.attendant_id != null && wantedAttIds.includes(l.attendant_id)
+        return (wantsNoAttendant && isNone) || matches
+      })
+    }
+    if (stageFilter.length > 0) {
+      const wantedStageIds = stageFilter.filter((v): v is number => typeof v === 'number')
+      result = result.filter(l => l.stage_id != null && wantedStageIds.includes(l.stage_id))
+    }
     if (search.trim()) {
       const s = search.toLowerCase()
       result = result.filter(l => (l.name || '').toLowerCase().includes(s) || (l.phone || '').includes(s))
@@ -422,10 +474,14 @@ export default function Chat() {
 
   const handleSendMsg = async () => {
     if (!msgText.trim() || !lead || !accountId) return
+    // Bloqueia envio se nao ha instancia escolhida (lead novo sem aba ativa)
+    const override = sendInstanceOverride || activeConvInstance || undefined
+    if (!override) {
+      setNotice({ kind: 'error', title: 'Escolha uma instancia', message: 'Clique em "Enviar via" acima do input pra escolher de qual WhatsApp essa mensagem vai sair.' })
+      return
+    }
     setSending(true)
     try {
-      // Tab ativa = instancia que vai enviar (override manual sobreescreve)
-      const override = sendInstanceOverride || activeConvInstance || undefined
       const result = await sendMessage(lead.id, accountId, msgText, override)
       setMessages(prev => [...prev, result.message])
       setMsgText('')
@@ -565,37 +621,46 @@ export default function Chat() {
   const availableTags = lead ? tags.filter(t => !lead.tags?.some(lt => lt.id === t.id)) : []
 
   return (
-    <div className="chat-page">
+    <div className={isMobile ? `chat-page chat-mobile-active mobile-tab-${mobileTab}` : 'chat-page'}>
       {/* Top bar: instance selector */}
       <div className="chat-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <h1 style={{ fontSize: 20, margin: 0 }}><MessageCircle size={20} style={{ verticalAlign: -4, marginRight: 6 }} />Chat</h1>
-          <select className="select" style={{ width: 200 }} value={selectedInstance} onChange={e => setSelectedInstance(e.target.value === 'all' ? 'all' : +e.target.value)}>
-            <option value="all">Todos os numeros</option>
-            {instances.map(i => (
-              <option key={i.id} value={i.id}>{i.instance_name}{i.status === 'connected' ? ' ✓' : ' ✗'}</option>
-            ))}
-          </select>
-          <select className="select" style={{ width: 160 }} value={tagFilter} onChange={e => setTagFilter(e.target.value ? +e.target.value : '')}>
-            <option value="">Todas as tags</option>
-            {tags.map(t => (
-              <option key={t.id} value={t.id}>{t.name}</option>
-            ))}
-          </select>
-          <select className="select" style={{ width: 180 }} value={stageFilter} onChange={e => setStageFilter(e.target.value ? +e.target.value : '')}>
-            <option value="">Todas etapas</option>
-            {allStages.map(s => (
-              <option key={s.id} value={s.id}>{s.name}</option>
-            ))}
-          </select>
+          <FilterDropdown
+            label="instancias"
+            width={200}
+            options={instances.map(i => ({ value: i.id, label: `${i.instance_name}${i.status === 'connected' ? ' ✓' : ' ✗'}` }))}
+            selected={instanceFilter}
+            onChange={setInstanceFilter}
+          />
+          <FilterDropdown
+            label="tags"
+            width={160}
+            options={[
+              { value: 'untagged', label: '(Sem tag)' },
+              ...tags.map(t => ({ value: t.id, label: t.name })),
+            ]}
+            selected={tagFilter}
+            onChange={setTagFilter}
+          />
+          <FilterDropdown
+            label="etapas"
+            width={180}
+            options={allStages.map(s => ({ value: s.id, label: s.name }))}
+            selected={stageFilter}
+            onChange={setStageFilter}
+          />
           {user?.role !== 'atendente' && (
-            <select className="select" style={{ width: 180 }} value={attendantFilter} onChange={e => setAttendantFilter(e.target.value === 'all' ? 'all' : e.target.value === 'unassigned' ? 'unassigned' : +e.target.value)}>
-              <option value="all">Todos atendentes</option>
-              <option value="unassigned">Sem atendente</option>
-              {attendants.map(a => (
-                <option key={a.id} value={a.id}>{a.name}</option>
-              ))}
-            </select>
+            <FilterDropdown
+              label="atendentes"
+              width={180}
+              options={[
+                { value: 'none', label: '(Sem atendente)' },
+                ...attendants.map(a => ({ value: a.id, label: a.name })),
+              ]}
+              selected={attendantFilter}
+              onChange={setAttendantFilter}
+            />
           )}
           <button onClick={() => setShowArchived(s => !s)} className={`btn btn-sm ${showArchived ? 'btn-primary' : 'btn-secondary'}`} style={{ fontSize: 11 }} title="Mostrar leads arquivados">
             <Archive size={12} /> {showArchived ? 'Ocultar arquivados' : 'Mostrar arquivados'}
@@ -629,7 +694,7 @@ export default function Chat() {
               const active = l.id === selectedLeadId
               const stage = allStages.find(s => s.id === l.stage_id)
               return (
-                <div key={l.id} className={`chat-contact-item ${active ? 'active' : ''}`} onClick={() => setSelectedLeadId(l.id)} style={{ position: 'relative' }}>
+                <div key={l.id} className={`chat-contact-item ${active ? 'active' : ''}`} onClick={() => selectLead(l.id)} style={{ position: 'relative' }}>
                   <div className="chat-contact-avatar" style={{ background: stage ? `${stage.color}25` : '#FFB30025', overflow: 'hidden' }}>
                     {l.profile_pic_url ? (
                       <img src={l.profile_pic_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
@@ -673,6 +738,9 @@ export default function Chat() {
           ) : (
             <>
               <div className="chat-conversation-header">
+                <button className="chat-mobile-back" onClick={() => setMobileTab('conversas')} title="Voltar">
+                  <ChevronLeft size={16} />
+                </button>
                 <div className="chat-contact-avatar" style={{ background: `${currentStage?.color || '#FFB300'}25`, overflow: 'hidden' }}>
                   {lead.profile_pic_url ? (
                     <img src={lead.profile_pic_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
@@ -739,24 +807,35 @@ export default function Chat() {
                 ))}
                 <div ref={chatEndRef} />
               </div>
-              {resolvedSendInstance && (
-                <div style={{ padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#9B96B0', borderTop: '1px solid rgba(255,255,255,0.04)', position: 'relative' }}>
-                  <Smartphone size={11} style={{ color: '#FFB300' }} />
-                  <span>Respondendo por:</span>
-                  <button onClick={() => setShowSendInstance(s => !s)} style={{ background: 'none', border: 'none', color: '#FFB300', fontWeight: 600, cursor: 'pointer', padding: 0, fontSize: 11 }}>
-                    {resolvedSendInstance.instance_name} ▾
-                  </button>
-                  {showSendInstance && (
-                    <div style={{ position: 'absolute', bottom: '100%', left: 12, marginBottom: 4, background: '#1a1625', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, padding: 4, minWidth: 220, zIndex: 10, boxShadow: '0 4px 14px rgba(0,0,0,0.4)' }}>
-                      {instances.filter(i => i.status === 'connected').map(i => (
-                        <button key={i.id} onClick={() => { setSendInstanceOverride(i.id); setShowSendInstance(false) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 10px', background: i.id === resolvedSendInstance.id ? 'rgba(255,179,0,0.12)' : 'transparent', color: i.id === resolvedSendInstance.id ? '#FFB300' : '#fff', border: 'none', borderRadius: 4, fontSize: 12, cursor: 'pointer' }}>
-                          {i.instance_name}{i.id === resolvedSendInstance.id ? ' ✓' : ''}
-                        </button>
-                      ))}
+              {/* Dropdown 'Enviar via' — sempre visivel quando ha instancias conectadas */}
+              {(() => {
+                const connected = instances.filter(i => i.status === 'connected')
+                if (connected.length === 0) {
+                  return (
+                    <div style={{ padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#FF6B6B', borderTop: '1px solid rgba(255,107,107,0.2)', background: 'rgba(255,107,107,0.05)' }}>
+                      <Smartphone size={11} /> Nenhuma instancia conectada — nao da pra enviar
                     </div>
-                  )}
-                </div>
-              )}
+                  )
+                }
+                return (
+                  <div style={{ padding: '6px 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#9B96B0', borderTop: '1px solid rgba(255,255,255,0.04)', background: resolvedSendInstance ? 'transparent' : 'rgba(255,179,0,0.05)', position: 'relative' }}>
+                    <Smartphone size={11} style={{ color: resolvedSendInstance ? '#FFB300' : '#FBBC04' }} />
+                    <span>Enviar via:</span>
+                    <button onClick={() => setShowSendInstance(s => !s)} style={{ background: 'none', border: 'none', color: resolvedSendInstance ? '#FFB300' : '#FBBC04', fontWeight: 600, cursor: 'pointer', padding: 0, fontSize: 11 }}>
+                      {resolvedSendInstance ? resolvedSendInstance.instance_name : '— escolha uma instancia —'} ▾
+                    </button>
+                    {showSendInstance && (
+                      <div style={{ position: 'absolute', bottom: '100%', left: 12, marginBottom: 4, background: '#1a1625', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, padding: 4, minWidth: 240, zIndex: 10, boxShadow: '0 4px 14px rgba(0,0,0,0.4)' }}>
+                        {connected.map(i => (
+                          <button key={i.id} onClick={() => { setSendInstanceOverride(i.id); setShowSendInstance(false) }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 10px', background: i.id === resolvedSendInstance?.id ? 'rgba(255,179,0,0.12)' : 'transparent', color: i.id === resolvedSendInstance?.id ? '#FFB300' : '#fff', border: 'none', borderRadius: 4, fontSize: 12, cursor: 'pointer' }}>
+                            {i.instance_name}{i.phone_number ? <span style={{ color: '#6B6580', marginLeft: 6 }}>({i.phone_number})</span> : ''}{i.id === resolvedSendInstance?.id ? ' ✓' : ''}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })()}
               <div className="chat-input">
                 <input ref={fileInputRef} type="file" style={{ display: 'none' }} onChange={e => handlePickFile(e.target.files?.[0] || null)} accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.txt,.csv" />
                 <button
@@ -882,7 +961,7 @@ export default function Chat() {
                     </div>
                   )}
                 </div>
-                <button className="btn btn-primary btn-icon" onClick={handleSendMsg} disabled={sending || !msgText.trim()}><Send size={16} /></button>
+                <button className="btn btn-primary btn-icon" onClick={handleSendMsg} disabled={sending || !msgText.trim() || !resolvedSendInstance} title={!resolvedSendInstance ? 'Escolha uma instancia pra enviar' : ''}><Send size={16} /></button>
               </div>
               {attachFile && (
                 <div className="modal-overlay" onClick={handleCancelAttach}>
@@ -1011,10 +1090,13 @@ export default function Chat() {
 
                   {/* Observacoes */}
                   <div className="card" style={{ padding: 12, marginBottom: 12 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                      <div style={{ fontSize: 10, color: '#9B96B0', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 3 }}><FileText size={10} /> Observacoes</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: notesCollapsed ? 0 : 6 }}>
+                      <div onClick={() => { if (!editingNotes) { setNotesCollapsed(p => { const v = !p; localStorage.setItem('chat_notes_collapsed', v ? '1' : '0'); return v }) } }} style={{ fontSize: 10, color: '#9B96B0', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 3, cursor: editingNotes ? 'default' : 'pointer', flex: 1 }}>
+                        {!editingNotes && (notesCollapsed ? <ChevronDown size={12} style={{ color: '#9B96B0' }} /> : <ChevronUp size={12} style={{ color: '#9B96B0' }} />)}
+                        <FileText size={10} /> Observacoes
+                      </div>
                       {!editingNotes ? (
-                        <button className="btn btn-secondary btn-sm" onClick={() => { setNotesDraft(lead.notes || ''); setEditingNotes(true) }} style={{ padding: '2px 6px' }}><Edit3 size={10} /></button>
+                        <button className="btn btn-secondary btn-sm" onClick={() => { setNotesCollapsed(false); setNotesDraft(lead.notes || ''); setEditingNotes(true) }} style={{ padding: '2px 6px' }}><Edit3 size={10} /></button>
                       ) : (
                         <div style={{ display: 'flex', gap: 4 }}>
                           <button className="btn btn-primary btn-sm" disabled={savingNotes} onClick={async () => {
@@ -1027,7 +1109,7 @@ export default function Chat() {
                         </div>
                       )}
                     </div>
-                    {editingNotes ? (
+                    {!notesCollapsed && (editingNotes ? (
                       <textarea className="input" value={notesDraft} onChange={e => setNotesDraft(e.target.value)} rows={4} style={{ width: '100%', resize: 'vertical', fontSize: 11, lineHeight: 1.4 }} placeholder="Anotacoes sobre o lead..." />
                     ) : (
                       lead.notes ? (
@@ -1035,15 +1117,18 @@ export default function Chat() {
                       ) : (
                         <div style={{ fontSize: 10, color: '#6B6580' }}>Sem observacoes</div>
                       )
-                    )}
+                    ))}
                   </div>
 
                   {/* Tags */}
                   <div className="card" style={{ padding: 12, marginBottom: 12 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                      <div style={{ fontSize: 10, color: '#9B96B0', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 3 }}><TagIcon size={10} /> Tags</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tagsCollapsed ? 0 : 6 }}>
+                      <div onClick={() => setTagsCollapsed(p => { const v = !p; localStorage.setItem('chat_tags_collapsed', v ? '1' : '0'); return v })} style={{ fontSize: 10, color: '#9B96B0', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 3, cursor: 'pointer', flex: 1 }}>
+                        {tagsCollapsed ? <ChevronDown size={12} style={{ color: '#9B96B0' }} /> : <ChevronUp size={12} style={{ color: '#9B96B0' }} />}
+                        <TagIcon size={10} /> Tags
+                      </div>
                       <div style={{ position: 'relative' }}>
-                        <button className="btn btn-secondary btn-sm" onClick={() => setShowTagMenu(!showTagMenu)} style={{ padding: '2px 6px' }}><Plus size={10} /></button>
+                        <button className="btn btn-secondary btn-sm" onClick={() => { setTagsCollapsed(false); setShowTagMenu(!showTagMenu) }} style={{ padding: '2px 6px' }}><Plus size={10} /></button>
                         {showTagMenu && (
                           <div style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, background: 'var(--bg-card)', border: '1px solid var(--border-medium)', borderRadius: 8, padding: 6, zIndex: 50, minWidth: 200 }}>
                             {availableTags.length > 0 && (
@@ -1065,22 +1150,27 @@ export default function Chat() {
                         )}
                       </div>
                     </div>
-                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                      {lead.tags?.map(t => (
-                        <span key={t.id} className="tag-pill" style={{ background: `${t.color}20`, color: t.color, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontSize: 10 }} onClick={() => handleRemoveTag(t.id)}>
-                          {t.name} <X size={7} />
-                        </span>
-                      ))}
-                      {(!lead.tags || lead.tags.length === 0) && <span style={{ fontSize: 10, color: '#6B6580' }}>Sem tags</span>}
-                    </div>
+                    {!tagsCollapsed && (
+                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                        {lead.tags?.map(t => (
+                          <span key={t.id} className="tag-pill" style={{ background: `${t.color}20`, color: t.color, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontSize: 10 }} onClick={() => handleRemoveTag(t.id)}>
+                            {t.name} <X size={7} />
+                          </span>
+                        ))}
+                        {(!lead.tags || lead.tags.length === 0) && <span style={{ fontSize: 10, color: '#6B6580' }}>Sem tags</span>}
+                      </div>
+                    )}
                   </div>
 
                   {/* Cadence */}
                   <div className="card" style={{ padding: 12 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                      <div style={{ fontSize: 10, color: '#9B96B0', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 3 }}><ListOrdered size={10} /> Cadencia</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: cadenceCollapsed ? 0 : 6 }}>
+                      <div onClick={() => setCadenceCollapsed(p => { const v = !p; localStorage.setItem('chat_cadence_collapsed', v ? '1' : '0'); return v })} style={{ fontSize: 10, color: '#9B96B0', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 3, cursor: 'pointer', flex: 1 }}>
+                        {cadenceCollapsed ? <ChevronDown size={12} style={{ color: '#9B96B0' }} /> : <ChevronUp size={12} style={{ color: '#9B96B0' }} />}
+                        <ListOrdered size={10} /> Cadencia
+                      </div>
                       <div style={{ position: 'relative' }}>
-                        <button className="btn btn-secondary btn-sm" onClick={() => setShowCadenceMenu(!showCadenceMenu)} style={{ padding: '2px 8px', fontSize: 10 }}>{leadCadence ? 'Trocar' : 'Atribuir'}</button>
+                        <button className="btn btn-secondary btn-sm" onClick={() => { setCadenceCollapsed(false); setShowCadenceMenu(!showCadenceMenu) }} style={{ padding: '2px 8px', fontSize: 10 }}>{leadCadence ? 'Trocar' : 'Atribuir'}</button>
                         {showCadenceMenu && (
                           <div style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, background: 'var(--bg-card)', border: '1px solid var(--border-medium)', borderRadius: 8, padding: 4, zIndex: 50, minWidth: 180, maxHeight: 220, overflowY: 'auto' }}>
                             {cadences.length === 0 && <div style={{ padding: 8, fontSize: 11, color: '#9B96B0' }}>Nenhuma cadencia. Crie em /cadences</div>}
@@ -1093,7 +1183,7 @@ export default function Chat() {
                         )}
                       </div>
                     </div>
-                    {leadCadence ? (
+                    {!cadenceCollapsed && (leadCadence ? (
                       <>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <div style={{ fontSize: 12, fontWeight: 600 }}>{leadCadence.cadence_name}</div>
@@ -1132,7 +1222,7 @@ export default function Chat() {
                       </>
                     ) : (
                       <div style={{ fontSize: 11, color: '#6B6580' }}>Nenhuma cadencia atribuida</div>
-                    )}
+                    ))}
                   </div>
 
                   {/* Lead pending tasks */}
@@ -1401,6 +1491,50 @@ export default function Chat() {
             </div>
           </div>
         </div>
+      )}
+
+      {isMobile && (
+        <nav className="chat-mobile-bottom-nav">
+          <button className="chat-mobile-tab" onClick={openSidebarMenu} title="Menu">
+            <MenuIcon size={18} />
+            <span>Menu</span>
+          </button>
+          <button
+            className={`chat-mobile-tab ${mobileTab === 'conversas' ? 'active' : ''}`}
+            onClick={() => switchMobileTab('conversas')}
+            title="Conversas"
+          >
+            <MessageCircle size={18} />
+            <span>Conversas</span>
+          </button>
+          <button
+            className={`chat-mobile-tab ${mobileTab === 'chat' ? 'active' : ''}`}
+            onClick={() => switchMobileTab('chat')}
+            disabled={!lead}
+            title="Chat"
+          >
+            <MessagesSquare size={18} />
+            <span>Chat</span>
+          </button>
+          <button
+            className={`chat-mobile-tab ${mobileTab === 'info' ? 'active' : ''}`}
+            onClick={() => switchMobileTab('info')}
+            disabled={!lead}
+            title="Info"
+          >
+            <InfoIcon size={18} />
+            <span>Info</span>
+          </button>
+          <button
+            className={`chat-mobile-tab ${mobileTab === 'history' ? 'active' : ''}`}
+            onClick={() => switchMobileTab('history')}
+            disabled={!lead}
+            title="Histórico"
+          >
+            <HistoryIcon size={18} />
+            <span>Histórico</span>
+          </button>
+        </nav>
       )}
     </div>
   )

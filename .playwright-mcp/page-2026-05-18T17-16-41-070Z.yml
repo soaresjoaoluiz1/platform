@@ -1,0 +1,17 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: D
+      - generic [ref=e5]: DROS Sales
+    - generic [ref=e6]: Método DROS Sales
+  - generic [ref=e8]:
+    - heading "Canal de vendas para indústria vender mais." [level=1] [ref=e9]:
+      - text: Canal de vendas
+      - text: para indústria vender mais.
+    - paragraph [ref=e10]: Análise. Anúncios. Comercial. Pedido novo todo mês.
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - generic [ref=e13]: Análise
+      - generic [ref=e14]: Anúncios
+      - generic [ref=e15]: Comercial
+    - generic [ref=e16]: drosagencia.com.br/industria

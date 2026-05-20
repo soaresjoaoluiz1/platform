@@ -1,0 +1,47 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "DROS Sales" [ref=e4] [cursor=pointer]:
+        - /url: index.html
+        - img "DROS Sales" [ref=e5]
+      - link "Voltar ao site" [ref=e6] [cursor=pointer]:
+        - /url: index.html
+        - img [ref=e7]
+        - text: Voltar ao site
+  - generic [ref=e10]:
+    - img [ref=e12]
+    - generic [ref=e14]: Confirmado
+    - heading "Pedido recebido. Falamos com você em breve." [level=1] [ref=e15]
+    - paragraph [ref=e16]:
+      - text: Em até
+      - strong [ref=e17]: 1 dia útil
+      - text: entraremos em contato pelo WhatsApp com 2 ou 3 horários sugeridos para tua conversa de 15 minutos.
+  - generic [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]: Próximos passos
+      - heading "O que acontece agora" [level=2] [ref=e22]
+    - generic [ref=e23]:
+      - article [ref=e24]:
+        - generic [ref=e25]: "1"
+        - heading "Resposta em até 1 dia útil" [level=3] [ref=e26]
+        - paragraph [ref=e27]: Vamos te chamar no WhatsApp com horários disponíveis para conversa. Não enviamos proposta empurrada — só os horários para tu escolher.
+      - article [ref=e28]:
+        - generic [ref=e29]: "2"
+        - heading "Conversa de 15 minutos" [level=3] [ref=e30]
+        - paragraph [ref=e31]: Olhamos juntos como tua indústria vende hoje, onde está o gargalo do canal e onde existem oportunidades concretas no curto prazo.
+      - article [ref=e32]:
+        - generic [ref=e33]: "3"
+        - heading "Caminho claro" [level=3] [ref=e34]
+        - paragraph [ref=e35]: Se fizer sentido, mostramos como podemos seguir juntos. Se não for o melhor momento para tua indústria, indicamos uma direção — sem custo.
+  - generic [ref=e37]:
+    - heading "Quer adiantar?" [level=2] [ref=e38]
+    - paragraph [ref=e39]: Fala com a gente agora mesmo no WhatsApp. Atendemos em horário comercial.
+    - link "Falar no WhatsApp" [ref=e40] [cursor=pointer]:
+      - /url: https://wa.me/5541995211546?text=Acabei%20de%20pedir%20o%20diagn%C3%B3stico%20no%20site.%20Quero%20adiantar%20a%20conversa.
+      - img [ref=e41]
+      - text: Falar no WhatsApp
+    - paragraph [ref=e43]: (41) 99521-1546 · contato@drossales.com.br
+  - contentinfo [ref=e44]:
+    - generic [ref=e46]:
+      - paragraph [ref=e47]: © 2025 DROS Sales. Todos os direitos reservados.
+      - paragraph [ref=e48]: Canal de vendas para indústria vender mais.

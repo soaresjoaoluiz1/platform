@@ -3,6 +3,7 @@ import fetch from 'node-fetch'
 import db from '../db.js'
 import { broadcastSSE } from '../sse.js'
 import { triggerCapiForStageChange } from '../services/metaCapi.js'
+import { getInstanceConfig, wasAutoMsgSentRecently, sendAutoMessage, shouldSendAway } from '../services/autoMessages.js'
 
 const router = Router()
 
@@ -45,6 +46,23 @@ function phoneCompareKey(p) {
 
 function getOrCreateLead(accountId, phone, name, source, waJid, instanceId) {
   phone = normalizePhone(phone)
+
+  // ─── GATE: phone bloqueado nesta conta? Ignora silenciosamente. ───
+  // Match por phone exato OU sufixo 8d (mesma logica de dedup). Se houver QUALQUER lead bloqueado
+  // pra esse numero, retorna blocked=true e nao processa msg.
+  if (phone) {
+    const blockedExact = db.prepare("SELECT id FROM leads WHERE account_id = ? AND phone = ? AND is_blocked = 1 LIMIT 1").get(accountId, phone)
+    if (blockedExact) return { lead: null, isNew: false, blocked: true }
+    const key = phoneCompareKey(phone)
+    if (key) {
+      const last8 = key.slice(-8)
+      const candidates = db.prepare("SELECT phone FROM leads WHERE account_id = ? AND is_blocked = 1 AND phone LIKE ?").all(accountId, '%' + last8)
+      if (candidates.some(c => phoneCompareKey(c.phone) === key)) {
+        return { lead: null, isNew: false, blocked: true }
+      }
+    }
+  }
+
   let lead = null
   if (waJid) lead = db.prepare('SELECT * FROM leads WHERE account_id = ? AND wa_remote_jid = ? ORDER BY is_archived ASC, created_at DESC LIMIT 1').get(accountId, waJid)
   if (!lead && phone) {
@@ -344,8 +362,17 @@ router.post('/evolution/:accountSlug', (req, res) => {
         // Create new lead with LID (no real phone)
         const sourceForNew = adSourceLabel || 'whatsapp'
         const r = getOrCreateLead(account.id, null, leadName, sourceForNew, dedupJid, waInstance?.id || null)
+        if (r.blocked) {
+          console.log(`[Webhook] Mensagem ignorada — phone bloqueado na conta ${account.slug}`)
+          return res.json({ ok: true, blocked: true })
+        }
         lead = r.lead; isNew = r.isNew
       } else {
+        // Se lead ja existe e esta bloqueado, ignora silenciosamente
+        if (lead.is_blocked) {
+          console.log(`[Webhook] Mensagem ignorada — lead ${lead.id} bloqueado na conta ${account.slug}`)
+          return res.json({ ok: true, blocked: true })
+        }
         // Se arquivado, marca has_new_after_archive mas NAO desarquiva (so manual)
         if (lead.is_archived && !fromMe) {
           db.prepare("UPDATE leads SET has_new_after_archive = 1, updated_at = datetime('now') WHERE id = ?").run(lead.id)
@@ -355,6 +382,10 @@ router.post('/evolution/:accountSlug', (req, res) => {
     } else {
       const sourceForNew = adSourceLabel || 'whatsapp'
       const r = getOrCreateLead(account.id, phone, leadName, sourceForNew, dedupJid, waInstance?.id || null)
+      if (r.blocked) {
+        console.log(`[Webhook] Mensagem ignorada — phone ${phone} bloqueado na conta ${account.slug}`)
+        return res.json({ ok: true, blocked: true })
+      }
       lead = r.lead; isNew = r.isNew
     }
     if (!lead) return res.json({ ok: true })
@@ -375,6 +406,21 @@ router.post('/evolution/:accountSlug', (req, res) => {
       lead.ctwa_clid = adInfo.ctwaClid
     }
 
+    // Auto-marca trabalha_anuncio=1 se veio de click-to-WhatsApp (Facebook/Instagram/Google ads)
+    // Sinais: ctwaClid presente, sourceType=ad/cta_url, ou URL contem facebook/instagram/google/meta
+    if (adInfo) {
+      const adSrcType = String(adInfo.sourceType || '').toLowerCase()
+      const adSrcUrl = String(adInfo.sourceUrl || '').toLowerCase()
+      const isFromAd = !!(
+        adInfo.ctwaClid ||
+        adSrcType === 'ad' || adSrcType === 'cta_url' ||
+        /facebook|instagram|fb\.|fb\.me|google|meta/.test(adSrcUrl)
+      )
+      if (isFromAd) {
+        db.prepare('UPDATE leads SET trabalha_anuncio = 1 WHERE id = ? AND (trabalha_anuncio IS NULL OR trabalha_anuncio = 0)').run(lead.id)
+      }
+    }
+
     // Captura IP do request (1a vez) — usado pelo CAPI pra elevar EMQ
     // NOTA: webhook do Evolution vem da MESMA VPS (127.0.0.1) — IP do lead NAO esta no request.
     // So serve pra forms web (/site, /sheets) onde o lead conecta direto.
@@ -390,6 +436,49 @@ router.post('/evolution/:accountSlug', (req, res) => {
     // CAPI: lead novo → dispara evento da primeira etapa (se mapeada)
     if (isNew) {
       triggerCapiForStageChange(lead.id, lead.stage_id, null)
+    }
+
+    // Auto-mensagens: SAUDACAO (so lead novo) + AUSENCIA (toda msg inbound)
+    // Se nada configurado, NAO altera o fluxo
+    if (!fromMe && waInstance) {
+      try {
+        const autoCfg = getInstanceConfig(waInstance.id)
+        if (autoCfg) {
+          // 1) SAUDACAO (so lead novo, anti-flood configuravel via greeting_cooldown_hours)
+          if (isNew && autoCfg.greeting_enabled && autoCfg.greeting_text) {
+            const greetCooldown = autoCfg.greeting_cooldown_hours || 24
+            if (!wasAutoMsgSentRecently(lead.id, 'greeting', greetCooldown)) {
+              setTimeout(() => {
+                sendAutoMessage({
+                  leadId: lead.id,
+                  instanceId: waInstance.id,
+                  type: 'greeting',
+                  text: autoCfg.greeting_text,
+                  accountId: account.id,
+                }).catch(e => console.error('[AutoMsg greeting] async:', e?.message))
+              }, 2000)
+            }
+          }
+          // 2) AUSENCIA (manual ou horario, anti-flood configuravel)
+          if (autoCfg.away_text && shouldSendAway(autoCfg, new Date())) {
+            const cooldown = autoCfg.away_cooldown_hours || 4
+            if (!wasAutoMsgSentRecently(lead.id, 'away', cooldown)) {
+              // Delay menor (1s) pra ausencia parecer responsiva
+              setTimeout(() => {
+                sendAutoMessage({
+                  leadId: lead.id,
+                  instanceId: waInstance.id,
+                  type: 'away',
+                  text: autoCfg.away_text,
+                  accountId: account.id,
+                }).catch(e => console.error('[AutoMsg away] async:', e?.message))
+              }, 1000)
+            }
+          }
+        }
+      } catch (e) {
+        console.error('[AutoMsg] erro no hook:', e?.message)
+      }
     }
 
     // Fetch profile picture in background (no await)
@@ -503,7 +592,8 @@ router.post('/meta-leads/:accountSlug', async (req, res) => {
           else if (field.name === 'zip_code' || field.name === 'post_code') zip = val
         }
 
-        const { lead, isNew } = getOrCreateLead(account.id, phone, name, 'meta_form', null)
+        const { lead, isNew, blocked } = getOrCreateLead(account.id, phone, name, 'meta_form', null)
+        if (blocked) { console.log(`[Webhook Meta Lead] phone ${phone} bloqueado, ignorando`); continue }
         if (!lead) continue
 
         // Salva todos IDs Meta + dados de contato (COALESCE pra nao sobrescrever)
@@ -644,6 +734,22 @@ router.post('/sheets/:accountSlug', (req, res) => {
     if (empresa) db.prepare('UPDATE leads SET empresa = COALESCE(empresa, ?) WHERE id = ?').run(empresa, lead.id)
     if (cpf_cnpj) db.prepare('UPDATE leads SET cpf_cnpj = COALESCE(cpf_cnpj, ?) WHERE id = ?').run(cpf_cnpj, lead.id)
     if (instagram) db.prepare('UPDATE leads SET instagram = COALESCE(instagram, ?) WHERE id = ?').run(instagram, lead.id)
+
+    // Auto-detect: lead veio de anuncio? Marca trabalha_anuncio=1 se houver sinal claro
+    // (fbclid, ad_id, campaign_id, gclid, ou source/utm indicam paid)
+    const sourceStr = String(source || '').toLowerCase()
+    const utmMedStr = String(body.utm_medium || '').toLowerCase()
+    const utmSrcStr = String(body.utm_source || '').toLowerCase()
+    const isFromAd = !!(
+      body.fbclid || body.gclid || body.ad_id || body.campaign_id ||
+      sourceStr.includes('form') || sourceStr.includes('fb') || sourceStr.includes('meta') || sourceStr.includes('ad') ||
+      utmMedStr.includes('paid') || utmMedStr.includes('cpc') ||
+      utmSrcStr.includes('fb') || utmSrcStr.includes('google') || utmSrcStr.includes('meta')
+    )
+    if (isFromAd) {
+      db.prepare('UPDATE leads SET trabalha_anuncio = 1 WHERE id = ? AND (trabalha_anuncio IS NULL OR trabalha_anuncio = 0)').run(lead.id)
+    }
+
     // source_detail: combina o source_detail explicito + utms + page_url quando vierem
     const detailExtras = []
     if (source_detail) detailExtras.push(source_detail)
@@ -694,6 +800,14 @@ router.post('/sheets/:accountSlug', (req, res) => {
       }
     }
 
+    // Notes — append (nao sobrescreve se ja tinha algo). Usado por importacoes pra preservar feedbacks, perguntas do form, etc.
+    if (body.notes && String(body.notes).trim()) {
+      const newPart = String(body.notes).trim()
+      const cur = (lead.notes || '').trim()
+      const merged = cur ? `${cur}\n\n${newPart}` : newPart
+      db.prepare('UPDATE leads SET notes = ? WHERE id = ?').run(merged, lead.id)
+    }
+
     // Atendente (corretor): busca user da conta pelo nome (case-insensitive, ignora acentos)
     const attendantName = body.attendant_name || body.corretor || body.atendente || ''
     if (attendantName) {
@@ -710,6 +824,7 @@ router.post('/sheets/:accountSlug', (req, res) => {
     // Tags: aceita array ou string separada por virgula. Cria a tag se nao existir.
     const tagsRaw = body.tags || body.tag || ''
     const tagList = Array.isArray(tagsRaw) ? tagsRaw : String(tagsRaw).split(',').map(t => t.trim()).filter(Boolean)
+    const appliedTagIds = []
     for (const tagName of tagList) {
       let tag = db.prepare('SELECT id FROM tags WHERE account_id = ? AND LOWER(name) = LOWER(?)').get(account.id, tagName)
       if (!tag) {
@@ -717,6 +832,34 @@ router.post('/sheets/:accountSlug', (req, res) => {
         tag = { id: r.lastInsertRowid }
       }
       db.prepare('INSERT OR IGNORE INTO lead_tags (lead_id, tag_id) VALUES (?, ?)').run(lead.id, tag.id)
+      appliedTagIds.push(tag.id)
+    }
+
+    // Mapeamento tag → instancia (so se lead nao tem instance_id ainda)
+    // Primeira tag que tem mapping vence. Fallback: account.default_form_instance_id
+    // SO ATIVA se a conta cadastrou mapping ou default_form_instance_id — caso contrario nao mexe em nada (fluxo antigo intacto)
+    if (!lead.instance_id && appliedTagIds.length > 0) {
+      for (const tagId of appliedTagIds) {
+        const mapping = db.prepare('SELECT instance_id, attendant_id FROM tag_instance_mapping WHERE account_id = ? AND tag_id = ?').get(account.id, tagId)
+        if (mapping) {
+          db.prepare("UPDATE leads SET instance_id = ?, last_instance_id = ?, updated_at = datetime('now') WHERE id = ?").run(mapping.instance_id, mapping.instance_id, lead.id)
+          lead.instance_id = mapping.instance_id
+          lead.last_instance_id = mapping.instance_id
+          if (mapping.attendant_id && !lead.attendant_id) {
+            db.prepare('UPDATE leads SET attendant_id = ? WHERE id = ?').run(mapping.attendant_id, lead.id)
+            lead.attendant_id = mapping.attendant_id
+          }
+          db.prepare('INSERT OR IGNORE INTO lead_instance_assignments (lead_id, instance_id, attendant_id) VALUES (?, ?, ?)').run(lead.id, mapping.instance_id, mapping.attendant_id || null)
+          break
+        }
+      }
+    }
+    // Fallback: instancia padrao da conta pra leads de form
+    if (!lead.instance_id && account.default_form_instance_id) {
+      db.prepare("UPDATE leads SET instance_id = ?, last_instance_id = ?, updated_at = datetime('now') WHERE id = ?").run(account.default_form_instance_id, account.default_form_instance_id, lead.id)
+      lead.instance_id = account.default_form_instance_id
+      lead.last_instance_id = account.default_form_instance_id
+      db.prepare('INSERT OR IGNORE INTO lead_instance_assignments (lead_id, instance_id, attendant_id) VALUES (?, ?, ?)').run(lead.id, account.default_form_instance_id, lead.attendant_id || null)
     }
 
     // Remove tags: aceita array ou string. Util pra correcao em massa.
@@ -746,6 +889,8 @@ router.post('/sheets/:accountSlug', (req, res) => {
       triggerCapiForStageChange(lead.id, lead.stage_id, null, req)
     }
 
+    // Marca timestamp do ultimo lead recebido (pra UI mostrar status de integração)
+    try { db.prepare("UPDATE accounts SET last_sheets_lead_at = datetime('now') WHERE id = ?").run(account.id) } catch {}
     console.log(`[Webhook Sheets] ${isNew ? 'New' : 'Existing'} lead: ${name || phone} → account ${account.name} fbp=${!!body.fbp} fbc=${!!fbcVal} event_id=${body.event_id || 'none'}`)
     res.json({ ok: true, leadId: lead.id, isNew })
   } catch (err) {
