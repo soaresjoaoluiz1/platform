@@ -963,13 +963,13 @@
 - `CLAUDE.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
+- `crm-dashboard\DEPLOY.md`
 - `crm-dashboard\PLANO_PERFORMANCE.md`
 - `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
 - `dros-sales-site-v2\INTEGRACAO-LEADS.md`
 - `dros-sales-site-v2\README.md`
-- `dros-sales-site\README.md`
 - `oxi-pedidos\DEPLOY.md`
 - `oxi-pedidos\README.md`
 - `oxiquimica-lp\README.md`

@@ -1825,7 +1825,8 @@ async function buildOverview({ accountId, accountName, days, since, until }) {
 
   promises.meta = (async () => {
       try {
-        const fields = 'spend,impressions,clicks,cpc,ctr,cpm,reach,frequency,actions,cost_per_action_type,action_values,video_3_sec_watched_actions'
+        // NOTA: 'video_3_sec_watched_actions' foi REMOVIDO da Meta API v21 — pedia esse field e o request inteiro falhava com erro #100. Hook Rate agora vem de actions[action_type=video_view].
+        const fields = 'spend,impressions,clicks,cpc,ctr,cpm,reach,frequency,actions,cost_per_action_type,action_values'
         const [current, previous, campaigns] = await Promise.all([
           metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.current), limit: '500' }).catch(err => { console.log(`[Performance/Meta] FAIL current account=${accountId}:`, err.message); return { data: [] } }),
           metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.previous), limit: '500' }).catch(err => { console.log(`[Performance/Meta] FAIL previous account=${accountId}:`, err.message); return { data: [] } }),
@@ -2074,9 +2075,9 @@ async function buildOverview({ accountId, accountName, days, since, until }) {
       const prevMetaLinkClicks = mp ? getAct(mp.actions, 'link_click') : 0
       const prevLeads = mp ? (getAct(mp.actions, 'lead') || getAct(mp.actions, 'onsite_conversion.lead_grouped')) : 0
       const prevMessaging = mp ? getAct(mp.actions, 'onsite_conversion.messaging_conversation_started_7d') : 0
-      // Video 3s views (pra hook rate)
-      const video3s = getAct(mc.video_3_sec_watched_actions, 'video_view')
-      const prevVideo3s = mp ? getAct(mp.video_3_sec_watched_actions, 'video_view') : 0
+      // Video 3s views (pra hook rate) — agora vem do array actions
+      const video3s = getAct(mc.actions, 'video_view')
+      const prevVideo3s = mp ? getAct(mp.actions, 'video_view') : 0
       // Metricas: prefere field direto da Meta API quando existe (cpm, ctr, frequency),
       // calcula localmente apenas quando o Meta nao retorna (ctrLink, hookRate).
       const cpm = parseFloat(mc.cpm || 0) || (metaImpressions > 0 ? (metaSpend / metaImpressions) * 1000 : 0)
