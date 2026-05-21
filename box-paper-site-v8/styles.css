@@ -456,9 +456,25 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 100%; height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 1.1s var(--ease);
+  will-change: transform, opacity;
+  transform-origin: center center;
 }
 .hero-photo-stack img.is-active { opacity: 1; }
+
+/* modo mockup — PNGs com transparência (chromakey aplicado no source) */
+.hero-photo--mockup {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+  aspect-ratio: 1/1;
+  overflow: visible;
+}
+.hero-photo--mockup .hero-photo-stack img {
+  object-fit: contain;
+  padding: 0;
+  filter: drop-shadow(0 24px 32px rgba(10, 37, 72, 0.18));
+}
 .hero-photo figcaption {
   position: absolute;
   left: 0; right: 0; bottom: 0;

@@ -82,6 +82,11 @@ export default function Sidebar() {
             </NavLink>
           )}
           {(isDono || isGerente) && (
+            <NavLink to="/performance" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}>
+              <BarChart3 size={16} /> Performance
+            </NavLink>
+          )}
+          {(isDono || isGerente) && (
             <>
               <div className="nav-section">Administracao</div>
               <NavLink to="/clients" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}><Building2 size={16} /> Clientes</NavLink>

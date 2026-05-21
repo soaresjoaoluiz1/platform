@@ -93,11 +93,12 @@
       </dl>
     </div>
 
-    <figure class="hero-photo" data-motion="scale-in">
+    <figure class="hero-photo hero-photo--mockup">
       <div class="hero-photo-stack" id="heroStack">
-        <img src="assets/img/hero-pizza-1.jpg" alt="Caixa de pizza Pizza Pitzz pela Box Paper" width="1400" height="1880" class="is-active" data-cap-name="Pizza Pitzz" data-cap-size="Caixa 35×35">
-        <img src="assets/img/hero-pizza-2.jpg" alt="Caixas Pizza Pitzz e Aló Pizza pela Box Paper" width="1400" height="1880" loading="lazy" data-cap-name="Aló Pizza" data-cap-size="Caixa 16 pedaços">
-        <img src="assets/img/hero-pizza-3.jpg" alt="Caixa Leal Pizzas pela Box Paper" width="1400" height="1880" loading="lazy" data-cap-name="Leal Pizzas" data-cap-size="Caixa premium">
+        <img src="assets/img/hero-cx-1.png" alt="Mockup caixa La Fornaia pela Box Paper" width="1200" height="1200" class="is-active">
+        <img src="assets/img/hero-cx-2.png" alt="Mockup caixa Vila Brasil kraft pela Box Paper" width="1200" height="1200" loading="lazy">
+        <img src="assets/img/hero-cx-3.png" alt="Mockup caixa Via Roma vermelha pela Box Paper" width="1200" height="1200" loading="lazy">
+        <img src="assets/img/hero-cx-4.png" alt="Mockup caixa Via Roma preta premium pela Box Paper" width="1200" height="1200" loading="lazy">
       </div>
     </figure>
   </div>
@@ -506,18 +507,69 @@
   fn(); window.addEventListener('scroll', fn, {passive:true});
 })();
 
-/* hero photo slideshow — alterna 3 imagens com fade */
-(()=>{
+/* hero photo slideshow + float idle animation — controlado via Motion One */
+(async ()=>{
   const stack = document.getElementById('heroStack');
   if(!stack) return;
   const imgs = stack.querySelectorAll('img');
   if(imgs.length < 2) return;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const motion = await import('https://cdn.jsdelivr.net/npm/motion@11.18.0/+esm');
+  const { animate } = motion;
+  const EASE_OUT = [0.16, 1, 0.3, 1];
+  const EASE_IN = [0.55, 0, 0.32, 1];
+
+  // estado inicial: só a primeira aparece, demais escondidas
+  imgs.forEach((img, i) => {
+    img.classList.remove('is-active');
+    if (i === 0) {
+      img.style.opacity = '1';
+      img.style.transform = 'scale(1) rotate(0deg)';
+    } else {
+      img.style.opacity = '0';
+      img.style.transform = 'scale(0.86) rotate(-6deg)';
+    }
+  });
+
+  // idle float — leve respiração contínua na caixa ativa
+  function floatLoop(img) {
+    if (reduce) return;
+    animate(img, {
+      transform: ['scale(1) rotate(0deg) translateY(0px)',
+                  'scale(1.015) rotate(0.6deg) translateY(-8px)',
+                  'scale(1) rotate(0deg) translateY(0px)']
+    }, {
+      duration: 4.2,
+      easing: 'ease-in-out',
+      repeat: Infinity,
+    });
+  }
+  floatLoop(imgs[0]);
+
   let idx = 0;
-  setInterval(()=>{
-    imgs[idx].classList.remove('is-active');
+  const next = () => {
+    const out = imgs[idx];
     idx = (idx + 1) % imgs.length;
-    imgs[idx].classList.add('is-active');
-  }, 4200);
+    const inImg = imgs[idx];
+
+    // saída: encolhe + gira + some
+    animate(out, {
+      opacity: [1, 0],
+      transform: ['scale(1) rotate(0deg)', 'scale(0.86) rotate(6deg) translateY(-30px)']
+    }, { duration: 0.7, easing: EASE_IN });
+
+    // entrada: cresce + gira + aparece
+    inImg.style.transform = 'scale(0.86) rotate(-6deg) translateY(30px)';
+    animate(inImg, {
+      opacity: [0, 1],
+      transform: ['scale(0.86) rotate(-6deg) translateY(30px)', 'scale(1) rotate(0deg) translateY(0px)']
+    }, { duration: 0.85, delay: 0.15, easing: EASE_OUT })
+      .then(() => floatLoop(inImg));
+  };
+
+  setInterval(next, 2800);
 })();
 
 /* calculadora — com count-up suave nos valores */

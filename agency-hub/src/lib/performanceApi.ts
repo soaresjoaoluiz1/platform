@@ -638,3 +638,27 @@ export async function fetchOverview(accountId: string, accountName: string, days
   if (since && until) url += `&since=${since}&until=${until}`
   return perfFetch<OverviewData>(url)
 }
+
+// ---------- ALL CLIENTS OVERVIEW (admin only) ----------
+export interface AllClientsOverviewItem {
+  client: {
+    id: number
+    name: string
+    logo_url: string | null
+    hasMeta: boolean
+    hasGads: boolean
+    hasGA4: boolean
+    hasIG: boolean
+  }
+  overview: OverviewData | null
+  error: string | null
+}
+
+export interface AllClientsOverviewResponse {
+  days: number
+  clients: AllClientsOverviewItem[]
+}
+
+export async function fetchAllClientsOverview(days = 7): Promise<AllClientsOverviewResponse> {
+  return perfFetch<AllClientsOverviewResponse>(`/all-clients-overview?days=${days}`)
+}

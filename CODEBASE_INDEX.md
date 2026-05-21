@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-21 · 5278 files · ~19.8M tokens total
+> 2026-05-21 · 5294 files · ~19.8M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -470,6 +470,14 @@
 **dros-sales-site-v2/**
 - `_bp-acabamentos-split.js` — Gera duas imagens separadas a partir da fonte:
 - `_bp-boleto.js`
+- `_bp-cxs-chromakey.js`
+- `_bp-cxs-clean.js`
+- `_bp-cxs-final.js`
+- `_bp-cxs-multiply.js`
+- `_bp-cxs-png.js`
+- `_bp-cxs-skybg.js`
+- `_bp-cxs-tight.js`
+- `_bp-cxs.js`
 - `_bp-entrega.js`
 - `_bp-estoque.js`
 - `_bp-extra-images.js` — Otimiza:
@@ -922,12 +930,12 @@
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-20T15-03-26-787Z.yml`
-- `.playwright-mcp\page-2026-05-20T15-57-46-100Z.yml`
-- `.playwright-mcp\page-2026-05-20T16-01-17-252Z.yml`
-- `.playwright-mcp\page-2026-05-20T16-27-08-875Z.yml`
-- `.playwright-mcp\page-2026-05-20T17-24-17-969Z.yml`
-- `.playwright-mcp\page-2026-05-20T18-15-58-532Z.yml`
+- `.playwright-mcp\page-2026-05-21T10-32-35-100Z.yml`
+- `.playwright-mcp\page-2026-05-21T10-33-58-997Z.yml`
+- `.playwright-mcp\page-2026-05-21T10-35-04-768Z.yml`
+- `.playwright-mcp\page-2026-05-21T10-36-17-074Z.yml`
+- `.playwright-mcp\page-2026-05-21T10-37-38-341Z.yml`
+- `.playwright-mcp\page-2026-05-21T10-39-42-916Z.yml`
 - `.vscode\mcp.json`
 - `.vscode\tasks.json`
 - `agency-hub\package.json`

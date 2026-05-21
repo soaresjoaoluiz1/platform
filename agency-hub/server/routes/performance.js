@@ -1789,16 +1789,41 @@ router.get('/kiwify/products', async (req, res) => {
 // =====================================================================
 // OVERVIEW (Aggregated from all sources)
 // =====================================================================
-router.get('/overview/:accountId', async (req, res) => {
-  try {
-    const { accountId } = req.params
-    const accountName = resolveAccountName(req)
-    const days = parseInt(req.query.days || '7')
-    const { since, until } = req.query
-    const ranges = getDateRanges(days, since, until)
-    const promises = {}
+// =====================================================================
+// Cache em memoria do overview — TTL 5min
+// Compartilhado entre /overview/:accountId e /all-clients-overview.
+// =====================================================================
+const overviewCache = new Map()
+const OVERVIEW_TTL_MS = 5 * 60 * 1000
 
-    promises.meta = (async () => {
+function overviewCacheKey(accountId, accountName, days, since, until) {
+  return `${accountId}|${(accountName || '').toLowerCase()}|${days}|${since || ''}|${until || ''}`
+}
+
+async function buildOverviewCached(opts) {
+  const k = overviewCacheKey(opts.accountId, opts.accountName, opts.days, opts.since, opts.until)
+  const cached = overviewCache.get(k)
+  if (cached && Date.now() - cached.ts < OVERVIEW_TTL_MS) return cached.data
+  const data = await buildOverview(opts)
+  overviewCache.set(k, { ts: Date.now(), data })
+  // Limpa caches antigos pra nao vazar memoria
+  if (overviewCache.size > 200) {
+    const cutoff = Date.now() - OVERVIEW_TTL_MS
+    for (const [key, val] of overviewCache.entries()) {
+      if (val.ts < cutoff) overviewCache.delete(key)
+    }
+  }
+  return data
+}
+
+// Funcao pura que agrega Meta + GAds + GA4 + IG + Kiwify + CRM pra uma conta.
+// Retorna o JSON do overview (sources, totals, alerts, metaDaily).
+// Reusada por /overview/:accountId (single client) e /all-clients-overview (loop).
+async function buildOverview({ accountId, accountName, days, since, until }) {
+  const ranges = getDateRanges(days, since, until)
+  const promises = {}
+
+  promises.meta = (async () => {
       try {
         const fields = 'spend,impressions,clicks,cpc,ctr,reach,actions,cost_per_action_type,action_values'
         const [current, previous, campaigns] = await Promise.all([
@@ -2128,9 +2153,68 @@ router.get('/overview/:accountId', async (req, res) => {
     overview.alerts = []
     if (overview.sources.ga4?.bounceRate > 70) overview.alerts.push({ type: 'warning', text: `Taxa de rejeicao do site alta: ${overview.sources.ga4.bounceRate.toFixed(1)}%` })
 
+    return overview
+}
+
+// Handler /overview/:accountId — casca que usa buildOverviewCached
+router.get('/overview/:accountId', async (req, res) => {
+  try {
+    const accountName = resolveAccountName(req)
+    const days = parseInt(req.query.days || '7')
+    const { since, until } = req.query
+    const overview = await buildOverviewCached({ accountId: req.params.accountId, accountName, days, since, until })
     res.json(overview)
   } catch (err) {
     console.error('[Performance/Overview]', err.message)
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// Agregado de TODOS os clientes vinculados — admin only (dono/gerente)
+// Itera clients ativos com pelo menos 1 vinculo, chama buildOverviewCached em paralelo,
+// retorna array com { client, overview, error }. Falha de um nao derruba os outros.
+router.get('/all-clients-overview', async (req, res) => {
+  if (!req.user || !['dono', 'gerente'].includes(req.user.role)) {
+    return res.status(403).json({ error: 'Forbidden' })
+  }
+  try {
+    const days = parseInt(req.query.days || '7')
+    const clients = db.prepare(`
+      SELECT id, name, logo_url,
+             core_client_name, core_meta_account_id, core_gads_customer_id,
+             core_ig_page_id, core_ga4_property_id
+      FROM clients
+      WHERE is_active = 1
+        AND (core_meta_account_id IS NOT NULL
+          OR core_gads_customer_id IS NOT NULL
+          OR core_ga4_property_id IS NOT NULL
+          OR core_ig_page_id IS NOT NULL
+          OR core_client_name IS NOT NULL)
+      ORDER BY name
+    `).all()
+
+    const items = await Promise.all(clients.map(async (c) => {
+      const clientInfo = {
+        id: c.id, name: c.name, logo_url: c.logo_url,
+        hasMeta: !!c.core_meta_account_id,
+        hasGads: !!c.core_gads_customer_id,
+        hasGA4: !!c.core_ga4_property_id,
+        hasIG: !!c.core_ig_page_id,
+      }
+      const accountId = c.core_meta_account_id || ''
+      const accountName = (c.core_client_name || c.name || '').trim()
+      try {
+        const overview = await buildOverviewCached({ accountId, accountName, days })
+        return { client: clientInfo, overview, error: null }
+      } catch (err) {
+        console.error(`[all-clients-overview] cliente ${c.id} (${c.name}):`, err.message)
+        return { client: clientInfo, overview: null, error: err.message || 'erro desconhecido' }
+      }
+    }))
+
+    res.json({ days, clients: items })
+  } catch (err) {
+    console.error('[all-clients-overview]', err.message)
     res.status(500).json({ error: err.message })
   }
 })
