@@ -373,8 +373,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 80px;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 64px;
   align-items: center;
   position: relative;
   z-index: 1;
@@ -491,8 +491,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 @media (max-width: 920px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-  .hero-photo { max-width: 480px; margin: 0 auto; }
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero-left { order: 2; }
+  .hero-photo { order: 1; max-width: 420px; margin: 0 auto; }
   .hero-facts { gap: 20px; grid-template-columns: repeat(3, 1fr); max-width: 100%; }
 }
 @media (max-width: 560px) {

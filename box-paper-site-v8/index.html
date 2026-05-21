@@ -521,15 +521,18 @@
   const EASE_OUT = [0.16, 1, 0.3, 1];
   const EASE_IN = [0.55, 0, 0.32, 1];
 
+  // Scale base maior pra caixa preencher o espaço
+  const BASE = 1.18;
+
   // estado inicial: só a primeira aparece, demais escondidas
   imgs.forEach((img, i) => {
     img.classList.remove('is-active');
     if (i === 0) {
       img.style.opacity = '1';
-      img.style.transform = 'scale(1) rotate(0deg)';
+      img.style.transform = `scale(${BASE}) rotate(0deg)`;
     } else {
       img.style.opacity = '0';
-      img.style.transform = 'scale(0.86) rotate(-6deg)';
+      img.style.transform = `scale(${BASE * 0.86}) rotate(-6deg)`;
     }
   });
 
@@ -537,9 +540,9 @@
   function floatLoop(img) {
     if (reduce) return;
     animate(img, {
-      transform: ['scale(1) rotate(0deg) translateY(0px)',
-                  'scale(1.015) rotate(0.6deg) translateY(-8px)',
-                  'scale(1) rotate(0deg) translateY(0px)']
+      transform: [`scale(${BASE}) rotate(0deg) translateY(0px)`,
+                  `scale(${BASE * 1.015}) rotate(0.6deg) translateY(-10px)`,
+                  `scale(${BASE}) rotate(0deg) translateY(0px)`]
     }, {
       duration: 4.2,
       easing: 'ease-in-out',
@@ -557,14 +560,14 @@
     // saída: encolhe + gira + some
     animate(out, {
       opacity: [1, 0],
-      transform: ['scale(1) rotate(0deg)', 'scale(0.86) rotate(6deg) translateY(-30px)']
+      transform: [`scale(${BASE}) rotate(0deg)`, `scale(${BASE * 0.86}) rotate(6deg) translateY(-30px)`]
     }, { duration: 0.7, easing: EASE_IN });
 
     // entrada: cresce + gira + aparece
-    inImg.style.transform = 'scale(0.86) rotate(-6deg) translateY(30px)';
+    inImg.style.transform = `scale(${BASE * 0.86}) rotate(-6deg) translateY(30px)`;
     animate(inImg, {
       opacity: [0, 1],
-      transform: ['scale(0.86) rotate(-6deg) translateY(30px)', 'scale(1) rotate(0deg) translateY(0px)']
+      transform: [`scale(${BASE * 0.86}) rotate(-6deg) translateY(30px)`, `scale(${BASE}) rotate(0deg) translateY(0px)`]
     }, { duration: 0.85, delay: 0.15, easing: EASE_OUT })
       .then(() => floatLoop(inImg));
   };
