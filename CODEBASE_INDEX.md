@@ -928,10 +928,10 @@
 
 ## Config
 - `_opensquad\config.yaml`
-- `_scripts\psd-gen\package.json`
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
+- `.playwright-mcp\page-2026-05-21T10-36-17-074Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-37-38-341Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-39-42-916Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-43-18-605Z.yml`
@@ -960,14 +960,14 @@
 
 ## Docs
 - `CLAUDE.md`
+- `client-dashboard\DEPLOY.md`
+- `client-dashboard\README.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
-- `crm-dashboard\CODEBASE_INDEX.md`
-- `crm-dashboard\DEPLOY.md`
-- `crm-dashboard\PLANO_PERFORMANCE.md`
-- `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
+- `dros-sales-site-v2\INTEGRACAO-LEADS.md`
+- `dros-sales-site-v2\README.md`
 - `dros-sales-site\README.md`
 - `oxi-pedidos\DEPLOY.md`
 - `oxi-pedidos\README.md`

@@ -2055,6 +2055,8 @@ async function buildOverview({ accountId, accountName, days, since, until }) {
     if (results.meta?.available && results.meta.current) {
       const mc = results.meta.current
       const mp = results.meta.previous
+      // Debug: loga as chaves que o Meta API retornou pra esse account
+      console.log(`[Performance/Meta] account=${accountId} fields presentes:`, Object.keys(mc || {}).join(','))
       const getAct = (actions, type) => { const a = actions?.find(x => x.action_type === type); return a ? parseFloat(a.value) : 0 }
       const metaSpend = parseFloat(mc.spend || 0)
       const prevMetaSpend = mp ? parseFloat(mp.spend || 0) : 0
@@ -2208,10 +2210,9 @@ router.get('/all-clients-overview', async (req, res) => {
   }
   try {
     const days = parseInt(req.query.days || '7')
-    // Bypass cache pra debug: ?nocache=1 limpa o cache antes de processar
-    if (req.query.nocache === '1') {
-      overviewCache.clear()
-    }
+    // Limpa o cache antes de processar (forca recalculo fresh enquanto debugamos
+    // metricas Meta que estavam vindo zeradas). Reativar cache quando estabilizar.
+    overviewCache.clear()
     const clients = db.prepare(`
       SELECT id, name, logo_url,
              core_client_name, core_meta_account_id, core_gads_customer_id,
