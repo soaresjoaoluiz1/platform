@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-21T11:02:29.415Z",
+  "generatedAt": "2026-05-21T11:15:53.170Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -6840,8 +6840,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\PerformanceOverview.tsx": {
-      "mtime": 1779361346963.2852,
-      "size": 11713,
+      "mtime": 1779362150708.471,
+      "size": 11879,
       "symbols": {
         "purpose": "=====================================================================",
         "exports": [

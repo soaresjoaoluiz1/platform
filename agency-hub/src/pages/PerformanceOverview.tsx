@@ -62,7 +62,7 @@ export default function PerformanceOverview() {
   return (
     <div>
       <div className="page-header">
-        <h1><BarChart3 size={20} style={{ marginRight: 8, verticalAlign: -3 }} /> Performance Geral</h1>
+        <h1><BarChart3 size={20} style={{ marginRight: 8, verticalAlign: -3 }} /> Performance Geral <span style={{ fontSize: 10, color: '#6B6580', fontWeight: 400, marginLeft: 6 }}>v3 meta+</span></h1>
         <p style={{ color: '#9B96B0', fontSize: 13, marginTop: 4 }}>
           Visao consolidada de todos os clientes vinculados ({items.length})
         </p>
@@ -145,54 +145,54 @@ function ClientPerfCard({ item, onOpen }: {
   const meta = s.meta
   const fmtPct = (n?: number) => n === undefined || n === null ? '—' : `${n.toFixed(2)}%`
   const fmtNum2 = (n?: number) => n === undefined || n === null ? '—' : n.toFixed(2)
+  // Mostrar linha Meta se cliente TEM badge Meta (vinculado), mesmo se payload nao retornou dados
+  const showMeta = client.hasMeta
 
   return (
     <div className="card client-perf-card" onClick={onOpen} role="button" tabIndex={0}>
       <CardHeader client={client} />
 
       <div className="metric-stack">
-        {/* === META ADS (foco principal) === */}
-        {(meta || client.hasMeta || client.hasGads) && (
+        {(showMeta || client.hasGads) && (
           <MetricRow label="Investido" value={formatBRL(t.spend)}
             current={t.spend} previous={t.prevSpend} invert />
         )}
-        {meta && (
-          <MetricRow label="Alcance" value={formatNumber(meta.reach || 0)}
-            current={meta.reach} previous={meta.prevReach} />
+        {showMeta && (
+          <MetricRow label="Alcance" value={formatNumber(meta?.reach || 0)}
+            current={meta?.reach} previous={meta?.prevReach} />
         )}
-        {meta && (
-          <MetricRow label="Impressoes" value={formatNumber(meta.impressions || 0)}
-            current={meta.impressions} previous={meta.prevImpressions} />
+        {showMeta && (
+          <MetricRow label="Impressoes" value={formatNumber(meta?.impressions || 0)}
+            current={meta?.impressions} previous={meta?.prevImpressions} />
         )}
-        {(meta || client.hasMeta || client.hasGads) && (
+        {(showMeta || client.hasGads) && (
           <MetricRow label="Resultados" value={formatNumber(t.leads)}
             current={t.leads} previous={t.prevLeads} />
         )}
-        {(meta || t.cpl > 0) && (
+        {(showMeta || t.cpl > 0) && (
           <MetricRow label="CPL" value={formatBRL(t.cpl)}
             current={t.cpl} previous={t.prevCpl} invert />
         )}
-        {meta && (
-          <MetricRow label="CPM" value={formatBRL(meta.cpm || 0)}
-            current={meta.cpm} previous={meta.prevCpm} invert />
+        {showMeta && (
+          <MetricRow label="CPM" value={formatBRL(meta?.cpm || 0)}
+            current={meta?.cpm} previous={meta?.prevCpm} invert />
         )}
-        {meta && (
-          <MetricRow label="CTR" value={fmtPct(meta.ctr || 0)}
-            current={meta.ctr} previous={meta.prevCtr} />
+        {showMeta && (
+          <MetricRow label="CTR" value={fmtPct(meta?.ctr || 0)}
+            current={meta?.ctr} previous={meta?.prevCtr} />
         )}
-        {meta && (
-          <MetricRow label="CTR Link" value={fmtPct(meta.ctrLink || 0)}
-            current={meta.ctrLink} previous={meta.prevCtrLink} />
+        {showMeta && (
+          <MetricRow label="CTR Link" value={fmtPct(meta?.ctrLink || 0)}
+            current={meta?.ctrLink} previous={meta?.prevCtrLink} />
         )}
-        {meta && (meta.hookRate || 0) > 0 && (
-          <MetricRow label="Hook Rate" value={fmtPct(meta.hookRate || 0)}
-            current={meta.hookRate} previous={meta.prevHookRate} />
+        {showMeta && (meta?.hookRate || 0) > 0 && (
+          <MetricRow label="Hook Rate" value={fmtPct(meta?.hookRate)}
+            current={meta?.hookRate} previous={meta?.prevHookRate} />
         )}
-        {meta && (
-          <MetricRow label="Frequencia" value={fmtNum2(meta.frequency || 0)}
-            current={meta.frequency} previous={meta.prevFrequency} invert />
+        {showMeta && (
+          <MetricRow label="Frequencia" value={fmtNum2(meta?.frequency || 0)}
+            current={meta?.frequency} previous={meta?.prevFrequency} invert />
         )}
-        {/* === Secundario === */}
         {client.hasGA4 && (
           <MetricRow label="Sessoes site" value={formatNumber(t.sessions)}
             current={t.sessions} previous={t.prevSessions} />
