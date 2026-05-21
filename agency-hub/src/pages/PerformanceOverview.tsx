@@ -178,10 +178,6 @@ function ClientPerfCard({ item, onOpen }: {
             current={meta?.cpm} previous={meta?.prevCpm} invert />
         )}
         {showMeta && (
-          <MetricRow label="CTR" value={fmtPct(meta?.ctr || 0)}
-            current={meta?.ctr} previous={meta?.prevCtr} />
-        )}
-        {showMeta && (
           <MetricRow label="CTR Link" value={fmtPct(meta?.ctrLink || 0)}
             current={meta?.ctrLink} previous={meta?.prevCtrLink} />
         )}

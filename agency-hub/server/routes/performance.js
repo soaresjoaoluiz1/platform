@@ -1825,7 +1825,7 @@ async function buildOverview({ accountId, accountName, days, since, until }) {
 
   promises.meta = (async () => {
       try {
-        const fields = 'spend,impressions,clicks,cpc,ctr,reach,frequency,actions,cost_per_action_type,action_values,video_3_sec_watched_actions'
+        const fields = 'spend,impressions,clicks,cpc,ctr,cpm,reach,frequency,actions,cost_per_action_type,action_values,video_3_sec_watched_actions'
         const [current, previous, campaigns] = await Promise.all([
           metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.current), limit: '500' }).catch(() => ({ data: [] })),
           metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.previous), limit: '500' }).catch(() => ({ data: [] })),
@@ -2074,11 +2074,12 @@ async function buildOverview({ accountId, accountName, days, since, until }) {
       // Video 3s views (pra hook rate)
       const video3s = getAct(mc.video_3_sec_watched_actions, 'video_view')
       const prevVideo3s = mp ? getAct(mp.video_3_sec_watched_actions, 'video_view') : 0
-      // Metricas calculadas
-      const cpm = metaImpressions > 0 ? (metaSpend / metaImpressions) * 1000 : 0
-      const prevCpm = prevMetaImpressions > 0 ? (prevMetaSpend / prevMetaImpressions) * 1000 : 0
-      const ctr = metaImpressions > 0 ? (metaClicks / metaImpressions) * 100 : 0
-      const prevCtr = prevMetaImpressions > 0 ? (prevMetaClicks / prevMetaImpressions) * 100 : 0
+      // Metricas: prefere field direto da Meta API quando existe (cpm, ctr, frequency),
+      // calcula localmente apenas quando o Meta nao retorna (ctrLink, hookRate).
+      const cpm = parseFloat(mc.cpm || 0) || (metaImpressions > 0 ? (metaSpend / metaImpressions) * 1000 : 0)
+      const prevCpm = mp ? (parseFloat(mp.cpm || 0) || (prevMetaImpressions > 0 ? (prevMetaSpend / prevMetaImpressions) * 1000 : 0)) : 0
+      const ctr = parseFloat(mc.ctr || 0) || (metaImpressions > 0 ? (metaClicks / metaImpressions) * 100 : 0)
+      const prevCtr = mp ? (parseFloat(mp.ctr || 0) || (prevMetaImpressions > 0 ? (prevMetaClicks / prevMetaImpressions) * 100 : 0)) : 0
       const ctrLink = metaImpressions > 0 ? (metaLinkClicks / metaImpressions) * 100 : 0
       const prevCtrLink = prevMetaImpressions > 0 ? (prevMetaLinkClicks / prevMetaImpressions) * 100 : 0
       const hookRate = metaImpressions > 0 && video3s > 0 ? (video3s / metaImpressions) * 100 : 0
@@ -2207,6 +2208,10 @@ router.get('/all-clients-overview', async (req, res) => {
   }
   try {
     const days = parseInt(req.query.days || '7')
+    // Bypass cache pra debug: ?nocache=1 limpa o cache antes de processar
+    if (req.query.nocache === '1') {
+      overviewCache.clear()
+    }
     const clients = db.prepare(`
       SELECT id, name, logo_url,
              core_client_name, core_meta_account_id, core_gads_customer_id,

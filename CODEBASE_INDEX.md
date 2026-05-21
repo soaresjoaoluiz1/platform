@@ -928,10 +928,10 @@
 
 ## Config
 - `_opensquad\config.yaml`
+- `_scripts\psd-gen\package.json`
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-21T10-36-17-074Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-37-38-341Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-39-42-916Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-43-18-605Z.yml`

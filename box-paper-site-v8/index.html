@@ -507,7 +507,7 @@
   fn(); window.addEventListener('scroll', fn, {passive:true});
 })();
 
-/* hero photo slideshow 3D — Motion One com rotateY, perspective + idle drift */
+/* hero slideshow premium — refined fade + subtle scale, sem giros */
 (async ()=>{
   const stack = document.getElementById('heroStack');
   if(!stack) return;
@@ -516,45 +516,36 @@
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // perspective 3D no container
-  stack.style.perspective = '1200px';
-  stack.style.transformStyle = 'preserve-3d';
-
   const motion = await import('https://cdn.jsdelivr.net/npm/motion@11.18.0/+esm');
   const { animate } = motion;
-  const EASE_OUT = [0.16, 1, 0.3, 1];
-  const EASE_IN = [0.55, 0, 0.32, 1];
-  const SPRING = [0.34, 1.56, 0.64, 1]; // overshoot suave
+  // refined easing — sem overshoot, sem spring; suave e premium
+  const EASE = [0.32, 0.72, 0, 1];   // smooth out
+  const EASE_SOFT = [0.4, 0, 0.2, 1]; // material-style
 
-  // Scale base maior pra preencher o espaço
   const BASE = 1.20;
 
-  // estado inicial — primeira ativa, demais escondidas no "stack 3D"
+  // estado inicial
   imgs.forEach((img, i) => {
-    img.style.transformStyle = 'preserve-3d';
-    img.style.backfaceVisibility = 'hidden';
     if (i === 0) {
       img.style.opacity = '1';
-      img.style.transform = `scale(${BASE}) rotateY(0deg) rotateZ(0deg) translateY(0px) translateZ(0px)`;
+      img.style.transform = `scale(${BASE}) translateY(0px)`;
     } else {
       img.style.opacity = '0';
-      img.style.transform = `scale(${BASE * 0.78}) rotateY(45deg) rotateZ(-8deg) translateX(80px) translateZ(-200px)`;
+      img.style.transform = `scale(${BASE * 0.98}) translateY(20px)`;
     }
   });
 
-  // idle drift — caixa flutua + tilt sutil em 3D
+  // idle: respiração mínima, contínua — só uma leve flutuação Y + breathing
   function floatLoop(img) {
     if (reduce) return;
     animate(img, {
       transform: [
-        `scale(${BASE}) rotateY(0deg) rotateZ(0deg) translateY(0px) translateZ(0px)`,
-        `scale(${BASE * 1.02}) rotateY(-3deg) rotateZ(1deg) translateY(-14px) translateZ(20px)`,
-        `scale(${BASE}) rotateY(3deg) rotateZ(-1deg) translateY(0px) translateZ(0px)`,
-        `scale(${BASE * 1.02}) rotateY(0deg) rotateZ(1.2deg) translateY(-10px) translateZ(15px)`,
-        `scale(${BASE}) rotateY(0deg) rotateZ(0deg) translateY(0px) translateZ(0px)`,
+        `scale(${BASE}) translateY(0px)`,
+        `scale(${BASE * 1.012}) translateY(-9px)`,
+        `scale(${BASE}) translateY(0px)`,
       ]
     }, {
-      duration: 8,
+      duration: 7,
       easing: 'ease-in-out',
       repeat: Infinity,
     });
@@ -567,29 +558,28 @@
     idx = (idx + 1) % imgs.length;
     const inImg = imgs[idx];
 
-    // saída: vira pro lado + voa pra trás + some
+    // saída: fade out + leve drift up, sem giro
     animate(out, {
       opacity: [1, 0],
       transform: [
-        `scale(${BASE}) rotateY(0deg) rotateZ(0deg) translateX(0px) translateZ(0px)`,
-        `scale(${BASE * 0.72}) rotateY(-55deg) rotateZ(12deg) translateX(-100px) translateZ(-300px)`
+        `scale(${BASE}) translateY(0px)`,
+        `scale(${BASE * 1.04}) translateY(-12px)`
       ]
-    }, { duration: 1.2, easing: EASE_IN });
+    }, { duration: 0.9, easing: EASE });
 
-    // entrada: vem do outro lado fazendo 3D flip in
-    inImg.style.transform = `scale(${BASE * 0.78}) rotateY(60deg) rotateZ(-10deg) translateX(120px) translateZ(-250px)`;
+    // entrada: fade in suave + escala 1.02 → 1.00 (entrada elegante)
+    inImg.style.transform = `scale(${BASE * 1.04}) translateY(12px)`;
     animate(inImg, {
       opacity: [0, 1],
       transform: [
-        `scale(${BASE * 0.78}) rotateY(60deg) rotateZ(-10deg) translateX(120px) translateZ(-250px)`,
-        `scale(${BASE * 1.05}) rotateY(-5deg) rotateZ(2deg) translateX(-10px) translateZ(40px)`,
-        `scale(${BASE}) rotateY(0deg) rotateZ(0deg) translateX(0px) translateZ(0px)`
+        `scale(${BASE * 1.04}) translateY(12px)`,
+        `scale(${BASE}) translateY(0px)`
       ]
-    }, { duration: 1.4, delay: 0.3, easing: SPRING })
+    }, { duration: 1.2, delay: 0.35, easing: EASE_SOFT })
       .then(() => floatLoop(inImg));
   };
 
-  setInterval(next, 4800);
+  setInterval(next, 5200);
 })();
 
 /* calculadora — com count-up suave nos valores */
