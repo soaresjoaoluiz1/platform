@@ -1827,10 +1827,11 @@ async function buildOverview({ accountId, accountName, days, since, until }) {
       try {
         const fields = 'spend,impressions,clicks,cpc,ctr,cpm,reach,frequency,actions,cost_per_action_type,action_values,video_3_sec_watched_actions'
         const [current, previous, campaigns] = await Promise.all([
-          metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.current), limit: '500' }).catch(() => ({ data: [] })),
-          metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.previous), limit: '500' }).catch(() => ({ data: [] })),
+          metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.current), limit: '500' }).catch(err => { console.log(`[Performance/Meta] FAIL current account=${accountId}:`, err.message); return { data: [] } }),
+          metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.previous), limit: '500' }).catch(err => { console.log(`[Performance/Meta] FAIL previous account=${accountId}:`, err.message); return { data: [] } }),
           metaFetch(`/${accountId}/insights`, { fields: 'campaign_name,actions', time_range: JSON.stringify(ranges.current), level: 'campaign', limit: '500' }).catch(() => ({ data: [] })),
         ])
+        console.log(`[Performance/Meta] RESULT account=${accountId} currentRows=${(current.data || []).length} previousRows=${(previous.data || []).length}`)
         let campaignLeads = 0, campaignMessaging = 0
         for (const camp of (campaigns.data || [])) {
           const getAct = (type) => { const a = camp.actions?.find(x => x.action_type === type); return a ? parseFloat(a.value) : 0 }

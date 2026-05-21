@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-21 · 5298 files · ~19.8M tokens total
+> 2026-05-21 · 5300 files · ~19.8M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -471,6 +471,7 @@
 **dros-sales-site-v2/**
 - `_bp-acabamentos-split.js` — Gera duas imagens separadas a partir da fonte:
 - `_bp-boleto.js`
+- `_bp-cronograma.js`
 - `_bp-cxs-chromakey.js`
 - `_bp-cxs-clean.js`
 - `_bp-cxs-final.js`
@@ -931,12 +932,12 @@
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-21T10-36-17-074Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-37-38-341Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-39-42-916Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-43-18-605Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-57-29-309Z.yml`
 - `.playwright-mcp\page-2026-05-21T11-06-55-522Z.yml`
+- `.playwright-mcp\page-2026-05-21T11-49-04-834Z.yml`
 - `.vscode\mcp.json`
 - `.vscode\tasks.json`
 - `agency-hub\package.json`
@@ -960,10 +961,10 @@
 
 ## Docs
 - `CLAUDE.md`
-- `client-dashboard\DEPLOY.md`
-- `client-dashboard\README.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
+- `crm-dashboard\PLANO_PERFORMANCE.md`
+- `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
 - `dros-sales-site-v2\INTEGRACAO-LEADS.md`
