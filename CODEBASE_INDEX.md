@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-21 · 5294 files · ~19.8M tokens total
+> 2026-05-21 · 5296 files · ~19.8M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -97,6 +97,7 @@
 - `Notifications.tsx` — default:Notifications
 - `Onboard.tsx` — default:Onboard
 - `Performance.tsx` — default:Performance
+- `PerformanceOverview.tsx` — ===================================================================== · default:PerformanceOverview
 - `Pipeline.tsx` — default:Pipeline
 - `PublicApprovals.tsx` — default:PublicApprovals
 - `Services.tsx` — default:Services
@@ -930,12 +931,12 @@
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-21T10-32-35-100Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-33-58-997Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-35-04-768Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-36-17-074Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-37-38-341Z.yml`
 - `.playwright-mcp\page-2026-05-21T10-39-42-916Z.yml`
+- `.playwright-mcp\page-2026-05-21T10-43-18-605Z.yml`
 - `.vscode\mcp.json`
 - `.vscode\tasks.json`
 - `agency-hub\package.json`
@@ -961,12 +962,12 @@
 - `CLAUDE.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
+- `crm-dashboard\CODEBASE_INDEX.md`
+- `crm-dashboard\DEPLOY.md`
 - `crm-dashboard\PLANO_PERFORMANCE.md`
 - `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
-- `dros-sales-site-v2\INTEGRACAO-LEADS.md`
-- `dros-sales-site-v2\README.md`
 - `dros-sales-site\README.md`
 - `oxi-pedidos\DEPLOY.md`
 - `oxi-pedidos\README.md`
@@ -975,4 +976,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~11.1k tokens · Full codebase: ~19.8M tokens · Saves ~100%*
+*Index: ~11.2k tokens · Full codebase: ~19.8M tokens · Saves ~100%*

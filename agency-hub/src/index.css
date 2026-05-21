@@ -579,6 +579,18 @@ th.right, td.right { text-align: right; }
 .platform-badges .badge.ga4  { background: rgba(155,89,182,0.15); color: #c39bda }
 .platform-badges .badge.ig   { background: rgba(225,48,108,0.15); color: #e8688f }
 .metric-stack { padding: 10px 14px }
+.metric-stack.meta-detail {
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(24,119,242,0.03);
+}
+.metric-section-title {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4f9cf2;
+  padding: 4px 0 6px;
+}
 .client-perf-card .metric-row {
   display: grid; grid-template-columns: 1fr auto auto;
   gap: 8px; align-items: center;

@@ -616,7 +616,22 @@ export async function fetchGA4Report(propertyId: string, days = 7, since?: strin
 // ---------- OVERVIEW ----------
 export interface OverviewData {
   sources: {
-    meta?: { spend: number; prevSpend: number; impressions: number; reach: number; clicks: number; leads: number; prevLeads: number; messaging: number; prevMessaging: number; purchases: number; linkClicks: number }
+    meta?: {
+      spend: number; prevSpend: number
+      impressions: number; prevImpressions?: number
+      reach: number; prevReach?: number
+      clicks: number; prevClicks?: number
+      leads: number; prevLeads: number
+      messaging: number; prevMessaging: number
+      purchases: number
+      linkClicks: number; prevLinkClicks?: number
+      // Metricas calculadas
+      cpm?: number; prevCpm?: number
+      ctr?: number; prevCtr?: number
+      ctrLink?: number; prevCtrLink?: number
+      hookRate?: number; prevHookRate?: number
+      frequency?: number; prevFrequency?: number
+    }
     gads?: { spend: number; prevSpend: number; clicks: number; impressions: number; conversions: number; prevConversions: number; revenue: number }
     ga4?: { sessions: number; prevSessions: number; users: number; prevUsers: number; pageviews: number; bounceRate: number; engagementRate: number; conversions: number; daily: { date: string; sessions: number }[] }
     instagram?: { followers: number; reach: number; interactions: number; username: string }

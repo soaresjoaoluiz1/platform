@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-21T10:43:09.679Z",
+  "generatedAt": "2026-05-21T10:51:46.772Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -754,8 +754,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\App.tsx": {
-      "mtime": 1778495219270.861,
-      "size": 3844,
+      "mtime": 1779360261830.6665,
+      "size": 4011,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -3113,8 +3113,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\ClientDetail.tsx": {
-      "mtime": 1778696246535.5667,
-      "size": 37187,
+      "mtime": 1779360307036.6875,
+      "size": 37415,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -3146,8 +3146,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\performanceApi.ts": {
-      "mtime": 1779360187762.6572,
-      "size": 18709,
+      "mtime": 1779360671323.7473,
+      "size": 19090,
       "symbols": {
         "purpose": "=====================================================================",
         "exports": [
@@ -3246,8 +3246,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\Sidebar.tsx": {
-      "mtime": 1778495277309.7078,
-      "size": 7226,
+      "mtime": 1779360278533.3713,
+      "size": 7480,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -3309,8 +3309,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\performance.js": {
-      "mtime": 1779360162583.5642,
-      "size": 106894,
+      "mtime": 1779360659758.2068,
+      "size": 108757,
       "symbols": {
         "purpose": "=====================================================================",
         "exports": [],
@@ -6836,6 +6836,17 @@
       "symbols": {
         "purpose": null,
         "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\PerformanceOverview.tsx": {
+      "mtime": 1779360704288.8188,
+      "size": 12124,
+      "symbols": {
+        "purpose": "=====================================================================",
+        "exports": [
+          "default:PerformanceOverview"
+        ],
         "language": "typescript"
       }
     }

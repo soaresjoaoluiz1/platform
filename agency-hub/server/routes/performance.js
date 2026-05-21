@@ -1825,7 +1825,7 @@ async function buildOverview({ accountId, accountName, days, since, until }) {
 
   promises.meta = (async () => {
       try {
-        const fields = 'spend,impressions,clicks,cpc,ctr,reach,actions,cost_per_action_type,action_values'
+        const fields = 'spend,impressions,clicks,cpc,ctr,reach,frequency,actions,cost_per_action_type,action_values,video_3_sec_watched_actions'
         const [current, previous, campaigns] = await Promise.all([
           metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.current), limit: '500' }).catch(() => ({ data: [] })),
           metaFetch(`/${accountId}/insights`, { fields, time_range: JSON.stringify(ranges.previous), limit: '500' }).catch(() => ({ data: [] })),
@@ -2058,19 +2058,47 @@ async function buildOverview({ accountId, accountName, days, since, until }) {
       const getAct = (actions, type) => { const a = actions?.find(x => x.action_type === type); return a ? parseFloat(a.value) : 0 }
       const metaSpend = parseFloat(mc.spend || 0)
       const prevMetaSpend = mp ? parseFloat(mp.spend || 0) : 0
+      const metaImpressions = parseInt(mc.impressions || 0)
+      const prevMetaImpressions = mp ? parseInt(mp.impressions || 0) : 0
+      const metaClicks = parseInt(mc.clicks || 0)
+      const prevMetaClicks = mp ? parseInt(mp.clicks || 0) : 0
+      const metaReach = parseInt(mc.reach || 0)
+      const prevMetaReach = mp ? parseInt(mp.reach || 0) : 0
       const metaLeads = results.meta.campaignLeads
       const metaMessaging = results.meta.campaignMessaging
       const metaPurchases = getAct(mc.actions, 'purchase')
       const metaLinkClicks = getAct(mc.actions, 'link_click')
+      const prevMetaLinkClicks = mp ? getAct(mp.actions, 'link_click') : 0
       const prevLeads = mp ? (getAct(mp.actions, 'lead') || getAct(mp.actions, 'onsite_conversion.lead_grouped')) : 0
       const prevMessaging = mp ? getAct(mp.actions, 'onsite_conversion.messaging_conversation_started_7d') : 0
+      // Video 3s views (pra hook rate)
+      const video3s = getAct(mc.video_3_sec_watched_actions, 'video_view')
+      const prevVideo3s = mp ? getAct(mp.video_3_sec_watched_actions, 'video_view') : 0
+      // Metricas calculadas
+      const cpm = metaImpressions > 0 ? (metaSpend / metaImpressions) * 1000 : 0
+      const prevCpm = prevMetaImpressions > 0 ? (prevMetaSpend / prevMetaImpressions) * 1000 : 0
+      const ctr = metaImpressions > 0 ? (metaClicks / metaImpressions) * 100 : 0
+      const prevCtr = prevMetaImpressions > 0 ? (prevMetaClicks / prevMetaImpressions) * 100 : 0
+      const ctrLink = metaImpressions > 0 ? (metaLinkClicks / metaImpressions) * 100 : 0
+      const prevCtrLink = prevMetaImpressions > 0 ? (prevMetaLinkClicks / prevMetaImpressions) * 100 : 0
+      const hookRate = metaImpressions > 0 && video3s > 0 ? (video3s / metaImpressions) * 100 : 0
+      const prevHookRate = prevMetaImpressions > 0 && prevVideo3s > 0 ? (prevVideo3s / prevMetaImpressions) * 100 : 0
+      const frequency = parseFloat(mc.frequency || 0)
+      const prevFrequency = mp ? parseFloat(mp.frequency || 0) : 0
       overview.sources.meta = {
         spend: metaSpend, prevSpend: prevMetaSpend,
-        impressions: parseInt(mc.impressions || 0), reach: parseInt(mc.reach || 0),
-        clicks: parseInt(mc.clicks || 0),
+        impressions: metaImpressions, prevImpressions: prevMetaImpressions,
+        reach: metaReach, prevReach: prevMetaReach,
+        clicks: metaClicks, prevClicks: prevMetaClicks,
         leads: metaLeads, prevLeads,
         messaging: metaMessaging, prevMessaging,
-        purchases: metaPurchases, linkClicks: metaLinkClicks,
+        purchases: metaPurchases, linkClicks: metaLinkClicks, prevLinkClicks: prevMetaLinkClicks,
+        // Metricas calculadas com deltas
+        cpm, prevCpm,
+        ctr, prevCtr,
+        ctrLink, prevCtrLink,
+        hookRate, prevHookRate,
+        frequency, prevFrequency,
       }
     }
 

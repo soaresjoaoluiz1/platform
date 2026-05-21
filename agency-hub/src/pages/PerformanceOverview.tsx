@@ -142,16 +142,23 @@ function ClientPerfCard({ item, onOpen }: {
   const sparkData = (overview.metaDaily || []).map(d => ({ date: d.date, value: d.spend }))
   const hasSpark = sparkData.length >= 2
 
+  const meta = s.meta
+  // Helpers de formato
+  const fmtPct = (n?: number) => n === undefined || n === null ? '—' : `${n.toFixed(2)}%`
+  const fmtNum2 = (n?: number) => n === undefined || n === null ? '—' : n.toFixed(2)
+
   return (
     <div className="card client-perf-card" onClick={onOpen} role="button" tabIndex={0}>
       <CardHeader client={client} />
+
+      {/* Bloco TOTAIS (cabeçalho com KPIs principais) */}
       <div className="metric-stack">
         {(client.hasMeta || client.hasGads) && (
           <MetricRow label="Investido" value={formatBRL(t.spend)}
             current={t.spend} previous={t.prevSpend} invert />
         )}
         {(client.hasMeta || client.hasGads) && (
-          <MetricRow label="Leads/Conv" value={formatNumber(t.leads)}
+          <MetricRow label="Resultados" value={formatNumber(t.leads)}
             current={t.leads} previous={t.prevLeads} />
         )}
         {client.hasGA4 && (
@@ -169,6 +176,42 @@ function ClientPerfCard({ item, onOpen }: {
           <MetricRow label="Qualif. CRM" value={`${qualRate}% (${s.crm!.qualSim}/${s.crm!.crmTotal})`} />
         )}
       </div>
+
+      {/* Bloco META ADS detalhe (alcance, CPM, CTR, etc) */}
+      {meta && (
+        <div className="metric-stack meta-detail">
+          <div className="metric-section-title">Meta Ads</div>
+          {meta.reach > 0 && (
+            <MetricRow label="Alcance" value={formatNumber(meta.reach)}
+              current={meta.reach} previous={meta.prevReach} />
+          )}
+          {meta.impressions > 0 && (
+            <MetricRow label="Impressoes" value={formatNumber(meta.impressions)}
+              current={meta.impressions} previous={meta.prevImpressions} />
+          )}
+          {meta.cpm !== undefined && meta.cpm > 0 && (
+            <MetricRow label="CPM" value={formatBRL(meta.cpm)}
+              current={meta.cpm} previous={meta.prevCpm} invert />
+          )}
+          {meta.ctr !== undefined && meta.ctr > 0 && (
+            <MetricRow label="CTR" value={fmtPct(meta.ctr)}
+              current={meta.ctr} previous={meta.prevCtr} />
+          )}
+          {meta.ctrLink !== undefined && meta.ctrLink > 0 && (
+            <MetricRow label="CTR Link" value={fmtPct(meta.ctrLink)}
+              current={meta.ctrLink} previous={meta.prevCtrLink} />
+          )}
+          {meta.hookRate !== undefined && meta.hookRate > 0 && (
+            <MetricRow label="Hook Rate" value={fmtPct(meta.hookRate)}
+              current={meta.hookRate} previous={meta.prevHookRate} />
+          )}
+          {meta.frequency !== undefined && meta.frequency > 0 && (
+            <MetricRow label="Frequencia" value={fmtNum2(meta.frequency)}
+              current={meta.frequency} previous={meta.prevFrequency} invert />
+          )}
+        </div>
+      )}
+
       {hasSpark && (
         <div className="card-sparkline">
           <ResponsiveContainer width="100%" height={40}>
