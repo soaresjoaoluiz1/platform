@@ -99,10 +99,6 @@
         <img src="assets/img/hero-pizza-2.jpg" alt="Caixas Pizza Pitzz e Aló Pizza pela Box Paper" width="1400" height="1880" loading="lazy" data-cap-name="Aló Pizza" data-cap-size="Caixa 16 pedaços">
         <img src="assets/img/hero-pizza-3.jpg" alt="Caixa Leal Pizzas pela Box Paper" width="1400" height="1880" loading="lazy" data-cap-name="Leal Pizzas" data-cap-size="Caixa premium">
       </div>
-      <figcaption>
-        <span id="heroCapName">Pizza Pitzz</span>
-        <span id="heroCapSize">Caixa 35×35</span>
-      </figcaption>
     </figure>
   </div>
 </section>
@@ -167,7 +163,7 @@
           <h3>A gente fabrica e <em>entrega no prazo.</em></h3>
           <p>Toda semana, no dia combinado, suas caixas chegam direto da nossa fábrica em Sombrio · SC até a porta da pizzaria. Sem atraso, sem você precisar ligar ou cobrar.</p>
         </div>
-        <figure class="step-photo">
+        <figure class="step-photo step-photo--mobile-only">
           <img src="assets/img/entrega-van.jpg" alt="Van Box Paper entregando caixas" loading="lazy">
         </figure>
       </li>
@@ -178,7 +174,7 @@
           <h3>Você paga <em>só pelo que recebeu.</em></h3>
           <p>Nada de comprometer o caixa com lote grande de uma vez. Você paga conforme recebe — capital de giro livre pra investir no que importa: a pizza.</p>
         </div>
-        <figure class="step-photo">
+        <figure class="step-photo step-photo--portrait">
           <img src="assets/img/metodo-pagamento.jpg" alt="Pagamento fracionado conforme entrega" loading="lazy">
         </figure>
       </li>
@@ -513,8 +509,6 @@
 /* hero photo slideshow — alterna 3 imagens com fade */
 (()=>{
   const stack = document.getElementById('heroStack');
-  const capName = document.getElementById('heroCapName');
-  const capSize = document.getElementById('heroCapSize');
   if(!stack) return;
   const imgs = stack.querySelectorAll('img');
   if(imgs.length < 2) return;
@@ -523,8 +517,6 @@
     imgs[idx].classList.remove('is-active');
     idx = (idx + 1) % imgs.length;
     imgs[idx].classList.add('is-active');
-    if(capName) capName.textContent = imgs[idx].dataset.capName || '';
-    if(capSize) capSize.textContent = imgs[idx].dataset.capSize || '';
   }, 4200);
 })();
 

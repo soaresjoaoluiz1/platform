@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-20 · 5226 files · ~19.5M tokens total
+> 2026-05-21 · 5278 files · ~19.8M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -471,8 +471,11 @@
 - `_bp-acabamentos-split.js` — Gera duas imagens separadas a partir da fonte:
 - `_bp-boleto.js`
 - `_bp-entrega.js`
+- `_bp-estoque.js`
 - `_bp-extra-images.js` — Otimiza:
 - `_bp-hero-img.js` — Otimiza box-paper-img-hero.png pra usar no hero do V8.
+- `_bp-hero-mockups.js` — Top-view Pizza Pitzz fechada (mockup limpo, vista superior)
+- `_bp-hero-mockups2.js`
 - `_bp-hero2.js`
 - `_bp-hero3.js` — Otimiza as 3 imagens do hero — alternando entre Pizza Pitzz, Aló Pizza e Leal Pizzas.
 - `_bp-replace-images.js` — Replace box-paper images with new professional ones.
@@ -919,12 +922,12 @@
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-20T14-04-15-296Z.yml`
-- `.playwright-mcp\page-2026-05-20T14-15-42-313Z.yml`
-- `.playwright-mcp\page-2026-05-20T14-17-06-531Z.yml`
-- `.playwright-mcp\page-2026-05-20T14-18-33-568Z.yml`
-- `.playwright-mcp\page-2026-05-20T14-58-51-265Z.yml`
 - `.playwright-mcp\page-2026-05-20T15-03-26-787Z.yml`
+- `.playwright-mcp\page-2026-05-20T15-57-46-100Z.yml`
+- `.playwright-mcp\page-2026-05-20T16-01-17-252Z.yml`
+- `.playwright-mcp\page-2026-05-20T16-27-08-875Z.yml`
+- `.playwright-mcp\page-2026-05-20T17-24-17-969Z.yml`
+- `.playwright-mcp\page-2026-05-20T18-15-58-532Z.yml`
 - `.vscode\mcp.json`
 - `.vscode\tasks.json`
 - `agency-hub\package.json`
@@ -948,10 +951,10 @@
 
 ## Docs
 - `CLAUDE.md`
-- `client-dashboard\DEPLOY.md`
-- `client-dashboard\README.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
+- `crm-dashboard\PLANO_PERFORMANCE.md`
+- `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
 - `dros-sales-site-v2\INTEGRACAO-LEADS.md`
@@ -964,4 +967,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~11.0k tokens · Full codebase: ~19.5M tokens · Saves ~100%*
+*Index: ~11.1k tokens · Full codebase: ~19.8M tokens · Saves ~100%*

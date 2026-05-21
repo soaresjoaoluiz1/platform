@@ -1,0 +1,336 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - link "Box Paper" [ref=e5] [cursor=pointer]:
+        - /url: "#"
+        - img "Box Paper Embalagens — Imprimindo marcas de sucesso" [ref=e6]
+      - generic [ref=e7]:
+        - link "Atendimento comercial (48) 99989-2391" [ref=e8] [cursor=pointer]:
+          - /url: tel:+5548999892391
+          - img [ref=e9]
+          - generic [ref=e11]:
+            - generic [ref=e12]: Atendimento comercial
+            - strong [ref=e13]: (48) 99989-2391
+        - button "Conheça o plano" [ref=e14] [cursor=pointer]:
+          - text: Conheça o plano
+          - img [ref=e15]
+    - generic [ref=e18]:
+      - navigation "principal" [ref=e19]:
+        - link "Como funciona" [ref=e20] [cursor=pointer]:
+          - /url: "#funciona"
+        - link "Comparativo" [ref=e21] [cursor=pointer]:
+          - /url: "#comparativo"
+        - link "Acabamentos" [ref=e22] [cursor=pointer]:
+          - /url: "#acabamentos"
+        - link "Pizzarias" [ref=e23] [cursor=pointer]:
+          - /url: "#clientes"
+        - link "Contato" [ref=e24] [cursor=pointer]:
+          - /url: "#contato"
+      - generic [ref=e25]: Desde 2012
+  - generic [ref=e27]:
+    - generic [ref=e28]:
+      - heading "Sua pizzaria nunca mais para por falta de caixa." [level=1] [ref=e29]:
+        - text: Sua pizzaria nunca mais para
+        - emphasis [ref=e30]: por falta de caixa.
+      - paragraph [ref=e31]: Você recebe toda semana exatamente a quantidade que sua pizzaria usa. Sem estoque grande, sem dinheiro travado em papelão. Paga conforme recebe.
+      - generic [ref=e32]:
+        - button "Conheça o plano" [ref=e33] [cursor=pointer]:
+          - text: Conheça o plano
+          - img [ref=e34]
+        - link "Como funciona" [ref=e36] [cursor=pointer]:
+          - /url: "#funciona"
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - term [ref=e39]: Desde
+          - definition [ref=e40]: "2012"
+        - generic [ref=e41]:
+          - term [ref=e42]: Atendimento
+          - definition [ref=e43]: SC + RS
+        - generic [ref=e44]:
+          - term [ref=e45]: Personalização
+          - definition [ref=e46]: 100%
+    - figure "Pizza Pitzz Personalizada · vermelha" [ref=e47]:
+      - generic [ref=e48]:
+        - img "Mockup caixa Pizza Pitzz vermelha personalizada Box Paper" [ref=e49]
+        - img "Mockup caixa Bella Napoli fundo branco padrão Box Paper" [ref=e50]
+        - img "Mockup caixa Via Roma fundo laminado premium Box Paper" [ref=e51]
+      - generic [ref=e52]:
+        - generic [ref=e53]: Pizza Pitzz
+        - generic [ref=e54]: Personalizada · vermelha
+  - generic [ref=e56]:
+    - generic [ref=e57]:
+      - heading "Comprar caixa em lote trava o caixa e o espaço da pizzaria." [level=2] [ref=e58]:
+        - text: Comprar caixa em lote
+        - emphasis [ref=e59]: trava o caixa
+        - text: e o espaço da pizzaria.
+      - paragraph [ref=e60]: A maneira tradicional cria 4 problemas operacionais ao mesmo tempo. A entrega programada resolve os quatro.
+    - generic [ref=e61]:
+      - article [ref=e62]:
+        - generic [ref=e63]: "1."
+        - heading "Capital travado em papelão." [level=3] [ref=e64]
+        - paragraph [ref=e65]: O lote grande some do caixa no dia do pagamento. O que devia girar pra pizza vira pilha de caixa empoeirada num canto.
+      - article [ref=e66]:
+        - generic [ref=e67]: "2."
+        - heading "Espaço perdido na pizzaria." [level=3] [ref=e68]
+        - paragraph [ref=e69]: 3–5 m² de estoque ocupam salão, despensa ou cozinha. Espaço útil convertido em pilha de caixa.
+      - article [ref=e70]:
+        - generic [ref=e71]: "3."
+        - heading "Risco no fim de semana." [level=3] [ref=e72]
+        - paragraph [ref=e73]: Aquele momento que a caixa some bem na hora do pico. Cliente esperando, equipe correndo. Sex 21h.
+      - article [ref=e74]:
+        - generic [ref=e75]: "4."
+        - heading "O loop nunca acaba." [level=3] [ref=e76]
+        - paragraph [ref=e77]: Compra grande → estoque grande → caixa fica → próximo lote → repete. Você não sai dele sozinho.
+  - generic [ref=e79]:
+    - generic [ref=e80]:
+      - heading "Um sistema simples para você nunca mais pensar em caixa." [level=2] [ref=e81]:
+        - text: Um sistema simples para você
+        - emphasis [ref=e82]: nunca mais
+        - text: pensar em caixa.
+      - paragraph [ref=e83]: A gente combina o ritmo da sua pizzaria, fabrica, entrega no dia certo e cobra só pelo que você recebeu.
+    - list [ref=e84]:
+      - listitem [ref=e85]:
+        - generic [ref=e86]: "01"
+        - generic [ref=e87]:
+          - generic [ref=e88]: Setup · 1 dia
+          - heading "Você define o dia e a quantidade." [level=3] [ref=e89]:
+            - text: Você define o
+            - emphasis [ref=e90]: dia
+            - text: e a
+            - emphasis [ref=e91]: quantidade.
+          - paragraph [ref=e92]:
+            - text: Combinamos juntos o melhor dia da semana e quantas caixas a sua pizzaria precisa por entrega. Sem amarra, sem pedido mínimo gigante. Plano feito pro
+            - emphasis [ref=e93]: seu
+            - text: fluxo.
+        - figure [ref=e94]:
+          - img "Cronograma de entregas Box Paper" [ref=e95]
+      - listitem [ref=e96]:
+        - generic [ref=e97]: "02"
+        - generic [ref=e98]:
+          - generic [ref=e99]: Toda semana
+          - heading "A gente fabrica e entrega no prazo." [level=3] [ref=e100]:
+            - text: A gente fabrica e
+            - emphasis [ref=e101]: entrega no prazo.
+          - paragraph [ref=e102]: Toda semana, no dia combinado, suas caixas chegam direto da nossa fábrica em Sombrio · SC até a porta da pizzaria. Sem atraso, sem você precisar ligar ou cobrar.
+        - figure [ref=e103]:
+          - img "Van Box Paper entregando caixas" [ref=e104]
+      - listitem [ref=e105]:
+        - generic [ref=e106]: "03"
+        - generic [ref=e107]:
+          - generic [ref=e108]: Pagamento fracionado
+          - heading "Você paga só pelo que recebeu." [level=3] [ref=e109]:
+            - text: Você paga
+            - emphasis [ref=e110]: só pelo que recebeu.
+          - paragraph [ref=e111]: "Nada de comprometer o caixa com lote grande de uma vez. Você paga conforme recebe — capital de giro livre pra investir no que importa: a pizza."
+        - figure [ref=e112]:
+          - img "Pagamento fracionado conforme entrega" [ref=e113]
+  - generic [ref=e115]:
+    - generic [ref=e116]:
+      - heading "Lote tradicional vs. Box Paper." [level=2] [ref=e117]:
+        - text: Lote tradicional
+        - emphasis [ref=e118]: vs.
+        - text: Box Paper.
+      - paragraph [ref=e119]: A diferença operacional na sua pizzaria, ponto a ponto.
+    - generic [ref=e120]:
+      - generic [ref=e121]:
+        - generic [ref=e122]: Comprar em lote
+        - generic [ref=e123]: Box Paper · Programada
+      - generic [ref=e124]:
+        - generic [ref=e125]: Capital de giro
+        - generic [ref=e126]:
+          - img [ref=e127]
+          - text: Travado em papelão
+        - generic [ref=e129]:
+          - img [ref=e130]
+          - text: Livre, paga conforme recebe
+      - generic [ref=e132]:
+        - generic [ref=e133]: Espaço da pizzaria
+        - generic [ref=e134]:
+          - img [ref=e135]
+          - text: 3–5 m² de estoque
+        - generic [ref=e137]:
+          - img [ref=e138]
+          - text: Só o que precisa na semana
+      - generic [ref=e140]:
+        - generic [ref=e141]: Risco de faltar
+        - generic [ref=e142]:
+          - img [ref=e143]
+          - text: Alto no fim de semana
+        - generic [ref=e145]:
+          - img [ref=e146]
+          - text: Zero. Entrega automática.
+      - generic [ref=e148]:
+        - generic [ref=e149]: Pedido mínimo
+        - generic [ref=e150]:
+          - img [ref=e151]
+          - text: 5.000 caixas / lote
+        - generic [ref=e153]:
+          - img [ref=e154]
+          - text: Sob medida pela sua semana
+      - generic [ref=e156]:
+        - generic [ref=e157]: Personalização
+        - generic [ref=e158]:
+          - img [ref=e159]
+          - text: Caixa genérica
+        - generic [ref=e161]:
+          - img [ref=e162]
+          - text: 100% com sua marca
+      - generic [ref=e164]:
+        - generic [ref=e165]: Você lembra de pedir
+        - generic [ref=e166]:
+          - img [ref=e167]
+          - text: Sim — e às vezes esquece
+        - generic [ref=e169]:
+          - img [ref=e170]
+          - text: Não. Chega automático.
+  - generic [ref=e173]:
+    - heading "Duas opções pra combinar com a sua pizzaria." [level=2] [ref=e175]:
+      - text: Duas opções pra
+      - emphasis [ref=e176]: combinar
+      - text: com a sua pizzaria.
+    - generic [ref=e177]:
+      - article [ref=e178]:
+        - figure [ref=e179]:
+          - text: BP · STD
+          - img "Caixa fundo branco padrão Box Paper" [ref=e180]
+        - generic [ref=e181]:
+          - generic [ref=e182]: Padrão · sem custo extra
+          - heading "Fundo branco" [level=3] [ref=e183]
+          - paragraph [ref=e184]: Limpo, profissional, já sai com a sua logo impressa. Ideal pra quem quer personalizar sem custo extra.
+      - article [ref=e185]:
+        - figure [ref=e186]:
+          - text: BP · PRM
+          - img "Caixa fundo laminado premium Box Paper" [ref=e187]
+        - generic [ref=e188]:
+          - generic [ref=e189]: Premium · pequeno acréscimo
+          - heading "Fundo laminado" [level=3] [ref=e190]
+          - paragraph [ref=e191]: Acabamento brilhante que muda a aparência da caixa. Pra quem quer passar imagem premium desde a entrega.
+  - generic [ref=e193]:
+    - heading "No Sul do Brasil, já não param por falta de caixa." [level=2] [ref=e195]:
+      - text: No Sul do Brasil,
+      - emphasis [ref=e196]: já não param
+      - text: por falta de caixa.
+    - generic [ref=e197]:
+      - article [ref=e198]:
+        - text: "\""
+        - paragraph [ref=e199]:
+          - text: "\"Desde que entramos no plano da Box Paper,"
+          - strong [ref=e200]: nunca mais ficamos sem caixa
+          - text: . O pagamento fracionado aliviou o nosso fluxo."
+        - generic [ref=e201]:
+          - generic [ref=e202]: M
+          - generic [ref=e203]:
+            - strong [ref=e204]: Marcelo R.
+            - text: Pizzaria Sabor da Serra · Garopaba
+      - article [ref=e205]:
+        - text: "\""
+        - paragraph [ref=e206]:
+          - text: "\"Atendimento nota 10 e qualidade"
+          - strong [ref=e207]: impecável
+          - text: . Antes a gente comprava em lote, hoje a caixa chega toda quinta sem a gente nem ter que lembrar."
+        - generic [ref=e208]:
+          - generic [ref=e209]: J
+          - generic [ref=e210]:
+            - strong [ref=e211]: Juliana M.
+            - text: Bella Pizza · Tubarão
+      - article [ref=e212]:
+        - text: "\""
+        - paragraph [ref=e213]:
+          - text: "\"O capital de giro que voltou pra dentro da operação foi grande. Em vez de papelão parado,"
+          - strong [ref=e214]: mais farinha e queijo
+          - text: rodando."
+        - generic [ref=e215]:
+          - generic [ref=e216]: R
+          - generic [ref=e217]:
+            - strong [ref=e218]: Rafael F.
+            - text: Forno Nobre · Torres
+    - generic [ref=e219]:
+      - generic [ref=e220]: Pizzarias atendidas em SC + RS
+      - generic [ref=e221]:
+        - generic [ref=e222]:
+          - generic [ref=e223]: Forno Nobre
+          - generic [ref=e224]: Sabor da Serra
+          - generic [ref=e225]: Bella Pizza
+          - generic [ref=e226]: Pizza & CIA
+          - generic [ref=e227]: Via Roma
+          - generic [ref=e228]: Bella Napoli
+          - generic [ref=e229]: Forno & Lenha
+          - generic [ref=e230]: Sabor & Lenha
+        - generic [ref=e231]:
+          - generic [ref=e232]: Forno Nobre
+          - generic [ref=e233]: Sabor da Serra
+          - generic [ref=e234]: Bella Pizza
+          - generic [ref=e235]: Pizza & CIA
+          - generic [ref=e236]: Via Roma
+          - generic [ref=e237]: Bella Napoli
+          - generic [ref=e238]: Forno & Lenha
+          - generic [ref=e239]: Sabor & Lenha
+  - generic [ref=e242]:
+    - generic [ref=e243]:
+      - heading "Quer receber suas caixas toda semana sem se preocupar com estoque?" [level=2] [ref=e244]:
+        - text: Quer receber suas caixas
+        - emphasis [ref=e245]: toda semana
+        - text: sem se preocupar com estoque?
+      - paragraph [ref=e246]:
+        - text: A gente desenha o plano de entrega programada da sua pizzaria em
+        - strong [ref=e247]: 2 minutos
+        - text: . Sem fidelidade, sem compromisso.
+      - generic [ref=e248]:
+        - button "Conheça o plano" [ref=e249] [cursor=pointer]:
+          - text: Conheça o plano
+          - img [ref=e250]
+        - link "Pedir orçamento" [ref=e252] [cursor=pointer]:
+          - /url: mailto:contato@boxpaperembalagens.com.br?subject=Pedido%20de%20orcamento
+      - list [ref=e253]:
+        - listitem [ref=e254]:
+          - img [ref=e255]
+          - text: Sem fidelidade · cancela quando quiser
+        - listitem [ref=e257]:
+          - img [ref=e258]
+          - text: Personalização inclusa
+        - listitem [ref=e260]:
+          - img [ref=e261]
+          - text: Resposta em até 4 horas úteis
+    - figure [ref=e263]:
+      - img "Entregador Box Paper entregando caixas para família" [ref=e264]
+  - contentinfo [ref=e265]:
+    - generic [ref=e266]:
+      - generic [ref=e267]:
+        - img "Box Paper Embalagens" [ref=e268]
+        - paragraph [ref=e269]: Sistema de assinatura de embalagens para pizzarias. Fábrica própria em Sombrio · SC. 14 anos imprimindo marcas de sucesso no Sul do Brasil.
+      - generic [ref=e270]:
+        - heading "Plano" [level=4] [ref=e271]
+        - list [ref=e272]:
+          - listitem [ref=e273]:
+            - link "Como funciona" [ref=e274] [cursor=pointer]:
+              - /url: "#funciona"
+          - listitem [ref=e275]:
+            - link "Comparativo" [ref=e276] [cursor=pointer]:
+              - /url: "#comparativo"
+          - listitem [ref=e277]:
+            - link "Acabamentos" [ref=e278] [cursor=pointer]:
+              - /url: "#acabamentos"
+      - generic [ref=e279]:
+        - heading "Contato" [level=4] [ref=e280]
+        - list [ref=e281]:
+          - listitem [ref=e282]:
+            - link "(48) 99989-2391" [ref=e283] [cursor=pointer]:
+              - /url: https://wa.me/5548999892391
+          - listitem [ref=e284]:
+            - link "(48) 99989-2082" [ref=e285] [cursor=pointer]:
+              - /url: https://wa.me/5548999892082
+          - listitem [ref=e286]:
+            - link "contato@boxpaperembalagens.com.br" [ref=e287] [cursor=pointer]:
+              - /url: mailto:contato@boxpaperembalagens.com.br
+              - text: contato@
+              - text: boxpaperembalagens.com.br
+          - listitem [ref=e288]: Av. Getúlio Vargas — Sombrio · SC
+      - generic [ref=e289]:
+        - heading "Box Paper®" [level=4] [ref=e290]
+        - list [ref=e291]:
+          - listitem [ref=e292]: Imprimindo marcas de sucesso
+          - listitem [ref=e293]: Desde 2012
+          - listitem [ref=e294]: Fábrica própria em Sombrio · SC
+    - generic [ref=e295]:
+      - generic [ref=e296]: © 2026 Box Paper Embalagens — Todos os direitos reservados.
+      - generic [ref=e297]: Atendimento SC + RS

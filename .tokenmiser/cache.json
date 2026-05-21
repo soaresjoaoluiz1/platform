@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-05-20T15:32:18.772Z",
+  "generatedAt": "2026-05-21T09:19:51.111Z",
   "entries": {
     "c:\\Users\\usuar\\Downloads\\Open Squad\\serve.js": {
       "mtime": 1778242312236.528,
@@ -295,6 +295,24 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\vite.config.ts": {
+      "mtime": 1778242354133.3901,
+      "size": 313,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\seed.js": {
+      "mtime": 1774977004338.5684,
+      "size": 7038,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\dros-sales-site-v2\\_bp-replace-images.js": {
       "mtime": 1779213870619.2122,
       "size": 2509,
@@ -322,6 +340,24 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\dros-sales-site-v2\\_bp-hero-mockups2.js": {
+      "mtime": 1779294370690.9424,
+      "size": 979,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\dros-sales-site-v2\\_bp-hero-mockups.js": {
+      "mtime": 1779294332316.0618,
+      "size": 1632,
+      "symbols": {
+        "purpose": "Top-view Pizza Pitzz fechada (mockup limpo, vista superior)",
+        "exports": [],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\dros-sales-site-v2\\_bp-hero-img.js": {
       "mtime": 1779285681286.7754,
       "size": 694,
@@ -336,6 +372,24 @@
       "size": 1939,
       "symbols": {
         "purpose": "Otimiza:",
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\dros-sales-site-v2\\_bp-estoque.js": {
+      "mtime": 1779292594781.637,
+      "size": 631,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\dros-sales-site-v2\\_bp-entrega.js": {
+      "mtime": 1779290468620.3538,
+      "size": 635,
+      "symbols": {
+        "purpose": null,
         "exports": [],
         "language": "typescript"
       }
@@ -370,24 +424,6 @@
     "c:\\Users\\usuar\\Downloads\\Open Squad\\dashboard\\vite.config.ts": {
       "mtime": 1774351686327.057,
       "size": 348,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\vite.config.ts": {
-      "mtime": 1778242354133.3901,
-      "size": 313,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\seed.js": {
-      "mtime": 1774977004338.5684,
-      "size": 7038,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -448,6 +484,26 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\main.tsx": {
+      "mtime": 1778081368440.4004,
+      "size": 523,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\App.tsx": {
+      "mtime": 1778081750072.9402,
+      "size": 3979,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:App"
+        ],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\seed.js": {
       "mtime": 1778144913207.343,
       "size": 4523,
@@ -481,46 +537,6 @@
       "symbols": {
         "purpose": null,
         "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\main.tsx": {
-      "mtime": 1778081368440.4004,
-      "size": 523,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\App.tsx": {
-      "mtime": 1778081750072.9402,
-      "size": 3979,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:App"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\main.tsx": {
-      "mtime": 1776424361165.7607,
-      "size": 231,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\App.tsx": {
-      "mtime": 1776445069159.5554,
-      "size": 4707,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:App"
-        ],
         "language": "typescript"
       }
     },
@@ -566,6 +582,92 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\main.tsx": {
+      "mtime": 1776424361165.7607,
+      "size": 231,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\App.tsx": {
+      "mtime": 1776445069159.5554,
+      "size": 4707,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:App"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\sse.js": {
+      "mtime": 1774975618493.0342,
+      "size": 739,
+      "symbols": {
+        "purpose": "SSE client management — shared between index.js and route files",
+        "exports": [
+          "addSSEClient",
+          "removeSSEClient",
+          "broadcastSSE"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\scheduler.js": {
+      "mtime": 1779300594975.8406,
+      "size": 23394,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "startScheduler",
+          "runPollNow"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\index.js": {
+      "mtime": 1779208703236.6626,
+      "size": 6549,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\db.js": {
+      "mtime": 1779293908463.0327,
+      "size": 33996,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "DEFAULT_EVOLUTION_API_URL",
+          "DEFAULT_EVOLUTION_API_KEY"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\main.tsx": {
+      "mtime": 1774976299854.4434,
+      "size": 231,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\App.tsx": {
+      "mtime": 1779208852738.2063,
+      "size": 5704,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:App"
+        ],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\dashboard\\src\\vite-env.d.ts": {
       "mtime": 1774351686326.0564,
       "size": 39,
@@ -591,72 +693,6 @@
         "purpose": null,
         "exports": [
           "App"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\main.tsx": {
-      "mtime": 1774976299854.4434,
-      "size": 231,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\App.tsx": {
-      "mtime": 1779208852738.2063,
-      "size": 5704,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:App"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\sse.js": {
-      "mtime": 1774975618493.0342,
-      "size": 739,
-      "symbols": {
-        "purpose": "SSE client management — shared between index.js and route files",
-        "exports": [
-          "addSSEClient",
-          "removeSSEClient",
-          "broadcastSSE"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\scheduler.js": {
-      "mtime": 1779269477912.4517,
-      "size": 22719,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "startScheduler",
-          "runPollNow"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\index.js": {
-      "mtime": 1779208703236.6626,
-      "size": 6549,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\db.js": {
-      "mtime": 1779290829366.3333,
-      "size": 33763,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "DEFAULT_EVOLUTION_API_URL",
-          "DEFAULT_EVOLUTION_API_KEY"
         ],
         "language": "typescript"
       }
@@ -687,35 +723,6 @@
       "symbols": {
         "purpose": null,
         "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\vite-env.d.ts": {
-      "mtime": 1775487011994.3838,
-      "size": 38,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\main.tsx": {
-      "mtime": 1775062092944.966,
-      "size": 219,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\App.tsx": {
-      "mtime": 1778495219270.861,
-      "size": 3844,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:App"
-        ],
         "language": "typescript"
       }
     },
@@ -767,12 +774,32 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\squads\\claude-code-mastery\\scripts\\validate-setup.js": {
-      "mtime": 1778242312319.311,
-      "size": 4725,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\vite-env.d.ts": {
+      "mtime": 1775487011994.3838,
+      "size": 38,
       "symbols": {
         "purpose": null,
         "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\main.tsx": {
+      "mtime": 1775062092944.966,
+      "size": 219,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\App.tsx": {
+      "mtime": 1778495219270.861,
+      "size": 3844,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:App"
+        ],
         "language": "typescript"
       }
     },
@@ -803,6 +830,33 @@
           "App"
         ],
         "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\squads\\claude-code-mastery\\scripts\\validate-setup.js": {
+      "mtime": 1778242312319.311,
+      "size": 4725,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\skills\\opensquad-skill-creator\\eval-viewer\\generate_review.py": {
+      "mtime": 1774351686349.2134,
+      "size": 16836,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "get_mime_type",
+          "find_runs",
+          "build_run",
+          "embed_file",
+          "load_previous_iteration",
+          "generate_html",
+          "main",
+          "ReviewHandler"
+        ],
+        "language": "python"
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\skills\\opensquad-skill-creator\\scripts\\__init__.py": {
@@ -866,20 +920,15 @@
         "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\skills\\opensquad-skill-creator\\eval-viewer\\generate_review.py": {
-      "mtime": 1774351686349.2134,
-      "size": 16836,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\skills\\image-generator\\scripts\\generate.py": {
+      "mtime": 1774351686345.213,
+      "size": 6877,
       "symbols": {
         "purpose": null,
         "exports": [
-          "get_mime_type",
-          "find_runs",
-          "build_run",
-          "embed_file",
-          "load_previous_iteration",
-          "generate_html",
-          "main",
-          "ReviewHandler"
+          "load_api_key",
+          "generate_image",
+          "main"
         ],
         "language": "python"
       }
@@ -899,100 +948,6 @@
           "publishMedia",
           "getPermalink"
         ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\skills\\image-generator\\scripts\\generate.py": {
-      "mtime": 1774351686345.213,
-      "size": 6877,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "load_api_key",
-          "generate_image",
-          "main"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\data\\products-catalog.js": {
-      "mtime": 1778144896381.0088,
-      "size": 24335,
-      "symbols": {
-        "purpose": "Dataset extraído do catálogo digital `catalogo-oxi-mercado.html`.",
-        "exports": [
-          "getMargin",
-          "calcSuggestedSalePrice",
-          "PRODUCTS",
-          "CATEGORIES",
-          "PRICE_TABLES",
-          "PAYMENT_TERMS"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\middleware\\auth.js": {
-      "mtime": 1778079576225.9385,
-      "size": 1855,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "signToken",
-          "requireAuth",
-          "requireAdmin",
-          "requireCustomer"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\lib\\mailer.js": {
-      "mtime": 1778081523131.655,
-      "size": 2128,
-      "symbols": {
-        "purpose": "Mailer — wrapper sobre nodemailer com graceful degradation.",
-        "exports": [
-          "isMailerConfigured",
-          "sendMail"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\lib\\email-templates.js": {
-      "mtime": 1778086725373.0835,
-      "size": 10034,
-      "symbols": {
-        "purpose": "Templates HTML de email. HTML inline-only (compatível com clientes de email).",
-        "exports": [
-          "adminNewOrderTemplate",
-          "customerOrderConfirmedTemplate"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\orders.js": {
-      "mtime": 1778162741020.9578,
-      "size": 8494,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\catalog.js": {
-      "mtime": 1778145023100.9316,
-      "size": 2622,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\auth.js": {
-      "mtime": 1778162758538.7651,
-      "size": 2811,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
         "language": "typescript"
       }
     },
@@ -1025,33 +980,6 @@
         "purpose": null,
         "exports": [
           "default:Home"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\context\\CartContext.tsx": {
-      "mtime": 1778081060188.1406,
-      "size": 3135,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "CartProvider",
-          "useCart",
-          "CartItem"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\context\\AuthContext.tsx": {
-      "mtime": 1778080437748.2942,
-      "size": 2034,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "AuthProvider",
-          "useAuth",
-          "User",
-          "Customer"
         ],
         "language": "typescript"
       }
@@ -1109,54 +1037,284 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\jest.config.js": {
-      "mtime": 1778242310958.49,
-      "size": 499,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\context\\CartContext.tsx": {
+      "mtime": 1778081060188.1406,
+      "size": 3135,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "CartProvider",
+          "useCart",
+          "CartItem"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\context\\AuthContext.tsx": {
+      "mtime": 1778080437748.2942,
+      "size": 2034,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "AuthProvider",
+          "useAuth",
+          "User",
+          "Customer"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\orders.js": {
+      "mtime": 1778162741020.9578,
+      "size": 8494,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\index.js": {
-      "mtime": 1778242310957.4778,
-      "size": 100,
-      "symbols": {
-        "purpose": "run `node index.js` in the terminal",
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\vite.config.ts": {
-      "mtime": 1778242311103.215,
-      "size": 230,
-      "symbols": {
-        "purpose": "https://vitejs.dev/config/",
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\tailwind.config.js": {
-      "mtime": 1778242311101.205,
-      "size": 178,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\catalog.js": {
+      "mtime": 1778145023100.9316,
+      "size": 2622,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\postcss.config.js": {
-      "mtime": 1778242311067.1682,
-      "size": 87,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\auth.js": {
+      "mtime": 1778162758538.7651,
+      "size": 2811,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\eslint.config.js": {
-      "mtime": 1778242311064.9268,
-      "size": 767,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\middleware\\auth.js": {
+      "mtime": 1778079576225.9385,
+      "size": 1855,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "signToken",
+          "requireAuth",
+          "requireAdmin",
+          "requireCustomer"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\data\\products-catalog.js": {
+      "mtime": 1778144896381.0088,
+      "size": 24335,
+      "symbols": {
+        "purpose": "Dataset extraído do catálogo digital `catalogo-oxi-mercado.html`.",
+        "exports": [
+          "getMargin",
+          "calcSuggestedSalePrice",
+          "PRODUCTS",
+          "CATEGORIES",
+          "PRICE_TABLES",
+          "PAYMENT_TERMS"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\lib\\mailer.js": {
+      "mtime": 1778081523131.655,
+      "size": 2128,
+      "symbols": {
+        "purpose": "Mailer — wrapper sobre nodemailer com graceful degradation.",
+        "exports": [
+          "isMailerConfigured",
+          "sendMail"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\lib\\email-templates.js": {
+      "mtime": 1778086725373.0835,
+      "size": 10034,
+      "symbols": {
+        "purpose": "Templates HTML de email. HTML inline-only (compatível com clientes de email).",
+        "exports": [
+          "adminNewOrderTemplate",
+          "customerOrderConfirmedTemplate"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\middleware\\auth.js": {
+      "mtime": 1776423875435.2412,
+      "size": 1082,
+      "symbols": {
+        "purpose": "Verify JWT and attach user to request",
+        "exports": [
+          "authenticate",
+          "requireRole",
+          "scopeToAccount",
+          "JWT_SECRET"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\webhooks.js": {
+      "mtime": 1776423875870.7842,
+      "size": 13630,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\users.js": {
+      "mtime": 1776427055060.781,
+      "size": 5071,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\tasks.js": {
+      "mtime": 1776449420926.7368,
+      "size": 12505,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\ready-messages.js": {
+      "mtime": 1776423556916.977,
+      "size": 2648,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\qualifications.js": {
+      "mtime": 1776423556927.9822,
+      "size": 4277,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\public-booking.js": {
+      "mtime": 1776447343396.8403,
+      "size": 6997,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\messages.js": {
+      "mtime": 1776423556929.9705,
+      "size": 4021,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\leads.js": {
+      "mtime": 1776423556919.9753,
+      "size": 19881,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\launches.js": {
+      "mtime": 1776423556903.9756,
+      "size": 4182,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\integrations.js": {
+      "mtime": 1776423875769.7979,
+      "size": 12753,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\funnels.js": {
+      "mtime": 1776423556914.973,
+      "size": 4758,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\dashboard.js": {
+      "mtime": 1776423556923.981,
+      "size": 5400,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\cadences.js": {
+      "mtime": 1776423556920.9797,
+      "size": 8365,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\broadcasts.js": {
+      "mtime": 1776423556906.973,
+      "size": 5068,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\auth.js": {
+      "mtime": 1776423556899.9824,
+      "size": 1796,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\appointments.js": {
+      "mtime": 1776444092165.5273,
+      "size": 8995,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\anamneses.js": {
+      "mtime": 1776426626405.8545,
+      "size": 3793,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\accounts.js": {
+      "mtime": 1776423556910.9749,
+      "size": 3781,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -1414,6 +1572,39 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\components\\Sidebar.tsx": {
+      "mtime": 1776445086552.793,
+      "size": 8556,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Sidebar"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\components\\MessageMedia.tsx": {
+      "mtime": 1776424361054.2246,
+      "size": 3867,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:MessageMedia"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\components\\AccountSelector.tsx": {
+      "mtime": 1776424361011.2183,
+      "size": 814,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:AccountSelector"
+        ],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\context\\SSEContext.tsx": {
       "mtime": 1776424361102.7588,
       "size": 2116,
@@ -1452,9 +1643,92 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\middleware\\auth.js": {
-      "mtime": 1776423875435.2412,
-      "size": 1082,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\jest.config.js": {
+      "mtime": 1778242310958.49,
+      "size": 499,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\index.js": {
+      "mtime": 1778242310957.4778,
+      "size": 100,
+      "symbols": {
+        "purpose": "run `node index.js` in the terminal",
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\vite.config.ts": {
+      "mtime": 1778242311103.215,
+      "size": 230,
+      "symbols": {
+        "purpose": "https://vitejs.dev/config/",
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\tailwind.config.js": {
+      "mtime": 1778242311101.205,
+      "size": 178,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\postcss.config.js": {
+      "mtime": 1778242311067.1682,
+      "size": 87,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\eslint.config.js": {
+      "mtime": 1778242311064.9268,
+      "size": 767,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\services\\metaCapi.js": {
+      "mtime": 1778766143914.5947,
+      "size": 10904,
+      "symbols": {
+        "purpose": "Hash padrao Meta: SHA256 lowercase trim",
+        "exports": [
+          "sendCapiEvent",
+          "loadLeadForCapi",
+          "triggerCapiForStageChange",
+          "testCapi"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\services\\autoMessages.js": {
+      "mtime": 1779113447814.5027,
+      "size": 5081,
+      "symbols": {
+        "purpose": "Aplica variaveis no texto da auto-mensagem",
+        "exports": [
+          "applyVars",
+          "getInstanceConfig",
+          "wasAutoMsgSentRecently",
+          "shouldSendAway",
+          "sendAutoMessage"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\middleware\\auth.js": {
+      "mtime": 1774975107150.9502,
+      "size": 1079,
       "symbols": {
         "purpose": "Verify JWT and attach user to request",
         "exports": [
@@ -1466,152 +1740,314 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\webhooks.js": {
-      "mtime": 1776423875870.7842,
-      "size": 13630,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\TransferRequests.tsx": {
+      "mtime": 1778853772779.7417,
+      "size": 8769,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:TransferRequests"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Team.tsx": {
+      "mtime": 1779210021720.7039,
+      "size": 10632,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Team"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Tasks.tsx": {
+      "mtime": 1778242354128.0454,
+      "size": 17186,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Tasks"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Tags.tsx": {
+      "mtime": 1779101406571.5005,
+      "size": 8050,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Tags"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Settings.tsx": {
+      "mtime": 1778773801507.4636,
+      "size": 6964,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:SettingsPage"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\ReadyMessages.tsx": {
+      "mtime": 1778242354125.6375,
+      "size": 6563,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:ReadyMessages"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Qualifications.tsx": {
+      "mtime": 1778242354124.637,
+      "size": 4881,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Qualifications"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Propostas.tsx": {
+      "mtime": 1778242354123.6267,
+      "size": 10399,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Propostas"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Pipeline.tsx": {
+      "mtime": 1779191363059.6526,
+      "size": 19532,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Pipeline"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Messages.tsx": {
+      "mtime": 1779288460958.7854,
+      "size": 35797,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Messages"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Login.tsx": {
+      "mtime": 1778242354119.2727,
+      "size": 2425,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Login"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Leads.tsx": {
+      "mtime": 1778774610796.9368,
+      "size": 24369,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Leads"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\LeadDetail.tsx": {
+      "mtime": 1779095754001.6611,
+      "size": 35033,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:LeadDetail"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Launches.tsx": {
+      "mtime": 1778242354116.15,
+      "size": 7422,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Launches"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Integrations.tsx": {
+      "mtime": 1779294200060.2468,
+      "size": 55165,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Integrations"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Funnels.tsx": {
+      "mtime": 1778693363061.5703,
+      "size": 11178,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Funnels"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Dashboard.tsx": {
+      "mtime": 1774977940196.811,
+      "size": 8960,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Dashboard"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Contratos.tsx": {
+      "mtime": 1779213473233.787,
+      "size": 21841,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Contratos"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Chat.tsx": {
+      "mtime": 1779291301282.1826,
+      "size": 98137,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Chat"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Cadences.tsx": {
+      "mtime": 1778242354113.1404,
+      "size": 17095,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Cadences"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\BroadcastDetail.tsx": {
+      "mtime": 1778242354112.0247,
+      "size": 14977,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:BroadcastDetail"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\lib\\messageVars.ts": {
+      "mtime": 1778242354110.9412,
+      "size": 1661,
+      "symbols": {
+        "purpose": "Single source of truth for message template variables.",
+        "exports": [
+          "applyMessageVars",
+          "MESSAGE_VARIABLES",
+          "VarContext",
+          "VarDoc"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\lib\\dates.ts": {
+      "mtime": 1778242354109.4238,
+      "size": 1323,
+      "symbols": {
+        "purpose": "Parser de timestamps do SQLite que sao gravados em UTC mas sem marcador de timezone.",
+        "exports": [
+          "parseSqlDate",
+          "formatTime",
+          "formatDate",
+          "formatDateTime"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\lib\\api.ts": {
+      "mtime": 1779294044732.7375,
+      "size": 40708,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "apiFetch",
+          "formatBRL",
+          "formatNumber",
+          "pctChange",
+          "createLeadOrFindExisting",
+          "fetchMessageMedia",
+          "login",
+          "fetchAccounts",
+          "createAccount",
+          "updateAccount"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\webhooks.js": {
+      "mtime": 1779295327554.503,
+      "size": 51001,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\users.js": {
-      "mtime": 1776427055060.781,
-      "size": 5071,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\users.js": {
+      "mtime": 1779209987460.2668,
+      "size": 7569,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\tasks.js": {
-      "mtime": 1776449420926.7368,
-      "size": 12505,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\tasks.js": {
+      "mtime": 1778242354092.3845,
+      "size": 16742,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\ready-messages.js": {
-      "mtime": 1776423556916.977,
-      "size": 2648,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\qualifications.js": {
-      "mtime": 1776423556927.9822,
-      "size": 4277,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\public-booking.js": {
-      "mtime": 1776447343396.8403,
-      "size": 6997,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\messages.js": {
-      "mtime": 1776423556929.9705,
-      "size": 4021,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\leads.js": {
-      "mtime": 1776423556919.9753,
-      "size": 19881,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\launches.js": {
-      "mtime": 1776423556903.9756,
-      "size": 4182,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\integrations.js": {
-      "mtime": 1776423875769.7979,
-      "size": 12753,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\funnels.js": {
-      "mtime": 1776423556914.973,
-      "size": 4758,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\dashboard.js": {
-      "mtime": 1776423556923.981,
-      "size": 5400,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\cadences.js": {
-      "mtime": 1776423556920.9797,
-      "size": 8365,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\broadcasts.js": {
-      "mtime": 1776423556906.973,
-      "size": 5068,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\auth.js": {
-      "mtime": 1776423556899.9824,
-      "size": 1796,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\appointments.js": {
-      "mtime": 1776444092165.5273,
-      "size": 8995,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\anamneses.js": {
-      "mtime": 1776426626405.8545,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\tag-mapping.js": {
+      "mtime": 1779102708358.8372,
       "size": 3793,
       "symbols": {
         "purpose": null,
@@ -1619,18 +2055,161 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\server\\routes\\accounts.js": {
-      "mtime": 1776423556910.9749,
-      "size": 3781,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\ready-messages.js": {
+      "mtime": 1778242354091.367,
+      "size": 2705,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\components\\Sidebar.tsx": {
-      "mtime": 1776445086552.793,
-      "size": 8556,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\qualifications.js": {
+      "mtime": 1778242354090.357,
+      "size": 4366,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\proposals.js": {
+      "mtime": 1778257229511.4473,
+      "size": 6722,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "publicProposalHandler"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\messages.js": {
+      "mtime": 1778242354086.8354,
+      "size": 13886,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\leads.js": {
+      "mtime": 1779290946759.8618,
+      "size": 44779,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\launches.js": {
+      "mtime": 1778242354083.8342,
+      "size": 4266,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\integrations.js": {
+      "mtime": 1779294005330.0815,
+      "size": 19836,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\funnels.js": {
+      "mtime": 1778694052402.3337,
+      "size": 5724,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\dashboard.js": {
+      "mtime": 1779291012770.8462,
+      "size": 5807,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\contracts.js": {
+      "mtime": 1779213405597.999,
+      "size": 12167,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\cadences.js": {
+      "mtime": 1778242354001.401,
+      "size": 9224,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\broadcasts.js": {
+      "mtime": 1779291040489.3008,
+      "size": 17094,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "runBroadcastLoop",
+          "resumeBroadcastIfPaused",
+          "recoverPendingBroadcasts"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\auth.js": {
+      "mtime": 1779208482238.9575,
+      "size": 2006,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\admin.js": {
+      "mtime": 1778489868197.9578,
+      "size": 3766,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\accounts.js": {
+      "mtime": 1778681322741.3699,
+      "size": 9193,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\hooks\\useIsMobile.ts": {
+      "mtime": 1779114986494.2046,
+      "size": 546,
+      "symbols": {
+        "purpose": "Hook compartilhado pra detectar viewport mobile. Default 640px (sm do Tailwind).",
+        "exports": [
+          "useIsMobile"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\Sidebar.tsx": {
+      "mtime": 1779208888677.0522,
+      "size": 10224,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -1639,9 +2218,9 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\components\\MessageMedia.tsx": {
-      "mtime": 1776424361054.2246,
-      "size": 3867,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\MessageMedia.tsx": {
+      "mtime": 1778242354100.9878,
+      "size": 3958,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -1650,13 +2229,96 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\gestao-clin\\src\\components\\AccountSelector.tsx": {
-      "mtime": 1776424361011.2183,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\InstanceAutoMessagesModal.tsx": {
+      "mtime": 1779289624273.6812,
+      "size": 11623,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:InstanceAutoMessagesModal"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\FilterDropdown.tsx": {
+      "mtime": 1779191333925.0598,
+      "size": 2964,
+      "symbols": {
+        "purpose": "Dropdown de multi-selecao com checkboxes — usado em Pipeline e Chat",
+        "exports": [
+          "FilterValue",
+          "default:FilterDropdown"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\EditTaskModal.tsx": {
+      "mtime": 1778242354100.0312,
+      "size": 5010,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:EditTaskModal"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\DisconnectedInstancesAlert.tsx": {
+      "mtime": 1779183996055.5396,
+      "size": 4344,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:DisconnectedInstancesAlert"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\AccountSelector.tsx": {
+      "mtime": 1774977889732.0027,
       "size": 814,
       "symbols": {
         "purpose": null,
         "exports": [
           "default:AccountSelector"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\context\\SSEContext.tsx": {
+      "mtime": 1778847562033.6028,
+      "size": 2249,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "SSEProvider",
+          "useSSE",
+          "useSSEStatus"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\context\\AuthContext.tsx": {
+      "mtime": 1778857215094.7974,
+      "size": 2172,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "AuthProvider",
+          "useAuth",
+          "User"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\context\\AccountContext.tsx": {
+      "mtime": 1778769007867.5554,
+      "size": 2708,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "AccountProvider",
+          "useAccount"
         ],
         "language": "typescript"
       }
@@ -1889,791 +2551,6 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\TransferRequests.tsx": {
-      "mtime": 1778853772779.7417,
-      "size": 8769,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:TransferRequests"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Team.tsx": {
-      "mtime": 1779210021720.7039,
-      "size": 10632,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Team"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Tasks.tsx": {
-      "mtime": 1778242354128.0454,
-      "size": 17186,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Tasks"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Tags.tsx": {
-      "mtime": 1779101406571.5005,
-      "size": 8050,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Tags"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Settings.tsx": {
-      "mtime": 1778773801507.4636,
-      "size": 6964,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:SettingsPage"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\ReadyMessages.tsx": {
-      "mtime": 1778242354125.6375,
-      "size": 6563,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:ReadyMessages"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Qualifications.tsx": {
-      "mtime": 1778242354124.637,
-      "size": 4881,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Qualifications"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Propostas.tsx": {
-      "mtime": 1778242354123.6267,
-      "size": 10399,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Propostas"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Pipeline.tsx": {
-      "mtime": 1779191363059.6526,
-      "size": 19532,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Pipeline"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Messages.tsx": {
-      "mtime": 1779288460958.7854,
-      "size": 35797,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Messages"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Login.tsx": {
-      "mtime": 1778242354119.2727,
-      "size": 2425,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Login"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Leads.tsx": {
-      "mtime": 1778774610796.9368,
-      "size": 24369,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Leads"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\LeadDetail.tsx": {
-      "mtime": 1779095754001.6611,
-      "size": 35033,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:LeadDetail"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Launches.tsx": {
-      "mtime": 1778242354116.15,
-      "size": 7422,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Launches"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Integrations.tsx": {
-      "mtime": 1779112600488.1238,
-      "size": 50410,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Integrations"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Funnels.tsx": {
-      "mtime": 1778693363061.5703,
-      "size": 11178,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Funnels"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Dashboard.tsx": {
-      "mtime": 1774977940196.811,
-      "size": 8960,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Dashboard"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Contratos.tsx": {
-      "mtime": 1779213473233.787,
-      "size": 21841,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Contratos"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Chat.tsx": {
-      "mtime": 1779287964327.8174,
-      "size": 96274,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Chat"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\Cadences.tsx": {
-      "mtime": 1778242354113.1404,
-      "size": 17095,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Cadences"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\BroadcastDetail.tsx": {
-      "mtime": 1778242354112.0247,
-      "size": 14977,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:BroadcastDetail"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\lib\\messageVars.ts": {
-      "mtime": 1778242354110.9412,
-      "size": 1661,
-      "symbols": {
-        "purpose": "Single source of truth for message template variables.",
-        "exports": [
-          "applyMessageVars",
-          "MESSAGE_VARIABLES",
-          "VarContext",
-          "VarDoc"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\lib\\dates.ts": {
-      "mtime": 1778242354109.4238,
-      "size": 1323,
-      "symbols": {
-        "purpose": "Parser de timestamps do SQLite que sao gravados em UTC mas sem marcador de timezone.",
-        "exports": [
-          "parseSqlDate",
-          "formatTime",
-          "formatDate",
-          "formatDateTime"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\lib\\api.ts": {
-      "mtime": 1779289672290.4905,
-      "size": 40105,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "apiFetch",
-          "formatBRL",
-          "formatNumber",
-          "pctChange",
-          "createLeadOrFindExisting",
-          "fetchMessageMedia",
-          "login",
-          "fetchAccounts",
-          "createAccount",
-          "updateAccount"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\hooks\\useIsMobile.ts": {
-      "mtime": 1779114986494.2046,
-      "size": 546,
-      "symbols": {
-        "purpose": "Hook compartilhado pra detectar viewport mobile. Default 640px (sm do Tailwind).",
-        "exports": [
-          "useIsMobile"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\context\\SSEContext.tsx": {
-      "mtime": 1778847562033.6028,
-      "size": 2249,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "SSEProvider",
-          "useSSE",
-          "useSSEStatus"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\context\\AuthContext.tsx": {
-      "mtime": 1778857215094.7974,
-      "size": 2172,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "AuthProvider",
-          "useAuth",
-          "User"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\context\\AccountContext.tsx": {
-      "mtime": 1778769007867.5554,
-      "size": 2708,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "AccountProvider",
-          "useAccount"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\Sidebar.tsx": {
-      "mtime": 1779208888677.0522,
-      "size": 10224,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Sidebar"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\MessageMedia.tsx": {
-      "mtime": 1778242354100.9878,
-      "size": 3958,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:MessageMedia"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\InstanceAutoMessagesModal.tsx": {
-      "mtime": 1779289624273.6812,
-      "size": 11623,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:InstanceAutoMessagesModal"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\FilterDropdown.tsx": {
-      "mtime": 1779191333925.0598,
-      "size": 2964,
-      "symbols": {
-        "purpose": "Dropdown de multi-selecao com checkboxes — usado em Pipeline e Chat",
-        "exports": [
-          "FilterValue",
-          "default:FilterDropdown"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\EditTaskModal.tsx": {
-      "mtime": 1778242354100.0312,
-      "size": 5010,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:EditTaskModal"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\DisconnectedInstancesAlert.tsx": {
-      "mtime": 1779183996055.5396,
-      "size": 4344,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:DisconnectedInstancesAlert"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\components\\AccountSelector.tsx": {
-      "mtime": 1774977889732.0027,
-      "size": 814,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:AccountSelector"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\webhooks.js": {
-      "mtime": 1779291137910.973,
-      "size": 49681,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\users.js": {
-      "mtime": 1779209987460.2668,
-      "size": 7569,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\tasks.js": {
-      "mtime": 1778242354092.3845,
-      "size": 16742,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\tag-mapping.js": {
-      "mtime": 1779102708358.8372,
-      "size": 3793,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\ready-messages.js": {
-      "mtime": 1778242354091.367,
-      "size": 2705,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\qualifications.js": {
-      "mtime": 1778242354090.357,
-      "size": 4366,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\proposals.js": {
-      "mtime": 1778257229511.4473,
-      "size": 6722,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "publicProposalHandler"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\messages.js": {
-      "mtime": 1778242354086.8354,
-      "size": 13886,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\leads.js": {
-      "mtime": 1779290946759.8618,
-      "size": 44779,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\launches.js": {
-      "mtime": 1778242354083.8342,
-      "size": 4266,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\integrations.js": {
-      "mtime": 1779289571636.217,
-      "size": 18918,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\funnels.js": {
-      "mtime": 1778694052402.3337,
-      "size": 5724,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\dashboard.js": {
-      "mtime": 1779291012770.8462,
-      "size": 5807,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\contracts.js": {
-      "mtime": 1779213405597.999,
-      "size": 12167,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\cadences.js": {
-      "mtime": 1778242354001.401,
-      "size": 9224,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\broadcasts.js": {
-      "mtime": 1779291040489.3008,
-      "size": 17094,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "runBroadcastLoop",
-          "resumeBroadcastIfPaused",
-          "recoverPendingBroadcasts"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\auth.js": {
-      "mtime": 1779208482238.9575,
-      "size": 2006,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\admin.js": {
-      "mtime": 1778489868197.9578,
-      "size": 3766,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\routes\\accounts.js": {
-      "mtime": 1778681322741.3699,
-      "size": 9193,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\middleware\\auth.js": {
-      "mtime": 1774975107150.9502,
-      "size": 1079,
-      "symbols": {
-        "purpose": "Verify JWT and attach user to request",
-        "exports": [
-          "authenticate",
-          "requireRole",
-          "scopeToAccount",
-          "JWT_SECRET"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\services\\metaCapi.js": {
-      "mtime": 1778766143914.5947,
-      "size": 10904,
-      "symbols": {
-        "purpose": "Hash padrao Meta: SHA256 lowercase trim",
-        "exports": [
-          "sendCapiEvent",
-          "loadLeadForCapi",
-          "triggerCapiForStageChange",
-          "testCapi"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\server\\services\\autoMessages.js": {
-      "mtime": 1779113447814.5027,
-      "size": 5081,
-      "symbols": {
-        "purpose": "Aplica variaveis no texto da auto-mensagem",
-        "exports": [
-          "applyVars",
-          "getInstanceConfig",
-          "wasAutoMsgSentRecently",
-          "shouldSendAway",
-          "sendAutoMessage"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\__init__.py": {
-      "mtime": 1779100283001.4768,
-      "size": 0,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_tool.py": {
-      "mtime": 1779100283034.4785,
-      "size": 13144,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "MemoryToolHandler"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\skill_utils.py": {
-      "mtime": 1779100282586.035,
-      "size": 12406,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "create_skill",
-          "list_custom_skills",
-          "get_skill_version",
-          "create_skill_version",
-          "delete_skill",
-          "test_skill",
-          "list_skill_versions",
-          "validate_skill_directory",
-          "print_skill_summary"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\file_utils.py": {
-      "mtime": 1779100282574.0342,
-      "size": 9767,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "extract_file_ids",
-          "download_file",
-          "download_all_files",
-          "get_file_info",
-          "print_download_summary"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tests\\__init__.py": {
-      "mtime": 1779100282795.8875,
-      "size": 51,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tests\\conftest.py": {
-      "mtime": 1779100282801.8855,
-      "size": 4949,
-      "symbols": {
-        "purpose": "Pytest configuration and fixtures for notebook testing.",
-        "exports": [
-          "pytest_addoption",
-          "get_project_root",
-          "load_registry",
-          "get_notebooks_to_test",
-          "pytest_generate_tests",
-          "project_root",
-          "notebook_data",
-          "notebook_cells",
-          "validation_result",
-          "execute_notebooks"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\validate_notebooks.py": {
-      "mtime": 1779100282526.0276,
-      "size": 1779,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "validate_notebook",
-          "main"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\validate_authors_sorted.py": {
-      "mtime": 1779100282521.0273,
-      "size": 3022,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "load_authors",
-          "is_sorted",
-          "sort_authors",
-          "show_diff",
-          "main"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\validate_all_notebooks.py": {
-      "mtime": 1779100282516.0273,
-      "size": 33393,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "main",
-          "NotebookValidator"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\test_notebooks.py": {
-      "mtime": 1779100282511.027,
-      "size": 7090,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "list_notebooks",
-          "run_quick_validation",
-          "run_pytest",
-          "run_tox",
-          "main"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\utilities.py": {
-      "mtime": 1779100281749.0562,
-      "size": 4986,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "wait_for_idle_status",
-          "stream_until_end_turn",
-          "make_unfamiliar_repo_zip"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\anthropic_cookbook\\__init__.py": {
-      "mtime": 1779100279048.5442,
-      "size": 0,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "python"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\client-dashboard\\src\\pages\\Login.tsx": {
       "mtime": 1777906906329.445,
       "size": 3126,
@@ -2696,18 +2573,6 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\client-dashboard\\src\\context\\AuthContext.tsx": {
-      "mtime": 1778493913353.1584,
-      "size": 2636,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "AuthProvider",
-          "useAuth"
-        ],
-        "language": "typescript"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\client-dashboard\\src\\lib\\api.ts": {
       "mtime": 1778493952782.9082,
       "size": 19129,
@@ -2724,6 +2589,18 @@
           "pctChange",
           "fetchCRM",
           "fetchBGImobCRM"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\client-dashboard\\src\\context\\AuthContext.tsx": {
+      "mtime": 1778493913353.1584,
+      "size": 2636,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "AuthProvider",
+          "useAuth"
         ],
         "language": "typescript"
       }
@@ -2891,149 +2768,163 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\Toast.tsx": {
-      "mtime": 1776705331531.806,
-      "size": 2315,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\__init__.py": {
+      "mtime": 1779100283001.4768,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_tool.py": {
+      "mtime": 1779100283034.4785,
+      "size": 13144,
       "symbols": {
         "purpose": null,
         "exports": [
-          "useToast",
-          "ToastProvider"
+          "MemoryToolHandler"
         ],
-        "language": "typescript"
+        "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\TimerCheck.tsx": {
-      "mtime": 1775736746275.9885,
-      "size": 3246,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tests\\__init__.py": {
+      "mtime": 1779100282795.8875,
+      "size": 51,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tests\\conftest.py": {
+      "mtime": 1779100282801.8855,
+      "size": 4949,
+      "symbols": {
+        "purpose": "Pytest configuration and fixtures for notebook testing.",
+        "exports": [
+          "pytest_addoption",
+          "get_project_root",
+          "load_registry",
+          "get_notebooks_to_test",
+          "pytest_generate_tests",
+          "project_root",
+          "notebook_data",
+          "notebook_cells",
+          "validation_result",
+          "execute_notebooks"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\skill_utils.py": {
+      "mtime": 1779100282586.035,
+      "size": 12406,
       "symbols": {
         "purpose": null,
         "exports": [
-          "default:TimerCheck"
+          "create_skill",
+          "list_custom_skills",
+          "get_skill_version",
+          "create_skill_version",
+          "delete_skill",
+          "test_skill",
+          "list_skill_versions",
+          "validate_skill_directory",
+          "print_skill_summary"
         ],
-        "language": "typescript"
+        "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\Sidebar.tsx": {
-      "mtime": 1778495277309.7078,
-      "size": 7226,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\file_utils.py": {
+      "mtime": 1779100282574.0342,
+      "size": 9767,
       "symbols": {
         "purpose": null,
         "exports": [
-          "default:Sidebar"
+          "extract_file_ids",
+          "download_file",
+          "download_all_files",
+          "get_file_info",
+          "print_download_summary"
         ],
-        "language": "typescript"
+        "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\NotificationBell.tsx": {
-      "mtime": 1777551631082.2786,
-      "size": 7814,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\validate_notebooks.py": {
+      "mtime": 1779100282526.0276,
+      "size": 1779,
       "symbols": {
         "purpose": null,
         "exports": [
-          "default:NotificationBell"
+          "validate_notebook",
+          "main"
         ],
-        "language": "typescript"
+        "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\CoreAccountSelect.tsx": {
-      "mtime": 1778515294971.0015,
-      "size": 7212,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\validate_authors_sorted.py": {
+      "mtime": 1779100282521.0273,
+      "size": 3022,
       "symbols": {
         "purpose": null,
         "exports": [
-          "default:CoreAccountSelect"
+          "load_authors",
+          "is_sorted",
+          "sort_authors",
+          "show_diff",
+          "main"
         ],
-        "language": "typescript"
+        "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\BankSelect.tsx": {
-      "mtime": 1777993139588.875,
-      "size": 4880,
-      "symbols": {
-        "purpose": "Tradicionais",
-        "exports": [
-          "BANCOS",
-          "default:BankSelect"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\context\\SSEContext.tsx": {
-      "mtime": 1775736771043.9885,
-      "size": 1746,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\validate_all_notebooks.py": {
+      "mtime": 1779100282516.0273,
+      "size": 33393,
       "symbols": {
         "purpose": null,
         "exports": [
-          "SSEProvider",
-          "useSSE"
+          "main",
+          "NotebookValidator"
         ],
-        "language": "typescript"
+        "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\context\\AuthContext.tsx": {
-      "mtime": 1775829828066.2168,
-      "size": 1918,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\test_notebooks.py": {
+      "mtime": 1779100282511.027,
+      "size": 7090,
       "symbols": {
         "purpose": null,
         "exports": [
-          "AuthProvider",
-          "useAuth",
-          "User"
+          "list_notebooks",
+          "run_quick_validation",
+          "run_pytest",
+          "run_tox",
+          "main"
         ],
-        "language": "typescript"
+        "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\performanceApi.ts": {
-      "mtime": 1778508333783.9697,
-      "size": 18110,
-      "symbols": {
-        "purpose": "=====================================================================",
-        "exports": [
-          "fetchAccounts",
-          "fetchCompare",
-          "fetchDailyCompare",
-          "getAction",
-          "formatBRL",
-          "formatNumber",
-          "formatPercent",
-          "pctChange",
-          "fetchCRM",
-          "fetchBGImobCRM"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\drive.ts": {
-      "mtime": 1778837829036.7097,
-      "size": 2071,
-      "symbols": {
-        "purpose": "=====================================================================",
-        "exports": [
-          "isDriveUrl",
-          "toDriveEmbedUrl"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\api.ts": {
-      "mtime": 1778838609720.9604,
-      "size": 22139,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\utilities.py": {
+      "mtime": 1779100281749.0562,
+      "size": 4986,
       "symbols": {
         "purpose": null,
         "exports": [
-          "apiFetch",
-          "getApprovalFiles",
-          "formatNumber",
-          "formatBRL",
-          "fetchClients",
-          "createClient",
-          "fetchClient",
-          "generateApprovalToken",
-          "revokeApprovalToken",
-          "updateClient"
+          "wait_for_idle_status",
+          "stream_until_end_turn",
+          "make_unfamiliar_repo_zip"
         ],
-        "language": "typescript"
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\anthropic_cookbook\\__init__.py": {
+      "mtime": 1779100279048.5442,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\users.js": {
@@ -3046,8 +2937,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\server\\routes\\tasks.js": {
-      "mtime": 1778838576511.0264,
-      "size": 57535,
+      "mtime": 1779354905076.6887,
+      "size": 59220,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -3160,8 +3051,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\Tasks.tsx": {
-      "mtime": 1778696246542.0806,
-      "size": 31523,
+      "mtime": 1779355188833.9417,
+      "size": 37351,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -3171,8 +3062,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\TaskDetail.tsx": {
-      "mtime": 1778864031337.948,
-      "size": 69984,
+      "mtime": 1779354998101.3176,
+      "size": 76097,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -3215,8 +3106,8 @@
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\pages\\Pipeline.tsx": {
-      "mtime": 1778841046651.986,
-      "size": 42654,
+      "mtime": 1779355081838.5063,
+      "size": 48536,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -3357,6 +3248,151 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\performanceApi.ts": {
+      "mtime": 1778508333783.9697,
+      "size": 18110,
+      "symbols": {
+        "purpose": "=====================================================================",
+        "exports": [
+          "fetchAccounts",
+          "fetchCompare",
+          "fetchDailyCompare",
+          "getAction",
+          "formatBRL",
+          "formatNumber",
+          "formatPercent",
+          "pctChange",
+          "fetchCRM",
+          "fetchBGImobCRM"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\drive.ts": {
+      "mtime": 1778837829036.7097,
+      "size": 2071,
+      "symbols": {
+        "purpose": "=====================================================================",
+        "exports": [
+          "isDriveUrl",
+          "toDriveEmbedUrl"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\lib\\api.ts": {
+      "mtime": 1779354925687.4834,
+      "size": 22518,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "apiFetch",
+          "getApprovalFiles",
+          "formatNumber",
+          "formatBRL",
+          "fetchClients",
+          "createClient",
+          "fetchClient",
+          "generateApprovalToken",
+          "revokeApprovalToken",
+          "updateClient"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\context\\SSEContext.tsx": {
+      "mtime": 1775736771043.9885,
+      "size": 1746,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "SSEProvider",
+          "useSSE"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\context\\AuthContext.tsx": {
+      "mtime": 1775829828066.2168,
+      "size": 1918,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "AuthProvider",
+          "useAuth",
+          "User"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\Toast.tsx": {
+      "mtime": 1776705331531.806,
+      "size": 2315,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "useToast",
+          "ToastProvider"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\TimerCheck.tsx": {
+      "mtime": 1775736746275.9885,
+      "size": 3246,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:TimerCheck"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\Sidebar.tsx": {
+      "mtime": 1778495277309.7078,
+      "size": 7226,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:Sidebar"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\NotificationBell.tsx": {
+      "mtime": 1777551631082.2786,
+      "size": 7814,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:NotificationBell"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\CoreAccountSelect.tsx": {
+      "mtime": 1778515294971.0015,
+      "size": 7212,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "default:CoreAccountSelect"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\agency-hub\\src\\components\\BankSelect.tsx": {
+      "mtime": 1777993139588.875,
+      "size": 4880,
+      "symbols": {
+        "purpose": "Tradicionais",
+        "exports": [
+          "BANCOS",
+          "default:BankSelect"
+        ],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\xquads\\squads\\claude-code-mastery\\scripts\\validate-setup.js": {
       "mtime": 1778242313345.2905,
       "size": 4725,
@@ -3402,6 +3438,30 @@
         "purpose": null,
         "exports": [
           "squadWatcherPlugin"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\templates\\dashboard\\src\\lib\\normalizeState.ts": {
+      "mtime": 1774351686391.2139,
+      "size": 723,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "sortAgentsByDesk",
+          "findAgent",
+          "getWorkingAgent"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\templates\\dashboard\\src\\lib\\formatTime.ts": {
+      "mtime": 1774351686391.2139,
+      "size": 531,
+      "symbols": {
+        "purpose": "Formats elapsed milliseconds as \"MM:SS\" or \"HH:MM:SS\" if over an hour.",
+        "exports": [
+          "formatElapsed"
         ],
         "language": "typescript"
       }
@@ -3515,6 +3575,17 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\templates\\dashboard\\src\\hooks\\useSquadSocket.ts": {
+      "mtime": 1774351686391.2139,
+      "size": 2312,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "useSquadSocket"
+        ],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\templates\\dashboard\\src\\components\\StatusBar.tsx": {
       "mtime": 1774351686391.2139,
       "size": 2839,
@@ -3559,112 +3630,67 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\templates\\dashboard\\src\\lib\\normalizeState.ts": {
-      "mtime": 1774351686391.2139,
-      "size": 723,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\components\\ui\\index.tsx": {
+      "mtime": 1778086278662.0166,
+      "size": 8651,
       "symbols": {
         "purpose": null,
         "exports": [
-          "sortAgentsByDesk",
-          "findAgent",
-          "getWorkingAgent"
+          "Button",
+          "Input",
+          "Select",
+          "Textarea",
+          "Card",
+          "Badge",
+          "Modal",
+          "EmptyState",
+          "ToastContainer",
+          "toast"
         ],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\templates\\dashboard\\src\\lib\\formatTime.ts": {
-      "mtime": 1774351686391.2139,
-      "size": 531,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\pages\\app\\MyOrders.tsx": {
+      "mtime": 1778081303124.641,
+      "size": 3695,
       "symbols": {
-        "purpose": "Formats elapsed milliseconds as \"MM:SS\" or \"HH:MM:SS\" if over an hour.",
+        "purpose": null,
         "exports": [
-          "formatElapsed"
+          "default:MyOrders"
         ],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\templates\\dashboard\\src\\hooks\\useSquadSocket.ts": {
-      "mtime": 1774351686391.2139,
-      "size": 2312,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\pages\\app\\MyOrderDetail.tsx": {
+      "mtime": 1778086739299.8022,
+      "size": 7226,
       "symbols": {
         "purpose": null,
         "exports": [
-          "useSquadSocket"
+          "default:MyOrderDetail"
         ],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\upload.js": {
-      "mtime": 1778142586007.8147,
-      "size": 2393,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\pages\\app\\Checkout.tsx": {
+      "mtime": 1778162902635.3904,
+      "size": 13181,
       "symbols": {
         "purpose": null,
         "exports": [
-          "UPLOADS_DIR"
+          "default:Checkout"
         ],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\products.js": {
-      "mtime": 1778144972785.9666,
-      "size": 4914,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\pages\\app\\Catalog.tsx": {
+      "mtime": 1778155876187.657,
+      "size": 14168,
       "symbols": {
         "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\price-tables.js": {
-      "mtime": 1778079664289.9822,
-      "size": 4917,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\payment-terms.js": {
-      "mtime": 1778079702019.8328,
-      "size": 1375,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\orders.js": {
-      "mtime": 1778081627193.4312,
-      "size": 6805,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\dashboard.js": {
-      "mtime": 1778079741155.2163,
-      "size": 2500,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\customers.js": {
-      "mtime": 1778162715483.8293,
-      "size": 7264,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\categories.js": {
-      "mtime": 1778079612301.1765,
-      "size": 2521,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
+        "exports": [
+          "default:Catalog"
+        ],
         "language": "typescript"
       }
     },
@@ -3767,46 +3793,14 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\pages\\app\\MyOrders.tsx": {
-      "mtime": 1778081303124.641,
-      "size": 3695,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\components\\admin\\AdminLayout.tsx": {
+      "mtime": 1778085543730.6475,
+      "size": 4666,
       "symbols": {
         "purpose": null,
         "exports": [
-          "default:MyOrders"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\pages\\app\\MyOrderDetail.tsx": {
-      "mtime": 1778086739299.8022,
-      "size": 7226,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:MyOrderDetail"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\pages\\app\\Checkout.tsx": {
-      "mtime": 1778162902635.3904,
-      "size": 13181,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Checkout"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\pages\\app\\Catalog.tsx": {
-      "mtime": 1778155876187.657,
-      "size": 14168,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "default:Catalog"
+          "PageHeader",
+          "default:AdminLayout"
         ],
         "language": "typescript"
       }
@@ -3845,77 +3839,74 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\components\\ui\\index.tsx": {
-      "mtime": 1778086278662.0166,
-      "size": 8651,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\upload.js": {
+      "mtime": 1778142586007.8147,
+      "size": 2393,
       "symbols": {
         "purpose": null,
         "exports": [
-          "Button",
-          "Input",
-          "Select",
-          "Textarea",
-          "Card",
-          "Badge",
-          "Modal",
-          "EmptyState",
-          "ToastContainer",
-          "toast"
+          "UPLOADS_DIR"
         ],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\src\\components\\admin\\AdminLayout.tsx": {
-      "mtime": 1778085543730.6475,
-      "size": 4666,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "PageHeader",
-          "default:AdminLayout"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\server.ts": {
-      "mtime": 1778242311050.132,
-      "size": 1488,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\products.js": {
+      "mtime": 1778144972785.9666,
+      "size": 4914,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\app.ts": {
-      "mtime": 1778242310961.0752,
-      "size": 1249,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\price-tables.js": {
+      "mtime": 1778079664289.9822,
+      "size": 4917,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\vite-env.d.ts": {
-      "mtime": 1778242311101.205,
-      "size": 163,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\payment-terms.js": {
+      "mtime": 1778079702019.8328,
+      "size": 1375,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\main.tsx": {
-      "mtime": 1778242311092.1611,
-      "size": 244,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\orders.js": {
+      "mtime": 1778081627193.4312,
+      "size": 6805,
       "symbols": {
         "purpose": null,
         "exports": [],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\App.tsx": {
-      "mtime": 1778242311068.4883,
-      "size": 3975,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\dashboard.js": {
+      "mtime": 1778079741155.2163,
+      "size": 2500,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\customers.js": {
+      "mtime": 1778162715483.8293,
+      "size": 7264,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\oxi-pedidos\\server\\routes\\admin\\categories.js": {
+      "mtime": 1778079612301.1765,
+      "size": 2521,
       "symbols": {
         "purpose": null,
         "exports": [],
@@ -3966,6 +3957,51 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\server.ts": {
+      "mtime": 1778242311050.132,
+      "size": 1488,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\app.ts": {
+      "mtime": 1778242310961.0752,
+      "size": 1249,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\vite-env.d.ts": {
+      "mtime": 1778242311101.205,
+      "size": 163,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\main.tsx": {
+      "mtime": 1778242311092.1611,
+      "size": 244,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\App.tsx": {
+      "mtime": 1778242311068.4883,
+      "size": 3975,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\crm-dashboard\\src\\pages\\admin\\Users.tsx": {
       "mtime": 1779210036986.6997,
       "size": 10248,
@@ -4008,6 +4044,64 @@
           "default:ClientDetail"
         ],
         "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\tests\\test_memory_tool.py": {
+      "mtime": 1779100283192.0378,
+      "size": 14609,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "TestMemoryToolHandler"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_demo\\__init__.py": {
+      "mtime": 1779100283136.5134,
+      "size": 304,
+      "symbols": {
+        "purpose": "Memory cookbook demo package.",
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_demo\\demo_helpers.py": {
+      "mtime": 1779100283147.515,
+      "size": 7877,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "execute_tool",
+          "run_conversation_turn",
+          "run_conversation_loop",
+          "print_context_management_info"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_demo\\code_review_demo.py": {
+      "mtime": 1779100283141.5144,
+      "size": 11293,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "run_session_1",
+          "run_session_2",
+          "run_session_3",
+          "main",
+          "CodeReviewAssistant"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\context_engineering\\research_corpus.py": {
+      "mtime": 1779100283120.5132,
+      "size": 76689,
+      "symbols": {
+        "purpose": "Synthetic research documents for the context-management cookbook.",
+        "exports": [],
+        "language": "python"
       }
     },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\utils\\__init__.py": {
@@ -4091,64 +4185,6 @@
         "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\tests\\test_memory_tool.py": {
-      "mtime": 1779100283192.0378,
-      "size": 14609,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "TestMemoryToolHandler"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\context_engineering\\research_corpus.py": {
-      "mtime": 1779100283120.5132,
-      "size": 76689,
-      "symbols": {
-        "purpose": "Synthetic research documents for the context-management cookbook.",
-        "exports": [],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_demo\\__init__.py": {
-      "mtime": 1779100283136.5134,
-      "size": 304,
-      "symbols": {
-        "purpose": "Memory cookbook demo package.",
-        "exports": [],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_demo\\demo_helpers.py": {
-      "mtime": 1779100283147.515,
-      "size": 7877,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "execute_tool",
-          "run_conversation_turn",
-          "run_conversation_loop",
-          "print_context_management_info"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_demo\\code_review_demo.py": {
-      "mtime": 1779100283141.5144,
-      "size": 11293,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "run_session_1",
-          "run_session_2",
-          "run_session_3",
-          "main",
-          "CodeReviewAssistant"
-        ],
-        "language": "python"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\third_party\\ElevenLabs\\stream_voice_assistant_websocket.py": {
       "mtime": 1779100282877.4502,
       "size": 12729,
@@ -4224,17 +4260,6 @@
         "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\detect-secrets\\plugins.py": {
-      "mtime": 1779100282543.0266,
-      "size": 792,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "AnthropicSecretsDetector"
-        ],
-        "language": "python"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\patterns\\agents\\util.py": {
       "mtime": 1779100282482.8723,
       "size": 1442,
@@ -4243,6 +4268,17 @@
         "exports": [
           "llm_call",
           "extract_xml"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\scripts\\detect-secrets\\plugins.py": {
+      "mtime": 1779100282543.0266,
+      "size": 792,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "AnthropicSecretsDetector"
         ],
         "language": "python"
       }
@@ -4272,18 +4308,6 @@
           "reset_activity_context",
           "print_final_result",
           "visualize_conversation"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\claude_agent_sdk\\research_agent\\agent.py": {
-      "mtime": 1779100280145.744,
-      "size": 4577,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "get_activity_text",
-          "send_query"
         ],
         "language": "python"
       }
@@ -4321,14 +4345,13 @@
         "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\claude_agent_sdk\\chief_of_staff_agent\\agent.py": {
-      "mtime": 1779100279935.1997,
-      "size": 4709,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\claude_agent_sdk\\research_agent\\agent.py": {
+      "mtime": 1779100280145.744,
+      "size": 4577,
       "symbols": {
         "purpose": null,
         "exports": [
           "get_activity_text",
-          "print_activity",
           "send_query"
         ],
         "language": "python"
@@ -4341,6 +4364,19 @@
         "purpose": null,
         "exports": [
           "get_github_mcp_server",
+          "send_query"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\claude_agent_sdk\\chief_of_staff_agent\\agent.py": {
+      "mtime": 1779100279935.1997,
+      "size": 4709,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "get_activity_text",
+          "print_activity",
           "send_query"
         ],
         "language": "python"
@@ -4563,6 +4599,45 @@
         "language": "typescript"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\validation\\schemas.ts": {
+      "mtime": 1778242311058.191,
+      "size": 14038,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "loginSchema",
+          "createUserSchema",
+          "updateUserSchema",
+          "createLeadSchema",
+          "updateLeadSchema",
+          "createDisparoSchema",
+          "createTenantSchema",
+          "createStatusSchema",
+          "updateStatusSchema",
+          "updateTenantStatusSchema"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\types\\index.ts": {
+      "mtime": 1778242311056.1917,
+      "size": 1457,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "JWTPayload",
+          "DashboardStats",
+          "LeadsPorDia",
+          "TopCorretor",
+          "DisparoFilter",
+          "UserRole",
+          "LeadSource",
+          "StatusTipo",
+          "DisparoTipo"
+        ],
+        "language": "typescript"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\utils\\logger.ts": {
       "mtime": 1778242311057.1914,
       "size": 732,
@@ -4580,26 +4655,6 @@
         "exports": [
           "generateToken",
           "verifyToken"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\validation\\schemas.ts": {
-      "mtime": 1778242311058.191,
-      "size": 14038,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "loginSchema",
-          "createUserSchema",
-          "updateUserSchema",
-          "createLeadSchema",
-          "updateLeadSchema",
-          "createDisparoSchema",
-          "createTenantSchema",
-          "createStatusSchema",
-          "updateStatusSchema",
-          "updateTenantStatusSchema"
         ],
         "language": "typescript"
       }
@@ -5036,53 +5091,6 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\middlewares\\validation.ts": {
-      "mtime": 1778242310971.4768,
-      "size": 1514,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "validateRequest",
-          "validateParams"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\middlewares\\upload.ts": {
-      "mtime": 1778242310970.4573,
-      "size": 1242,
-      "symbols": {
-        "purpose": "Configuração do Multer para upload em memória",
-        "exports": [
-          "uploadDisparoFiles"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\middlewares\\errorHandler.ts": {
-      "mtime": 1778242310970.4573,
-      "size": 520,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "errorHandler"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\middlewares\\auth.ts": {
-      "mtime": 1778242310969.928,
-      "size": 1366,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "authenticate",
-          "authorize",
-          "AuthenticatedRequest"
-        ],
-        "language": "typescript"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\controllers\\UserController.ts": {
       "mtime": 1778242310969.626,
       "size": 4609,
@@ -5269,25 +5277,6 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\types\\index.ts": {
-      "mtime": 1778242311056.1917,
-      "size": 1457,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "JWTPayload",
-          "DashboardStats",
-          "LeadsPorDia",
-          "TopCorretor",
-          "DisparoFilter",
-          "UserRole",
-          "LeadSource",
-          "StatusTipo",
-          "DisparoTipo"
-        ],
-        "language": "typescript"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\utils\\cadencia.ts": {
       "mtime": 1778242311100.1826,
       "size": 2968,
@@ -5323,28 +5312,194 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\contexts\\ToastContext.tsx": {
-      "mtime": 1778242311085.5283,
-      "size": 5526,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\whatsapp.ts": {
+      "mtime": 1778242311098.651,
+      "size": 2544,
       "symbols": {
         "purpose": null,
         "exports": [
-          "ToastProvider",
-          "ToastType",
-          "Toast",
-          "ToastContext"
+          "whatsappService"
         ],
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\contexts\\AuthContext.tsx": {
-      "mtime": 1778242311084.5142,
-      "size": 997,
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\users.ts": {
+      "mtime": 1778242311098.651,
+      "size": 1658,
       "symbols": {
         "purpose": null,
         "exports": [
-          "useAuth",
-          "AuthProvider"
+          "usersService",
+          "CreateUserInput"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\tenants.ts": {
+      "mtime": 1778242311097.6416,
+      "size": 2580,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "tenantsService",
+          "TenantDTO",
+          "TenantAdminDTO",
+          "UpdateTenantWithAdminPayload",
+          "TenantConfig"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\status.ts": {
+      "mtime": 1778242311097.6416,
+      "size": 2206,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "statusService",
+          "ApiStatus"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\sequencias.ts": {
+      "mtime": 1778242311096.4714,
+      "size": 1130,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "sequenciasService"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\roletas.ts": {
+      "mtime": 1778242311096.4714,
+      "size": 1038,
+      "symbols": {
+        "purpose": "Listar todas as roletas do tenant",
+        "exports": [
+          "roletaService"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\mensagens.ts": {
+      "mtime": 1778242311096.4714,
+      "size": 3714,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "fetchMensagensProntas",
+          "fetchMensagemProntaById",
+          "fetchMensagensProntasByStatus",
+          "createMensagemPronta",
+          "updateMensagemPronta",
+          "toggleMensagemProntaActive",
+          "deleteMensagemPronta"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\mappers.ts": {
+      "mtime": 1778242311095.4639,
+      "size": 8926,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "mapUserFromApi",
+          "mapUserToApi",
+          "mapTentativaFromApi",
+          "mapCadenciaFromApi",
+          "mapLeadFromApi",
+          "mapLeadToApi",
+          "mapDisparoFromApi",
+          "mapDashboardFromApi",
+          "ApiTentativaAtendimento",
+          "ApiCadenciaAtendimento"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\leads.ts": {
+      "mtime": 1778242311094.4539,
+      "size": 3896,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "leadsService"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\lancamentos.ts": {
+      "mtime": 1778242311094.4539,
+      "size": 1947,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "lancamentosService"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\disparos.ts": {
+      "mtime": 1778242311093.1636,
+      "size": 4034,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "disparosService"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\dashboard.ts": {
+      "mtime": 1778242311093.1636,
+      "size": 374,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "dashboardService"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\cadencias.ts": {
+      "mtime": 1778242311093.1636,
+      "size": 4537,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "cadenciasService"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\auth.ts": {
+      "mtime": 1778242311093.1636,
+      "size": 553,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "authService",
+          "LoginResponse"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\api.ts": {
+      "mtime": 1778242311092.1611,
+      "size": 2151,
+      "symbols": {
+        "purpose": "Detecta se a URL da API foi configurada (para ativar/desativar integrações)",
+        "exports": [
+          "API_BASE_URL",
+          "isApiEnabled",
+          "setTokenExpiredCallback",
+          "api",
+          "getErrorMessage",
+          "ApiError"
         ],
         "language": "typescript"
       }
@@ -5500,6 +5655,79 @@
         "purpose": null,
         "exports": [
           "useAuth"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\middlewares\\validation.ts": {
+      "mtime": 1778242310971.4768,
+      "size": 1514,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "validateRequest",
+          "validateParams"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\middlewares\\upload.ts": {
+      "mtime": 1778242310970.4573,
+      "size": 1242,
+      "symbols": {
+        "purpose": "Configuração do Multer para upload em memória",
+        "exports": [
+          "uploadDisparoFiles"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\middlewares\\errorHandler.ts": {
+      "mtime": 1778242310970.4573,
+      "size": 520,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "errorHandler"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\api-liya-main\\api-liya-main\\src\\middlewares\\auth.ts": {
+      "mtime": 1778242310969.928,
+      "size": 1366,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "authenticate",
+          "authorize",
+          "AuthenticatedRequest"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\contexts\\ToastContext.tsx": {
+      "mtime": 1778242311085.5283,
+      "size": 5526,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "ToastProvider",
+          "ToastType",
+          "Toast",
+          "ToastContext"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\contexts\\AuthContext.tsx": {
+      "mtime": 1778242311084.5142,
+      "size": 997,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "useAuth",
+          "AuthProvider"
         ],
         "language": "typescript"
       }
@@ -5738,198 +5966,6 @@
         "language": "typescript"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\whatsapp.ts": {
-      "mtime": 1778242311098.651,
-      "size": 2544,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "whatsappService"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\users.ts": {
-      "mtime": 1778242311098.651,
-      "size": 1658,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "usersService",
-          "CreateUserInput"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\tenants.ts": {
-      "mtime": 1778242311097.6416,
-      "size": 2580,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "tenantsService",
-          "TenantDTO",
-          "TenantAdminDTO",
-          "UpdateTenantWithAdminPayload",
-          "TenantConfig"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\status.ts": {
-      "mtime": 1778242311097.6416,
-      "size": 2206,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "statusService",
-          "ApiStatus"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\sequencias.ts": {
-      "mtime": 1778242311096.4714,
-      "size": 1130,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "sequenciasService"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\roletas.ts": {
-      "mtime": 1778242311096.4714,
-      "size": 1038,
-      "symbols": {
-        "purpose": "Listar todas as roletas do tenant",
-        "exports": [
-          "roletaService"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\mensagens.ts": {
-      "mtime": 1778242311096.4714,
-      "size": 3714,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "fetchMensagensProntas",
-          "fetchMensagemProntaById",
-          "fetchMensagensProntasByStatus",
-          "createMensagemPronta",
-          "updateMensagemPronta",
-          "toggleMensagemProntaActive",
-          "deleteMensagemPronta"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\mappers.ts": {
-      "mtime": 1778242311095.4639,
-      "size": 8926,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "mapUserFromApi",
-          "mapUserToApi",
-          "mapTentativaFromApi",
-          "mapCadenciaFromApi",
-          "mapLeadFromApi",
-          "mapLeadToApi",
-          "mapDisparoFromApi",
-          "mapDashboardFromApi",
-          "ApiTentativaAtendimento",
-          "ApiCadenciaAtendimento"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\leads.ts": {
-      "mtime": 1778242311094.4539,
-      "size": 3896,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "leadsService"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\lancamentos.ts": {
-      "mtime": 1778242311094.4539,
-      "size": 1947,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "lancamentosService"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\disparos.ts": {
-      "mtime": 1778242311093.1636,
-      "size": 4034,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "disparosService"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\dashboard.ts": {
-      "mtime": 1778242311093.1636,
-      "size": 374,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "dashboardService"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\cadencias.ts": {
-      "mtime": 1778242311093.1636,
-      "size": 4537,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "cadenciasService"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\auth.ts": {
-      "mtime": 1778242311093.1636,
-      "size": 553,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "authService",
-          "LoginResponse"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\liya\\front-end-liya-main\\front-end-liya-main\\src\\services\\api.ts": {
-      "mtime": 1778242311092.1611,
-      "size": 2151,
-      "symbols": {
-        "purpose": "Detecta se a URL da API foi configurada (para ativar/desativar integrações)",
-        "exports": [
-          "API_BASE_URL",
-          "isApiEnabled",
-          "setTokenExpiredCallback",
-          "api",
-          "getErrorMessage",
-          "ApiError"
-        ],
-        "language": "typescript"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\tool_use\\memory_demo\\sample_code\\web_scraper_v1.py": {
       "mtime": 1779100283182.522,
       "size": 2939,
@@ -5989,6 +6025,31 @@
         "language": "python"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\custom_skills\\creating-financial-models\\sensitivity_analysis.py": {
+      "mtime": 1779100282737.3716,
+      "size": 11543,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "create_data_table",
+          "SensitivityAnalyzer"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\custom_skills\\creating-financial-models\\dcf_model.py": {
+      "mtime": 1779100282731.3704,
+      "size": 17213,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "calculate_beta",
+          "calculate_fcf_cagr",
+          "DCFModel"
+        ],
+        "language": "python"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\custom_skills\\applying-brand-guidelines\\validate_brand.py": {
       "mtime": 1779100282717.3728,
       "size": 10575,
@@ -6042,79 +6103,6 @@
         "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\custom_skills\\creating-financial-models\\sensitivity_analysis.py": {
-      "mtime": 1779100282737.3716,
-      "size": 11543,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "create_data_table",
-          "SensitivityAnalyzer"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\skills\\custom_skills\\creating-financial-models\\dcf_model.py": {
-      "mtime": 1779100282731.3704,
-      "size": 17213,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "calculate_beta",
-          "calculate_fcf_cagr",
-          "DCFModel"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\cma-mcp\\src\\tools.ts": {
-      "mtime": 1779100281821.5234,
-      "size": 3442,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "registerTools"
-        ],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\cma-mcp\\src\\server.ts": {
-      "mtime": 1779100281816.523,
-      "size": 459,
-      "symbols": {
-        "purpose": "stdio transport — for Claude Desktop / Claude Code.",
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\cma-mcp\\src\\server-http.ts": {
-      "mtime": 1779100281810.5227,
-      "size": 2003,
-      "symbols": {
-        "purpose": "Streamable HTTP transport — for claude.ai web Connectors (or any remote MCP client).",
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\cma-mcp\\src\\cma.ts": {
-      "mtime": 1779100281802.5227,
-      "size": 4978,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "listAgents",
-          "getAgent",
-          "createSession",
-          "sendMessage",
-          "interrupt",
-          "getSession",
-          "listEvents",
-          "archiveSession",
-          "waitForIdle"
-        ],
-        "language": "typescript"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\linear\\src\\oauth.ts": {
       "mtime": 1779100282116.2593,
       "size": 3225,
@@ -6165,6 +6153,54 @@
       "symbols": {
         "purpose": "One-time: create the Claude agent + environment. Copy the printed IDs into .env.local.",
         "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\cma-mcp\\src\\tools.ts": {
+      "mtime": 1779100281821.5234,
+      "size": 3442,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "registerTools"
+        ],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\cma-mcp\\src\\server.ts": {
+      "mtime": 1779100281816.523,
+      "size": 459,
+      "symbols": {
+        "purpose": "stdio transport — for Claude Desktop / Claude Code.",
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\cma-mcp\\src\\server-http.ts": {
+      "mtime": 1779100281810.5227,
+      "size": 2003,
+      "symbols": {
+        "purpose": "Streamable HTTP transport — for claude.ai web Connectors (or any remote MCP client).",
+        "exports": [],
+        "language": "typescript"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\managed_agents\\cma-mcp\\src\\cma.ts": {
+      "mtime": 1779100281802.5227,
+      "size": 4978,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "listAgents",
+          "getAgent",
+          "createSession",
+          "sendMessage",
+          "interrupt",
+          "getSession",
+          "listEvents",
+          "archiveSession",
+          "waitForIdle"
+        ],
         "language": "typescript"
       }
     },
@@ -6289,6 +6325,18 @@
         "language": "python"
       }
     },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\.claude\\skills\\cookbook-audit\\validate_notebook.py": {
+      "mtime": 1779100278916.023,
+      "size": 18217,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "main",
+          "NotebookValidator"
+        ],
+        "language": "python"
+      }
+    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\text_to_sql\\evaluation\\vectordb.py": {
       "mtime": 1779100279800.1448,
       "size": 2099,
@@ -6312,6 +6360,28 @@
           "generate_prompt_with_cot",
           "generate_prompt_with_rag"
         ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\summarization\\evaluation\\prompts.py": {
+      "mtime": 1779100279686.605,
+      "size": 1995,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "basic_summarize",
+          "guided_legal_summary",
+          "summarize_long_document"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\summarization\\data\\multiple_subleases.py": {
+      "mtime": 1779100279524.115,
+      "size": 90266,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
         "language": "python"
       }
     },
@@ -6379,41 +6449,6 @@
         "language": "python"
       }
     },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\classification\\evaluation\\vectordb.py": {
-      "mtime": 1779100279156.5742,
-      "size": 2776,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "VectorDB"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\classification\\evaluation\\transform.py": {
-      "mtime": 1779100279151.572,
-      "size": 217,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "get_transform"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\classification\\evaluation\\prompts.py": {
-      "mtime": 1779100279146.5752,
-      "size": 5557,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "simple_classify",
-          "rag_classify",
-          "rag_chain_of_thought_classify"
-        ],
-        "language": "python"
-      }
-    },
     "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\knowledge_graph\\evaluation\\eval_extraction.py": {
       "mtime": 1779100279264.0913,
       "size": 4687,
@@ -6428,40 +6463,6 @@
           "Entity",
           "Relation",
           "ExtractedGraph"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\summarization\\evaluation\\prompts.py": {
-      "mtime": 1779100279686.605,
-      "size": 1995,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "basic_summarize",
-          "guided_legal_summary",
-          "summarize_long_document"
-        ],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\summarization\\data\\multiple_subleases.py": {
-      "mtime": 1779100279524.115,
-      "size": 90266,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "python"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\.claude\\skills\\cookbook-audit\\validate_notebook.py": {
-      "mtime": 1779100278916.023,
-      "size": 18217,
-      "symbols": {
-        "purpose": null,
-        "exports": [
-          "main",
-          "NotebookValidator"
         ],
         "language": "python"
       }
@@ -6495,6 +6496,41 @@
         "purpose": null,
         "exports": [
           "InferenceAdapter"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\classification\\evaluation\\vectordb.py": {
+      "mtime": 1779100279156.5742,
+      "size": 2776,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "VectorDB"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\classification\\evaluation\\transform.py": {
+      "mtime": 1779100279151.572,
+      "size": 217,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "get_transform"
+        ],
+        "language": "python"
+      }
+    },
+    "c:\\Users\\usuar\\Downloads\\Open Squad\\claude-cookbooks-main\\claude-cookbooks-main\\capabilities\\classification\\evaluation\\prompts.py": {
+      "mtime": 1779100279146.5752,
+      "size": 5557,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "simple_classify",
+          "rag_classify",
+          "rag_chain_of_thought_classify"
         ],
         "language": "python"
       }
@@ -6725,15 +6761,6 @@
     "c:\\Users\\usuar\\Downloads\\Open Squad\\xquads\\squads\\design-squad\\output\\doorgrill-super\\.chrome-tmp-v1-feed.html\\Default\\Extensions\\lmjegmlicamnimmfhcmpkclmigmmcbeh\\3.10_0\\background_compiled.js": {
       "mtime": 1778242315217.953,
       "size": 13356,
-      "symbols": {
-        "purpose": null,
-        "exports": [],
-        "language": "typescript"
-      }
-    },
-    "c:\\Users\\usuar\\Downloads\\Open Squad\\dros-sales-site-v2\\_bp-entrega.js": {
-      "mtime": 1779290468620.3538,
-      "size": 635,
       "symbols": {
         "purpose": null,
         "exports": [],

@@ -490,6 +490,48 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* =============================================================
    PROBLEMA — editorial 4-itens
    ============================================================= */
+.problem-photo {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 21/9;
+  margin-bottom: 56px;
+  box-shadow: 0 30px 70px rgba(10, 37, 72, 0.18);
+}
+.problem-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.02) saturate(0.94);
+}
+.problem-photo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(10, 37, 72, 0.60));
+  pointer-events: none;
+}
+.problem-photo figcaption {
+  position: absolute;
+  left: 24px; right: 24px; bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  z-index: 1;
+}
+.problem-photo figcaption span:last-child { color: var(--tomato-soft); }
+
+@media (max-width: 720px) {
+  .problem-photo { aspect-ratio: 4/3; margin-bottom: 40px; }
+  .problem-photo figcaption { font-size: 10px; left: 16px; right: 16px; bottom: 14px; }
+}
+
 .problem-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -571,13 +613,17 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .step {
   display: grid;
-  grid-template-columns: 76px 1.05fr 1fr;
+  grid-template-columns: 76px 1fr 1.1fr;
   gap: 32px;
   align-items: center;
   position: relative;
 }
-.step--reverse .step-photo { order: -1; }
-.step--reverse { grid-template-columns: 76px 1fr 1.05fr; }
+.step-num { grid-column: 1; }
+.step-body { grid-column: 2; }
+.step-photo { grid-column: 3; }
+.step--reverse { grid-template-columns: 76px 1.1fr 1fr; }
+.step--reverse .step-body { grid-column: 3; }
+.step--reverse .step-photo { grid-column: 2; }
 
 .step-num {
   font-family: var(--font-display);
@@ -655,6 +701,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   border: 4px solid #fff;
   box-shadow: 0 20px 50px rgba(10, 37, 72, 0.14);
 }
+.step-photo--portrait { aspect-ratio: 4/5; }
+/* esconde só no desktop, mantém no mobile */
+@media (min-width: 921px) {
+  .step-photo--mobile-only { display: none; }
+  .step--reverse:has(.step-photo--mobile-only) {
+    grid-template-columns: 76px 1fr;
+  }
+  .step--reverse:has(.step-photo--mobile-only) .step-body { grid-column: 2; }
+}
 .step-photo::after {
   content: '';
   position: absolute;
@@ -665,14 +720,17 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .step-photo img {
   width: 100%; height: 100%;
   object-fit: cover;
+  object-position: center 30%;
   transition: transform 0.6s var(--ease);
 }
+.step-photo--portrait img { object-position: center center; }
 .step:hover .step-photo img { transform: scale(1.03); }
 
 @media (max-width: 920px) {
   .step, .step--reverse { grid-template-columns: 56px 1fr; grid-template-rows: auto auto; gap: 18px; }
-  .step-photo { grid-column: 1 / -1; }
-  .step--reverse .step-photo { order: 0; }
+  .step-num, .step--reverse .step-num { grid-column: 1; }
+  .step-body, .step--reverse .step-body { grid-column: 2; }
+  .step-photo, .step--reverse .step-photo { grid-column: 1 / -1; }
   .step-num { font-size: 2.2rem; background: transparent; }
   .step-num::before { display: none; }
 }
