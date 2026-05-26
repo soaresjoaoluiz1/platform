@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-21 · 5300 files · ~19.8M tokens total
+> 2026-05-26 · 5711 files · ~24.6M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -108,6 +108,32 @@
 
 **bin/**
 - `opensquad.js`
+
+**box-paper-site-final\_scripts/**
+- `_bp-acab-new.cjs`
+- `_bp-acab-tight.js`
+- `_bp-acab-zoom.js`
+- `_bp-acabamentos-split.js` — Gera duas imagens separadas a partir da fonte:
+- `_bp-boleto.js`
+- `_bp-cronograma.js`
+- `_bp-cxs-chromakey.js`
+- `_bp-cxs-clean.js`
+- `_bp-cxs-final.js`
+- `_bp-cxs-multiply.js`
+- `_bp-cxs-png.js`
+- `_bp-cxs-skybg.js`
+- `_bp-cxs-tight.js`
+- `_bp-cxs.js`
+- `_bp-entrega.js`
+- `_bp-estoque-new.js`
+- `_bp-estoque.js`
+- `_bp-extra-images.js` — Otimiza:
+- `_bp-hero-img.js` — Otimiza box-paper-img-hero.png pra usar no hero do V8.
+- `_bp-hero-mockups.js` — Top-view Pizza Pitzz fechada (mockup limpo, vista superior)
+- `_bp-hero-mockups2.js`
+- `_bp-hero2.js`
+- `_bp-hero3.js` — Otimiza as 3 imagens do hero — alternando entre Pizza Pitzz, Aló Pizza e Leal Pizzas.
+- `_bp-replace-images.js` — Replace box-paper images with new professional ones.
 
 **claude-cookbooks-main\claude-cookbooks-main\.claude\skills\cookbook-audit/**
 - `validate_notebook.py` — main, NotebookValidator
@@ -351,11 +377,13 @@
 **crm-dashboard\server\routes/**
 - `accounts.js`
 - `admin.js`
+- `agents.js`
 - `auth.js`
 - `broadcasts.js` — runBroadcastLoop, resumeBroadcastIfPaused, recoverPendingBroadcasts
 - `cadences.js`
 - `contracts.js`
 - `dashboard.js`
+- `follow-ups.js` — computeNextRun
 - `funnels.js`
 - `integrations.js`
 - `launches.js`
@@ -370,8 +398,13 @@
 - `webhooks.js`
 
 **crm-dashboard\server\services/**
+- `aiAgent.js` — Servico do Agente de IA: orquestra recebimento de msg -> Haiku -> tool calls -> envio. · findAgentForLead, processInboundMessage
+- `anthropicClient.js` — Wrapper fetch da API Anthropic (Claude Haiku 4.5). · callHaiku, smokeTest
 - `autoMessages.js` — Aplica variaveis no texto da auto-mensagem · applyVars, getInstanceConfig, wasAutoMsgSentRecently, shouldSendAway, sendAutoMessage
+- `followUpSender.js` — Envio automatico de follow-ups (cadencias automaticas de mensagens WhatsApp). · sendFollowUpMessage, resumeFollowUpsIfPaused
+- `inactivityScanner.js` — Scanner de inatividade: pra cada follow-up tipo 'inactivity' ativo, · processInactivityFollowUps
 - `metaCapi.js` — Hash padrao Meta: SHA256 lowercase trim · sendCapiEvent, loadLeadForCapi, triggerCapiForStageChange, testCapi
+- `roulette.js` — Util compartilhado de roleta/round-robin pra escolher atendente. · pickFromRoulette
 
 **crm-dashboard\src/**
 - `App.tsx` — default:App
@@ -379,6 +412,7 @@
 
 **crm-dashboard\src\components/**
 - `AccountSelector.tsx` — default:AccountSelector
+- `AgentEditorModal.tsx` — default:AgentEditorModal
 - `DisconnectedInstancesAlert.tsx` — default:DisconnectedInstancesAlert
 - `EditTaskModal.tsx` — default:EditTaskModal
 - `FilterDropdown.tsx` — Dropdown de multi-selecao com checkboxes — usado em Pipeline e Chat · FilterValue, default:FilterDropdown
@@ -400,11 +434,13 @@
 - `messageVars.ts` — Single source of truth for message template variables. · applyMessageVars, MESSAGE_VARIABLES, VarContext, VarDoc
 
 **crm-dashboard\src\pages/**
+- `Agents.tsx` — default:Agents
 - `BroadcastDetail.tsx` — default:BroadcastDetail
 - `Cadences.tsx` — default:Cadences
 - `Chat.tsx` — default:Chat
 - `Contratos.tsx` — default:Contratos
 - `Dashboard.tsx` — default:Dashboard
+- `FollowUps.tsx` — default:FollowUps
 - `Funnels.tsx` — default:Funnels
 - `Integrations.tsx` — default:Integrations
 - `Launches.tsx` — default:Launches
@@ -469,26 +505,6 @@
 - `state.ts` — state.json structure — matches Pipeline Runner output · AgentDesk, AgentStatus, Agent, Handoff, SquadStatus, SquadState, SquadInfo, WsMessage
 
 **dros-sales-site-v2/**
-- `_bp-acabamentos-split.js` — Gera duas imagens separadas a partir da fonte:
-- `_bp-boleto.js`
-- `_bp-cronograma.js`
-- `_bp-cxs-chromakey.js`
-- `_bp-cxs-clean.js`
-- `_bp-cxs-final.js`
-- `_bp-cxs-multiply.js`
-- `_bp-cxs-png.js`
-- `_bp-cxs-skybg.js`
-- `_bp-cxs-tight.js`
-- `_bp-cxs.js`
-- `_bp-entrega.js`
-- `_bp-estoque.js`
-- `_bp-extra-images.js` — Otimiza:
-- `_bp-hero-img.js` — Otimiza box-paper-img-hero.png pra usar no hero do V8.
-- `_bp-hero-mockups.js` — Top-view Pizza Pitzz fechada (mockup limpo, vista superior)
-- `_bp-hero-mockups2.js`
-- `_bp-hero2.js`
-- `_bp-hero3.js` — Otimiza as 3 imagens do hero — alternando entre Pizza Pitzz, Aló Pizza e Leal Pizzas.
-- `_bp-replace-images.js` — Replace box-paper images with new professional ones.
 - `optimize-images.js` — Otimiza as imagens grandes do site para deploy em produção.
 
 **gestao-clin/**
@@ -932,12 +948,12 @@
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-21T10-37-38-341Z.yml`
-- `.playwright-mcp\page-2026-05-21T10-39-42-916Z.yml`
-- `.playwright-mcp\page-2026-05-21T10-43-18-605Z.yml`
-- `.playwright-mcp\page-2026-05-21T10-57-29-309Z.yml`
-- `.playwright-mcp\page-2026-05-21T11-06-55-522Z.yml`
-- `.playwright-mcp\page-2026-05-21T11-49-04-834Z.yml`
+- `.playwright-mcp\page-2026-05-21T13-36-59-897Z.yml`
+- `.playwright-mcp\page-2026-05-21T13-43-12-375Z.yml`
+- `.playwright-mcp\page-2026-05-21T13-44-50-920Z.yml`
+- `.playwright-mcp\page-2026-05-21T13-46-12-886Z.yml`
+- `.playwright-mcp\page-2026-05-21T13-52-57-503Z.yml`
+- `.playwright-mcp\page-2026-05-21T13-57-50-188Z.yml`
 - `.vscode\mcp.json`
 - `.vscode\tasks.json`
 - `agency-hub\package.json`
@@ -963,13 +979,13 @@
 - `CLAUDE.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
-- `crm-dashboard\DEPLOY.md`
 - `crm-dashboard\PLANO_PERFORMANCE.md`
 - `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
 - `dros-sales-site-v2\INTEGRACAO-LEADS.md`
 - `dros-sales-site-v2\README.md`
+- `dros-sales-site\README.md`
 - `oxi-pedidos\DEPLOY.md`
 - `oxi-pedidos\README.md`
 - `oxiquimica-lp\README.md`
@@ -977,4 +993,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~11.2k tokens · Full codebase: ~19.8M tokens · Saves ~100%*
+*Index: ~11.4k tokens · Full codebase: ~24.6M tokens · Saves ~100%*

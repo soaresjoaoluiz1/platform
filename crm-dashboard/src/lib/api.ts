@@ -20,8 +20,8 @@ export function pctChange(c: number, p: number) { if (p === 0) return c > 0 ? 10
 // Types
 // =============================================
 
-export interface Account { id: number; name: string; slug: string; logo_url: string | null; is_active: number; created_at: string; lead_count?: number; user_count?: number; cnpj?: string | null; razao_social?: string | null; segmento?: string | null; website?: string | null; instagram?: string | null; whatsapp_comercial?: string | null; valor_mensal?: number | null; contrato_inicio?: string | null; cidade?: string | null; estado?: string | null; observacoes?: string | null; trabalha_anuncio?: number; investimento_anuncios?: number | null; meta_pixel_id?: string | null; meta_capi_token?: string | null; meta_capi_test_event_code?: string | null; meta_capi_enabled?: number }
-export interface User { id: number; account_id: number | null; account_name?: string | null; name: string; email: string; role: string; is_active: number; primary_instance_id?: number | null; can_manage_proposals?: number; can_manage_contracts?: number; can_grab_leads?: number; created_at: string }
+export interface Account { id: number; name: string; slug: string; logo_url: string | null; is_active: number; created_at: string; lead_count?: number; user_count?: number; cnpj?: string | null; razao_social?: string | null; segmento?: string | null; website?: string | null; instagram?: string | null; whatsapp_comercial?: string | null; valor_mensal?: number | null; contrato_inicio?: string | null; cidade?: string | null; estado?: string | null; observacoes?: string | null; trabalha_anuncio?: number; investimento_anuncios?: number | null; meta_pixel_id?: string | null; meta_capi_token?: string | null; meta_capi_test_event_code?: string | null; meta_capi_enabled?: number; ai_agents_enabled?: number }
+export interface User { id: number; account_id: number | null; account_name?: string | null; name: string; email: string; role: string; is_active: number; is_bot?: number; primary_instance_id?: number | null; can_manage_proposals?: number; can_manage_contracts?: number; can_grab_leads?: number; created_at: string }
 export interface FunnelStage { id: number; funnel_id: number; name: string; position: number; color: string; is_conversion: number; is_terminal: number; auto_keywords: string | null; meta_event_name?: string | null }
 export interface Funnel { id: number; account_id: number; name: string; is_default: number; is_active: number; stages: FunnelStage[] }
 export interface Tag { id: number; account_id: number; name: string; color: string }
@@ -154,6 +154,7 @@ export interface Proposal {
   num_videos: number; num_images: number;
   valor: number; contrato_meses: number;
   observacoes: string | null;
+  has_comissao: number; comissao_percent: number;
   created_by: number | null; created_by_name?: string;
   created_at: string; updated_at: string;
 }
@@ -163,6 +164,7 @@ export interface ProposalInput {
   num_videos?: number; num_images?: number;
   valor: number; contrato_meses: number;
   observacoes?: string;
+  has_comissao?: boolean; comissao_percent?: number;
 }
 export const fetchProposals = () => apiFetch<{ proposals: Proposal[] }>('/api/proposals').then(d => d.proposals)
 export const createProposal = (data: ProposalInput) => apiFetch<{ proposal: Proposal }>('/api/proposals', { method: 'POST', body: JSON.stringify(data) }).then(d => d.proposal)
@@ -355,6 +357,176 @@ export const assignLeadCadence = (cadenceId: number, accountId: number, leadId: 
 export const advanceLeadCadence = (lcId: number, accountId: number) => apiFetch(`/api/cadences/lead-cadence/${lcId}/advance?account_id=${accountId}`, { method: 'PUT' })
 export const removeLeadCadence = (lcId: number, accountId: number) => apiFetch(`/api/cadences/lead-cadence/${lcId}?account_id=${accountId}`, { method: 'DELETE' })
 export const fetchLeadCadence = (leadId: number, accountId: number) => apiFetch<{ leadCadence: LeadCadence | null }>(`/api/cadences/lead/${leadId}?account_id=${accountId}`).then(d => d.leadCadence)
+
+// =============================================
+// Follow-ups (cadencias automaticas — envio sozinho via scheduler)
+// =============================================
+export interface FollowUpStep {
+  id?: number; follow_up_id?: number; position?: number;
+  delay_minutes: number; message_template: string;
+  schedule_mode?: 'relative' | 'absolute';
+  scheduled_at?: string | null;
+  variations?: string[] | null;  // JSON array; sender escolhe aleatoria. null = usa message_template
+}
+export interface FollowUp {
+  id: number; account_id: number; name: string; description: string | null;
+  instance_id: number; instance_name?: string | null; instance_status?: string | null;
+  stop_on_reply: number; is_active: number;
+  type?: 'sequence' | 'inactivity';
+  inactivity_stage_id?: number | null;
+  inactivity_days?: number;
+  inactivity_minutes?: number | null;
+  inactivity_mode?: 'rotation' | 'sequence';
+  variation_delay_seconds?: number;
+  on_reply_action?: 'pause' | 'roulette' | 'assign_user';
+  on_reply_user_id?: number | null;
+  on_reply_move_to_stage_id?: number | null;
+  on_reply_add_tag_id?: number | null;
+  steps?: FollowUpStep[]; steps_count?: number; active_leads?: number;
+  created_by: number | null; created_by_name?: string | null;
+  created_at: string; updated_at: string;
+}
+export interface LeadFollowUp {
+  id: number; lead_id: number; follow_up_id: number;
+  follow_up_name?: string; instance_id?: number; instance_name?: string | null;
+  stop_on_reply?: number;
+  current_step_id: number | null; current_position?: number; current_message?: string | null;
+  total_steps?: number;
+  status: 'active' | 'paused' | 'completed' | 'cancelled';
+  next_run_at: string | null;
+  last_executed_at: string | null;
+  paused_at: string | null; paused_reason: string | null;
+  started_at: string;
+}
+
+export const fetchFollowUps = (accountId: number) => apiFetch<{ follow_ups: FollowUp[] }>(`/api/follow-ups?account_id=${accountId}`).then(d => d.follow_ups)
+export const fetchFollowUp = (id: number, accountId: number) => apiFetch<{ follow_up: FollowUp }>(`/api/follow-ups/${id}?account_id=${accountId}`).then(d => d.follow_up)
+export const createFollowUp = (accountId: number, data: Partial<FollowUp> & { name: string; instance_id: number; steps: FollowUpStep[] }) =>
+  apiFetch<{ follow_up: FollowUp }>(`/api/follow-ups?account_id=${accountId}`, { method: 'POST', body: JSON.stringify(data) }).then(d => d.follow_up)
+export const updateFollowUp = (id: number, accountId: number, data: Partial<FollowUp> & { steps?: FollowUpStep[] }) =>
+  apiFetch<{ follow_up: FollowUp }>(`/api/follow-ups/${id}?account_id=${accountId}`, { method: 'PUT', body: JSON.stringify(data) }).then(d => d.follow_up)
+export const deleteFollowUp = (id: number, accountId: number, force = false) =>
+  apiFetch(`/api/follow-ups/${id}?account_id=${accountId}${force ? '&force=1' : ''}`, { method: 'DELETE' })
+export const assignFollowUp = (followUpId: number, accountId: number, leadId: number) =>
+  apiFetch<{ lead_follow_up: LeadFollowUp }>(`/api/follow-ups/${followUpId}/assign?account_id=${accountId}`, { method: 'POST', body: JSON.stringify({ lead_id: leadId }) }).then(d => d.lead_follow_up)
+export const pauseLeadFollowUp = (lfuId: number, accountId: number) =>
+  apiFetch(`/api/follow-ups/lead/${lfuId}/pause?account_id=${accountId}`, { method: 'POST' })
+export const resumeLeadFollowUp = (lfuId: number, accountId: number) =>
+  apiFetch(`/api/follow-ups/lead/${lfuId}/resume?account_id=${accountId}`, { method: 'POST' })
+export const cancelLeadFollowUp = (lfuId: number, accountId: number) =>
+  apiFetch(`/api/follow-ups/lead/${lfuId}/cancel?account_id=${accountId}`, { method: 'POST' })
+export const fetchLeadFollowUp = (leadId: number, accountId: number) =>
+  apiFetch<{ lead_follow_up: LeadFollowUp | null }>(`/api/follow-ups/lead/${leadId}?account_id=${accountId}`).then(d => d.lead_follow_up)
+
+// =============================================
+// AI Agents (Haiku 4.5)
+// =============================================
+export type AgentActivationMode = 'default_attendant' | 'roulette' | 'conditional' | 'manual'
+export type AgentHandoffReason = 'qualified' | 'keyword' | 'unknown' | 'max_messages' | 'audio_received'
+
+export interface AgentHandoffRule {
+  agent_id?: number
+  reason: AgentHandoffReason
+  target_type: 'roulette' | 'specific_user'
+  target_user_id: number | null
+  fallback_to_roulette: number
+  move_to_stage_id: number | null
+  add_tag_id: number | null
+  target_user_name?: string
+  stage_name?: string
+  tag_name?: string
+}
+
+export interface AgentStage { id: number; name: string; color: string; funnel_id: number; funnel_name: string }
+export interface AgentInstance { id: number; instance_name: string; status: string }
+
+export interface Agent {
+  id: number
+  account_id: number
+  user_id: number
+  name: string
+  is_active: number
+  identifies_as_bot: number
+  persona: string | null
+  knowledge_base: string | null
+  never_mention: string | null
+  qualification_criteria: string | null
+  required_fields: string | null  // JSON
+  required_fields_arr?: string[]
+  responds_to_audio: number
+  audio_decline_message: string
+  max_messages_before_handoff: number
+  handoff_keywords: string
+  activation_mode: AgentActivationMode
+  required_tag_id: number | null
+  monthly_token_limit: number
+  tokens_used_this_month: number
+  current_month: string | null
+  created_at: string
+  updated_at: string
+  // Joined
+  bot_user_name?: string
+  stages_count?: number
+  instances_count?: number
+  stages?: AgentStage[]
+  instances?: AgentInstance[]
+  handoff_rules?: AgentHandoffRule[]
+}
+
+export interface AgentInput {
+  name: string
+  persona?: string
+  knowledge_base?: string
+  never_mention?: string
+  qualification_criteria?: string
+  required_fields?: string[]
+  responds_to_audio?: boolean
+  audio_decline_message?: string
+  max_messages_before_handoff?: number
+  handoff_keywords?: string
+  activation_mode?: AgentActivationMode
+  required_tag_id?: number | null
+  monthly_token_limit?: number
+  identifies_as_bot?: boolean
+  is_active?: boolean
+  stage_ids?: number[]
+  instance_ids?: number[]
+  handoff_rules?: Omit<AgentHandoffRule, 'agent_id'>[]
+}
+
+export interface AgentUsage {
+  monthly_limit: number
+  tokens_used_this_month: number
+  cost_usd_this_month: number
+  current_month: string | null
+  recent_log: Array<{
+    id: number; agent_id: number; lead_id: number | null; lead_name: string | null
+    input_tokens: number; output_tokens: number
+    cache_read_tokens: number; cache_creation_tokens: number
+    cost_usd: number; created_at: string
+  }>
+}
+
+export const fetchAgents = (accountId: number) =>
+  apiFetch<{ feature_enabled: boolean; agents: Agent[] }>(`/api/agents?account_id=${accountId}`)
+
+export const fetchAgent = (id: number, accountId: number) =>
+  apiFetch<{ agent: Agent }>(`/api/agents/${id}?account_id=${accountId}`).then(d => d.agent)
+
+export const createAgent = (accountId: number, data: AgentInput) =>
+  apiFetch<{ agent: Agent }>(`/api/agents?account_id=${accountId}`, { method: 'POST', body: JSON.stringify(data) }).then(d => d.agent)
+
+export const updateAgent = (id: number, accountId: number, data: Partial<AgentInput>) =>
+  apiFetch<{ agent: Agent }>(`/api/agents/${id}?account_id=${accountId}`, { method: 'PUT', body: JSON.stringify(data) }).then(d => d.agent)
+
+export const deleteAgent = (id: number, accountId: number) =>
+  apiFetch(`/api/agents/${id}?account_id=${accountId}`, { method: 'DELETE' })
+
+export const fetchAgentUsage = (id: number, accountId: number) =>
+  apiFetch<AgentUsage>(`/api/agents/${id}/usage?account_id=${accountId}`)
+
+export const testAgent = (id: number, accountId: number, message: string, history: Array<{ role: 'user' | 'assistant'; content: string }> = []) =>
+  apiFetch<{ response: string; usage: { input: number; output: number; cacheRead: number; cacheCreation: number; total: number }; cost_usd: number; stop_reason: string }>(`/api/agents/${id}/test?account_id=${accountId}`, { method: 'POST', body: JSON.stringify({ message, history }) })
 
 // =============================================
 // Tasks (cadence steps that need execution)

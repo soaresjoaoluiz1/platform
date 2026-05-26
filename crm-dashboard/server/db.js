@@ -460,6 +460,162 @@ addColumnIfNotExists('users', 'can_manage_proposals', 'INTEGER NOT NULL DEFAULT 
 addColumnIfNotExists('users', 'can_manage_contracts', 'INTEGER NOT NULL DEFAULT 0')
 // instance_auto_messages.greeting_cooldown_hours: cooldown configuravel da saudacao (default 24h, comportamento anterior)
 addColumnIfNotExists('instance_auto_messages', 'greeting_cooldown_hours', 'INTEGER NOT NULL DEFAULT 24')
+// proposals.has_comissao + comissao_percent: comissao sobre faturamento (opcional, alguns clientes tem)
+addColumnIfNotExists('proposals', 'has_comissao', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('proposals', 'comissao_percent', 'REAL NOT NULL DEFAULT 0')
+
+// Follow-ups v2: tipo (sequence/inactivity) + campos especificos de inactivity + datas absolutas em steps
+addColumnIfNotExists('follow_ups', 'type', "TEXT NOT NULL DEFAULT 'sequence'")
+addColumnIfNotExists('follow_ups', 'inactivity_stage_id', 'INTEGER REFERENCES funnel_stages(id) ON DELETE SET NULL')
+addColumnIfNotExists('follow_ups', 'inactivity_days', 'INTEGER NOT NULL DEFAULT 2')
+addColumnIfNotExists('follow_ups', 'variation_delay_seconds', 'INTEGER NOT NULL DEFAULT 30')
+addColumnIfNotExists('follow_up_steps', 'schedule_mode', "TEXT NOT NULL DEFAULT 'relative'")
+addColumnIfNotExists('follow_up_steps', 'scheduled_at', 'TEXT')
+
+// Follow-ups v3: inactivity multi-step (cadência) + variações por step + on-reply action
+addColumnIfNotExists('follow_ups', 'inactivity_minutes', 'INTEGER')
+addColumnIfNotExists('follow_ups', 'inactivity_mode', "TEXT NOT NULL DEFAULT 'rotation'")
+addColumnIfNotExists('follow_ups', 'on_reply_action', "TEXT NOT NULL DEFAULT 'pause'")
+addColumnIfNotExists('follow_ups', 'on_reply_user_id', 'INTEGER REFERENCES users(id) ON DELETE SET NULL')
+addColumnIfNotExists('follow_up_steps', 'variations', 'TEXT')
+// Follow-ups v3.1: on-reply move stage + add tag
+addColumnIfNotExists('follow_ups', 'on_reply_move_to_stage_id', 'INTEGER REFERENCES funnel_stages(id) ON DELETE SET NULL')
+addColumnIfNotExists('follow_ups', 'on_reply_add_tag_id', 'INTEGER REFERENCES tags(id) ON DELETE SET NULL')
+
+// Agentes de IA (Claude Haiku 4.5) — F0+1 schema
+addColumnIfNotExists('accounts', 'ai_agents_enabled', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('users', 'is_bot', 'INTEGER NOT NULL DEFAULT 0')
+addColumnIfNotExists('messages', 'ai_agent_id', 'INTEGER')
+addColumnIfNotExists('leads', 'ai_handed_off_at', 'TEXT')
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS ai_agents (
+    id                          INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id                  INTEGER NOT NULL,
+    user_id                     INTEGER NOT NULL,
+    name                        TEXT NOT NULL,
+    is_active                   INTEGER NOT NULL DEFAULT 1,
+    identifies_as_bot           INTEGER NOT NULL DEFAULT 1,
+    persona                     TEXT,
+    knowledge_base              TEXT,
+    never_mention               TEXT,
+    qualification_criteria      TEXT,
+    required_fields             TEXT,
+    responds_to_audio           INTEGER NOT NULL DEFAULT 0,
+    audio_decline_message       TEXT DEFAULT 'Oi! Por enquanto só leio mensagens de texto. Pode digitar pra mim?',
+    max_messages_before_handoff INTEGER NOT NULL DEFAULT 15,
+    handoff_keywords            TEXT DEFAULT 'humano,atendente,vendedor,corretor,pessoa',
+    activation_mode             TEXT NOT NULL DEFAULT 'conditional',
+    required_tag_id             INTEGER,
+    monthly_token_limit         INTEGER NOT NULL DEFAULT 500000,
+    tokens_used_this_month      INTEGER NOT NULL DEFAULT 0,
+    current_month               TEXT,
+    created_at                  TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at                  TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (required_tag_id) REFERENCES tags(id) ON DELETE SET NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS ai_agent_stages (
+    agent_id INTEGER NOT NULL,
+    stage_id INTEGER NOT NULL,
+    PRIMARY KEY (agent_id, stage_id),
+    FOREIGN KEY (agent_id) REFERENCES ai_agents(id) ON DELETE CASCADE,
+    FOREIGN KEY (stage_id) REFERENCES funnel_stages(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS ai_agent_instances (
+    agent_id    INTEGER NOT NULL,
+    instance_id INTEGER NOT NULL,
+    PRIMARY KEY (agent_id, instance_id),
+    FOREIGN KEY (agent_id) REFERENCES ai_agents(id) ON DELETE CASCADE,
+    FOREIGN KEY (instance_id) REFERENCES whatsapp_instances(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS ai_agent_handoff_rules (
+    agent_id              INTEGER NOT NULL,
+    reason                TEXT NOT NULL,
+    target_type           TEXT NOT NULL,
+    target_user_id        INTEGER,
+    fallback_to_roulette  INTEGER NOT NULL DEFAULT 1,
+    move_to_stage_id      INTEGER,
+    add_tag_id            INTEGER,
+    PRIMARY KEY (agent_id, reason),
+    FOREIGN KEY (agent_id) REFERENCES ai_agents(id) ON DELETE CASCADE,
+    FOREIGN KEY (target_user_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (move_to_stage_id) REFERENCES funnel_stages(id) ON DELETE SET NULL,
+    FOREIGN KEY (add_tag_id) REFERENCES tags(id) ON DELETE SET NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS ai_agent_token_log (
+    id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+    agent_id              INTEGER NOT NULL,
+    account_id            INTEGER NOT NULL,
+    lead_id               INTEGER,
+    input_tokens          INTEGER NOT NULL DEFAULT 0,
+    output_tokens         INTEGER NOT NULL DEFAULT 0,
+    cache_read_tokens     INTEGER NOT NULL DEFAULT 0,
+    cache_creation_tokens INTEGER NOT NULL DEFAULT 0,
+    cost_usd              REAL,
+    created_at            TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (agent_id) REFERENCES ai_agents(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_ai_agents_account ON ai_agents(account_id, is_active);
+  CREATE INDEX IF NOT EXISTS idx_ai_token_log_month ON ai_agent_token_log(agent_id, created_at);
+`)
+
+// Follow-ups (cadencias automaticas — diferentes das cadencias manuais ja existentes)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS follow_ups (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id      INTEGER NOT NULL,
+    name            TEXT NOT NULL,
+    description     TEXT,
+    instance_id     INTEGER NOT NULL,
+    stop_on_reply   INTEGER NOT NULL DEFAULT 1,
+    is_active       INTEGER NOT NULL DEFAULT 1,
+    created_by      INTEGER,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (instance_id) REFERENCES whatsapp_instances(id) ON DELETE SET NULL,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS follow_up_steps (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    follow_up_id      INTEGER NOT NULL,
+    position          INTEGER NOT NULL,
+    delay_minutes     INTEGER NOT NULL DEFAULT 0,
+    message_template  TEXT NOT NULL,
+    created_at        TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (follow_up_id) REFERENCES follow_ups(id) ON DELETE CASCADE
+  );
+  CREATE INDEX IF NOT EXISTS idx_followup_steps ON follow_up_steps(follow_up_id, position);
+
+  CREATE TABLE IF NOT EXISTS lead_follow_ups (
+    id                       INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id                  INTEGER NOT NULL,
+    follow_up_id             INTEGER NOT NULL,
+    current_step_id          INTEGER,
+    status                   TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'paused', 'completed', 'cancelled')),
+    next_run_at              TEXT,
+    last_executed_at         TEXT,
+    last_executed_step_id    INTEGER,
+    paused_at                TEXT,
+    paused_reason            TEXT,
+    started_at               TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at               TEXT NOT NULL DEFAULT (datetime('now')),
+    assigned_by              INTEGER,
+    FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
+    FOREIGN KEY (follow_up_id) REFERENCES follow_ups(id) ON DELETE CASCADE,
+    FOREIGN KEY (current_step_id) REFERENCES follow_up_steps(id) ON DELETE SET NULL,
+    FOREIGN KEY (assigned_by) REFERENCES users(id) ON DELETE SET NULL
+  );
+  CREATE INDEX IF NOT EXISTS idx_lead_followups_pending ON lead_follow_ups(status, next_run_at);
+  CREATE INDEX IF NOT EXISTS idx_lead_followups_by_lead ON lead_follow_ups(lead_id, status);
+`)
 // whatsapp_instances.lead_intake_mode: 'open' (atual, qualquer msg cria lead) | 'restricted' (so processa leads ja cadastrados no CRM)
 addColumnIfNotExists('whatsapp_instances', 'lead_intake_mode', "TEXT NOT NULL DEFAULT 'open'")
 // leads.is_blocked: bloqueio total (lead some do CRM e mensagens futuras sao silenciosamente ignoradas pelo webhook)
