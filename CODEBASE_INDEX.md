@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-05-26 · 5711 files · ~24.6M tokens total
+> 2026-05-27 · 5875 files · ~25.2M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -78,6 +78,7 @@
 **agency-hub\src\context/**
 - `AuthContext.tsx` — AuthProvider, useAuth, User
 - `SSEContext.tsx` — SSEProvider, useSSE
+- `ThemeContext.tsx` — ThemeProvider, useTheme, Theme
 
 **agency-hub\src\lib/**
 - `api.ts` — apiFetch, getApprovalFiles, formatNumber, formatBRL, fetchClients, createClient, fetchClient, generateApprovalToken +2
@@ -378,6 +379,7 @@
 - `accounts.js`
 - `admin.js`
 - `agents.js`
+- `app-settings.js` — Configs globais do CRM (super_admin only).
 - `auth.js`
 - `broadcasts.js` — runBroadcastLoop, resumeBroadcastIfPaused, recoverPendingBroadcasts
 - `cadences.js`
@@ -402,7 +404,9 @@
 - `anthropicClient.js` — Wrapper fetch da API Anthropic (Claude Haiku 4.5). · callHaiku, smokeTest
 - `autoMessages.js` — Aplica variaveis no texto da auto-mensagem · applyVars, getInstanceConfig, wasAutoMsgSentRecently, shouldSendAway, sendAutoMessage
 - `followUpSender.js` — Envio automatico de follow-ups (cadencias automaticas de mensagens WhatsApp). · sendFollowUpMessage, resumeFollowUpsIfPaused
+- `hubClient.js` — Integracao com HUB (porta 3003) — cria cliente quando contrato eh aprovado no CRM. · createHubClient
 - `inactivityScanner.js` — Scanner de inatividade: pra cada follow-up tipo 'inactivity' ativo, · processInactivityFollowUps
+- `leadHandoff.js` — Helper de distribuicao de lead: dispara primeira msg + notificacao ao vendedor · notifyAndOpenLead
 - `metaCapi.js` — Hash padrao Meta: SHA256 lowercase trim · sendCapiEvent, loadLeadForCapi, triggerCapiForStageChange, testCapi
 - `roulette.js` — Util compartilhado de roleta/round-robin pra escolher atendente. · pickFromRoulette
 
@@ -424,6 +428,7 @@
 - `AccountContext.tsx` — AccountProvider, useAccount
 - `AuthContext.tsx` — AuthProvider, useAuth, User
 - `SSEContext.tsx` — SSEProvider, useSSE, useSSEStatus
+- `ThemeContext.tsx` — ThemeProvider, useTheme, Theme
 
 **crm-dashboard\src\hooks/**
 - `useIsMobile.ts` — Hook compartilhado pra detectar viewport mobile. Default 640px (sm do Tailwind). · useIsMobile
@@ -449,7 +454,7 @@
 - `Login.tsx` — default:Login
 - `Messages.tsx` — default:Messages
 - `Pipeline.tsx` — default:Pipeline
-- `Propostas.tsx` — default:Propostas
+- `Propostas.tsx` — Title Case PT-BR: 1ª letra de cada palavra maiuscula, exceto conectores (de, da, do, e) · default:Propostas
 - `Qualifications.tsx` — default:Qualifications
 - `ReadyMessages.tsx` — default:ReadyMessages
 - `Settings.tsx` — default:SettingsPage
@@ -948,12 +953,12 @@
 - `.claude\settings.json`
 - `.claude\settings.local.json`
 - `.mcp.json`
-- `.playwright-mcp\page-2026-05-21T13-36-59-897Z.yml`
 - `.playwright-mcp\page-2026-05-21T13-43-12-375Z.yml`
 - `.playwright-mcp\page-2026-05-21T13-44-50-920Z.yml`
 - `.playwright-mcp\page-2026-05-21T13-46-12-886Z.yml`
 - `.playwright-mcp\page-2026-05-21T13-52-57-503Z.yml`
 - `.playwright-mcp\page-2026-05-21T13-57-50-188Z.yml`
+- `.playwright-mcp\page-2026-05-26T20-06-48-681Z.yml`
 - `.vscode\mcp.json`
 - `.vscode\tasks.json`
 - `agency-hub\package.json`
@@ -979,12 +984,12 @@
 - `CLAUDE.md`
 - `CODEBASE_INDEX.md`
 - `CONTRIBUTING.md`
+- `crm-dashboard\CODEBASE_INDEX.md`
+- `crm-dashboard\DEPLOY.md`
 - `crm-dashboard\PLANO_PERFORMANCE.md`
 - `crm-dashboard\README.md`
 - `drive-snap.md`
 - `drive-snapshot.md`
-- `dros-sales-site-v2\INTEGRACAO-LEADS.md`
-- `dros-sales-site-v2\README.md`
 - `dros-sales-site\README.md`
 - `oxi-pedidos\DEPLOY.md`
 - `oxi-pedidos\README.md`
@@ -993,4 +998,4 @@
 - `skills\README.md`
 
 ---
-*Index: ~11.4k tokens · Full codebase: ~24.6M tokens · Saves ~100%*
+*Index: ~11.6k tokens · Full codebase: ~25.2M tokens · Saves ~100%*
