@@ -352,6 +352,61 @@ try {
 try { db.exec("CREATE INDEX IF NOT EXISTS idx_tasks_parent ON tasks(parent_task_id)") } catch {}
 try { db.exec("CREATE INDEX IF NOT EXISTS idx_tasks_subtask_kind ON tasks(subtask_kind)") } catch {}
 
+// =====================================================================
+// Tarefas recorrentes — templates que o cron usa pra criar tasks novas
+// =====================================================================
+try {
+  db.exec(`CREATE TABLE IF NOT EXISTS task_templates (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    is_active INTEGER DEFAULT 1,
+    task_type TEXT DEFAULT 'normal',
+    client_id INTEGER NOT NULL,
+    category_id INTEGER, department_id INTEGER,
+    title TEXT NOT NULL, description TEXT, priority TEXT DEFAULT 'normal',
+    drive_link TEXT, drive_link_raw TEXT,
+    approval_link TEXT, approval_files TEXT, approval_text TEXT,
+    publish_date TEXT, publish_objective TEXT,
+    due_date_offset_days INTEGER DEFAULT 7,
+    recurrence_type TEXT NOT NULL,
+    recurrence_day INTEGER NOT NULL,
+    recurrence_hour INTEGER DEFAULT 6,
+    last_run_at TEXT, next_run_at TEXT,
+    created_by INTEGER,
+    created_at TEXT DEFAULT (datetime('now', '-3 hours')),
+    updated_at TEXT DEFAULT (datetime('now', '-3 hours'))
+  )`)
+} catch {}
+try {
+  db.exec(`CREATE TABLE IF NOT EXISTS task_template_assignees (
+    template_id INTEGER,
+    user_id INTEGER,
+    PRIMARY KEY (template_id, user_id)
+  )`)
+} catch {}
+try {
+  db.exec(`CREATE TABLE IF NOT EXISTS task_template_subtasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    template_id INTEGER,
+    subtask_position INTEGER,
+    title TEXT NOT NULL, description TEXT, priority TEXT DEFAULT 'normal',
+    category_id INTEGER, department_id INTEGER,
+    due_date_offset_days INTEGER,
+    drive_link TEXT, drive_link_raw TEXT,
+    approval_link TEXT, approval_files TEXT, approval_text TEXT,
+    publish_date TEXT, publish_objective TEXT
+  )`)
+} catch {}
+try {
+  db.exec(`CREATE TABLE IF NOT EXISTS task_template_subtask_assignees (
+    template_subtask_id INTEGER,
+    user_id INTEGER,
+    PRIMARY KEY (template_subtask_id, user_id)
+  )`)
+} catch {}
+try { db.exec("CREATE INDEX IF NOT EXISTS idx_task_templates_next_run ON task_templates(next_run_at) WHERE is_active = 1") } catch {}
+try { db.exec("CREATE INDEX IF NOT EXISTS idx_task_template_subtasks_template ON task_template_subtasks(template_id)") } catch {}
+
 // Migrate users.role CHECK to include 'gerente' (SQLite requires table rebuild)
 try {
   const tbl = db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='users'").get()

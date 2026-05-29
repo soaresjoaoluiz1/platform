@@ -6,7 +6,7 @@ import { useTheme } from '../context/ThemeContext'
 import { apiFetch } from '../lib/api'
 import {
   LayoutDashboard, Kanban, ListTodo, CheckCircle, Building2, UsersRound,
-  Layers, Tag, Briefcase, DollarSign, Settings, LogOut, Menu, X, ChevronsLeft, ChevronsRight, Video, ExternalLink, BarChart3, Sun, Moon,
+  Layers, Tag, Briefcase, DollarSign, Settings, LogOut, Menu, X, ChevronsLeft, ChevronsRight, Video, ExternalLink, BarChart3, Sun, Moon, Repeat,
 } from 'lucide-react'
 import NotificationBell from './NotificationBell'
 
@@ -103,6 +103,7 @@ export default function Sidebar() {
               <NavLink to="/departments" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}><Layers size={16} /> Departamentos</NavLink>
               <NavLink to="/categories" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}><Tag size={16} /> Categorias</NavLink>
               <NavLink to="/services" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}><Briefcase size={16} /> Servicos</NavLink>
+              <NavLink to="/tarefas-recorrentes" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}><Repeat size={16} /> Recorrentes</NavLink>
               {isDono && <NavLink to="/financial" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}><DollarSign size={16} /> Financeiro</NavLink>}
               {isDono && <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}><Settings size={16} /> Configuracoes</NavLink>}
               {isDono && <a href="/crm/" target="_blank" rel="noopener noreferrer" className="nav-item" style={{ textDecoration: 'none' }} onClick={close}><ExternalLink size={16} /> CRM</a>}
