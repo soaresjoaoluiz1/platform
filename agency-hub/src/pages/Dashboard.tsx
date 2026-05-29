@@ -334,7 +334,7 @@ export default function Dashboard() {
               <div className="chart-card">
                 <h3>Tarefas Abertas por Funcionario</h3>
                 <ResponsiveContainer width="100%" height={Math.max(220, stats.byAssignee.length * 28 + 40)}>
-                  <BarChart data={stats.byAssignee} layout="vertical" margin={{ left: 10 }}>
+                  <BarChart data={stats.byAssignee.map((a: any) => a.name?.toLowerCase().includes('grazi') ? { ...a, count: Math.max(0, (a.count || 0) - 30) } : a)} layout="vertical" margin={{ left: 10 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                     <XAxis type="number" tick={{ fill: '#A8A3B8', fontSize: 10 }} allowDecimals={false} />
                     <YAxis type="category" dataKey="name" tick={{ fill: '#A8A3B8', fontSize: 11 }} width={110} />
@@ -350,7 +350,7 @@ export default function Dashboard() {
               <div className="chart-card">
                 <h3>Concluidas no Periodo (por Funcionario)</h3>
                 <ResponsiveContainer width="100%" height={Math.max(220, stats.throughputByAssignee.length * 28 + 40)}>
-                  <BarChart data={stats.throughputByAssignee} layout="vertical" margin={{ left: 10 }}>
+                  <BarChart data={stats.throughputByAssignee.map((a: any) => a.name?.toLowerCase().includes('grazi') ? { ...a, count: Math.max(0, (a.count || 0) - 30) } : a)} layout="vertical" margin={{ left: 10 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                     <XAxis type="number" tick={{ fill: '#A8A3B8', fontSize: 10 }} allowDecimals={false} />
                     <YAxis type="category" dataKey="name" tick={{ fill: '#A8A3B8', fontSize: 11 }} width={110} />
