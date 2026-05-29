@@ -23,7 +23,7 @@ function loadFullTemplate(id) {
 }
 
 // GET / — lista todos os templates (com nomes de cliente e count de subtarefas)
-router.get('/', requireRole('dono', 'gerente'), (req, res) => {
+router.get('/', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   const templates = db.prepare(`
     SELECT t.*,
       c.name as client_name,
@@ -36,14 +36,14 @@ router.get('/', requireRole('dono', 'gerente'), (req, res) => {
 })
 
 // GET /:id — detalhe completo
-router.get('/:id', requireRole('dono', 'gerente'), (req, res) => {
+router.get('/:id', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   const tpl = loadFullTemplate(req.params.id)
   if (!tpl) return res.status(404).json({ error: 'Template nao encontrado' })
   res.json({ template: tpl })
 })
 
 // POST / — cria template + assignees + subtasks
-router.post('/', requireRole('dono', 'gerente'), (req, res) => {
+router.post('/', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   try {
   const b = req.body
   if (!b.name || !b.client_id || !b.title || !b.recurrence_type || !b.recurrence_day) {
@@ -126,7 +126,7 @@ router.post('/', requireRole('dono', 'gerente'), (req, res) => {
 })
 
 // PUT /:id — substitui campos + replaces assignees e subtasks
-router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
+router.put('/:id', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   try {
   const tplId = +req.params.id
   const exists = db.prepare('SELECT id, recurrence_type, recurrence_day, recurrence_hour FROM task_templates WHERE id = ?').get(tplId)
@@ -225,14 +225,14 @@ router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
 })
 
 // DELETE /:id — soft delete (is_active=0). Mantem historico.
-router.delete('/:id', requireRole('dono', 'gerente'), (req, res) => {
+router.delete('/:id', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   const r = db.prepare("UPDATE task_templates SET is_active = 0, updated_at = datetime('now', '-3 hours') WHERE id = ?").run(req.params.id)
   if (r.changes === 0) return res.status(404).json({ error: 'Template nao encontrado' })
   res.json({ ok: true })
 })
 
 // POST /:id/run-now — forca criar uma tarefa do template agora (sem esperar cron)
-router.post('/:id/run-now', requireRole('dono', 'gerente'), (req, res) => {
+router.post('/:id/run-now', requireRole('dono', 'gerente', 'funcionario'), (req, res) => {
   try {
     const result = createTaskFromTemplate(+req.params.id, { userId: req.user.id, force: true })
     res.json({ ok: true, task_id: result.taskId, subtasks_created: result.subtasksCreated })
