@@ -44,6 +44,7 @@ router.get('/:id', requireRole('dono', 'gerente'), (req, res) => {
 
 // POST / — cria template + assignees + subtasks
 router.post('/', requireRole('dono', 'gerente'), (req, res) => {
+  try {
   const b = req.body
   if (!b.name || !b.client_id || !b.title || !b.recurrence_type || !b.recurrence_day) {
     return res.status(400).json({ error: 'name, client_id, title, recurrence_type, recurrence_day obrigatorios' })
@@ -118,10 +119,15 @@ router.post('/', requireRole('dono', 'gerente'), (req, res) => {
 
   const tplId = tx()
   res.json({ template: loadFullTemplate(tplId) })
+  } catch (err) {
+    console.error('[task-templates POST] erro:', err.message, err.stack)
+    res.status(500).json({ error: err.message })
+  }
 })
 
 // PUT /:id — substitui campos + replaces assignees e subtasks
 router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
+  try {
   const tplId = +req.params.id
   const exists = db.prepare('SELECT id, recurrence_type, recurrence_day, recurrence_hour FROM task_templates WHERE id = ?').get(tplId)
   if (!exists) return res.status(404).json({ error: 'Template nao encontrado' })
@@ -212,6 +218,10 @@ router.put('/:id', requireRole('dono', 'gerente'), (req, res) => {
   })
   tx()
   res.json({ template: loadFullTemplate(tplId) })
+  } catch (err) {
+    console.error('[task-templates PUT] erro:', err.message, err.stack)
+    res.status(500).json({ error: err.message })
+  }
 })
 
 // DELETE /:id — soft delete (is_active=0). Mantem historico.
