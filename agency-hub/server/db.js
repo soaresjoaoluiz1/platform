@@ -421,7 +421,8 @@ try {
     PRIMARY KEY (template_subtask_id, user_id)
   )`)
 } catch {}
-try { db.exec("CREATE INDEX IF NOT EXISTS idx_task_templates_next_run ON task_templates(next_run_at) WHERE is_active = 1") } catch {}
+// Sem WHERE: sqlite3 CLI do CentOS 7 nao parseia partial index, quebra inspecao manual.
+try { db.exec("CREATE INDEX IF NOT EXISTS idx_task_templates_next_run ON task_templates(next_run_at)") } catch {}
 try { db.exec("CREATE INDEX IF NOT EXISTS idx_task_template_subtasks_template ON task_template_subtasks(template_id)") } catch {}
 
 // Backward-compat: garante que TODAS as colunas existem mesmo se a tabela foi criada antes
