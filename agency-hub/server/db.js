@@ -355,6 +355,23 @@ try { db.exec("CREATE INDEX IF NOT EXISTS idx_tasks_subtask_kind ON tasks(subtas
 // =====================================================================
 // Tarefas recorrentes — templates que o cron usa pra criar tasks novas
 // =====================================================================
+// Detecta tabela com schema antigo (criada antes do schema final) e dropa pra recriar limpa.
+// Como nenhum template foi criado com sucesso ainda, e seguro descartar.
+try {
+  const cols = db.prepare("PRAGMA table_info(task_templates)").all()
+  if (cols.length > 0) {
+    const colNames = cols.map(c => c.name)
+    const required = ['client_id', 'task_type', 'title', 'recurrence_type', 'recurrence_day']
+    const missingCritical = required.filter(c => !colNames.includes(c))
+    if (missingCritical.length > 0) {
+      console.log('[migration] task_templates com schema incompleto, recriando. Faltando:', missingCritical)
+      db.exec('DROP TABLE IF EXISTS task_template_subtask_assignees')
+      db.exec('DROP TABLE IF EXISTS task_template_subtasks')
+      db.exec('DROP TABLE IF EXISTS task_template_assignees')
+      db.exec('DROP TABLE IF EXISTS task_templates')
+    }
+  }
+} catch (e) { console.log('[migration] check task_templates falhou:', e.message) }
 try {
   db.exec(`CREATE TABLE IF NOT EXISTS task_templates (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
