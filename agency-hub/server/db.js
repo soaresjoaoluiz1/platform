@@ -407,6 +407,52 @@ try {
 try { db.exec("CREATE INDEX IF NOT EXISTS idx_task_templates_next_run ON task_templates(next_run_at) WHERE is_active = 1") } catch {}
 try { db.exec("CREATE INDEX IF NOT EXISTS idx_task_template_subtasks_template ON task_template_subtasks(template_id)") } catch {}
 
+// Backward-compat: garante que TODAS as colunas existem mesmo se a tabela foi criada antes
+const taskTplCols = [
+  ['is_active', 'INTEGER DEFAULT 1'],
+  ['task_type', "TEXT DEFAULT 'normal'"],
+  ['category_id', 'INTEGER'],
+  ['department_id', 'INTEGER'],
+  ['description', 'TEXT'],
+  ['priority', "TEXT DEFAULT 'normal'"],
+  ['drive_link', 'TEXT'],
+  ['drive_link_raw', 'TEXT'],
+  ['approval_link', 'TEXT'],
+  ['approval_files', 'TEXT'],
+  ['approval_text', 'TEXT'],
+  ['publish_date', 'TEXT'],
+  ['publish_objective', 'TEXT'],
+  ['due_date_offset_days', 'INTEGER DEFAULT 7'],
+  ['recurrence_hour', 'INTEGER DEFAULT 6'],
+  ['last_run_at', 'TEXT'],
+  ['next_run_at', 'TEXT'],
+  ['created_by', 'INTEGER'],
+  ['created_at', "TEXT DEFAULT (datetime('now', '-3 hours'))"],
+  ['updated_at', "TEXT DEFAULT (datetime('now', '-3 hours'))"],
+]
+for (const [col, def] of taskTplCols) {
+  try { db.exec(`ALTER TABLE task_templates ADD COLUMN ${col} ${def}`) } catch {}
+}
+
+const taskTplSubCols = [
+  ['description', 'TEXT'],
+  ['priority', "TEXT DEFAULT 'normal'"],
+  ['category_id', 'INTEGER'],
+  ['department_id', 'INTEGER'],
+  ['due_date_offset_days', 'INTEGER'],
+  ['drive_link', 'TEXT'],
+  ['drive_link_raw', 'TEXT'],
+  ['approval_link', 'TEXT'],
+  ['approval_files', 'TEXT'],
+  ['approval_text', 'TEXT'],
+  ['publish_date', 'TEXT'],
+  ['publish_objective', 'TEXT'],
+  ['subtask_position', 'INTEGER'],
+]
+for (const [col, def] of taskTplSubCols) {
+  try { db.exec(`ALTER TABLE task_template_subtasks ADD COLUMN ${col} ${def}`) } catch {}
+}
+
 // Migrate users.role CHECK to include 'gerente' (SQLite requires table rebuild)
 try {
   const tbl = db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='users'").get()
